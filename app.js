@@ -90,7 +90,7 @@ async function callBackend(
 
         headers: {
           'Content-Type':
-            'text/plain;charset=utf-8'
+            'application/json'
         },
 
         body: JSON.stringify({
