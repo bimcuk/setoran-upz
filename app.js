@@ -1,4 +1,3 @@
-```javascript
 const SUPABASE_URL =
   'https://efmgvgqyzdbhmejigqyg.supabase.co';
 
@@ -2142,4 +2141,4 @@ function renderExcelPreview(
     'block';
 
 }
-```
+
