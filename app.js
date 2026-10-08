@@ -703,3 +703,238 @@ if (nominalSetoran) {
   );
 
 }
+
+// =========================
+// PREVIEW EXCEL MUZAKI
+// =========================
+
+const fileExcel =
+  document.getElementById('fileExcel');
+
+const fileExcelInfo =
+  document.getElementById('fileExcelInfo');
+
+const excelPreview =
+  document.getElementById('excelPreview');
+
+
+if (fileExcel) {
+
+  fileExcel.addEventListener(
+    'change',
+    async function () {
+
+      const file = this.files[0];
+
+      if (!file) {
+
+        fileExcelInfo.textContent =
+          'Belum ada file dipilih.';
+
+        excelPreview.style.display =
+          'none';
+
+        excelPreview.innerHTML =
+          '';
+
+        return;
+      }
+
+
+      fileExcelInfo.textContent =
+        'Membaca file...';
+
+
+      try {
+
+        const arrayBuffer =
+          await file.arrayBuffer();
+
+
+        const workbook =
+          XLSX.read(
+            arrayBuffer,
+            {
+              type: 'array'
+            }
+          );
+
+
+        const sheetName =
+          workbook.SheetNames[0];
+
+
+        const worksheet =
+          workbook.Sheets[sheetName];
+
+
+        const rows =
+          XLSX.utils.sheet_to_json(
+            worksheet,
+            {
+              header: 1,
+              defval: ''
+            }
+          );
+
+
+        if (!rows.length) {
+
+          throw new Error(
+            'File Excel kosong.'
+          );
+
+        }
+
+
+        fileExcelInfo.textContent =
+          `${file.name} • ${rows.length - 1} data`;
+
+
+        renderExcelPreview(rows);
+
+
+      } catch (error) {
+
+        console.error(
+          'EXCEL ERROR:',
+          error
+        );
+
+
+        fileExcelInfo.textContent =
+          'Gagal membaca file Excel.';
+
+
+        excelPreview.style.display =
+          'block';
+
+
+        excelPreview.innerHTML = `
+          <div
+            style="
+              padding: 15px;
+              color: #d93025;
+            "
+          >
+            ${error.message}
+          </div>
+        `;
+
+      }
+
+    }
+  );
+
+}
+
+
+// =========================
+// RENDER PREVIEW EXCEL
+// =========================
+
+function renderExcelPreview(rows) {
+
+  if (!rows.length) {
+    return;
+  }
+
+
+  const header =
+    rows[0];
+
+
+  const data =
+    rows.slice(1);
+
+
+  let html = `
+    <table>
+      <thead>
+        <tr>
+  `;
+
+
+  header.forEach(
+    function (cell) {
+
+      html += `
+        <th>
+          ${cell || ''}
+        </th>
+      `;
+
+    }
+  );
+
+
+  html += `
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+
+  // Tampilkan maksimal 20 baris
+  const previewRows =
+    data.slice(0, 20);
+
+
+  previewRows.forEach(
+    function (row) {
+
+      html += '<tr>';
+
+
+      header.forEach(
+        function (_, index) {
+
+          html += `
+            <td>
+              ${row[index] || ''}
+            </td>
+          `;
+
+        }
+      );
+
+
+      html += '</tr>';
+
+    }
+  );
+
+
+  html += `
+      </tbody>
+    </table>
+  `;
+
+
+  if (data.length > 20) {
+
+    html += `
+      <div
+        style="
+          padding: 12px;
+          font-size: 12px;
+          color: #777;
+        "
+      >
+        Menampilkan 20 dari
+        ${data.length}
+        data.
+      </div>
+    `;
+
+  }
+
+
+  excelPreview.innerHTML =
+    html;
+
+
+  excelPreview.style.display =
+    'block';
+
+}
