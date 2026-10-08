@@ -631,7 +631,7 @@ if (setoranForm) {
           tanggal_setor: tanggalSetor,
           periode_bulan: Number(periodeBulan),
           periode_tahun: Number(periodeTahun),
-          nominal: Number(nominal)
+          nominal: Number(nominal.replace(/\./g, '')
         }
       );
 
