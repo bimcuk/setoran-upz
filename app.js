@@ -674,3 +674,32 @@ if (setoranForm) {
   });
 
 }
+
+// =========================
+// FORMAT NOMINAL SETORAN
+// =========================
+
+const nominalSetoran =
+  document.getElementById('nominalSetoran');
+
+if (nominalSetoran) {
+
+  nominalSetoran.addEventListener(
+    'input',
+    function () {
+
+      let angka =
+        this.value.replace(/\D/g, '');
+
+      if (!angka) {
+        this.value = '';
+        return;
+      }
+
+      this.value =
+        Number(angka).toLocaleString('id-ID');
+
+    }
+  );
+
+}
