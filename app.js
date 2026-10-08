@@ -497,3 +497,109 @@ async function checkSession() {
 
 
 checkSession();
+
+// =========================
+// FORM INPUT SETORAN
+// =========================
+
+const setoranForm = document.getElementById('setoranForm');
+
+if (setoranForm) {
+
+  setoranForm.addEventListener('submit', async function (event) {
+
+    event.preventDefault();
+
+    const button = document.getElementById('submitSetoranButton');
+    const message = document.getElementById('setoranMessage');
+
+    const tanggalSetor =
+      document.getElementById('tanggalSetor').value;
+
+    const periodeBulan =
+      document.getElementById('periodeBulan').value;
+
+    const periodeTahun =
+      document.getElementById('periodeTahun').value;
+
+    const nominal =
+      document.getElementById('nominalSetoran').value;
+
+
+    // Validasi sederhana
+    if (
+      !tanggalSetor ||
+      !periodeBulan ||
+      !periodeTahun ||
+      !nominal
+    ) {
+
+      message.textContent =
+        'Semua data wajib diisi.';
+
+      message.style.color = '#d93025';
+
+      return;
+    }
+
+
+    try {
+
+      // Loading
+      button.disabled = true;
+      button.textContent = 'Menyimpan...';
+
+      message.textContent = 'Mengirim data setoran...';
+      message.style.color = '#666';
+
+
+      // Kirim ke backend
+      const result = await callBackend(
+        'createSetoran',
+        {
+          tanggal_setor: tanggalSetor,
+          periode_bulan: Number(periodeBulan),
+          periode_tahun: Number(periodeTahun),
+          nominal: Number(nominal)
+        }
+      );
+
+
+      // Berhasil
+      message.textContent =
+        'Setoran berhasil disimpan.';
+
+      message.style.color = '#259148';
+
+
+      // Reset form
+      setoranForm.reset();
+
+
+      // Reload dashboard
+      await loadDashboard();
+
+
+    } catch (error) {
+
+      console.error(
+        'CREATE SETORAN ERROR:',
+        error
+      );
+
+      message.textContent =
+        error.message || 'Gagal menyimpan setoran.';
+
+      message.style.color = '#d93025';
+
+
+    } finally {
+
+      button.disabled = false;
+      button.textContent = 'Simpan Setoran';
+
+    }
+
+  });
+
+}
