@@ -843,279 +843,441 @@ if (nominalSetoran) {
 // ==================================================
 // PREVIEW EXCEL MUZAKI
 // ==================================================
+const fileExcel = document.getElementById('fileExcel');
+const fileExcelInfo = document.getElementById('fileExcelInfo');
+const excelPreview = document.getElementById('excelPreview');
 
-const fileExcel =
-  document.getElementById(
-    'fileExcel'
-  );
-
-
-const fileExcelInfo =
-  document.getElementById(
-    'fileExcelInfo'
-  );
+let excelData = [];
+let totalNominalExcel = 0;
 
 
-const excelPreview =
-  document.getElementById(
-    'excelPreview'
-  );
+function parseNominalExcel(value) {
+  if (value === null || value === undefined || value === '') {
+    return 0;
+  }
+
+  // Kalau Excel membaca angka sebagai number
+  if (typeof value === 'number') {
+    return value;
+  }
+
+  // Kalau Excel membaca sebagai text
+  let text = String(value)
+    .trim()
+    .replace(/rp/gi, '')
+    .replace(/\s/g, '')
+    .replace(/\./g, '')
+    .replace(/,/g, '');
+
+  if (!text) {
+    return 0;
+  }
+
+  const number = Number(text);
+
+  return isNaN(number) ? 0 : number;
+}
+
+
+function formatRupiahSimple(value) {
+  return Number(value || 0).toLocaleString('id-ID');
+}
+
+
+function validateExcelFormat(rows) {
+
+  if (!rows.length) {
+    throw new Error('File Excel kosong.');
+  }
+
+  const header = rows[0].map(function(cell) {
+    return String(cell || '').trim().toLowerCase();
+  });
+
+  const noIndex = header.indexOf('no');
+  const namaIndex = header.indexOf('nama muzaki');
+  const nominalIndex = header.indexOf('nominal');
+  const jenisIndex = header.indexOf('jenis zakat');
+
+  if (namaIndex === -1) {
+    throw new Error('Kolom "Nama Muzaki" tidak ditemukan.');
+  }
+
+  if (nominalIndex === -1) {
+    throw new Error('Kolom "Nominal" tidak ditemukan.');
+  }
+
+  if (jenisIndex === -1) {
+    throw new Error('Kolom "Jenis Zakat" tidak ditemukan.');
+  }
+
+  return {
+    noIndex: noIndex,
+    namaIndex: namaIndex,
+    nominalIndex: nominalIndex,
+    jenisIndex: jenisIndex
+  };
+}
+
+
+function calculateExcelTotal(rows, indexes) {
+
+  let total = 0;
+  let jumlahData = 0;
+  let nominalKosong = 0;
+
+  rows.slice(1).forEach(function(row) {
+
+    const nama = row[indexes.namaIndex];
+
+    // Abaikan baris kosong
+    if (!nama || String(nama).trim() === '') {
+      return;
+    }
+
+    jumlahData++;
+
+    const nominalValue = row[indexes.nominalIndex];
+
+    if (
+      nominalValue === undefined ||
+      nominalValue === null ||
+      String(nominalValue).trim() === ''
+    ) {
+      nominalKosong++;
+      return;
+    }
+
+    const nominal = parseNominalExcel(nominalValue);
+
+    total += nominal;
+  });
+
+  return {
+    total: total,
+    jumlahData: jumlahData,
+    nominalKosong: nominalKosong
+  };
+}
+
+
+function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
+
+  const nominalInput = document.getElementById('nominalSetoran');
+
+  if (!nominalInput) return;
+
+  const nominalSetoran = Number(
+    nominalInput.value.replace(/\./g, '')
+  ) || 0;
+
+  const selisih = totalExcel - nominalSetoran;
+
+  let statusText = '';
+  let statusColor = '#666';
+
+  if (nominalSetoran === 0) {
+
+    statusText =
+      'Isi Nominal Setoran untuk membandingkan dengan Excel.';
+
+  } else if (nominalKosong > 0) {
+
+    statusText =
+      `⚠️ Ada ${nominalKosong} data yang nominalnya kosong.`;
+
+    statusColor = '#b54708';
+
+  } else if (selisih === 0) {
+
+    statusText =
+      '✅ Nominal Excel sesuai dengan Nominal Setoran.';
+
+    statusColor = '#18753a';
+
+  } else {
+
+    statusText =
+      `⚠️ Terdapat selisih Rp ${formatRupiahSimple(Math.abs(selisih))}.`;
+
+    statusColor = '#b54708';
+  }
+
+  let summary = document.getElementById('excelSummary');
+
+  if (!summary) {
+
+    summary = document.createElement('div');
+    summary.id = 'excelSummary';
+
+    excelPreview.parentNode.insertBefore(
+      summary,
+      excelPreview
+    );
+  }
+
+  summary.innerHTML = `
+    <div style="
+      margin-bottom:10px;
+      padding:14px;
+      border:1px solid #e5e5e5;
+      border-radius:10px;
+      background:#fafafa;
+    ">
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        gap:15px;
+        margin-bottom:6px;
+      ">
+        <span>Total Data Muzaki</span>
+        <strong>${jumlahData}</strong>
+      </div>
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        gap:15px;
+        margin-bottom:6px;
+      ">
+        <span>Total Nominal Excel</span>
+        <strong>Rp ${formatRupiahSimple(totalExcel)}</strong>
+      </div>
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        gap:15px;
+        margin-bottom:8px;
+      ">
+        <span>Nominal Setoran</span>
+        <strong>Rp ${formatRupiahSimple(nominalSetoran)}</strong>
+      </div>
+
+      <div style="
+        padding-top:8px;
+        border-top:1px solid #e5e5e5;
+        color:${statusColor};
+        font-weight:600;
+      ">
+        ${statusText}
+      </div>
+
+    </div>
+  `;
+}
 
 
 if (fileExcel) {
 
-  fileExcel.addEventListener(
-    'change',
-    async function() {
+  fileExcel.addEventListener('change', async function() {
 
-      const file =
-        this.files[0];
+    const file = this.files[0];
 
-
-      if (!file) {
-
-        fileExcelInfo.textContent =
-          'Belum ada file dipilih.';
-
-
-        excelPreview.style.display =
-          'none';
-
-
-        excelPreview.innerHTML =
-          '';
-
-
-        return;
-
-      }
-
+    if (!file) {
 
       fileExcelInfo.textContent =
-        'Membaca file...';
+        'Belum ada file dipilih.';
 
+      excelPreview.style.display = 'none';
+      excelPreview.innerHTML = '';
 
-      try {
+      const summary =
+        document.getElementById('excelSummary');
 
-        const arrayBuffer =
-          await file.arrayBuffer();
-
-
-        const workbook =
-          XLSX.read(
-            arrayBuffer,
-            {
-              type: 'array'
-            }
-          );
-
-
-        const sheetName =
-          workbook.SheetNames[0];
-
-
-        if (!sheetName) {
-
-          throw new Error(
-            'Sheet Excel tidak ditemukan.'
-          );
-
-        }
-
-
-        const worksheet =
-          workbook.Sheets[
-            sheetName
-          ];
-
-
-        const rows =
-          XLSX.utils.sheet_to_json(
-            worksheet,
-            {
-              header: 1,
-              defval: ''
-            }
-          );
-
-
-        if (!rows.length) {
-
-          throw new Error(
-            'File Excel kosong.'
-          );
-
-        }
-
-
-        fileExcelInfo.textContent =
-          `${file.name} • ${rows.length - 1} data`;
-
-
-        renderExcelPreview(
-          rows
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          'EXCEL ERROR:',
-          error
-        );
-
-
-        fileExcelInfo.textContent =
-          'Gagal membaca file Excel.';
-
-
-        excelPreview.style.display =
-          'block';
-
-
-        excelPreview.innerHTML = `
-          <div
-            style="
-              padding: 15px;
-              color: #d93025;
-            "
-          >
-            ${error.message}
-          </div>
-        `;
-
+      if (summary) {
+        summary.remove();
       }
 
-    }
-  );
+      excelData = [];
+      totalNominalExcel = 0;
 
+      return;
+    }
+
+    fileExcelInfo.textContent =
+      'Membaca file...';
+
+    try {
+
+      const arrayBuffer =
+        await file.arrayBuffer();
+
+      const workbook =
+        XLSX.read(arrayBuffer, {
+          type: 'array'
+        });
+
+      const sheetName =
+        workbook.SheetNames[0];
+
+      if (!sheetName) {
+        throw new Error(
+          'Sheet Excel tidak ditemukan.'
+        );
+      }
+
+      const worksheet =
+        workbook.Sheets[sheetName];
+
+      const rows =
+        XLSX.utils.sheet_to_json(
+          worksheet,
+          {
+            header: 1,
+            defval: ''
+          }
+        );
+
+      const indexes =
+        validateExcelFormat(rows);
+
+      const calculation =
+        calculateExcelTotal(
+          rows,
+          indexes
+        );
+
+      excelData = rows;
+
+      totalNominalExcel =
+        calculation.total;
+
+      fileExcelInfo.textContent =
+        `${file.name} • ${calculation.jumlahData} data`;
+
+      renderExcelPreview(
+        rows,
+        indexes
+      );
+
+      renderExcelSummary(
+        calculation.total,
+        calculation.jumlahData,
+        calculation.nominalKosong
+      );
+
+    } catch (error) {
+
+      console.error(
+        'EXCEL ERROR:',
+        error
+      );
+
+      fileExcelInfo.textContent =
+        'Gagal membaca file Excel.';
+
+      excelPreview.style.display =
+        'block';
+
+      excelPreview.innerHTML = `
+        <div style="
+          padding:15px;
+          color:#d93025;
+        ">
+          ${error.message}
+        </div>
+      `;
+
+      const summary =
+        document.getElementById('excelSummary');
+
+      if (summary) {
+        summary.remove();
+      }
+
+      excelData = [];
+      totalNominalExcel = 0;
+    }
+  });
 }
 
 
-// ==================================================
-// RENDER PREVIEW EXCEL
-// ==================================================
+function renderExcelPreview(rows, indexes) {
 
-function renderExcelPreview(
-  rows
-) {
+  if (!rows.length) return;
 
-  if (!rows.length) {
-
-    return;
-
-  }
-
-
-  const header =
-    rows[0];
-
-
-  const data =
-    rows.slice(1);
-
+  const header = rows[0];
+  const data = rows.slice(1);
 
   let html = `
     <table>
-
       <thead>
-
         <tr>
   `;
 
+  header.forEach(function(cell) {
 
-  header.forEach(
-    function(cell) {
+    html += `
+      <th>${cell || ''}</th>
+    `;
 
-      html += `
-        <th>
-          ${cell || ''}
-        </th>
-      `;
-
-    }
-  );
-
+  });
 
   html += `
         </tr>
-
       </thead>
-
       <tbody>
   `;
 
-
-  // MAKSIMAL 20 BARIS PREVIEW
-
   const previewRows =
-    data.slice(
-      0,
-      20
-    );
+    data.slice(0, 20);
 
+  previewRows.forEach(function(row) {
 
-  previewRows.forEach(
-    function(row) {
+    html += '<tr>';
 
-      html +=
-        '<tr>';
+    header.forEach(function(_, index) {
 
+      let value =
+        row[index] !== undefined
+          ? row[index]
+          : '';
 
-      header.forEach(
-        function(
-          _,
-          index
-        ) {
+      // Format khusus kolom Nominal
+      if (
+        index === indexes.nominalIndex &&
+        value !== ''
+      ) {
+        value =
+          'Rp ' +
+          formatRupiahSimple(
+            parseNominalExcel(value)
+          );
+      }
 
-          html += `
-            <td>
-              ${row[index] || ''}
-            </td>
-          `;
+      html += `
+        <td>${value}</td>
+      `;
 
-        }
-      );
+    });
 
+    html += '</tr>';
 
-      html +=
-        '</tr>';
-
-    }
-  );
-
+  });
 
   html += `
       </tbody>
-
     </table>
   `;
-
 
   if (data.length > 20) {
 
     html += `
-      <div
-        style="
-          padding: 12px;
-          font-size: 12px;
-          color: #777;
-        "
-      >
-        Menampilkan 20 dari
-        ${data.length}
-        data.
+      <div style="
+        padding:12px;
+        font-size:12px;
+        color:#777;
+      ">
+        Menampilkan 20 dari ${data.length} data.
       </div>
     `;
 
   }
 
-
-  excelPreview.innerHTML =
-    html;
-
+  excelPreview.innerHTML = html;
 
   excelPreview.style.display =
     'block';
-
 }
