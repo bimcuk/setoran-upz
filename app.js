@@ -275,14 +275,10 @@ async function loadDashboard() {
 // RENDER RIWAYAT
 // ==================================================
 
-function renderRiwayat(
-  setoran
-) {
+function renderRiwayat(setoran) {
 
   const container =
-    document.getElementById(
-      'riwayatContainer'
-    );
+    document.getElementById('riwayatContainer');
 
 
   if (!setoran.length) {
@@ -298,46 +294,121 @@ function renderRiwayat(
   }
 
 
+  const namaBulan = [
+    '',
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  ];
+
+
   container.innerHTML =
-    setoran.map(
-      item => `
+    setoran.map(item => {
 
-        <div
-          style="
-            padding: 14px 0;
-            border-bottom:
-              1px solid #eee;
-          "
-        >
+      const tanggal = item.tanggal_setor
+        ? new Date(
+            item.tanggal_setor + 'T00:00:00'
+          ).toLocaleDateString(
+            'id-ID',
+            {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            }
+          )
+        : '-';
 
-          <div>
-            <strong>
-              ${formatRupiah(
-                item.nominal
-              )}
-            </strong>
+
+      const bulan =
+        namaBulan[
+          Number(item.periode_bulan)
+        ] || '-';
+
+
+      const periode =
+        item.periode_tahun
+          ? `${bulan} ${item.periode_tahun}`
+          : '-';
+
+
+      const status =
+        item.status || '-';
+
+
+      let statusClass = 'status-menunggu';
+
+
+      if (status === 'diterima') {
+        statusClass = 'status-diterima';
+      }
+
+      if (status === 'ditolak') {
+        statusClass = 'status-ditolak';
+      }
+
+      if (status === 'sesuai') {
+        statusClass = 'status-sesuai';
+      }
+
+      if (status === 'selisih') {
+        statusClass = 'status-selisih';
+      }
+
+
+      const statusLabel =
+        status.charAt(0).toUpperCase() +
+        status.slice(1);
+
+
+      return `
+
+        <div class="riwayat-item">
+
+          <div class="riwayat-main">
+
+            <div class="riwayat-nominal">
+              ${formatRupiah(item.nominal)}
+            </div>
+
+            <div class="riwayat-info">
+
+              <div>
+                Setoran:
+                <strong>${tanggal}</strong>
+              </div>
+
+              <div>
+                Periode:
+                <strong>${periode}</strong>
+              </div>
+
+            </div>
+
           </div>
 
+
           <div
-            style="
-              margin-top: 4px;
-              font-size: 13px;
-              color: #777;
-            "
+            class="status-badge ${statusClass}"
           >
-            ${item.tanggal_setor || '-'}
-            ·
-            ${item.status || '-'}
+            ${statusLabel}
           </div>
 
         </div>
 
-      `
-    )
-    .join('');
+      `;
+
+    }).join('');
 
 }
-
 
 // ==================================================
 // LOGIN
