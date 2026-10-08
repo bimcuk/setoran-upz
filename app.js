@@ -1,5 +1,8 @@
-const SUPABASE_URL = 'https://efmgvgqyzdbhmejigqyg.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_qhbns7HHepypJ2s3TiF-MQ_i_-bpaow';
+const SUPABASE_URL =
+  'https://efmgvgqyzdbhmejigqyg.supabase.co';
+
+const SUPABASE_ANON_KEY =
+  'sb_publishable_qhbns7HHepypJ2s3TiF-MQ_i_-bpaow';
 
 const APPS_SCRIPT_URL =
   '/api/backend';
@@ -68,9 +71,10 @@ async function callBackend(
   const {
     data: { session },
     error
-  } = await supabaseClient
-    .auth
-    .getSession();
+  } =
+    await supabaseClient
+      .auth
+      .getSession();
 
 
   if (error || !session) {
@@ -278,7 +282,9 @@ async function loadDashboard() {
 function renderRiwayat(setoran) {
 
   const container =
-    document.getElementById('riwayatContainer');
+    document.getElementById(
+      'riwayatContainer'
+    );
 
 
   if (!setoran.length) {
@@ -312,103 +318,134 @@ function renderRiwayat(setoran) {
 
 
   container.innerHTML =
-    setoran.map(item => {
+    setoran.map(
+      item => {
 
-      const tanggal = item.tanggal_setor
-        ? new Date(
-            item.tanggal_setor + 'T00:00:00'
-          ).toLocaleDateString(
-            'id-ID',
-            {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            }
-          )
-        : '-';
-
-
-      const bulan =
-        namaBulan[
-          Number(item.periode_bulan)
-        ] || '-';
+        const tanggal =
+          item.tanggal_setor
+            ? new Date(
+                item.tanggal_setor +
+                'T00:00:00'
+              ).toLocaleDateString(
+                'id-ID',
+                {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                }
+              )
+            : '-';
 
 
-      const periode =
-        item.periode_tahun
-          ? `${bulan} ${item.periode_tahun}`
-          : '-';
+        const bulan =
+          namaBulan[
+            Number(
+              item.periode_bulan
+            )
+          ] || '-';
 
 
-      const status =
-        item.status || '-';
+        const periode =
+          item.periode_tahun
+            ? `${bulan} ${item.periode_tahun}`
+            : '-';
 
 
-      let statusClass = 'status-menunggu';
+        const status =
+          item.status || '-';
 
 
-      if (status === 'diterima') {
-        statusClass = 'status-diterima';
-      }
-
-      if (status === 'ditolak') {
-        statusClass = 'status-ditolak';
-      }
-
-      if (status === 'sesuai') {
-        statusClass = 'status-sesuai';
-      }
-
-      if (status === 'selisih') {
-        statusClass = 'status-selisih';
-      }
+        let statusClass =
+          'status-menunggu';
 
 
-      const statusLabel =
-        status.charAt(0).toUpperCase() +
-        status.slice(1);
+        if (
+          status === 'diterima'
+        ) {
+
+          statusClass =
+            'status-diterima';
+
+        }
 
 
-      return `
+        if (
+          status === 'ditolak'
+        ) {
 
-        <div class="riwayat-item">
+          statusClass =
+            'status-ditolak';
 
-          <div class="riwayat-main">
+        }
 
-            <div class="riwayat-nominal">
-              ${formatRupiah(item.nominal)}
+
+        if (
+          status === 'sesuai'
+        ) {
+
+          statusClass =
+            'status-sesuai';
+
+        }
+
+
+        if (
+          status === 'selisih'
+        ) {
+
+          statusClass =
+            'status-selisih';
+
+        }
+
+
+        const statusLabel =
+          status.charAt(0).toUpperCase() +
+          status.slice(1);
+
+
+        return `
+
+          <div class="riwayat-item">
+
+            <div class="riwayat-main">
+
+              <div class="riwayat-nominal">
+                ${formatRupiah(item.nominal)}
+              </div>
+
+              <div class="riwayat-info">
+
+                <div>
+                  Setoran:
+                  <strong>${tanggal}</strong>
+                </div>
+
+                <div>
+                  Periode:
+                  <strong>${periode}</strong>
+                </div>
+
+              </div>
+
             </div>
 
-            <div class="riwayat-info">
 
-              <div>
-                Setoran:
-                <strong>${tanggal}</strong>
-              </div>
-
-              <div>
-                Periode:
-                <strong>${periode}</strong>
-              </div>
-
+            <div
+              class="status-badge ${statusClass}"
+            >
+              ${statusLabel}
             </div>
 
           </div>
 
+        `;
 
-          <div
-            class="status-badge ${statusClass}"
-          >
-            ${statusLabel}
-          </div>
-
-        </div>
-
-      `;
-
-    }).join('');
+      }
+    ).join('');
 
 }
+
 
 // ==================================================
 // LOGIN
@@ -513,7 +550,9 @@ logoutButton.addEventListener(
       .auth
       .signOut();
 
+
     showLogin();
+
 
     document
       .getElementById(
@@ -521,17 +560,21 @@ logoutButton.addEventListener(
       )
       .value = '';
 
+
     document
       .getElementById(
         'password'
       )
       .value = '';
 
+
     message.textContent =
       '';
 
+
     loginButton.disabled =
       false;
+
 
     loginButton.textContent =
       'Login';
@@ -569,175 +612,282 @@ async function checkSession() {
 
 checkSession();
 
-// =========================
-// FORM INPUT SETORAN
-// =========================
 
-const setoranForm = document.getElementById('setoranForm');
+// ==================================================
+// FORM INPUT SETORAN
+// ==================================================
+
+const setoranForm =
+  document.getElementById(
+    'setoranForm'
+  );
+
 
 if (setoranForm) {
 
-  setoranForm.addEventListener('submit', async function (event) {
+  setoranForm.addEventListener(
+    'submit',
+    async function(event) {
 
-    event.preventDefault();
-
-    const button = document.getElementById('submitSetoranButton');
-    const message = document.getElementById('setoranMessage');
-
-    const tanggalSetor =
-      document.getElementById('tanggalSetor').value;
-
-    const periodeBulan =
-      document.getElementById('periodeBulan').value;
-
-    const periodeTahun =
-      document.getElementById('periodeTahun').value;
-
-    const nominal =
-      document.getElementById('nominalSetoran').value;
+      event.preventDefault();
 
 
-    // Validasi sederhana
-    if (
-      !tanggalSetor ||
-      !periodeBulan ||
-      !periodeTahun ||
-      !nominal
-    ) {
-
-      message.textContent =
-        'Semua data wajib diisi.';
-
-      message.style.color = '#d93025';
-
-      return;
-    }
+      const button =
+        document.getElementById(
+          'submitSetoranButton'
+        );
 
 
-    try {
-
-      // Loading
-      button.disabled = true;
-      button.textContent = 'Menyimpan...';
-
-      message.textContent = 'Mengirim data setoran...';
-      message.style.color = '#666';
+      const message =
+        document.getElementById(
+          'setoranMessage'
+        );
 
 
-      // Kirim ke backend
-      const result = await callBackend(
-        'createSetoran',
-        {
-          tanggal_setor: tanggalSetor,
-          periode_bulan: Number(periodeBulan),
-          periode_tahun: Number(periodeTahun),
-          nominal: Number(nominal.replace(/\./g, '')
-        }
-      );
+      const tanggalSetor =
+        document.getElementById(
+          'tanggalSetor'
+        ).value;
 
 
-      // Berhasil
-      message.textContent =
-        'Setoran berhasil disimpan.';
-
-      message.style.color = '#259148';
-
-
-      // Reset form
-      setoranForm.reset();
+      const periodeBulan =
+        document.getElementById(
+          'periodeBulan'
+        ).value;
 
 
-      // Reload dashboard
-      await loadDashboard();
+      const periodeTahun =
+        document.getElementById(
+          'periodeTahun'
+        ).value;
 
 
-    } catch (error) {
-
-      console.error(
-        'CREATE SETORAN ERROR:',
-        error
-      );
-
-      message.textContent =
-        error.message || 'Gagal menyimpan setoran.';
-
-      message.style.color = '#d93025';
+      const nominal =
+        document.getElementById(
+          'nominalSetoran'
+        ).value;
 
 
-    } finally {
+      // VALIDASI
 
-      button.disabled = false;
-      button.textContent = 'Simpan Setoran';
+      if (
+        !tanggalSetor ||
+        !periodeBulan ||
+        !periodeTahun ||
+        !nominal
+      ) {
 
-    }
+        message.textContent =
+          'Semua data wajib diisi.';
 
-  });
+        message.style.color =
+          '#d93025';
 
-}
-
-// =========================
-// FORMAT NOMINAL SETORAN
-// =========================
-
-const nominalSetoran =
-  document.getElementById('nominalSetoran');
-
-if (nominalSetoran) {
-
-  nominalSetoran.addEventListener(
-    'input',
-    function () {
-
-      let angka =
-        this.value.replace(/\D/g, '');
-
-      if (!angka) {
-        this.value = '';
         return;
+
       }
 
-      this.value =
-        Number(angka).toLocaleString('id-ID');
+
+      try {
+
+        // LOADING
+
+        button.disabled =
+          true;
+
+        button.textContent =
+          'Menyimpan...';
+
+
+        message.textContent =
+          'Mengirim data setoran...';
+
+        message.style.color =
+          '#666';
+
+
+        // NOMINAL
+        // 500.000 -> 500000
+
+        const nominalAngka =
+          Number(
+            nominal.replace(
+              /\./g,
+              ''
+            )
+          );
+
+
+        // KIRIM KE BACKEND
+
+        const result =
+          await callBackend(
+            'createSetoran',
+            {
+              tanggal_setor:
+                tanggalSetor,
+
+              periode_bulan:
+                Number(
+                  periodeBulan
+                ),
+
+              periode_tahun:
+                Number(
+                  periodeTahun
+                ),
+
+              nominal:
+                nominalAngka
+            }
+          );
+
+
+        // BERHASIL
+
+        message.textContent =
+          'Setoran berhasil disimpan.';
+
+        message.style.color =
+          '#259148';
+
+
+        // RESET FORM
+
+        setoranForm.reset();
+
+
+        // RELOAD DASHBOARD
+
+        await loadDashboard();
+
+
+      } catch (error) {
+
+        console.error(
+          'CREATE SETORAN ERROR:',
+          error
+        );
+
+
+        message.textContent =
+          error.message ||
+          'Gagal menyimpan setoran.';
+
+        message.style.color =
+          '#d93025';
+
+
+      } finally {
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          'Simpan Setoran';
+
+      }
 
     }
   );
 
 }
 
-// =========================
+
+// ==================================================
+// FORMAT NOMINAL SETORAN
+// ==================================================
+
+const nominalSetoran =
+  document.getElementById(
+    'nominalSetoran'
+  );
+
+
+if (nominalSetoran) {
+
+  nominalSetoran.addEventListener(
+    'input',
+    function() {
+
+      let angka =
+        this.value.replace(
+          /\D/g,
+          ''
+        );
+
+
+      if (!angka) {
+
+        this.value =
+          '';
+
+        return;
+
+      }
+
+
+      this.value =
+        Number(
+          angka
+        ).toLocaleString(
+          'id-ID'
+        );
+
+    }
+  );
+
+}
+
+
+// ==================================================
 // PREVIEW EXCEL MUZAKI
-// =========================
+// ==================================================
 
 const fileExcel =
-  document.getElementById('fileExcel');
+  document.getElementById(
+    'fileExcel'
+  );
+
 
 const fileExcelInfo =
-  document.getElementById('fileExcelInfo');
+  document.getElementById(
+    'fileExcelInfo'
+  );
+
 
 const excelPreview =
-  document.getElementById('excelPreview');
+  document.getElementById(
+    'excelPreview'
+  );
 
 
 if (fileExcel) {
 
   fileExcel.addEventListener(
     'change',
-    async function () {
+    async function() {
 
-      const file = this.files[0];
+      const file =
+        this.files[0];
+
 
       if (!file) {
 
         fileExcelInfo.textContent =
           'Belum ada file dipilih.';
 
+
         excelPreview.style.display =
           'none';
+
 
         excelPreview.innerHTML =
           '';
 
+
         return;
+
       }
 
 
@@ -764,8 +914,19 @@ if (fileExcel) {
           workbook.SheetNames[0];
 
 
+        if (!sheetName) {
+
+          throw new Error(
+            'Sheet Excel tidak ditemukan.'
+          );
+
+        }
+
+
         const worksheet =
-          workbook.Sheets[sheetName];
+          workbook.Sheets[
+            sheetName
+          ];
 
 
         const rows =
@@ -791,7 +952,9 @@ if (fileExcel) {
           `${file.name} • ${rows.length - 1} data`;
 
 
-        renderExcelPreview(rows);
+        renderExcelPreview(
+          rows
+        );
 
 
       } catch (error) {
@@ -829,14 +992,18 @@ if (fileExcel) {
 }
 
 
-// =========================
+// ==================================================
 // RENDER PREVIEW EXCEL
-// =========================
+// ==================================================
 
-function renderExcelPreview(rows) {
+function renderExcelPreview(
+  rows
+) {
 
   if (!rows.length) {
+
     return;
+
   }
 
 
@@ -850,13 +1017,15 @@ function renderExcelPreview(rows) {
 
   let html = `
     <table>
+
       <thead>
+
         <tr>
   `;
 
 
   header.forEach(
-    function (cell) {
+    function(cell) {
 
       html += `
         <th>
@@ -870,24 +1039,34 @@ function renderExcelPreview(rows) {
 
   html += `
         </tr>
+
       </thead>
+
       <tbody>
   `;
 
 
-  // Tampilkan maksimal 20 baris
+  // MAKSIMAL 20 BARIS PREVIEW
+
   const previewRows =
-    data.slice(0, 20);
+    data.slice(
+      0,
+      20
+    );
 
 
   previewRows.forEach(
-    function (row) {
+    function(row) {
 
-      html += '<tr>';
+      html +=
+        '<tr>';
 
 
       header.forEach(
-        function (_, index) {
+        function(
+          _,
+          index
+        ) {
 
           html += `
             <td>
@@ -899,7 +1078,8 @@ function renderExcelPreview(rows) {
       );
 
 
-      html += '</tr>';
+      html +=
+        '</tr>';
 
     }
   );
@@ -907,6 +1087,7 @@ function renderExcelPreview(rows) {
 
   html += `
       </tbody>
+
     </table>
   `;
 
