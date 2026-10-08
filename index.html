@@ -356,6 +356,46 @@
 
 
 
+          <!-- ========================= -->
+          <!-- FILE EXCEL -->
+          <!-- ========================= -->
+
+          <div class="form-group form-group-full">
+
+            <label for="fileExcel">
+              Rincian Muzaki
+            </label>
+
+            <input
+              type="file"
+              id="fileExcel"
+              accept=".xlsx,.xls"
+            >
+
+            <div
+              id="fileExcelInfo"
+              class="file-info"
+            >
+              Belum ada file dipilih.
+            </div>
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- PREVIEW EXCEL -->
+          <!-- ========================= -->
+
+          <div
+            id="excelPreview"
+            class="excel-preview form-group-full"
+            style="display: none;"
+          >
+          </div>
+
+
+
           <!-- TOMBOL -->
 
           <button
@@ -418,6 +458,14 @@
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
   ></script>
 
+
+  <!-- ========================= -->
+  <!-- SHEETJS / EXCEL -->
+  <!-- ========================= -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+  ></script>
 
 
   <!-- ========================= -->
