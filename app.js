@@ -677,6 +677,20 @@ if (setoranForm) {
         !nominal
       ) {
 
+        if (!fileExcel.files.length) {
+          message.textContent =
+            'Rincian muzaki dalam Excel wajib diupload.';
+          message.style.color = '#d93025';
+          return;
+        }
+        
+        if (!excelValid) {
+          message.textContent =
+            'Total nominal Excel belum sesuai dengan Nominal Setoran.';
+          message.style.color = '#d93025';
+          return;
+        }
+        
         message.textContent =
           'Semua data wajib diisi.';
 
@@ -853,6 +867,7 @@ const excelPreview = document.getElementById('excelPreview');
 
 let excelData = [];
 let totalNominalExcel = 0;
+let excelValid = false;
 
 
 function parseNominalExcel(value) {
@@ -901,7 +916,7 @@ function validateExcelFormat(rows) {
   const noIndex = header.indexOf('no');
   const namaIndex = header.indexOf('nama muzaki');
   const nominalIndex = header.indexOf('nominal');
-  const jenisIndex = header.indexOf('jenis zakat');
+  const jenisIndex = header.indexOf('jenis');
 
   if (namaIndex === -1) {
     throw new Error('Kolom "Nama Muzaki" tidak ditemukan.');
@@ -912,7 +927,7 @@ function validateExcelFormat(rows) {
   }
 
   if (jenisIndex === -1) {
-    throw new Error('Kolom "Jenis Zakat" tidak ditemukan.');
+    throw new Error('Kolom "Jenis" tidak ditemukan.');
   }
 
   return {
@@ -976,6 +991,11 @@ function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
   ) || 0;
 
   const selisih = totalExcel - nominalSetoran;
+  
+  excelValid =
+  nominalSetoran > 0 &&
+  nominalKosong === 0 &&
+  selisih === 0;
 
   let statusText = '';
   let statusColor = '#666';
