@@ -798,47 +798,51 @@ if (setoranForm) {
 // FORMAT NOMINAL SETORAN
 // ==================================================
 
-const nominalSetoran =
-  document.getElementById(
-    'nominalSetoran'
-  );
-
+const nominalSetoran = document.getElementById('nominalSetoran');
 
 if (nominalSetoran) {
 
-  nominalSetoran.addEventListener(
-    'input',
-    function() {
+  nominalSetoran.addEventListener('input', function() {
 
-      let angka =
-        this.value.replace(
-          /\D/g,
-          ''
+    let angka =
+      this.value.replace(/\D/g, '');
+
+    if (!angka) {
+
+      this.value = '';
+
+      if (totalNominalExcel > 0) {
+        renderExcelSummary(
+          totalNominalExcel,
+          excelData.length - 1,
+          0
         );
-
-
-      if (!angka) {
-
-        this.value =
-          '';
-
-        return;
-
       }
 
+      return;
+    }
 
-      this.value =
-        Number(
-          angka
-        ).toLocaleString(
-          'id-ID'
+    this.value =
+      Number(angka).toLocaleString('id-ID');
+
+    if (totalNominalExcel > 0) {
+
+      const calculation =
+        calculateExcelTotal(
+          excelData,
+          validateExcelFormat(excelData)
         );
 
+      renderExcelSummary(
+        totalNominalExcel,
+        calculation.jumlahData,
+        calculation.nominalKosong
+      );
+
     }
-  );
 
+  });
 }
-
 
 // ==================================================
 // PREVIEW EXCEL MUZAKI
