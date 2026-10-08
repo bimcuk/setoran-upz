@@ -2,75 +2,27 @@
   box-sizing: border-box;
 }
 
+html {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
   background: #f5f7f6;
   color: #202322;
 }
 
-.login-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 400px;
-  background: white;
-  padding: 32px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-}
-
-h1 {
-  margin: 0;
-  color: #259148;
-}
-
-.subtitle {
-  margin-top: 6px;
-  margin-bottom: 28px;
-  color: #666;
-}
-
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 18px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 15px;
+button,
+input,
+select {
+  font-family: inherit;
 }
 
 button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: #259148;
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
   cursor: pointer;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
-#message {
-  margin-top: 16px;
-  text-align: center;
 }
 
 /* =========================
@@ -87,14 +39,97 @@ button:hover {
 
 
 /* =========================
+   LOGIN
+========================= */
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #f5f7f6;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.login-card h1 {
+  margin: 0;
+  color: #259148;
+  font-size: 30px;
+}
+
+.subtitle {
+  margin: 8px 0 28px;
+  color: #777;
+  font-size: 15px;
+}
+
+.login-card label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.login-card input {
+  width: 100%;
+  height: 46px;
+  margin-bottom: 18px;
+  padding: 0 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  outline: none;
+  background: #fff;
+}
+
+.login-card input:focus {
+  border-color: #259148;
+  box-shadow: 0 0 0 3px rgba(37, 145, 72, 0.1);
+}
+
+.login-card button {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 10px;
+  background: #259148;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.login-card button:hover {
+  background: #1f7e3e;
+}
+
+#message {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+
+/* =========================
    TOPBAR
 ========================= */
 
 .topbar {
-  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  background: #ffffff;
   border-bottom: 1px solid #e5e5e5;
 
-  padding: 16px 24px;
+  padding: 14px 24px;
 
   display: flex;
   align-items: center;
@@ -104,12 +139,31 @@ button:hover {
 .topbar h2 {
   margin: 0;
   color: #259148;
+  font-size: 21px;
 }
 
 .user-name {
   margin-top: 4px;
-  color: #666;
+  color: #777;
+  font-size: 13px;
+}
+
+.logout-button {
+  width: auto;
+  min-width: 80px;
+  padding: 9px 16px;
+
+  border: 1px solid #ddd;
+  border-radius: 9px;
+
+  background: #f5f5f5;
+  color: #333;
+
   font-size: 14px;
+}
+
+.logout-button:hover {
+  background: #eaeaea;
 }
 
 
@@ -118,10 +172,10 @@ button:hover {
 ========================= */
 
 .dashboard-container {
+  width: 100%;
   max-width: 1100px;
 
   margin: 0 auto;
-
   padding: 24px;
 }
 
@@ -132,23 +186,32 @@ button:hover {
 
 .welcome-card {
   background: #259148;
-  color: white;
+  color: #ffffff;
 
   border-radius: 16px;
 
   padding: 24px;
 
   margin-bottom: 20px;
+
+  box-shadow: 0 6px 18px rgba(37, 145, 72, 0.15);
 }
 
 .welcome-card small {
-  opacity: 0.8;
+  display: block;
+  margin-bottom: 6px;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .welcome-card h1 {
-  margin: 6px 0 0;
-
-  color: white;
+  margin: 0;
+  color: #ffffff;
+  font-size: 26px;
 }
 
 
@@ -157,137 +220,260 @@ button:hover {
 ========================= */
 
 .summary-grid {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 16px;
 
   margin-bottom: 20px;
 }
 
-
 .summary-card {
-
-  background: white;
+  background: #ffffff;
 
   border-radius: 14px;
 
   padding: 20px;
 
-  box-shadow:
-    0 4px 16px
-    rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
-
 
 .summary-title {
-
-  font-size: 14px;
-
-  color: #666;
-
   margin-bottom: 8px;
+
+  color: #777;
+
+  font-size: 13px;
 }
 
-
 .summary-value {
+  color: #259148;
 
   font-size: 24px;
-
   font-weight: 700;
-
-  color: #259148;
 }
 
 
 /* =========================
-   CONTENT
+   CONTENT CARD
 ========================= */
 
 .content-card {
-
-  background: white;
+  background: #ffffff;
 
   border-radius: 14px;
 
-  padding: 20px;
+  padding: 22px;
 
-  box-shadow:
-    0 4px 16px
-    rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
-
 
 .section-header {
-
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
-
 .section-header h2 {
-
   margin: 0;
+
+  color: #202322;
 
   font-size: 20px;
 }
 
 
 /* =========================
-   EMPTY
+   FORM SETORAN
 ========================= */
 
+.setoran-form {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 7px;
+
+  color: #333;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  height: 46px;
+
+  padding: 0 13px;
+
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #202322;
+
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #259148;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 145, 72, 0.1);
+}
+
+
+/* TOMBOL SIMPAN */
+
+#setoranForm button {
+  grid-column: 1 / -1;
+
+  width: 100%;
+
+  height: 46px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #259148;
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#setoranForm button:hover {
+  background: #1f7e3e;
+}
+
+
+/* PESAN FORM */
+
+#setoranMessage {
+  grid-column: 1 / -1;
+
+  min-height: 20px;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   RIWAYAT
+========================= */
+
+#riwayatContainer {
+  width: 100%;
+}
+
 .empty-state {
+  padding: 35px 20px;
 
   text-align: center;
 
-  padding: 40px 20px;
-
   color: #888;
+
+  font-size: 14px;
+
+  border: 1px dashed #ddd;
+  border-radius: 10px;
+
+  background: #fafafa;
 }
 
 
 /* =========================
-   LOGOUT
+   RESPONSIVE TABLET
 ========================= */
 
-.logout-button {
-
-  width: auto;
-
-  padding:
-    9px 16px;
-
-  background: #f1f1f1;
-
-  color: #333;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 700px) {
+@media (max-width: 800px) {
 
   .dashboard-container {
-    padding: 16px;
+    padding: 18px;
   }
 
   .summary-grid {
-
-    grid-template-columns:
-      1fr;
-
+    grid-template-columns: 1fr;
   }
 
+  .setoran-form {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================
+   RESPONSIVE MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
   .topbar {
+    padding: 13px 16px;
+  }
 
-    padding:
-      14px 16px;
+  .topbar h2 {
+    font-size: 18px;
+  }
 
+  .user-name {
+    font-size: 12px;
+  }
+
+  .logout-button {
+    min-width: auto;
+    padding: 8px 13px;
+  }
+
+  .dashboard-container {
+    padding: 14px;
+  }
+
+  .welcome-card {
+    padding: 20px;
+
+    border-radius: 14px;
+  }
+
+  .welcome-card h1 {
+    font-size: 22px;
+  }
+
+  .summary-card {
+    padding: 17px;
+  }
+
+  .summary-value {
+    font-size: 21px;
+  }
+
+  .content-card {
+    padding: 17px;
+
+    border-radius: 12px;
+  }
+
+  .section-header h2 {
+    font-size: 18px;
+  }
+
+  .login-card {
+    padding: 25px 20px;
   }
 
 }
