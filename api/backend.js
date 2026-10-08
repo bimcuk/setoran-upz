@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   try {
 
     const response = await fetch(
-      'URL_APPS_SCRIPT_KAMU',
+      'https://script.google.com/macros/s/AKfycbxwpkFzjuBeTEJD5C5rVtek07MXBT5jQor3P1yrmQFvRdQvU1r5zYG22_ZSDmRij0J-/exec',
       {
         method: 'POST',
 
