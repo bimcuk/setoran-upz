@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Setoran UPZ BAZNAS Banyumas</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+  <!-- ========================= -->
+  <!-- LOGIN -->
+  <!-- ========================= -->
+
+  <div id="loginPage" class="page">
+
+    <div class="login-container">
+
+      <div class="login-card">
+
+        <h1>Setoran UPZ</h1>
+
+        <p class="subtitle">
+          BAZNAS Kabupaten Banyumas
+        </p>
+
+
+        <form id="loginForm">
+
+          <label for="email">
+            Email
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            placeholder="Masukkan email"
+            required
+          >
+
+
+          <label for="password">
+            Password
+          </label>
+
+          <input
+            type="password"
+            id="password"
+            placeholder="Masukkan password"
+            required
+          >
+
+
+          <button
+            type="submit"
+            id="loginButton"
+          >
+            Login
+          </button>
+
+        </form>
+
+
+        <div id="message"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ========================= -->
+  <!-- DASHBOARD -->
+  <!-- ========================= -->
+
+  <div
+    id="dashboardPage"
+    class="page hidden"
+  >
+
+    <header class="topbar">
+
+      <div>
+
+        <h2>
+          Setoran UPZ
+        </h2>
+
+        <div
+          id="userName"
+          class="user-name"
+        >
+          -
+        </div>
+
+      </div>
+
+
+      <button
+        id="logoutButton"
+        class="logout-button"
+      >
+        Logout
+      </button>
+
+    </header>
+
+
+
+    <main class="dashboard-container">
+
+      <!-- PROFILE -->
+
+      <section class="welcome-card">
+
+        <div>
+
+          <small>
+            UPZ
+          </small>
+
+          <h1 id="upzName">
+            -
+          </h1>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- SUMMARY -->
+
+      <section class="summary-grid">
+
+
+        <div class="summary-card">
+
+          <div class="summary-title">
+            Total Setoran
+          </div>
+
+          <div
+            id="totalSetoran"
+            class="summary-value"
+          >
+            Rp 0
+          </div>
+
+        </div>
+
+
+
+        <div class="summary-card">
+
+          <div class="summary-title">
+            Jumlah Transaksi
+          </div>
+
+          <div
+            id="jumlahTransaksi"
+            class="summary-value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+
+        <div class="summary-card">
+
+          <div class="summary-title">
+            Status Terakhir
+          </div>
+
+          <div
+            id="statusTerakhir"
+            class="summary-value"
+          >
+            -
+          </div>
+
+        </div>
+
+
+      </section>
+
+
+
+      <!-- RIWAYAT -->
+
+      <section class="content-card">
+
+        <div class="section-header">
+
+          <h2>
+            Riwayat Setoran
+          </h2>
+
+        </div>
+
+
+        <div id="riwayatContainer">
+
+          <div class="empty-state">
+            Belum ada data setoran.
+          </div>
+
+        </div>
+
+      </section>
+
+
+    </main>
+
+  </div>
+
+
+
+  <!-- SUPABASE -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+
+  <!-- APP -->
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>

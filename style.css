@@ -1,0 +1,293 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7f6;
+  color: #202322;
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  margin: 0;
+  color: #259148;
+}
+
+.subtitle {
+  margin-top: 6px;
+  margin-bottom: 28px;
+  color: #666;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #259148;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+#message {
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* =========================
+   GENERAL
+========================= */
+
+.hidden {
+  display: none !important;
+}
+
+.page {
+  min-height: 100vh;
+}
+
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+
+  padding: 16px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar h2 {
+  margin: 0;
+  color: #259148;
+}
+
+.user-name {
+  margin-top: 4px;
+  color: #666;
+  font-size: 14px;
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard-container {
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 24px;
+}
+
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome-card {
+  background: #259148;
+  color: white;
+
+  border-radius: 16px;
+
+  padding: 24px;
+
+  margin-bottom: 20px;
+}
+
+.welcome-card small {
+  opacity: 0.8;
+}
+
+.welcome-card h1 {
+  margin: 6px 0 0;
+
+  color: white;
+}
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+.summary-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+
+.summary-card {
+
+  background: white;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 4px 16px
+    rgba(0, 0, 0, 0.05);
+}
+
+
+.summary-title {
+
+  font-size: 14px;
+
+  color: #666;
+
+  margin-bottom: 8px;
+}
+
+
+.summary-value {
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+  color: #259148;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.content-card {
+
+  background: white;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 4px 16px
+    rgba(0, 0, 0, 0.05);
+}
+
+
+.section-header {
+
+  margin-bottom: 16px;
+}
+
+
+.section-header h2 {
+
+  margin: 0;
+
+  font-size: 20px;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-state {
+
+  text-align: center;
+
+  padding: 40px 20px;
+
+  color: #888;
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+.logout-button {
+
+  width: auto;
+
+  padding:
+    9px 16px;
+
+  background: #f1f1f1;
+
+  color: #333;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+  .dashboard-container {
+    padding: 16px;
+  }
+
+  .summary-grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+  .topbar {
+
+    padding:
+      14px 16px;
+
+  }
+
+}
