@@ -71,6 +71,8 @@ let totalNominalExcel = 0;
 
 let excelValid = false;
 
+let currentProfile = null;
+
 
 // ==================================================
 // FORMAT RUPIAH
@@ -261,7 +263,9 @@ async function loadDashboard() {
     const profile =
       result.profile;
 
-
+    currentProfile =
+      profile;
+    
     const setoran =
       result.setoran || [];
 
@@ -910,29 +914,60 @@ if (setoranForm) {
         // 1. SIMPAN SETORAN
         // ==================================================
 
-        const result =
-          await callBackend(
-            'createSetoran',
-            {
+        // ==================================================
+// 1. UPLOAD EXCEL KE STORAGE
+// ==================================================
 
-              tanggal_setor:
-                tanggalSetor,
+setoranMessage.textContent =
+  'Mengupload file Excel...';
 
-              periode_bulan:
-                Number(
-                  periodeBulan
-                ),
+const uploadedFile =
+  await uploadExcelToStorage(
+    fileExcel.files[0],
+    currentProfile.upz_id,
+    Number(periodeTahun),
+    Number(periodeBulan)
+  );
 
-              periode_tahun:
-                Number(
-                  periodeTahun
-                ),
+console.log(
+  'EXCEL STORAGE RESULT:',
+  uploadedFile
+);
 
-              nominal:
-                nominalAngka
 
-            }
-          );
+// ==================================================
+// 2. SIMPAN SETORAN
+// ==================================================
+
+      const result =
+        await callBackend(
+          'createSetoran',
+          {
+      
+            tanggal_setor:
+              tanggalSetor,
+      
+            periode_bulan:
+              Number(
+                periodeBulan
+              ),
+      
+            periode_tahun:
+              Number(
+                periodeTahun
+              ),
+      
+            nominal:
+              nominalAngka,
+      
+            file_name:
+              uploadedFile.originalName,
+      
+            file_path:
+              uploadedFile.filePath
+      
+          }
+        );
 
 
         if (
@@ -1426,6 +1461,90 @@ function validateExcelFormat(
 
 }
 
+async function uploadExcelToStorage(file, upzId, tahun, bulan) {
+  if (!file) {
+    throw new Error('File Excel tidak ditemukan.');
+  }
+
+  if (!upzId) {
+    throw new Error('ID UPZ tidak ditemukan.');
+  }
+
+  // Maksimal 5 MB
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error('Ukuran file Excel maksimal 5 MB.');
+  }
+
+  const allowedExtensions = ['.xlsx', '.xls'];
+  const fileName = file.name;
+  const lowerName = fileName.toLowerCase();
+
+  const validExtension = allowedExtensions.some(function(ext) {
+    return lowerName.endsWith(ext);
+  });
+
+  if (!validExtension) {
+    throw new Error('File harus berformat Excel (.xlsx atau .xls).');
+  }
+
+  // Nama file dibuat unik agar tidak bentrok
+  const extension = lowerName.endsWith('.xlsx')
+    ? '.xlsx'
+    : '.xls';
+
+  const uniqueName =
+    Date.now() +
+    '_' +
+    Math.random().toString(36).substring(2, 8) +
+    extension;
+
+  const filePath =
+    upzId +
+    '/' +
+    tahun +
+    '/' +
+    String(bulan).padStart(2, '0') +
+    '/' +
+    uniqueName;
+
+  const { data, error } = await supabaseClient
+    .storage
+    .from('setoran-upz')
+    .upload(filePath, file, {
+      cacheControl: '3600',
+      upsert: false
+    });
+
+  if (error) {
+    console.error('UPLOAD EXCEL ERROR:', error);
+    throw new Error(
+      'Gagal upload Excel: ' + error.message
+    );
+  }
+
+  console.log('EXCEL UPLOADED:', data);
+
+  return {
+    originalName: fileName,
+    filePath: filePath
+  };
+}
+
+async function deleteExcelFromStorage(filePath) {
+  if (!filePath) return;
+
+  const { data, error } = await supabaseClient
+    .storage
+    .from('setoran-upz')
+    .remove([filePath]);
+
+  if (error) {
+    console.error('DELETE EXCEL ERROR:', error);
+    return;
+  }
+
+  console.log('EXCEL DELETED:', data);
+}
 
 // ==================================================
 // HITUNG TOTAL EXCEL
