@@ -1,3 +1,4 @@
+```javascript
 const SUPABASE_URL =
   'https://efmgvgqyzdbhmejigqyg.supabase.co';
 
@@ -39,6 +40,40 @@ const logoutButton =
 
 
 // ==================================================
+// ELEMENT FORM SETORAN
+// ==================================================
+
+const setoranForm =
+  document.getElementById('setoranForm');
+
+const setoranMessage =
+  document.getElementById('setoranMessage');
+
+const fileExcel =
+  document.getElementById('fileExcel');
+
+const fileExcelInfo =
+  document.getElementById('fileExcelInfo');
+
+const excelPreview =
+  document.getElementById('excelPreview');
+
+const nominalSetoran =
+  document.getElementById('nominalSetoran');
+
+
+// ==================================================
+// DATA EXCEL
+// ==================================================
+
+let excelData = [];
+
+let totalNominalExcel = 0;
+
+let excelValid = false;
+
+
+// ==================================================
 // FORMAT RUPIAH
 // ==================================================
 
@@ -55,6 +90,14 @@ function formatRupiah(value) {
       maximumFractionDigits: 0
     }
   ).format(number);
+
+}
+
+
+function formatRupiahSimple(value) {
+
+  return Number(value || 0)
+    .toLocaleString('id-ID');
 
 }
 
@@ -104,15 +147,38 @@ async function callBackend(
           token:
             session.access_token,
 
-          payload: payload
+          payload:
+            payload
 
         })
       }
     );
 
 
-  const result =
-    await response.json();
+  const text =
+    await response.text();
+
+
+  let result;
+
+
+  try {
+
+    result =
+      JSON.parse(text);
+
+  } catch (error) {
+
+    console.error(
+      'BACKEND RAW RESPONSE:',
+      text
+    );
+
+    throw new Error(
+      'Response backend bukan JSON.'
+    );
+
+  }
 
 
   if (!result.success) {
@@ -178,60 +244,117 @@ async function loadDashboard() {
       );
 
 
+    console.log(
+      'GET DASHBOARD RESULT:',
+      result
+    );
+
+
+    if (!result.profile) {
+
+      throw new Error(
+        'Data profile tidak ditemukan dari backend.'
+      );
+
+    }
+
+
     const profile =
       result.profile;
+
 
     const setoran =
       result.setoran || [];
 
 
+    // ==================================================
     // USER
+    // ==================================================
 
-    document.getElementById(
-      'userName'
-    ).textContent =
-      profile.nama_lengkap;
+    const userName =
+      document.getElementById(
+        'userName'
+      );
+
+    if (userName) {
+
+      userName.textContent =
+        profile.nama_lengkap || '-';
+
+    }
 
 
+    // ==================================================
     // UPZ
+    // ==================================================
 
-    document.getElementById(
-      'upzName'
-    ).textContent =
-      profile.upz_id;
+    const upzName =
+      document.getElementById(
+        'upzName'
+      );
+
+    if (upzName) {
+
+      upzName.textContent =
+        profile.upz_id || '-';
+
+    }
 
 
+    // ==================================================
     // JUMLAH TRANSAKSI
+    // ==================================================
 
-    document.getElementById(
-      'jumlahTransaksi'
-    ).textContent =
-      setoran.length;
+    const jumlahTransaksi =
+      document.getElementById(
+        'jumlahTransaksi'
+      );
+
+    if (jumlahTransaksi) {
+
+      jumlahTransaksi.textContent =
+        setoran.length;
+
+    }
 
 
+    // ==================================================
     // TOTAL SETORAN
+    // ==================================================
 
     const total =
       setoran.reduce(
-        (
+        function(
           sum,
           item
-        ) =>
-          sum +
-          Number(
-            item.nominal || 0
-          ),
+        ) {
+
+          return sum +
+            Number(
+              item.nominal || 0
+            );
+
+        },
         0
       );
 
 
-    document.getElementById(
-      'totalSetoran'
-    ).textContent =
-      formatRupiah(total);
+    const totalSetoran =
+      document.getElementById(
+        'totalSetoran'
+      );
+
+    if (totalSetoran) {
+
+      totalSetoran.textContent =
+        formatRupiah(total);
+
+    }
 
 
+    // ==================================================
     // STATUS TERAKHIR
+    // ==================================================
 
     const status =
       setoran.length > 0
@@ -239,13 +362,22 @@ async function loadDashboard() {
         : '-';
 
 
-    document.getElementById(
-      'statusTerakhir'
-    ).textContent =
-      status;
+    const statusTerakhir =
+      document.getElementById(
+        'statusTerakhir'
+      );
+
+    if (statusTerakhir) {
+
+      statusTerakhir.textContent =
+        status;
+
+    }
 
 
+    // ==================================================
     // RIWAYAT
+    // ==================================================
 
     renderRiwayat(
       setoran
@@ -262,11 +394,14 @@ async function loadDashboard() {
       error
     );
 
+
     message.textContent =
       error.message;
 
+
     message.style.color =
       'red';
+
 
     showLogin();
 
@@ -279,12 +414,19 @@ async function loadDashboard() {
 // RENDER RIWAYAT
 // ==================================================
 
-function renderRiwayat(setoran) {
+function renderRiwayat(
+  setoran
+) {
 
   const container =
     document.getElementById(
       'riwayatContainer'
     );
+
+
+  if (!container) {
+    return;
+  }
 
 
   if (!setoran.length) {
@@ -301,7 +443,9 @@ function renderRiwayat(setoran) {
 
 
   const namaBulan = [
+
     '',
+
     'Januari',
     'Februari',
     'Maret',
@@ -314,15 +458,18 @@ function renderRiwayat(setoran) {
     'Oktober',
     'November',
     'Desember'
+
   ];
 
 
   container.innerHTML =
     setoran.map(
-      item => {
+      function(item) {
+
 
         const tanggal =
           item.tanggal_setor
+
             ? new Date(
                 item.tanggal_setor +
                 'T00:00:00'
@@ -334,6 +481,7 @@ function renderRiwayat(setoran) {
                   year: 'numeric'
                 }
               )
+
             : '-';
 
 
@@ -430,7 +578,6 @@ function renderRiwayat(setoran) {
 
             </div>
 
-
             <div
               class="status-badge ${statusClass}"
             >
@@ -451,140 +598,147 @@ function renderRiwayat(setoran) {
 // LOGIN
 // ==================================================
 
-loginForm.addEventListener(
-  'submit',
-  async function(event) {
+if (loginForm) {
 
-    event.preventDefault();
+  loginForm.addEventListener(
+    'submit',
+    async function(event) {
 
-
-    const email =
-      document
-        .getElementById(
-          'email'
-        )
-        .value
-        .trim();
+      event.preventDefault();
 
 
-    const password =
-      document
-        .getElementById(
-          'password'
-        )
-        .value;
+      const email =
+        document
+          .getElementById('email')
+          .value
+          .trim();
 
 
-    loginButton.disabled =
-      true;
+      const password =
+        document
+          .getElementById('password')
+          .value;
 
-    loginButton.textContent =
-      'Login...';
-
-    message.textContent =
-      '';
-
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .auth
-        .signInWithPassword({
-
-          email:
-            email,
-
-          password:
-            password
-
-        });
-
-
-    if (error) {
-
-      message.textContent =
-        error.message;
-
-      message.style.color =
-        'red';
 
       loginButton.disabled =
-        false;
+        true;
+
 
       loginButton.textContent =
-        'Login';
+        'Login...';
 
-      return;
+
+      message.textContent =
+        '';
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .auth
+          .signInWithPassword({
+
+            email:
+              email,
+
+            password:
+              password
+
+          });
+
+
+      if (error) {
+
+        message.textContent =
+          error.message;
+
+
+        message.style.color =
+          'red';
+
+
+        loginButton.disabled =
+          false;
+
+
+        loginButton.textContent =
+          'Login';
+
+
+        return;
+
+      }
+
+
+      message.textContent =
+        'Login berhasil.';
+
+
+      message.style.color =
+        '#259148';
+
+
+      loginButton.textContent =
+        'Berhasil';
+
+
+      await loadDashboard();
 
     }
+  );
 
-
-    message.textContent =
-      'Login berhasil.';
-
-    message.style.color =
-      '#259148';
-
-
-    loginButton.textContent =
-      'Berhasil';
-
-
-    await loadDashboard();
-
-  }
-);
+}
 
 
 // ==================================================
 // LOGOUT
 // ==================================================
 
-logoutButton.addEventListener(
-  'click',
-  async function() {
+if (logoutButton) {
 
-    await supabaseClient
-      .auth
-      .signOut();
+  logoutButton.addEventListener(
+    'click',
+    async function() {
 
-
-    showLogin();
-
-
-    document
-      .getElementById(
-        'email'
-      )
-      .value = '';
+      await supabaseClient
+        .auth
+        .signOut();
 
 
-    document
-      .getElementById(
-        'password'
-      )
-      .value = '';
+      showLogin();
 
 
-    message.textContent =
-      '';
+      document
+        .getElementById('email')
+        .value = '';
 
 
-    loginButton.disabled =
-      false;
+      document
+        .getElementById('password')
+        .value = '';
 
 
-    loginButton.textContent =
-      'Login';
+      message.textContent =
+        '';
 
-  }
-);
+
+      loginButton.disabled =
+        false;
+
+
+      loginButton.textContent =
+        'Login';
+
+    }
+  );
+
+}
 
 
 // ==================================================
-// CEK SESSION SAAT HALAMAN DIBUKA
+// CEK SESSION
 // ==================================================
 
 async function checkSession() {
@@ -617,12 +771,6 @@ checkSession();
 // FORM INPUT SETORAN
 // ==================================================
 
-const setoranForm =
-  document.getElementById(
-    'setoranForm'
-  );
-
-
 if (setoranForm) {
 
   setoranForm.addEventListener(
@@ -635,12 +783,6 @@ if (setoranForm) {
       const button =
         document.getElementById(
           'submitSetoranButton'
-        );
-
-
-      const message =
-        document.getElementById(
-          'setoranMessage'
         );
 
 
@@ -668,7 +810,9 @@ if (setoranForm) {
         ).value;
 
 
-      // VALIDASI
+      // ==================================================
+      // VALIDASI DATA UTAMA
+      // ==================================================
 
       if (
         !tanggalSetor ||
@@ -677,51 +821,82 @@ if (setoranForm) {
         !nominal
       ) {
 
-        if (!fileExcel.files.length) {
-          message.textContent =
-            'Rincian muzaki dalam Excel wajib diupload.';
-          message.style.color = '#d93025';
-          return;
-        }
-        
-        if (!excelValid) {
-          message.textContent =
-            'Total nominal Excel belum sesuai dengan Nominal Setoran.';
-          message.style.color = '#d93025';
-          return;
-        }
-        
-        message.textContent =
-          'Semua data wajib diisi.';
+        setoranMessage.textContent =
+          'Semua data setoran wajib diisi.';
 
-        message.style.color =
+
+        setoranMessage.style.color =
           '#d93025';
+
 
         return;
 
       }
 
 
+      // ==================================================
+      // VALIDASI EXCEL
+      // ==================================================
+
+      if (
+        !fileExcel ||
+        !fileExcel.files.length
+      ) {
+
+        setoranMessage.textContent =
+          'Rincian muzaki dalam Excel wajib diupload.';
+
+
+        setoranMessage.style.color =
+          '#d93025';
+
+
+        return;
+
+      }
+
+
+      if (!excelValid) {
+
+        setoranMessage.textContent =
+          'Total nominal Excel belum sesuai dengan Nominal Setoran.';
+
+
+        setoranMessage.style.color =
+          '#d93025';
+
+
+        return;
+
+      }
+
+
+      // ==================================================
+      // LOADING
+      // ==================================================
+
+      button.disabled =
+        true;
+
+
+      button.textContent =
+        'Menyimpan...';
+
+
+      setoranMessage.textContent =
+        'Mengirim data setoran...';
+
+
+      setoranMessage.style.color =
+        '#666';
+
+
       try {
 
-        // LOADING
 
-        button.disabled =
-          true;
-
-        button.textContent =
-          'Menyimpan...';
-
-
-        message.textContent =
-          'Mengirim data setoran...';
-
-        message.style.color =
-          '#666';
-
-
+        // ==================================================
         // NOMINAL
-        // 500.000 -> 500000
+        // ==================================================
 
         const nominalAngka =
           Number(
@@ -732,12 +907,15 @@ if (setoranForm) {
           );
 
 
-        // KIRIM KE BACKEND
+        // ==================================================
+        // 1. SIMPAN SETORAN
+        // ==================================================
 
         const result =
           await callBackend(
             'createSetoran',
             {
+
               tanggal_setor:
                 tanggalSetor,
 
@@ -753,25 +931,190 @@ if (setoranForm) {
 
               nominal:
                 nominalAngka
+
             }
           );
 
 
+        if (
+          !result.setoran ||
+          !result.setoran.id
+        ) {
+
+          throw new Error(
+            'ID setoran tidak ditemukan dari backend.'
+          );
+
+        }
+
+
+        // ==================================================
+        // 2. SIAPKAN DETAIL EXCEL
+        // ==================================================
+
+        const indexes =
+          validateExcelFormat(
+            excelData
+          );
+
+
+        const detail =
+          excelData
+            .slice(1)
+
+            .filter(
+              function(row) {
+
+                const nama =
+                  row[
+                    indexes.namaIndex
+                  ];
+
+                return (
+                  nama &&
+                  String(nama).trim() !== ''
+                );
+
+              }
+            )
+
+            .map(
+              function(row) {
+
+                return {
+
+                  nama_muzaki:
+                    String(
+                      row[
+                        indexes.namaIndex
+                      ]
+                    ).trim(),
+
+                  nominal:
+                    parseNominalExcel(
+                      row[
+                        indexes.nominalIndex
+                      ]
+                    ),
+
+                  jenis:
+                    row[
+                      indexes.jenisIndex
+                    ]
+
+                      ? String(
+                          row[
+                            indexes.jenisIndex
+                          ]
+                        ).trim()
+
+                      : null
+
+                };
+
+              }
+            );
+
+
+        if (!detail.length) {
+
+          throw new Error(
+            'Data rincian muzaki tidak ditemukan.'
+          );
+
+        }
+
+
+        // ==================================================
+        // 3. SIMPAN DETAIL SETORAN
+        // ==================================================
+
+        setoranMessage.textContent =
+          'Menyimpan rincian muzaki...';
+
+
+        const detailResult =
+          await callBackend(
+            'createDetailSetoran',
+            {
+
+              setoran_id:
+                result.setoran.id,
+
+              detail:
+                detail
+
+            }
+          );
+
+
+        console.log(
+          'DETAIL SETORAN RESULT:',
+          detailResult
+        );
+
+
+        // ==================================================
         // BERHASIL
+        // ==================================================
 
-        message.textContent =
-          'Setoran berhasil disimpan.';
+        setoranMessage.textContent =
+          'Setoran dan rincian muzaki berhasil disimpan.';
 
-        message.style.color =
+
+        setoranMessage.style.color =
           '#259148';
 
 
+        // ==================================================
         // RESET FORM
+        // ==================================================
 
         setoranForm.reset();
 
 
+        excelData = [];
+
+        totalNominalExcel = 0;
+
+        excelValid = false;
+
+
+        if (fileExcelInfo) {
+
+          fileExcelInfo.textContent =
+            'Belum ada file dipilih.';
+
+        }
+
+
+        if (excelPreview) {
+
+          excelPreview.innerHTML =
+            '';
+
+          excelPreview.style.display =
+            'none';
+
+        }
+
+
+        const summary =
+          document.getElementById(
+            'excelSummary'
+          );
+
+
+        if (summary) {
+
+          summary.remove();
+
+        }
+
+
+        // ==================================================
         // RELOAD DASHBOARD
+        // ==================================================
 
         await loadDashboard();
 
@@ -784,18 +1127,19 @@ if (setoranForm) {
         );
 
 
-        message.textContent =
+        setoranMessage.textContent =
           error.message ||
           'Gagal menyimpan setoran.';
 
-        message.style.color =
-          '#d93025';
 
+        setoranMessage.style.color =
+          '#d93025';
 
       } finally {
 
         button.disabled =
           false;
+
 
         button.textContent =
           'Simpan Setoran';
@@ -812,235 +1156,506 @@ if (setoranForm) {
 // FORMAT NOMINAL SETORAN
 // ==================================================
 
-const nominalSetoran = document.getElementById('nominalSetoran');
-
 if (nominalSetoran) {
 
-  nominalSetoran.addEventListener('input', function() {
+  nominalSetoran.addEventListener(
+    'input',
+    function() {
 
-    let angka =
-      this.value.replace(/\D/g, '');
-
-    if (!angka) {
-
-      this.value = '';
-
-      if (totalNominalExcel > 0) {
-        renderExcelSummary(
-          totalNominalExcel,
-          excelData.length - 1,
-          0
+      let angka =
+        this.value.replace(
+          /\D/g,
+          ''
         );
+
+
+      if (!angka) {
+
+        this.value =
+          '';
+
+        excelValid =
+          false;
+
+
+        if (
+          excelData.length > 0
+        ) {
+
+          const indexes =
+            validateExcelFormat(
+              excelData
+            );
+
+
+          const calculation =
+            calculateExcelTotal(
+              excelData,
+              indexes
+            );
+
+
+          renderExcelSummary(
+            calculation.total,
+            calculation.jumlahData,
+            calculation.nominalKosong
+          );
+
+        }
+
+
+        return;
+
       }
 
-      return;
-    }
 
-    this.value =
-      Number(angka).toLocaleString('id-ID');
-
-    if (totalNominalExcel > 0) {
-
-      const calculation =
-        calculateExcelTotal(
-          excelData,
-          validateExcelFormat(excelData)
+      this.value =
+        Number(
+          angka
+        ).toLocaleString(
+          'id-ID'
         );
 
-      renderExcelSummary(
-        totalNominalExcel,
-        calculation.jumlahData,
-        calculation.nominalKosong
+
+      if (
+        excelData.length > 0
+      ) {
+
+        const indexes =
+          validateExcelFormat(
+            excelData
+          );
+
+
+        const calculation =
+          calculateExcelTotal(
+            excelData,
+            indexes
+          );
+
+
+        renderExcelSummary(
+          calculation.total,
+          calculation.jumlahData,
+          calculation.nominalKosong
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+// ==================================================
+// PARSE NOMINAL EXCEL
+// ==================================================
+
+function parseNominalExcel(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ''
+  ) {
+
+    return 0;
+
+  }
+
+
+  if (
+    typeof value === 'number'
+  ) {
+
+    return value;
+
+  }
+
+
+  let text =
+    String(value)
+
+      .trim()
+
+      .replace(
+        /rp/gi,
+        ''
+      )
+
+      .replace(
+        /\s/g,
+        ''
+      )
+
+      .replace(
+        /\./g,
+        ''
+      )
+
+      .replace(
+        /,/g,
+        ''
       );
 
-    }
-
-  });
-}
-
-// ==================================================
-// PREVIEW EXCEL MUZAKI
-// ==================================================
-const fileExcel = document.getElementById('fileExcel');
-const fileExcelInfo = document.getElementById('fileExcelInfo');
-const excelPreview = document.getElementById('excelPreview');
-
-let excelData = [];
-let totalNominalExcel = 0;
-let excelValid = false;
-
-
-function parseNominalExcel(value) {
-  if (value === null || value === undefined || value === '') {
-    return 0;
-  }
-
-  // Kalau Excel membaca angka sebagai number
-  if (typeof value === 'number') {
-    return value;
-  }
-
-  // Kalau Excel membaca sebagai text
-  let text = String(value)
-    .trim()
-    .replace(/rp/gi, '')
-    .replace(/\s/g, '')
-    .replace(/\./g, '')
-    .replace(/,/g, '');
 
   if (!text) {
+
     return 0;
+
   }
 
-  const number = Number(text);
 
-  return isNaN(number) ? 0 : number;
+  const number =
+    Number(text);
+
+
+  return isNaN(number)
+    ? 0
+    : number;
+
 }
 
 
-function formatRupiahSimple(value) {
-  return Number(value || 0).toLocaleString('id-ID');
-}
+// ==================================================
+// VALIDASI FORMAT EXCEL
+// ==================================================
 
+function validateExcelFormat(
+  rows
+) {
 
-function validateExcelFormat(rows) {
+  if (
+    !rows ||
+    !rows.length
+  ) {
 
-  if (!rows.length) {
-    throw new Error('File Excel kosong.');
+    throw new Error(
+      'File Excel kosong.'
+    );
+
   }
 
-  const header = rows[0].map(function(cell) {
-    return String(cell || '').trim().toLowerCase();
-  });
 
-  const noIndex = header.indexOf('no');
-  const namaIndex = header.indexOf('nama muzaki');
-  const nominalIndex = header.indexOf('nominal');
-  const jenisIndex = header.indexOf('jenis');
+  const header =
+    rows[0].map(
+      function(cell) {
 
-  if (namaIndex === -1) {
-    throw new Error('Kolom "Nama Muzaki" tidak ditemukan.');
+        return String(
+          cell || ''
+        )
+          .trim()
+          .toLowerCase();
+
+      }
+    );
+
+
+  const noIndex =
+    header.indexOf('no');
+
+
+  const namaIndex =
+    header.indexOf(
+      'nama muzaki'
+    );
+
+
+  const nominalIndex =
+    header.indexOf(
+      'nominal'
+    );
+
+
+  const jenisIndex =
+    header.indexOf(
+      'jenis'
+    );
+
+
+  if (
+    namaIndex === -1
+  ) {
+
+    throw new Error(
+      'Kolom "Nama Muzaki" tidak ditemukan.'
+    );
+
   }
 
-  if (nominalIndex === -1) {
-    throw new Error('Kolom "Nominal" tidak ditemukan.');
+
+  if (
+    nominalIndex === -1
+  ) {
+
+    throw new Error(
+      'Kolom "Nominal" tidak ditemukan.'
+    );
+
   }
 
-  if (jenisIndex === -1) {
-    throw new Error('Kolom "Jenis" tidak ditemukan.');
+
+  if (
+    jenisIndex === -1
+  ) {
+
+    throw new Error(
+      'Kolom "Jenis" tidak ditemukan.'
+    );
+
   }
+
 
   return {
-    noIndex: noIndex,
-    namaIndex: namaIndex,
-    nominalIndex: nominalIndex,
-    jenisIndex: jenisIndex
+
+    noIndex:
+      noIndex,
+
+    namaIndex:
+      namaIndex,
+
+    nominalIndex:
+      nominalIndex,
+
+    jenisIndex:
+      jenisIndex
+
   };
+
 }
 
 
-function calculateExcelTotal(rows, indexes) {
+// ==================================================
+// HITUNG TOTAL EXCEL
+// ==================================================
 
-  let total = 0;
-  let jumlahData = 0;
-  let nominalKosong = 0;
+function calculateExcelTotal(
+  rows,
+  indexes
+) {
 
-  rows.slice(1).forEach(function(row) {
+  let total =
+    0;
 
-    const nama = row[indexes.namaIndex];
 
-    // Abaikan baris kosong
-    if (!nama || String(nama).trim() === '') {
-      return;
-    }
+  let jumlahData =
+    0;
 
-    jumlahData++;
 
-    const nominalValue = row[indexes.nominalIndex];
+  let nominalKosong =
+    0;
 
-    if (
-      nominalValue === undefined ||
-      nominalValue === null ||
-      String(nominalValue).trim() === ''
-    ) {
-      nominalKosong++;
-      return;
-    }
 
-    const nominal = parseNominalExcel(nominalValue);
+  rows
+    .slice(1)
+    .forEach(
+      function(row) {
 
-    total += nominal;
-  });
+
+        const nama =
+          row[
+            indexes.namaIndex
+          ];
+
+
+        if (
+          !nama ||
+          String(nama).trim() === ''
+        ) {
+
+          return;
+
+        }
+
+
+        jumlahData++;
+
+
+        const nominalValue =
+          row[
+            indexes.nominalIndex
+          ];
+
+
+        if (
+          nominalValue === undefined ||
+          nominalValue === null ||
+          String(
+            nominalValue
+          ).trim() === ''
+        ) {
+
+          nominalKosong++;
+
+          return;
+
+        }
+
+
+        const nominal =
+          parseNominalExcel(
+            nominalValue
+          );
+
+
+        total +=
+          nominal;
+
+      }
+    );
+
 
   return {
-    total: total,
-    jumlahData: jumlahData,
-    nominalKosong: nominalKosong
+
+    total:
+      total,
+
+    jumlahData:
+      jumlahData,
+
+    nominalKosong:
+      nominalKosong
+
   };
+
 }
 
 
-function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
+// ==================================================
+// RENDER SUMMARY EXCEL
+// ==================================================
 
-  const nominalInput = document.getElementById('nominalSetoran');
+function renderExcelSummary(
+  totalExcel,
+  jumlahData,
+  nominalKosong
+) {
 
-  if (!nominalInput) return;
+  if (!nominalSetoran) {
+    return;
+  }
 
-  const nominalSetoran = Number(
-    nominalInput.value.replace(/\./g, '')
-  ) || 0;
 
-  const selisih = totalExcel - nominalSetoran;
-  
+  const nominal =
+    Number(
+      nominalSetoran.value
+        .replace(
+          /\./g,
+          ''
+        )
+    ) || 0;
+
+
+  const selisih =
+    totalExcel -
+    nominal;
+
+
   excelValid =
-  nominalSetoran > 0 &&
-  nominalKosong === 0 &&
-  selisih === 0;
+    nominal > 0 &&
+    jumlahData > 0 &&
+    nominalKosong === 0 &&
+    selisih === 0;
 
-  let statusText = '';
-  let statusColor = '#666';
 
-  if (nominalSetoran === 0) {
+  let statusText =
+    '';
+
+
+  let statusColor =
+    '#666';
+
+
+  if (
+    nominal === 0
+  ) {
 
     statusText =
       'Isi Nominal Setoran untuk membandingkan dengan Excel.';
 
-  } else if (nominalKosong > 0) {
+  }
+
+  else if (
+    jumlahData === 0
+  ) {
+
+    statusText =
+      '⚠️ Tidak ada data muzaki dalam Excel.';
+
+    statusColor =
+      '#b54708';
+
+  }
+
+  else if (
+    nominalKosong > 0
+  ) {
 
     statusText =
       `⚠️ Ada ${nominalKosong} data yang nominalnya kosong.`;
 
-    statusColor = '#b54708';
+    statusColor =
+      '#b54708';
 
-  } else if (selisih === 0) {
+  }
+
+  else if (
+    selisih === 0
+  ) {
 
     statusText =
       '✅ Nominal Excel sesuai dengan Nominal Setoran.';
 
-    statusColor = '#18753a';
+    statusColor =
+      '#18753a';
 
-  } else {
-
-    statusText =
-      `⚠️ Terdapat selisih Rp ${formatRupiahSimple(Math.abs(selisih))}.`;
-
-    statusColor = '#b54708';
   }
 
-  let summary = document.getElementById('excelSummary');
+  else {
+
+    statusText =
+      `⚠️ Terdapat selisih Rp ${formatRupiahSimple(
+        Math.abs(selisih)
+      )}.`;
+
+    statusColor =
+      '#b54708';
+
+  }
+
+
+  let summary =
+    document.getElementById(
+      'excelSummary'
+    );
+
 
   if (!summary) {
 
-    summary = document.createElement('div');
-    summary.id = 'excelSummary';
+    summary =
+      document.createElement(
+        'div'
+      );
 
-    excelPreview.parentNode.insertBefore(
-      summary,
-      excelPreview
-    );
+
+    summary.id =
+      'excelSummary';
+
+
+    excelPreview.parentNode
+      .insertBefore(
+        summary,
+        excelPreview
+      );
+
   }
 
+
   summary.innerHTML = `
+
     <div style="
       margin-bottom:10px;
       padding:14px;
@@ -1055,9 +1670,17 @@ function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
         gap:15px;
         margin-bottom:6px;
       ">
-        <span>Total Data Muzaki</span>
-        <strong>${jumlahData}</strong>
+
+        <span>
+          Total Data Muzaki
+        </span>
+
+        <strong>
+          ${jumlahData}
+        </strong>
+
       </div>
+
 
       <div style="
         display:flex;
@@ -1065,9 +1688,17 @@ function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
         gap:15px;
         margin-bottom:6px;
       ">
-        <span>Total Nominal Excel</span>
-        <strong>Rp ${formatRupiahSimple(totalExcel)}</strong>
+
+        <span>
+          Total Nominal Excel
+        </span>
+
+        <strong>
+          Rp ${formatRupiahSimple(totalExcel)}
+        </strong>
+
       </div>
+
 
       <div style="
         display:flex;
@@ -1075,9 +1706,17 @@ function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
         gap:15px;
         margin-bottom:8px;
       ">
-        <span>Nominal Setoran</span>
-        <strong>Rp ${formatRupiahSimple(nominalSetoran)}</strong>
+
+        <span>
+          Nominal Setoran
+        </span>
+
+        <strong>
+          Rp ${formatRupiahSimple(nominal)}
+        </strong>
+
       </div>
+
 
       <div style="
         padding-top:8px;
@@ -1085,223 +1724,422 @@ function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
         color:${statusColor};
         font-weight:600;
       ">
+
         ${statusText}
+
       </div>
 
     </div>
+
   `;
+
 }
 
 
+// ==================================================
+// BACA FILE EXCEL
+// ==================================================
+
 if (fileExcel) {
 
-  fileExcel.addEventListener('change', async function() {
+  fileExcel.addEventListener(
+    'change',
+    async function() {
 
-    const file = this.files[0];
 
-    if (!file) {
+      const file =
+        this.files[0];
+
+
+      excelValid =
+        false;
+
+
+      if (!file) {
+
+        fileExcelInfo.textContent =
+          'Belum ada file dipilih.';
+
+
+        excelPreview.style.display =
+          'none';
+
+
+        excelPreview.innerHTML =
+          '';
+
+
+        const summary =
+          document.getElementById(
+            'excelSummary'
+          );
+
+
+        if (summary) {
+
+          summary.remove();
+
+        }
+
+
+        excelData =
+          [];
+
+
+        totalNominalExcel =
+          0;
+
+
+        return;
+
+      }
+
 
       fileExcelInfo.textContent =
-        'Belum ada file dipilih.';
+        'Membaca file...';
 
-      excelPreview.style.display = 'none';
-      excelPreview.innerHTML = '';
 
-      const summary =
-        document.getElementById('excelSummary');
+      try {
 
-      if (summary) {
-        summary.remove();
-      }
 
-      excelData = [];
-      totalNominalExcel = 0;
+        // ==================================================
+        // BACA FILE
+        // ==================================================
 
-      return;
-    }
+        const arrayBuffer =
+          await file.arrayBuffer();
 
-    fileExcelInfo.textContent =
-      'Membaca file...';
 
-    try {
+        const workbook =
+          XLSX.read(
+            arrayBuffer,
+            {
+              type:
+                'array'
+            }
+          );
 
-      const arrayBuffer =
-        await file.arrayBuffer();
 
-      const workbook =
-        XLSX.read(arrayBuffer, {
-          type: 'array'
-        });
+        const sheetName =
+          workbook.SheetNames[0];
 
-      const sheetName =
-        workbook.SheetNames[0];
 
-      if (!sheetName) {
-        throw new Error(
-          'Sheet Excel tidak ditemukan.'
-        );
-      }
+        if (!sheetName) {
 
-      const worksheet =
-        workbook.Sheets[sheetName];
+          throw new Error(
+            'Sheet Excel tidak ditemukan.'
+          );
 
-      const rows =
-        XLSX.utils.sheet_to_json(
-          worksheet,
-          {
-            header: 1,
-            defval: ''
-          }
-        );
+        }
 
-      const indexes =
-        validateExcelFormat(rows);
 
-      const calculation =
-        calculateExcelTotal(
+        const worksheet =
+          workbook.Sheets[
+            sheetName
+          ];
+
+
+        const rows =
+          XLSX.utils.sheet_to_json(
+            worksheet,
+            {
+              header:
+                1,
+
+              defval:
+                ''
+            }
+          );
+
+
+        // ==================================================
+        // VALIDASI FORMAT
+        // ==================================================
+
+        const indexes =
+          validateExcelFormat(
+            rows
+          );
+
+
+        // ==================================================
+        // HITUNG TOTAL
+        // ==================================================
+
+        const calculation =
+          calculateExcelTotal(
+            rows,
+            indexes
+          );
+
+
+        // ==================================================
+        // SIMPAN DATA
+        // ==================================================
+
+        excelData =
+          rows;
+
+
+        totalNominalExcel =
+          calculation.total;
+
+
+        // ==================================================
+        // INFO FILE
+        // ==================================================
+
+        fileExcelInfo.textContent =
+          `${file.name} • ${calculation.jumlahData} data`;
+
+
+        // ==================================================
+        // PREVIEW
+        // ==================================================
+
+        renderExcelPreview(
           rows,
           indexes
         );
 
-      excelData = rows;
 
-      totalNominalExcel =
-        calculation.total;
+        // ==================================================
+        // SUMMARY
+        // ==================================================
 
-      fileExcelInfo.textContent =
-        `${file.name} • ${calculation.jumlahData} data`;
+        renderExcelSummary(
+          calculation.total,
+          calculation.jumlahData,
+          calculation.nominalKosong
+        );
 
-      renderExcelPreview(
-        rows,
-        indexes
-      );
 
-      renderExcelSummary(
-        calculation.total,
-        calculation.jumlahData,
-        calculation.nominalKosong
-      );
+      } catch (error) {
 
-    } catch (error) {
 
-      console.error(
-        'EXCEL ERROR:',
-        error
-      );
+        console.error(
+          'EXCEL ERROR:',
+          error
+        );
 
-      fileExcelInfo.textContent =
-        'Gagal membaca file Excel.';
 
-      excelPreview.style.display =
-        'block';
+        fileExcelInfo.textContent =
+          'Gagal membaca file Excel.';
 
-      excelPreview.innerHTML = `
-        <div style="
-          padding:15px;
-          color:#d93025;
-        ">
-          ${error.message}
-        </div>
-      `;
 
-      const summary =
-        document.getElementById('excelSummary');
+        excelPreview.style.display =
+          'block';
 
-      if (summary) {
-        summary.remove();
+
+        excelPreview.innerHTML = `
+
+          <div style="
+            padding:15px;
+            color:#d93025;
+          ">
+
+            ${error.message}
+
+          </div>
+
+        `;
+
+
+        const summary =
+          document.getElementById(
+            'excelSummary'
+          );
+
+
+        if (summary) {
+
+          summary.remove();
+
+        }
+
+
+        excelData =
+          [];
+
+
+        totalNominalExcel =
+          0;
+
+
+        excelValid =
+          false;
+
       }
 
-      excelData = [];
-      totalNominalExcel = 0;
     }
-  });
+  );
+
 }
 
 
-function renderExcelPreview(rows, indexes) {
+// ==================================================
+// RENDER PREVIEW EXCEL
+// ==================================================
 
-  if (!rows.length) return;
+function renderExcelPreview(
+  rows,
+  indexes
+) {
 
-  const header = rows[0];
-  const data = rows.slice(1);
+  if (
+    !rows ||
+    !rows.length
+  ) {
+
+    return;
+
+  }
+
+
+  const header =
+    rows[0];
+
+
+  const data =
+    rows.slice(1);
+
 
   let html = `
+
     <table>
+
       <thead>
+
         <tr>
+
   `;
 
-  header.forEach(function(cell) {
 
-    html += `
-      <th>${cell || ''}</th>
-    `;
-
-  });
-
-  html += `
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  const previewRows =
-    data.slice(0, 20);
-
-  previewRows.forEach(function(row) {
-
-    html += '<tr>';
-
-    header.forEach(function(_, index) {
-
-      let value =
-        row[index] !== undefined
-          ? row[index]
-          : '';
-
-      // Format khusus kolom Nominal
-      if (
-        index === indexes.nominalIndex &&
-        value !== ''
-      ) {
-        value =
-          'Rp ' +
-          formatRupiahSimple(
-            parseNominalExcel(value)
-          );
-      }
+  header.forEach(
+    function(cell) {
 
       html += `
-        <td>${value}</td>
+
+        <th>
+          ${cell || ''}
+        </th>
+
       `;
 
-    });
+    }
+  );
 
-    html += '</tr>';
-
-  });
 
   html += `
-      </tbody>
-    </table>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
   `;
 
-  if (data.length > 20) {
+
+  const previewRows =
+    data.slice(
+      0,
+      20
+    );
+
+
+  previewRows.forEach(
+    function(row) {
+
+
+      html +=
+        '<tr>';
+
+
+      header.forEach(
+        function(_, index) {
+
+
+          let value =
+            row[index] !== undefined
+              ? row[index]
+              : '';
+
+
+          if (
+            index ===
+              indexes.nominalIndex &&
+            value !== ''
+          ) {
+
+            value =
+              'Rp ' +
+              formatRupiahSimple(
+                parseNominalExcel(
+                  value
+                )
+              );
+
+          }
+
+
+          html += `
+
+            <td>
+              ${value}
+            </td>
+
+          `;
+
+        }
+      );
+
+
+      html +=
+        '</tr>';
+
+    }
+  );
+
+
+  html += `
+
+      </tbody>
+
+    </table>
+
+  `;
+
+
+  if (
+    data.length > 20
+  ) {
 
     html += `
+
       <div style="
         padding:12px;
         font-size:12px;
         color:#777;
       ">
-        Menampilkan 20 dari ${data.length} data.
+
+        Menampilkan 20 dari
+        ${data.length}
+        data.
+
       </div>
+
     `;
 
   }
 
-  excelPreview.innerHTML = html;
+
+  excelPreview.innerHTML =
+    html;
+
 
   excelPreview.style.display =
     'block';
+
 }
+```
