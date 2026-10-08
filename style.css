@@ -477,3 +477,113 @@ button {
   }
 
 }
+
+/* =========================
+   RIWAYAT SETORAN
+========================= */
+
+.riwayat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 17px 0;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.riwayat-item:last-child {
+  border-bottom: none;
+}
+
+.riwayat-main {
+  min-width: 0;
+}
+
+.riwayat-nominal {
+  margin-bottom: 7px;
+
+  color: #259148;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.riwayat-info {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px 20px;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+.riwayat-info strong {
+  color: #444;
+  font-weight: 600;
+}
+
+.status-badge {
+  flex-shrink: 0;
+
+  padding: 6px 11px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-menunggu {
+  background: #fff4d6;
+  color: #9a6700;
+}
+
+.status-diterima {
+  background: #e6f6ec;
+  color: #18753a;
+}
+
+.status-sesuai {
+  background: #e6f6ec;
+  color: #18753a;
+}
+
+.status-ditolak {
+  background: #fde8e8;
+  color: #b42318;
+}
+
+.status-selisih {
+  background: #fff0e0;
+  color: #b54708;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .riwayat-item {
+    align-items: flex-start;
+  }
+
+  .riwayat-nominal {
+    font-size: 17px;
+  }
+
+  .riwayat-info {
+    display: block;
+    line-height: 1.7;
+  }
+
+  .status-badge {
+    margin-top: 2px;
+  }
+
+}
