@@ -587,3 +587,49 @@ button {
   }
 
 }
+
+/* =========================
+   UPLOAD & PREVIEW EXCEL
+========================= */
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+.file-info {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #777;
+}
+
+.excel-preview {
+  margin-top: 5px;
+  overflow-x: auto;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.excel-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.excel-preview th,
+.excel-preview td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eeeeee;
+  text-align: left;
+  font-size: 13px;
+}
+
+.excel-preview th {
+  background: #f5f7f6;
+  font-weight: 700;
+  color: #333;
+}
+
+.excel-preview td {
+  color: #555;
+}
