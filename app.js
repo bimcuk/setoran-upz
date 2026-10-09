@@ -85,6 +85,17 @@ function escapeHtml(value) {
   });
 }
 
+// HANYA SETORAN DITERIMA YANG MASUK TOTAL TERVERIFIKASI
+function hitungTotalTerverifikasi(daftarSetoran) {
+  return (daftarSetoran || [])
+    .filter(function(item) {
+      return String(item.status || '').toLowerCase() === 'diterima';
+    })
+    .reduce(function(total, item) {
+      return total + Number(item.nominal || 0);
+    }, 0);
+}
+
 function showMessage(element, text, color) {
   if (!element) return;
   element.textContent = text;
@@ -293,7 +304,6 @@ async function loadDashboard() {
   isLoadingDashboard = true;
 
   try {
-    // Ambil profil lebih dahulu agar login admin tidak dipaksa masuk dashboard UPZ.
     const profileResult = await callBackend('test');
     const profile = profileResult.profile;
 
@@ -307,9 +317,12 @@ async function loadDashboard() {
 
     currentProfile = profile;
 
+    // DASHBOARD ADMIN
     if (profile.role === 'admin') {
       const userName = document.getElementById('userName');
-      if (userName) userName.textContent = profile.nama_lengkap || 'Administrator';
+      if (userName) {
+        userName.textContent = profile.nama_lengkap || 'Administrator';
+      }
 
       const upzName = document.getElementById('upzName');
       if (upzName) upzName.textContent = 'Administrator';
@@ -319,6 +332,7 @@ async function loadDashboard() {
       return true;
     }
 
+    // DASHBOARD UPZ
     if (profile.role !== 'upz' || !profile.upz_id) {
       throw new Error('Akun ini tidak terhubung ke UPZ.');
     }
@@ -351,17 +365,19 @@ async function loadDashboard() {
         '-';
     }
 
+    // Jumlah transaksi tetap menghitung seluruh status.
     const jumlahTransaksi = document.getElementById('jumlahTransaksi');
     if (jumlahTransaksi) {
       jumlahTransaksi.textContent = setoran.length.toLocaleString('id-ID');
     }
 
-    const total = setoran.reduce(function(sum, item) {
-      return sum + Number(item.nominal || 0);
-    }, 0);
+    // TOTAL SETORAN UPZ HANYA MENGHITUNG STATUS DITERIMA.
+    const total = hitungTotalTerverifikasi(setoran);
 
     const totalSetoran = document.getElementById('totalSetoran');
-    if (totalSetoran) totalSetoran.textContent = formatRupiah(total);
+    if (totalSetoran) {
+      totalSetoran.textContent = formatRupiah(total);
+    }
 
     const jumlahDonatur = document.getElementById('jumlahDonatur');
 
@@ -678,12 +694,11 @@ function updateAdminSummary(setoran) {
   const totalNominal = document.getElementById('adminTotalNominal');
 
   const menunggu = setoran.filter(function(item) {
-    return item.status === 'menunggu';
+    return String(item.status || '').toLowerCase() === 'menunggu';
   });
 
-  const total = setoran.reduce(function(sum, item) {
-    return sum + Number(item.nominal || 0);
-  }, 0);
+  // TOTAL ADMIN HANYA MENGHITUNG STATUS DITERIMA.
+  const total = hitungTotalTerverifikasi(setoran);
 
   if (jumlahTransaksi) {
     jumlahTransaksi.textContent = setoran.length.toLocaleString('id-ID');
@@ -707,9 +722,10 @@ function renderAdminSetoran(setoran) {
     ? adminFilterStatus.value
     : 'semua';
 
-  if (filterStatus && filterStatus !== 'semua') {
+  if (filterStatus && filterStatus !== 'semua' && filterStatus !== 'all') {
     filtered = filtered.filter(function(item) {
-      return item.status === filterStatus;
+      return String(item.status || '').toLowerCase() ===
+        String(filterStatus).toLowerCase();
     });
   }
 
@@ -913,8 +929,8 @@ function bindAdminVerifyEvents() {
         }
 
         const konfirmasi = keputusan === 'diterima'
-          ? 'Terima setoran ini?'
-          : 'Tolak setoran ini?';
+          ? 'Terima setoran ini? Nominalnya akan masuk ke total setoran terverifikasi.'
+          : 'Tolak setoran ini? Nominalnya tidak akan masuk ke total setoran terverifikasi.';
 
         if (!window.confirm(konfirmasi)) return;
 
@@ -944,6 +960,7 @@ function bindAdminVerifyEvents() {
             '#259148'
           );
 
+          // Ambil ulang daftar setelah status berubah agar total langsung diperbarui.
           await loadAdminSetoran();
 
         } catch (error) {
