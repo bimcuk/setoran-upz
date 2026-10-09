@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#259148">
   <title>Setoran UPZ BAZNAS Banyumas</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -18,41 +18,132 @@
 
         <form id="loginForm">
           <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Masukkan email" required>
+          <input
+            type="email"
+            id="email"
+            placeholder="Masukkan email"
+            autocomplete="username"
+            required
+          >
 
           <label for="password">Password</label>
-          <input type="password" id="password" placeholder="Masukkan password" required>
+          <input
+            type="password"
+            id="password"
+            placeholder="Masukkan password"
+            autocomplete="current-password"
+            required
+          >
 
           <button type="submit" id="loginButton">Login</button>
         </form>
 
-        <div id="message"></div>
+        <div id="message" role="status" aria-live="polite"></div>
       </div>
     </div>
   </div>
 
   <!-- DASHBOARD -->
   <div id="dashboardPage" class="page hidden">
+
+    <!-- HEADER -->
     <header class="topbar">
       <div>
         <h2>Setoran UPZ</h2>
         <div id="userName" class="user-name">-</div>
       </div>
-      <button id="logoutButton" class="logout-button">Logout</button>
+
+      <button
+        type="button"
+        id="logoutButton"
+        class="logout-button"
+      >
+        Logout
+      </button>
     </header>
 
     <main class="dashboard-container">
 
-      <!-- PROFIL UPZ -->
-      <section class="welcome-card">
+      <!-- ====================================== -->
+      <!-- DASHBOARD ADMIN                        -->
+      <!-- ====================================== -->
+      <section id="adminPage" class="content-card hidden">
+
+        <div class="section-header">
+          <div>
+            <h2>Verifikasi Setoran UPZ</h2>
+            <p style="font-size:13px;color:#777;margin-top:6px;">
+              Periksa setoran yang masuk sebelum memberikan keputusan.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            id="refreshAdminButton"
+          >
+            Muat Ulang
+          </button>
+        </div>
+
+        <!-- RINGKASAN ADMIN -->
+        <div class="summary-grid" id="adminSummaryGrid">
+
+          <div class="summary-card">
+            <div class="summary-title">Total Transaksi</div>
+            <div id="adminJumlahTransaksi" class="summary-value">0</div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-title">Menunggu Verifikasi</div>
+            <div id="adminJumlahMenunggu" class="summary-value">0</div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-title">Total Nominal</div>
+            <div id="adminTotalNominal" class="summary-value">Rp 0</div>
+          </div>
+
+        </div>
+
+        <!-- FILTER STATUS -->
+        <div class="form-group" style="margin:18px 0;">
+          <label for="adminFilterStatus">Filter Status</label>
+          <select id="adminFilterStatus">
+            <option value="semua">Semua Status</option>
+            <option value="menunggu">Menunggu Verifikasi</option>
+            <option value="diterima">Diterima</option>
+            <option value="ditolak">Ditolak</option>
+          </select>
+        </div>
+
+        <div
+          id="adminMessage"
+          role="status"
+          aria-live="polite"
+          style="margin-bottom:12px;"
+        ></div>
+
+        <!-- DAFTAR SETORAN -->
+        <div id="adminSetoranContainer">
+          <div class="empty-state">Memuat data setoran...</div>
+        </div>
+
+      </section>
+
+      <!-- ====================================== -->
+      <!-- PROFIL UPZ                             -->
+      <!-- ====================================== -->
+      <section class="welcome-card upz-only">
         <div>
           <small>UPZ</small>
           <h1 id="upzName">-</h1>
         </div>
       </section>
 
-      <!-- RINGKASAN DASHBOARD -->
-      <section class="summary-grid">
+      <!-- ====================================== -->
+      <!-- RINGKASAN DASHBOARD UPZ                -->
+      <!-- ====================================== -->
+      <section class="summary-grid upz-only">
 
         <div class="summary-card">
           <div class="summary-title">Total Setoran</div>
@@ -71,8 +162,11 @@
 
       </section>
 
-      <!-- INPUT SETORAN -->
-      <section class="content-card">
+      <!-- ====================================== -->
+      <!-- FORM INPUT SETORAN UPZ                -->
+      <!-- ====================================== -->
+      <section class="content-card upz-only">
+
         <div class="section-header">
           <h2>Input Setoran</h2>
         </div>
@@ -81,7 +175,11 @@
 
           <div class="form-group">
             <label for="tanggalSetor">Tanggal Setor</label>
-            <input type="date" id="tanggalSetor" required>
+            <input
+              type="date"
+              id="tanggalSetor"
+              required
+            >
           </div>
 
           <div class="form-group">
@@ -105,7 +203,13 @@
 
           <div class="form-group">
             <label for="periodeTahun">Periode Tahun</label>
-            <input type="number" id="periodeTahun" min="2000" max="2100" required>
+            <input
+              type="number"
+              id="periodeTahun"
+              min="2000"
+              max="2100"
+              required
+            >
           </div>
 
           <div class="form-group">
@@ -122,8 +226,15 @@
 
           <div class="form-group form-group-full">
             <label for="fileExcel">Rincian Muzaki</label>
-            <input type="file" id="fileExcel" accept=".xlsx,.xls" required>
-            <div id="fileExcelInfo" class="file-info">Belum ada file dipilih.</div>
+            <input
+              type="file"
+              id="fileExcel"
+              accept=".xlsx,.xls"
+              required
+            >
+            <div id="fileExcelInfo" class="file-info">
+              Belum ada file dipilih.
+            </div>
           </div>
 
           <div
@@ -132,27 +243,45 @@
             style="display:none;"
           ></div>
 
-          <button type="submit" id="submitSetoranButton">Simpan Setoran</button>
-          <div id="setoranMessage"></div>
+          <button type="submit" id="submitSetoranButton">
+            Simpan Setoran
+          </button>
+
+          <div
+            id="setoranMessage"
+            role="status"
+            aria-live="polite"
+          ></div>
+
         </form>
       </section>
 
-      <!-- RIWAYAT SETORAN -->
-      <section class="content-card">
+      <!-- ====================================== -->
+      <!-- RIWAYAT SETORAN UPZ                   -->
+      <!-- ====================================== -->
+      <section class="content-card upz-only">
+
         <div class="section-header">
           <h2>Riwayat Setoran</h2>
         </div>
 
-        <p style="font-size:13px;color:#777;margin-top:-5px;">
+        <p style="font-size:13px;color:#777;margin-top:-5px;margin-bottom:16px;">
           Klik transaksi untuk melihat rincian nama donatur dan mengunduh file Excel.
         </p>
 
         <div id="riwayatContainer">
           <div class="empty-state">Belum ada data setoran.</div>
         </div>
+
       </section>
 
     </main>
+
+    <!-- FOOTER -->
+    <footer style="text-align:center;padding:22px 15px;color:#888;font-size:12px;">
+      Setoran UPZ · BAZNAS Kabupaten Banyumas
+    </footer>
+
   </div>
 
   <!-- SUPABASE -->
