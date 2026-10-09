@@ -5,12 +5,8 @@
 // KONFIGURASI
 // ==================================================
 
-const SUPABASE_URL =
-  'https://efmgvgqyzdbhmejigqyg.supabase.co';
-
-const SUPABASE_ANON_KEY =
-  'sb_publishable_qhbns7HHepypJ2s3TiF-MQ_i_-bpaow';
-
+const SUPABASE_URL = 'https://efmgvgqyzdbhmejigqyg.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_qhbns7HHepypJ2s3TiF-MQ_i_-bpaow';
 const APPS_SCRIPT_URL = '/api/backend';
 
 const STORAGE_BUCKET = 'setoran-upz';
@@ -47,6 +43,7 @@ let excelData = [];
 let totalNominalExcel = 0;
 let excelValid = false;
 let currentProfile = null;
+let currentSetoran = [];
 let isSubmitting = false;
 let isReadingExcel = false;
 
@@ -91,6 +88,31 @@ function setSubmitButtonState(disabled, text) {
 
   button.disabled = disabled;
   button.textContent = text;
+}
+
+function formatTanggal(value) {
+  if (!value) return '-';
+
+  const date = new Date(value + 'T00:00:00');
+
+  if (Number.isNaN(date.getTime())) return '-';
+
+  return date.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+}
+
+function getNamaBulan(number) {
+  const months = [
+    '',
+    'Januari', 'Februari', 'Maret', 'April',
+    'Mei', 'Juni', 'Juli', 'Agustus',
+    'September', 'Oktober', 'November', 'Desember'
+  ];
+
+  return months[Number(number)] || '-';
 }
 
 // ==================================================
@@ -150,7 +172,6 @@ async function callBackend(action, payload = {}) {
       result.message || 'Terjadi kesalahan pada server.'
     );
 
-    // Respons kegagalan eksplisit berbeda dari koneksi yang terputus.
     backendError.backendRejected = true;
     backendError.backendResponse = result;
 
@@ -161,7 +182,7 @@ async function callBackend(action, payload = {}) {
 }
 
 // ==================================================
-// TAMPILAN LOGIN / DASHBOARD
+// LOGIN / DASHBOARD
 // ==================================================
 
 function showLogin() {
@@ -172,6 +193,31 @@ function showLogin() {
 function showDashboard() {
   if (loginPage) loginPage.classList.add('hidden');
   if (dashboardPage) dashboardPage.classList.remove('hidden');
+}
+
+// ==================================================
+// AMBIL RINCIAN TRANSAKSI DARI SUPABASE
+// ==================================================
+
+async function getDetailSetoran(setoranId) {
+  if (!setoranId) {
+    throw new Error('ID transaksi tidak ditemukan.');
+  }
+
+  const { data, error } = await supabaseClient
+    .from('detail_setoran')
+    .select('id, setoran_id, nama_muzaki, nominal, jenis, keterangan')
+    .eq('setoran_id', setoranId)
+    .order('nama_muzaki', { ascending: true });
+
+  if (error) {
+    console.error('GET DETAIL SETORAN ERROR:', error);
+    throw new Error(
+      'Gagal mengambil rincian donatur. Periksa kebijakan akses tabel detail_setoran.'
+    );
+  }
+
+  return data || [];
 }
 
 // ==================================================
@@ -196,7 +242,23 @@ async function loadDashboard() {
 
     currentProfile = profile;
 
-    const setoran = result.setoran || [];
+    const setoran = Array.isArray(result.setoran)
+      ? result.setoran.slice()
+      : [];
+
+    // Urutkan berdasarkan waktu pembuatan transaksi jika tersedia.
+    setoran.sort(function(a, b) {
+      const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+
+      if (dateA && dateB && dateA !== dateB) {
+        return dateB - dateA;
+      }
+
+      return 0;
+    });
+
+    currentSetoran = setoran;
 
     const userName = document.getElementById('userName');
     if (userName) {
@@ -205,14 +267,16 @@ async function loadDashboard() {
 
     const upzName = document.getElementById('upzName');
     if (upzName) {
-      upzName.textContent = profile.upz_id || '-';
+      upzName.textContent = profile.nama_upz || profile.kode_upz || profile.upz_id || '-';
     }
 
+    // JUMLAH TRANSAKSI
     const jumlahTransaksi = document.getElementById('jumlahTransaksi');
     if (jumlahTransaksi) {
-      jumlahTransaksi.textContent = setoran.length;
+      jumlahTransaksi.textContent = setoran.length.toLocaleString('id-ID');
     }
 
+    // TOTAL SETORAN
     const total = setoran.reduce(function(sum, item) {
       return sum + Number(item.nominal || 0);
     }, 0);
@@ -222,10 +286,24 @@ async function loadDashboard() {
       totalSetoran.textContent = formatRupiah(total);
     }
 
-    const statusTerakhir = document.getElementById('statusTerakhir');
-    if (statusTerakhir) {
-      statusTerakhir.textContent =
-        setoran.length > 0 ? setoran[0].status || '-' : '-';
+    // JUMLAH DONATUR DARI TRANSAKSI TERAKHIR
+    const jumlahDonatur = document.getElementById('jumlahDonatur');
+
+    if (jumlahDonatur) {
+      jumlahDonatur.textContent = '...';
+
+      if (setoran.length > 0 && setoran[0].id) {
+        try {
+          const detailTerakhir = await getDetailSetoran(setoran[0].id);
+          jumlahDonatur.textContent =
+            detailTerakhir.length.toLocaleString('id-ID');
+        } catch (detailError) {
+          console.error('HITUNG DONATUR ERROR:', detailError);
+          jumlahDonatur.textContent = '-';
+        }
+      } else {
+        jumlahDonatur.textContent = '0';
+      }
     }
 
     renderRiwayat(setoran);
@@ -242,7 +320,7 @@ async function loadDashboard() {
 }
 
 // ==================================================
-// RENDER RIWAYAT
+// RENDER RIWAYAT SETORAN
 // ==================================================
 
 function renderRiwayat(setoran) {
@@ -250,31 +328,13 @@ function renderRiwayat(setoran) {
   if (!container) return;
 
   if (!setoran.length) {
-    container.innerHTML = `
-      <div class="empty-state">Belum ada data setoran.</div>
-    `;
+    container.innerHTML = '<div class="empty-state">Belum ada data setoran.</div>';
     return;
   }
 
-  const namaBulan = [
-    '',
-    'Januari', 'Februari', 'Maret', 'April',
-    'Mei', 'Juni', 'Juli', 'Agustus',
-    'September', 'Oktober', 'November', 'Desember'
-  ];
-
-  container.innerHTML = setoran.map(function(item) {
-    const tanggal = item.tanggal_setor
-      ? new Date(item.tanggal_setor + 'T00:00:00')
-          .toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-          })
-      : '-';
-
-    const bulan =
-      namaBulan[Number(item.periode_bulan)] || '-';
+  container.innerHTML = setoran.map(function(item, index) {
+    const tanggal = formatTanggal(item.tanggal_setor);
+    const bulan = getNamaBulan(item.periode_bulan);
 
     const periode = item.periode_tahun
       ? bulan + ' ' + item.periode_tahun
@@ -288,26 +348,203 @@ function renderRiwayat(setoran) {
     if (status === 'sesuai') statusClass = 'status-sesuai';
     if (status === 'selisih') statusClass = 'status-selisih';
 
-    const statusLabel =
-      status.charAt(0).toUpperCase() + status.slice(1);
+    const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+    const transactionId = escapeHtml(item.id || '');
+    const fileName = escapeHtml(item.file_name || 'File Excel');
 
     return `
-      <div class="riwayat-item">
-        <div class="riwayat-main">
+      <details
+        class="riwayat-item"
+        data-setoran-id="${transactionId}"
+        style="margin-bottom:12px;"
+      >
+        <summary
+          class="riwayat-main"
+          style="cursor:pointer;list-style-position:inside;padding:12px;"
+        >
           <div class="riwayat-nominal">
             ${formatRupiah(item.nominal)}
           </div>
+
           <div class="riwayat-info">
-            <div>Setoran: <strong>${escapeHtml(tanggal)}</strong></div>
+            <div>Tanggal setor: <strong>${escapeHtml(tanggal)}</strong></div>
             <div>Periode: <strong>${escapeHtml(periode)}</strong></div>
           </div>
+
+          <div class="status-badge ${statusClass}">
+            ${escapeHtml(statusLabel)}
+          </div>
+        </summary>
+
+        <div
+          class="riwayat-detail"
+          data-detail-loaded="false"
+          style="padding:14px;border-top:1px solid #eee;"
+        >
+          <div style="margin-bottom:12px;">
+            <strong>Rincian Donatur</strong>
+          </div>
+
+          <div class="detail-setoran-content">
+            <p style="color:#777;">Buka transaksi untuk memuat rincian.</p>
+          </div>
+
+          <div style="margin-top:14px;">
+            ${
+              item.file_path
+                ? `<button
+                     type="button"
+                     class="download-excel-button"
+                     data-download-id="${transactionId}"
+                   >Unduh Excel (${fileName})</button>`
+                : '<p style="font-size:13px;color:#777;">File Excel tidak tersedia untuk transaksi ini.</p>'
+            }
+          </div>
         </div>
-        <div class="status-badge ${statusClass}">
-          ${escapeHtml(statusLabel)}
-        </div>
-      </div>
+      </details>
     `;
   }).join('');
+
+  // Muat rincian hanya saat transaksi dibuka.
+  container.querySelectorAll('details[data-setoran-id]').forEach(function(details) {
+    details.addEventListener('toggle', async function() {
+      if (!details.open) return;
+
+      const detailBox = details.querySelector('.riwayat-detail');
+      if (!detailBox || detailBox.dataset.detailLoaded === 'true') return;
+
+      const content = detailBox.querySelector('.detail-setoran-content');
+      const id = details.dataset.setoranId;
+
+      content.innerHTML = '<p style="color:#777;">Memuat rincian donatur...</p>';
+
+      try {
+        const detail = await getDetailSetoran(id);
+        content.innerHTML = renderDetailSetoran(detail);
+        detailBox.dataset.detailLoaded = 'true';
+      } catch (error) {
+        console.error('LOAD DETAIL RIWAYAT ERROR:', error);
+        content.innerHTML = `
+          <p style="color:#d93025;">${escapeHtml(error.message)}</p>
+          <button type="button" class="retry-detail-button">Coba Lagi</button>
+        `;
+
+        const retryButton = content.querySelector('.retry-detail-button');
+        if (retryButton) {
+          retryButton.addEventListener('click', function() {
+            detailBox.dataset.detailLoaded = 'false';
+            details.open = false;
+            details.open = true;
+          });
+        }
+      }
+    });
+  });
+
+  // Unduh file Excel asli.
+  container.querySelectorAll('.download-excel-button').forEach(function(button) {
+    button.addEventListener('click', async function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const item = currentSetoran.find(function(row) {
+        return String(row.id) === String(button.dataset.downloadId);
+      });
+
+      if (!item || !item.file_path) {
+        alert('Lokasi file Excel tidak ditemukan.');
+        return;
+      }
+
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Menyiapkan unduhan...';
+
+      try {
+        const { data, error } = await supabaseClient
+          .storage
+          .from(STORAGE_BUCKET)
+          .createSignedUrl(item.file_path, 60, { download: true });
+
+        if (error) throw error;
+        if (!data || !data.signedUrl) {
+          throw new Error('Tautan unduhan tidak berhasil dibuat.');
+        }
+
+        const link = document.createElement('a');
+        link.href = data.signedUrl;
+        link.download = item.file_name || 'rincian-setoran.xlsx';
+        link.target = '_blank';
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+      } catch (error) {
+        console.error('DOWNLOAD EXCEL ERROR:', error);
+        alert(
+          'Gagal mengunduh file Excel. Pastikan file masih ada dan izin Storage sudah benar.\n\n' +
+          error.message
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    });
+  });
+}
+
+// ==================================================
+// RENDER TABEL RINCIAN DONATUR
+// ==================================================
+
+function renderDetailSetoran(detail) {
+  if (!detail || detail.length === 0) {
+    return '<p class="empty-state">Rincian donatur tidak ditemukan.</p>';
+  }
+
+  const total = detail.reduce(function(sum, item) {
+    return sum + Number(item.nominal || 0);
+  }, 0);
+
+  const rows = detail.map(function(item, index) {
+    return `
+      <tr>
+        <td style="padding:9px;border-bottom:1px solid #eee;">${index + 1}</td>
+        <td style="padding:9px;border-bottom:1px solid #eee;">
+          ${escapeHtml(item.nama_muzaki || '-')}
+        </td>
+        <td style="padding:9px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap;">
+          ${formatRupiah(item.nominal)}
+        </td>
+        <td style="padding:9px;border-bottom:1px solid #eee;">
+          ${escapeHtml(item.jenis || '-')}
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  return `
+    <div style="margin-bottom:10px;font-size:13px;color:#555;">
+      Jumlah donatur: <strong>${detail.length.toLocaleString('id-ID')}</strong>
+      &nbsp; | &nbsp;
+      Total rincian: <strong>${formatRupiah(total)}</strong>
+    </div>
+
+    <div style="overflow-x:auto;width:100%;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="background:#f5f7f5;text-align:left;">
+            <th style="padding:9px;">No.</th>
+            <th style="padding:9px;">Nama Muzaki</th>
+            <th style="padding:9px;text-align:right;">Nominal</th>
+            <th style="padding:9px;">Jenis</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
 }
 
 // ==================================================
@@ -360,6 +597,7 @@ if (logoutButton) {
       if (error) throw error;
 
       currentProfile = null;
+      currentSetoran = [];
       showLogin();
 
       document.getElementById('email').value = '';
@@ -402,75 +640,46 @@ async function checkSession() {
 checkSession();
 
 // ==================================================
-// SUBMIT SETORAN - SATU TRANSAKSI DATABASE
+// SUBMIT SETORAN
 // ==================================================
 
 if (setoranForm) {
   setoranForm.addEventListener('submit', async function(event) {
     event.preventDefault();
 
-    // Pengaman terhadap pemanggilan submit berulang.
     if (isSubmitting) return;
 
-    const tanggalSetor =
-      document.getElementById('tanggalSetor').value;
-
-    const periodeBulan =
-      document.getElementById('periodeBulan').value;
-
-    const periodeTahun =
-      document.getElementById('periodeTahun').value;
-
-    const nominalInput =
-      document.getElementById('nominalSetoran').value;
+    const tanggalSetor = document.getElementById('tanggalSetor').value;
+    const periodeBulan = document.getElementById('periodeBulan').value;
+    const periodeTahun = document.getElementById('periodeTahun').value;
+    const nominalInput = document.getElementById('nominalSetoran').value;
 
     const file = fileExcel && fileExcel.files
       ? fileExcel.files[0]
       : null;
 
-    if (!tanggalSetor || !periodeBulan ||
-        !periodeTahun || !nominalInput) {
-      showMessage(
-        setoranMessage,
-        'Semua data setoran wajib diisi.',
-        '#d93025'
-      );
+    if (!tanggalSetor || !periodeBulan || !periodeTahun || !nominalInput) {
+      showMessage(setoranMessage, 'Semua data setoran wajib diisi.', '#d93025');
       return;
     }
 
     if (!file) {
-      showMessage(
-        setoranMessage,
-        'Rincian muzaki dalam Excel wajib diupload.',
-        '#d93025'
-      );
+      showMessage(setoranMessage, 'Rincian muzaki dalam Excel wajib diupload.', '#d93025');
       return;
     }
 
     if (!currentProfile || !currentProfile.upz_id) {
-      showMessage(
-        setoranMessage,
-        'Profil UPZ belum tersedia. Silakan login kembali.',
-        '#d93025'
-      );
+      showMessage(setoranMessage, 'Profil UPZ belum tersedia. Silakan login kembali.', '#d93025');
       return;
     }
 
     if (isReadingExcel) {
-      showMessage(
-        setoranMessage,
-        'Tunggu sampai pembacaan Excel selesai.',
-        '#d93025'
-      );
+      showMessage(setoranMessage, 'Tunggu sampai pembacaan Excel selesai.', '#d93025');
       return;
     }
 
     if (!excelValid) {
-      showMessage(
-        setoranMessage,
-        'Total nominal Excel belum sesuai dengan Nominal Setoran.',
-        '#d93025'
-      );
+      showMessage(setoranMessage, 'Total nominal Excel belum sesuai dengan Nominal Setoran.', '#d93025');
       return;
     }
 
@@ -485,7 +694,6 @@ if (setoranForm) {
         throw new Error('Nominal setoran tidak valid.');
       }
 
-      // Siapkan ulang rincian dari hasil pembacaan Excel.
       const indexes = validateExcelFormat(excelData);
 
       const detail = excelData.slice(1)
@@ -505,8 +713,7 @@ if (setoranForm) {
             nominalCell === undefined
           ) {
             throw new Error(
-              'Nominal muzaki pada baris data ' +
-              (index + 1) + ' kosong.'
+              'Nominal muzaki pada baris data ' + (index + 1) + ' kosong.'
             );
           }
 
@@ -514,8 +721,7 @@ if (setoranForm) {
 
           if (!Number.isFinite(nominal) || nominal < 0) {
             throw new Error(
-              'Nominal muzaki pada baris data ' +
-              (index + 1) + ' tidak valid.'
+              'Nominal muzaki pada baris data ' + (index + 1) + ' tidak valid.'
             );
           }
 
@@ -524,9 +730,7 @@ if (setoranForm) {
           return {
             nama_muzaki: nama,
             nominal: nominal,
-            jenis: jenisCell
-              ? String(jenisCell).trim()
-              : null
+            jenis: jenisCell ? String(jenisCell).trim() : null
           };
         });
 
@@ -534,25 +738,20 @@ if (setoranForm) {
         throw new Error('Data rincian muzaki tidak ditemukan.');
       }
 
-      // Hitung ulang di browser sebagai pemeriksaan awal.
       const totalDetail = detail.reduce(function(sum, item) {
         return sum + item.nominal;
       }, 0);
 
-      if (Math.round(totalDetail * 100) !==
-          Math.round(nominalAngka * 100)) {
-        throw new Error(
-          'Total rincian Excel tidak sama dengan nominal setoran.'
-        );
+      if (
+        Math.round(totalDetail * 100) !==
+        Math.round(nominalAngka * 100)
+      ) {
+        throw new Error('Total rincian Excel tidak sama dengan nominal setoran.');
       }
 
       isSubmitting = true;
       setSubmitButtonState(true, 'Menyimpan...');
-      showMessage(
-        setoranMessage,
-        'Mengupload file Excel...',
-        '#666'
-      );
+      showMessage(setoranMessage, 'Mengupload file Excel...', '#666');
 
       let uploadedFile = null;
       let transactionSaved = false;
@@ -571,38 +770,29 @@ if (setoranForm) {
           '#666'
         );
 
-        // SATU pemanggilan backend untuk setoran + semua detail.
-        const response = await callBackend(
-          'simpanSetoranLengkap',
-          {
-            tanggal_setor: tanggalSetor,
-            periode_bulan: Number(periodeBulan),
-            periode_tahun: Number(periodeTahun),
-            nominal: nominalAngka,
-            file_name: uploadedFile.originalName,
-            file_path: uploadedFile.filePath,
-            detail: detail
-          }
-        );
+        const response = await callBackend('simpanSetoranLengkap', {
+          tanggal_setor: tanggalSetor,
+          periode_bulan: Number(periodeBulan),
+          periode_tahun: Number(periodeTahun),
+          nominal: nominalAngka,
+          file_name: uploadedFile.originalName,
+          file_path: uploadedFile.filePath,
+          detail: detail
+        });
 
         transactionSaved = true;
 
-        console.log(
-          'SIMPAN SETORAN LENGKAP RESULT:',
-          response
-        );
+        console.log('SIMPAN SETORAN LENGKAP RESULT:', response);
 
         const result = response.result || {};
 
         showMessage(
           setoranMessage,
           'Setoran dan rincian berhasil disimpan. Status: ' +
-            (result.status || 'tersimpan') +
-            '.',
+            (result.status || 'tersimpan') + '.',
           '#259148'
         );
 
-        // Reset form setelah server mengonfirmasi keberhasilan.
         setoranForm.reset();
 
         excelData = [];
@@ -626,20 +816,11 @@ if (setoranForm) {
       } catch (error) {
         console.error('CREATE SETORAN ERROR:', error);
 
-        // Hapus file hanya jika backend secara eksplisit menolak
-        // transaksi. Jika koneksi putus, hasil transaksi tidak pasti.
-        if (
-          uploadedFile &&
-          error.backendRejected &&
-          !transactionSaved
-        ) {
+        if (uploadedFile && error.backendRejected && !transactionSaved) {
           try {
             await deleteExcelFromStorage(uploadedFile.filePath);
           } catch (cleanupError) {
-            console.error(
-              'CLEANUP FILE ERROR:',
-              cleanupError
-            );
+            console.error('CLEANUP FILE ERROR:', cleanupError);
           }
         }
 
@@ -735,17 +916,13 @@ function parseNominalExcel(value) {
 
   if (!text) return 0;
 
-  // Format angka Excel Indonesia, misalnya 1.250.000
-  // atau Rp 1.250.000.
   if (/^-?\d{1,3}(\.\d{3})+$/.test(text)) {
     text = text.replace(/\./g, '');
   } else if (/^-?\d+,\d{1,2}$/.test(text)) {
-    // Koma sebagai desimal jika nilainya berupa teks.
     text = text.replace(',', '.');
   } else if (/^-?\d+(\.\d+)?$/.test(text)) {
-    // Angka polos atau desimal titik.
+    // Format angka polos atau desimal titik.
   } else {
-    // Fallback untuk pemisah ribuan yang tercampur.
     text = text.replace(/[.,]/g, '');
   }
 
@@ -796,21 +973,15 @@ function validateExcelFormat(rows) {
 // ==================================================
 
 async function uploadExcelToStorage(file, upzId, tahun, bulan) {
-  if (!file) {
-    throw new Error('File Excel tidak ditemukan.');
-  }
-
-  if (!upzId) {
-    throw new Error('ID UPZ tidak ditemukan.');
-  }
+  if (!file) throw new Error('File Excel tidak ditemukan.');
+  if (!upzId) throw new Error('ID UPZ tidak ditemukan.');
 
   if (file.size > MAX_FILE_SIZE) {
     throw new Error('Ukuran file Excel maksimal 5 MB.');
   }
 
   const lowerName = file.name.toLowerCase();
-  const allowed = lowerName.endsWith('.xlsx') ||
-    lowerName.endsWith('.xls');
+  const allowed = lowerName.endsWith('.xlsx') || lowerName.endsWith('.xls');
 
   if (!allowed) {
     throw new Error('File harus berformat Excel (.xlsx atau .xls).');
@@ -931,7 +1102,6 @@ function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
 
   const indexes = validateExcelFormat(excelData);
   const calculation = calculateExcelTotal(excelData, indexes);
-
   const selisih = totalExcel - nominal;
 
   excelValid =
@@ -959,9 +1129,7 @@ function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
     statusText = 'Nominal Excel sesuai dengan Nominal Setoran.';
     statusColor = '#18753a';
   } else {
-    statusText =
-      'Terdapat selisih Rp ' +
-      formatRupiahSimple(Math.abs(selisih)) + '.';
+    statusText = 'Terdapat selisih Rp ' + formatRupiahSimple(Math.abs(selisih)) + '.';
     statusColor = '#b54708';
   }
 
@@ -986,42 +1154,22 @@ function renderExcelSummary(totalExcel, jumlahData, nominalKosong) {
       border-radius:10px;
       background:#fafafa;
     ">
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        gap:15px;
-        margin-bottom:6px;
-      ">
+      <div style="display:flex;justify-content:space-between;gap:15px;margin-bottom:6px;">
         <span>Total Data Muzaki</span>
         <strong>${jumlahData}</strong>
       </div>
 
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        gap:15px;
-        margin-bottom:6px;
-      ">
+      <div style="display:flex;justify-content:space-between;gap:15px;margin-bottom:6px;">
         <span>Total Nominal Excel</span>
         <strong>Rp ${formatRupiahSimple(totalExcel)}</strong>
       </div>
 
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        gap:15px;
-        margin-bottom:8px;
-      ">
+      <div style="display:flex;justify-content:space-between;gap:15px;margin-bottom:8px;">
         <span>Nominal Setoran</span>
         <strong>Rp ${formatRupiahSimple(nominal)}</strong>
       </div>
 
-      <div style="
-        padding-top:8px;
-        border-top:1px solid #e5e5e5;
-        color:${statusColor};
-        font-weight:600;
-      ">
+      <div style="padding-top:8px;border-top:1px solid #e5e5e5;color:${statusColor};font-weight:600;">
         ${escapeHtml(statusText)}
       </div>
     </div>
@@ -1131,7 +1279,7 @@ if (fileExcel) {
 }
 
 // ==================================================
-// RENDER PREVIEW EXCEL
+// RENDER PREVIEW EXCEL SAAT INPUT SETORAN
 // ==================================================
 
 function renderExcelPreview(rows, indexes) {
@@ -1141,21 +1289,13 @@ function renderExcelPreview(rows, indexes) {
   const data = rows.slice(1);
   const previewRows = data.slice(0, 20);
 
-  let html = `
-    <table>
-      <thead>
-        <tr>
-  `;
+  let html = '<table><thead><tr>';
 
   header.forEach(function(cell) {
     html += `<th>${escapeHtml(cell || '')}</th>`;
   });
 
-  html += `
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  html += '</tr></thead><tbody>';
 
   previewRows.forEach(function(row) {
     html += '<tr>';
@@ -1177,10 +1317,7 @@ function renderExcelPreview(rows, indexes) {
     html += '</tr>';
   });
 
-  html += `
-      </tbody>
-    </table>
-  `;
+  html += '</tbody></table>';
 
   if (data.length > 20) {
     html += `
