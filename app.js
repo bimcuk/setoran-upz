@@ -225,6 +225,461 @@ function sortByCreatedAt(items) {
 }
 
 // ==================================================
+// TOAST NOTIFIKASI
+// ==================================================
+
+function showToast(titleOrMessage, type = 'info', description = '') {
+  const stack = document.getElementById('toastStack');
+  if (!stack) return;
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+
+  let iconSvg = '<svg class="icon" style="width:18px;height:18px;"><use href="#i-alert"></use></svg>';
+  let bgColor = 'var(--slate-900)';
+  if (type === 'success') {
+    iconSvg = '<svg class="icon" style="width:18px;height:18px;"><use href="#i-check"></use></svg>';
+    bgColor = '#166534';
+  } else if (type === 'error') {
+    iconSvg = '<svg class="icon" style="width:18px;height:18px;"><use href="#i-x"></use></svg>';
+    bgColor = '#dc2626';
+  } else if (type === 'notif') {
+    iconSvg = '<svg class="icon" style="width:18px;height:18px;"><use href="#i-bell"></use></svg>';
+    bgColor = '#1e293b';
+  }
+
+  toast.style.background = bgColor;
+
+  if (description) {
+    toast.innerHTML = `${iconSvg}<div><div style="font-weight:700;font-size:13px;">${escapeHtml(titleOrMessage)}</div><div style="font-size:12px;opacity:0.9;font-weight:400;margin-top:2px;">${escapeHtml(description)}</div></div>`;
+  } else {
+    toast.innerHTML = `${iconSvg}<span>${escapeHtml(titleOrMessage)}</span>`;
+  }
+
+  stack.appendChild(toast);
+
+  setTimeout(function () {
+    toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(40px)';
+    setTimeout(function () {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 300);
+  }, 4500);
+}
+
+// ==================================================
+// SISTEM NOTIFIKASI AKTIVITAS UPZ (ROLE ADMIN)
+// ==================================================
+
+let adminNotifications = [];
+let adminReadNotifIds = new Set();
+let activeNotifTab = 'semua';
+let realtimeNotifChannel = null;
+let isNotifSystemInitialized = false;
+
+function loadReadNotifIds() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('admin_read_notif_ids_v1') || '[]');
+    adminReadNotifIds = new Set(Array.isArray(saved) ? saved : []);
+  } catch (_) {
+    adminReadNotifIds = new Set();
+  }
+}
+
+function saveReadNotifIds() {
+  try {
+    localStorage.setItem('admin_read_notif_ids_v1', JSON.stringify(Array.from(adminReadNotifIds)));
+  } catch (_) {}
+}
+
+function formatRelativeTime(dateString) {
+  if (!dateString) return '';
+  try {
+    const d = new Date(dateString);
+    const now = new Date();
+    const diffSec = Math.floor((now.getTime() - d.getTime()) / 1000);
+
+    if (diffSec < 60) return 'Baru saja';
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) return diffMin + ' mnt lalu';
+    const diffHour = Math.floor(diffMin / 60);
+    if (diffHour < 24) return diffHour + ' jam lalu';
+    const diffDay = Math.floor(diffHour / 24);
+    if (diffDay < 7) return diffDay + ' hari lalu';
+
+    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+  } catch (_) {
+    return '';
+  }
+}
+
+function recordUpzActivity(payload) {
+  try {
+    const actId = 'act_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+    const item = {
+      id: actId,
+      type: payload.type || 'perubahan',
+      title: payload.title || 'Aktivitas UPZ',
+      nama_upz: payload.nama_upz || 'UPZ',
+      upz_id: payload.upz_id || null,
+      file_name: payload.file_name || null,
+      nominal: payload.nominal || null,
+      desc: payload.desc || '',
+      timestamp: new Date().toISOString()
+    };
+
+    // 1. Simpan ke localStorage agar persisten
+    const stored = JSON.parse(localStorage.getItem('upz_activity_logs_v1') || '[]');
+    const list = Array.isArray(stored) ? stored : [];
+    list.unshift(item);
+    if (list.length > 50) list.length = 50;
+    localStorage.setItem('upz_activity_logs_v1', JSON.stringify(list));
+
+    // 2. Broadcast realtime via Supabase jika channel aktif
+    if (realtimeNotifChannel) {
+      realtimeNotifChannel.send({
+        type: 'broadcast',
+        event: 'upz_activity',
+        payload: item
+      }).catch(function (e) {
+        console.warn('Realtime broadcast error:', e);
+      });
+    }
+
+    // 3. Jika sedang login sebagai admin, langsung sinkronkan UI
+    if (currentProfile && currentProfile.role === 'admin') {
+      syncAdminNotifications();
+    }
+  } catch (err) {
+    console.warn('Record UPZ activity error:', err);
+  }
+}
+
+function syncAdminNotifications() {
+  const notifs = [];
+  loadReadNotifIds();
+
+  // 1. Dari data setoran admin (Upload berkas & setoran baru)
+  if (Array.isArray(currentAdminSetoran) && currentAdminSetoran.length > 0) {
+    currentAdminSetoran.forEach(function (s) {
+      const notifId = 'setoran_' + s.id;
+      const isPending = s.status === 'menunggu';
+      const upzName = (upzMap && upzMap[s.upz_id]) || s.nama_upz || 'UPZ';
+      const nominalStr = formatRupiah(s.nominal);
+      const periodeStr = getNamaBulan(s.periode_bulan) + ' ' + (s.periode_tahun || '');
+      const fileName = s.file_name || 'Berkas Excel';
+
+      notifs.push({
+        id: notifId,
+        type: 'upload',
+        category: 'Upload Berkas',
+        title: isPending ? 'Setoran Baru Menunggu Verifikasi' : 'Berkas Setoran Diunggah',
+        nama_upz: upzName,
+        upz_id: s.upz_id,
+        setoran_id: s.id,
+        file_name: fileName,
+        desc: `Mengunggah berkas <strong>${escapeHtml(fileName)}</strong> senilai <strong>${nominalStr}</strong> (Periode ${periodeStr})`,
+        timestamp: s.created_at || s.tanggal_setor || new Date().toISOString(),
+        status: s.status || 'menunggu',
+        read: adminReadNotifIds.has(notifId)
+      });
+    });
+  }
+
+  // 2. Dari riwayat aktivitas perubahan UPZ (nama pengelola / profil mandiri)
+  try {
+    const actLogs = JSON.parse(localStorage.getItem('upz_activity_logs_v1') || '[]');
+    if (Array.isArray(actLogs)) {
+      actLogs.forEach(function (log) {
+        notifs.push({
+          id: log.id,
+          type: log.type || 'perubahan',
+          category: 'Perubahan Data',
+          title: log.title || 'Perubahan Data UPZ',
+          nama_upz: log.nama_upz || 'UPZ',
+          upz_id: log.upz_id,
+          desc: log.desc || 'Terdapat pembaruan data dari UPZ',
+          timestamp: log.timestamp || new Date().toISOString(),
+          status: 'info',
+          read: adminReadNotifIds.has(log.id)
+        });
+      });
+    }
+  } catch (_) {}
+
+  // Urutkan dari notifikasi terbaru
+  notifs.sort(function (a, b) {
+    const timeA = new Date(a.timestamp).getTime() || 0;
+    const timeB = new Date(b.timestamp).getTime() || 0;
+    return timeB - timeA;
+  });
+
+  adminNotifications = notifs;
+  renderAdminNotificationUI();
+}
+
+function renderAdminNotificationUI() {
+  const badge = document.getElementById('adminNotifBadge');
+  const unreadPill = document.getElementById('notifUnreadPill');
+  const listEl = document.getElementById('adminNotifList');
+  if (!listEl) return;
+
+  const unreadCount = adminNotifications.filter(function (n) { return !n.read; }).length;
+
+  if (badge) {
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  }
+
+  if (unreadPill) {
+    if (unreadCount > 0) {
+      unreadPill.textContent = unreadCount + ' baru';
+      unreadPill.classList.remove('hidden');
+    } else {
+      unreadPill.classList.add('hidden');
+    }
+  }
+
+  let items = adminNotifications;
+  if (activeNotifTab === 'upload') {
+    items = items.filter(function (n) { return n.type === 'upload'; });
+  } else if (activeNotifTab === 'perubahan') {
+    items = items.filter(function (n) { return n.type === 'perubahan'; });
+  }
+
+  if (!items.length) {
+    let emptyMsg = 'Belum ada notifikasi aktivitas UPZ.';
+    if (activeNotifTab === 'upload') emptyMsg = 'Belum ada notifikasi unggahan berkas setoran.';
+    if (activeNotifTab === 'perubahan') emptyMsg = 'Belum ada notifikasi perubahan data pengelola.';
+    listEl.innerHTML = `<div class="notif-empty">${emptyMsg}</div>`;
+    return;
+  }
+
+  let html = '';
+  items.forEach(function (n) {
+    const isUnread = !n.read;
+    const relTime = formatRelativeTime(n.timestamp);
+
+    let iconBoxClass = n.type === 'upload' ? 'upload' : 'perubahan';
+    let iconName = n.type === 'upload' ? 'i-sheet' : 'i-edit';
+    if (n.status === 'menunggu') {
+      iconBoxClass = 'pending';
+    }
+
+    let tagHtml = '';
+    if (n.type === 'upload') {
+      if (n.status === 'menunggu') {
+        tagHtml = `<span class="notif-tag pending">Menunggu Verifikasi</span>`;
+      } else if (n.status === 'diterima') {
+        tagHtml = `<span class="notif-tag success">Diterima</span>`;
+      } else if (n.status === 'ditolak') {
+        tagHtml = `<span class="notif-tag" style="background:#fee2e2;color:#991b1b;">Ditolak</span>`;
+      }
+    } else {
+      tagHtml = `<span class="notif-tag perubahan">Perubahan Akun</span>`;
+    }
+
+    html += `
+      <div class="notif-item ${isUnread ? 'unread' : ''}" data-notif-id="${escapeHtml(n.id)}" data-type="${escapeHtml(n.type)}" data-upz-name="${escapeHtml(n.nama_upz || '')}" data-setoran-id="${escapeHtml(n.setoran_id || '')}">
+        <div class="notif-icon-box ${iconBoxClass}">
+          <svg class="icon"><use href="#${iconName}"></use></svg>
+        </div>
+        <div class="notif-body">
+          <div class="notif-title-row">
+            <span class="notif-upz-name" title="${escapeHtml(n.nama_upz)}">${escapeHtml(n.nama_upz || 'UPZ')}</span>
+            <span class="notif-time">${escapeHtml(relTime)}</span>
+          </div>
+          <div class="notif-desc">${n.desc}</div>
+          <div class="notif-tags-row">
+            ${tagHtml}
+            <span style="font-size:10px;color:var(--slate-400);">${escapeHtml(n.title)}</span>
+          </div>
+        </div>
+        ${isUnread ? '<div class="notif-unread-dot" title="Belum dibaca"></div>' : ''}
+      </div>
+    `;
+  });
+
+  listEl.innerHTML = html;
+
+  // Click on item
+  listEl.querySelectorAll('.notif-item').forEach(function (el) {
+    el.addEventListener('click', function () {
+      const notifId = el.dataset.notifId;
+      const type = el.dataset.type;
+      const upzName = el.dataset.upzName;
+      const setoranId = el.dataset.setoranId;
+
+      if (notifId) {
+        adminReadNotifIds.add(notifId);
+        saveReadNotifIds();
+        renderAdminNotificationUI();
+      }
+
+      // Close dropdown
+      const dropdown = document.getElementById('adminNotifDropdown');
+      if (dropdown) dropdown.classList.add('hidden');
+      const btn = document.getElementById('adminNotifButton');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+
+      // Navigate
+      if (type === 'upload') {
+        if (typeof navigateToView === 'function') navigateToView('setoran');
+        if (setoranId) {
+          setTimeout(function () {
+            const card = document.querySelector(`[data-admin-setoran-id="${setoranId}"]`);
+            if (card) {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              card.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+              card.style.boxShadow = '0 0 0 3px rgba(37, 145, 72, 0.4)';
+              card.style.borderColor = '#259148';
+              setTimeout(function () {
+                card.style.boxShadow = '';
+                card.style.borderColor = '';
+              }, 3000);
+            }
+          }, 350);
+        }
+      } else if (type === 'perubahan') {
+        if (typeof navigateToView === 'function') navigateToView('upz');
+        if (upzName) {
+          setTimeout(function () {
+            const searchInput = document.getElementById('upzMgmtSearch');
+            if (searchInput) {
+              searchInput.value = upzName;
+              upzMgmtCurrentPage = 1;
+              renderUpzMgmtTable();
+            }
+          }, 250);
+        }
+      }
+    });
+  });
+}
+
+function initAdminNotificationSystem() {
+  if (isNotifSystemInitialized) return;
+  isNotifSystemInitialized = true;
+
+  const btn = document.getElementById('adminNotifButton');
+  const dropdown = document.getElementById('adminNotifDropdown');
+  const markAllBtn = document.getElementById('markAllNotifsReadBtn');
+  const refreshBtn = document.getElementById('refreshNotifsBtn');
+  const tabs = document.querySelectorAll('.notif-tabs .notif-tab');
+
+  if (btn && dropdown) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const isHidden = dropdown.classList.contains('hidden');
+      dropdown.classList.toggle('hidden', !isHidden);
+      btn.setAttribute('aria-expanded', String(isHidden));
+    });
+  }
+
+  // Close when clicking outside
+  document.addEventListener('click', function (e) {
+    if (!dropdown || dropdown.classList.contains('hidden')) return;
+    if (!dropdown.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+      dropdown.classList.add('hidden');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && dropdown && !dropdown.classList.contains('hidden')) {
+      dropdown.classList.add('hidden');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Mark all as read
+  if (markAllBtn) {
+    markAllBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      adminNotifications.forEach(function (n) {
+        adminReadNotifIds.add(n.id);
+      });
+      saveReadNotifIds();
+      renderAdminNotificationUI();
+      showToast('Semua notifikasi ditandai sudah dibaca', 'success');
+    });
+  }
+
+  // Refresh
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', async function (e) {
+      e.stopPropagation();
+      refreshBtn.disabled = true;
+      refreshBtn.innerHTML = '<span class="spinner" style="width:12px;height:12px;" aria-hidden="true"></span>';
+      try {
+        await loadAdminSetoran();
+        syncAdminNotifications();
+        showToast('Notifikasi berhasil dimuat ulang', 'info');
+      } catch (err) {
+        console.warn('Refresh notif error:', err);
+      } finally {
+        refreshBtn.disabled = false;
+        refreshBtn.innerHTML = '<svg class="icon"><use href="#i-refresh"></use></svg> Segarkan';
+      }
+    });
+  }
+
+  // Tab switching
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      tabs.forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      activeNotifTab = tab.dataset.tab || 'semua';
+      renderAdminNotificationUI();
+    });
+  });
+}
+
+function initAdminRealtimeNotifications() {
+  if (!supabaseClient || !supabaseClient.channel || realtimeNotifChannel) return;
+
+  try {
+    realtimeNotifChannel = supabaseClient.channel('admin-notif-hub');
+
+    realtimeNotifChannel
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'setoran' }, function (payload) {
+        console.log('Realtime setoran INSERT:', payload);
+        const newRow = payload.new || {};
+        const upzName = (upzMap && upzMap[newRow.upz_id]) || 'UPZ';
+        const nominalStr = newRow.nominal ? formatRupiah(newRow.nominal) : '';
+        showToast('Setoran Baru Diunggah!', 'notif', `${upzName} mengunggah setoran ${nominalStr}`);
+        loadAdminSetoran();
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles' }, function (payload) {
+        console.log('Realtime profile UPDATE:', payload);
+        const p = payload.new || {};
+        if (p.role === 'upz') {
+          showToast('Perubahan Data UPZ', 'notif', `Data pengelola UPZ diperbarui: ${p.nama_lengkap || ''}`);
+          syncAdminNotifications();
+        }
+      })
+      .on('broadcast', { event: 'upz_activity' }, function (event) {
+        console.log('Realtime broadcast upz_activity:', event);
+        const p = event.payload || {};
+        const cleanDesc = (p.desc || '').replace(/<[^>]+>/g, '');
+        showToast(p.title || 'Aktivitas UPZ', 'notif', cleanDesc);
+        syncAdminNotifications();
+      })
+      .subscribe(function (status) {
+        console.log('Realtime notification channel status:', status);
+      });
+  } catch (err) {
+    console.warn('Init realtime notification error:', err);
+  }
+}
+
+// ==================================================
 // CALL BACKEND
 // ==================================================
 
@@ -331,6 +786,18 @@ function showRolePage(role) {
   const adminDonaturMgmt = document.getElementById('adminDonaturManagement');
   if (adminDonaturMgmt && role !== 'admin') {
     adminDonaturMgmt.classList.add('hidden');
+  }
+
+  // Tampilkan tombol & sistem notifikasi khusus role admin
+  const notifWrap = document.getElementById('adminNotificationWrap');
+  if (notifWrap) {
+    notifWrap.classList.toggle('hidden', role !== 'admin');
+  }
+
+  if (role === 'admin') {
+    initAdminNotificationSystem();
+    initAdminRealtimeNotifications();
+    syncAdminNotifications();
   }
 
   // Tampilkan halaman Beranda secara default saat role terbuka
@@ -705,16 +1172,193 @@ async function openDetailModal(setoranId, isAdmin) {
   };
 }
 
-async function verifyFromDetailModal(decision) {
+// ==================================================
+// MODAL KONFIRMASI VERIFIKASI SETORAN (ADMIN)
+// ==================================================
+let pendingAdminVerification = null;
+
+function openAdminVerifyConfirmModal(options) {
+  // options: { setoranId, upzName, nominal, periode, decision, initialCatatan, onComplete }
+  const modal = document.getElementById('adminVerifyConfirmModal');
+  if (!modal) return;
+
+  pendingAdminVerification = options;
+
+  const upzEl = document.getElementById('adminConfirmUpzName');
+  const nominalEl = document.getElementById('adminConfirmNominal');
+  const periodeEl = document.getElementById('adminConfirmPeriode');
+  const badgeEl = document.getElementById('adminConfirmDecisionBadge');
+  const titleEl = document.getElementById('verifyConfirmModalTitle');
+  const subtitleEl = document.getElementById('verifyConfirmModalSubtitle');
+  const iconBox = document.getElementById('verifyConfirmIconBox');
+  const catatanEl = document.getElementById('confirmVerifyCatatan');
+  const errorEl = document.getElementById('confirmVerifyErrorMsg');
+  const execBtn = document.getElementById('executeVerifyConfirmBtn');
+  const execText = document.getElementById('executeVerifyConfirmText');
+
+  if (upzEl) upzEl.textContent = options.upzName || '-';
+  if (nominalEl) nominalEl.textContent = formatRupiah(options.nominal || 0);
+  if (periodeEl) periodeEl.textContent = options.periode || '-';
+
+  if (catatanEl) {
+    catatanEl.value = options.initialCatatan || '';
+  }
+  if (errorEl) {
+    errorEl.style.display = 'none';
+    errorEl.textContent = '';
+  }
+
+  const isAccept = (options.decision === 'diterima');
+
+  if (titleEl) {
+    titleEl.textContent = isAccept ? 'Konfirmasi Terima Setoran' : 'Konfirmasi Tolak Setoran';
+  }
+  if (subtitleEl) {
+    subtitleEl.textContent = isAccept
+      ? 'Setoran akan ditandai valid dan nominal masuk ke akumulasi terverifikasi.'
+      : 'Setoran akan ditandai ditolak dan alasan penolakan wajib disertakan.';
+  }
+
+  if (iconBox) {
+    iconBox.className = 'modal-icon ' + (isAccept ? 'verify-icon-diterima' : 'verify-icon-ditolak');
+    iconBox.innerHTML = `<svg class="icon"><use href="#${isAccept ? 'i-check' : 'i-x'}"></use></svg>`;
+  }
+
+  if (badgeEl) {
+    badgeEl.innerHTML = isAccept
+      ? '<span class="badge badge-success" style="font-size:12px;">✓ Terima (Disetujui)</span>'
+      : '<span class="badge badge-danger" style="font-size:12px;">✕ Tolak (Ditolak)</span>';
+  }
+
+  if (execBtn) {
+    execBtn.disabled = false;
+    execBtn.className = 'btn ' + (isAccept ? 'btn-primary' : 'btn-danger');
+  }
+  if (execText) {
+    execText.textContent = isAccept ? 'Ya, Terima Setoran' : 'Ya, Tolak Setoran';
+  }
+
+  modal.classList.remove('hidden');
+  if (catatanEl) {
+    setTimeout(function () { catatanEl.focus(); }, 120);
+  }
+}
+
+function closeAdminVerifyConfirmModal() {
+  const modal = document.getElementById('adminVerifyConfirmModal');
+  if (modal) modal.classList.add('hidden');
+  const errorEl = document.getElementById('confirmVerifyErrorMsg');
+  if (errorEl) {
+    errorEl.style.display = 'none';
+    errorEl.textContent = '';
+  }
+  pendingAdminVerification = null;
+}
+
+(function setupAdminVerifyConfirmModalEvents() {
+  const modal = document.getElementById('adminVerifyConfirmModal');
+  const closeX = document.getElementById('closeVerifyConfirmX');
+  const cancelBtn = document.getElementById('cancelVerifyConfirmBtn');
+  const execBtn = document.getElementById('executeVerifyConfirmBtn');
+  const catatanEl = document.getElementById('confirmVerifyCatatan');
+  const errorEl = document.getElementById('confirmVerifyErrorMsg');
+
+  if (closeX) closeX.addEventListener('click', closeAdminVerifyConfirmModal);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeAdminVerifyConfirmModal);
+  if (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) closeAdminVerifyConfirmModal();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      closeAdminVerifyConfirmModal();
+    }
+  });
+
+  if (execBtn) {
+    execBtn.addEventListener('click', async function () {
+      if (!pendingAdminVerification) return;
+      const opts = pendingAdminVerification;
+      const catatan = catatanEl ? catatanEl.value.trim() : '';
+
+      if (opts.decision === 'ditolak' && !catatan) {
+        if (errorEl) {
+          errorEl.textContent = 'Catatan wajib diisi jika setoran ditolak untuk memberitahu alasan kepada UPZ.';
+          errorEl.style.display = 'block';
+        }
+        if (catatanEl) catatanEl.focus();
+        return;
+      }
+
+      if (errorEl) {
+        errorEl.style.display = 'none';
+        errorEl.textContent = '';
+      }
+
+      execBtn.disabled = true;
+      const textSpan = document.getElementById('executeVerifyConfirmText');
+      const originalText = textSpan ? textSpan.textContent : '';
+      if (textSpan) {
+        textSpan.textContent = 'Menyimpan...';
+      }
+
+      try {
+        const result = await callBackend('verifikasiSetoran', {
+          setoran_id: opts.setoranId,
+          keputusan: opts.decision,
+          catatan: catatan
+        });
+
+        if (typeof showToast === 'function') {
+          showToast(result.message || (opts.decision === 'diterima' ? 'Setoran berhasil diterima.' : 'Setoran berhasil ditolak.'), 'success');
+        }
+        if (typeof showMessage === 'function' && adminMessage) {
+          showMessage(adminMessage, result.message || 'Verifikasi berhasil disimpan.', '#259148');
+        }
+
+        if (typeof opts.onComplete === 'function') {
+          opts.onComplete();
+        }
+
+        closeAdminVerifyConfirmModal();
+        if (typeof closeDetailModal === 'function') {
+          closeDetailModal();
+        }
+
+        await loadAdminSetoran();
+
+      } catch (error) {
+        console.error('VERIFIKASI SETORAN ERROR:', error);
+        if (errorEl) {
+          errorEl.textContent = error.message || 'Verifikasi gagal disimpan. Silakan coba lagi.';
+          errorEl.style.display = 'block';
+        }
+        if (typeof showToast === 'function') {
+          showToast(error.message || 'Verifikasi gagal.', 'error');
+        }
+        execBtn.disabled = false;
+        if (textSpan) {
+          textSpan.textContent = originalText;
+        }
+      }
+    });
+  }
+})();
+
+function verifyFromDetailModal(decision) {
   if (!activeDetailItem) return;
-  const note = document.getElementById('detailCatatan').value.trim();
-  if (decision === 'ditolak' && !note) { document.getElementById('detailCatatan').focus(); return; }
-  if (!await askDialog(decision === 'diterima' ? 'Terima setoran?' : 'Tolak setoran?', decision === 'diterima' ? 'Nominal akan masuk total terverifikasi.' : 'Setoran akan ditandai ditolak.', decision === 'diterima' ? 'Ya, Terima' : 'Ya, Tolak', decision === 'diterima' ? 'i-check' : 'i-x')) return;
-  try {
-    await callBackend('verifikasiSetoran', { setoran_id: activeDetailItem.id, keputusan: decision, catatan: note });
-    closeDetailModal();
-    await loadAdminSetoran();
-  } catch (error) { alert(error.message || 'Verifikasi gagal.'); }
+  const initialCatatan = document.getElementById('detailCatatan') ? document.getElementById('detailCatatan').value.trim() : '';
+  const upzName = (upzMap && upzMap[activeDetailItem.upz_id]) || activeDetailItem.nama_upz || activeDetailItem.upz_id || 'UPZ';
+  const periode = (getNamaBulan(activeDetailItem.periode_bulan) || '') + ' ' + (activeDetailItem.periode_tahun || '');
+  openAdminVerifyConfirmModal({
+    setoranId: activeDetailItem.id,
+    upzName: upzName,
+    nominal: activeDetailItem.nominal,
+    periode: periode,
+    decision: decision,
+    initialCatatan: initialCatatan
+  });
 }
 const detailAcceptButton = document.getElementById('detailAcceptButton');
 const detailRejectButton = document.getElementById('detailRejectButton');
@@ -833,6 +1477,9 @@ async function loadAdminSetoran() {
         if (typeof populateAdminDonaturUpzFilter === 'function') {
           populateAdminDonaturUpzFilter();
         }
+        if (typeof populateScorecardUpzFilter === 'function') {
+          populateScorecardUpzFilter();
+        }
       }
     } catch (err) {
       console.warn('Gagal memuat mapping nama UPZ:', err);
@@ -840,6 +1487,7 @@ async function loadAdminSetoran() {
 
     updateAdminSummary(currentAdminSetoran);
     renderAdminSetoran(currentAdminSetoran);
+    syncAdminNotifications();
     if (typeof renderAdminMonthlyChart === 'function') {
       renderAdminMonthlyChart();
     }
@@ -913,6 +1561,13 @@ function updateAdminSummary(setoran) {
       setoran.map(function (item) { return item.upz_id; }).filter(Boolean)
     );
     jumlahUpzEl.textContent = uniqueUpz.size.toLocaleString('id-ID');
+  }
+
+  if (typeof populateScorecardUpzFilter === 'function') {
+    populateScorecardUpzFilter();
+  }
+  if (typeof updateScorecardDonatur === 'function') {
+    updateScorecardDonatur();
   }
 }
 
@@ -1066,7 +1721,7 @@ function bindAdminVerifyEvents() {
   adminSetoranContainer
     .querySelectorAll('.admin-verify-button')
     .forEach(function (button) {
-      button.addEventListener('click', async function () {
+      button.addEventListener('click', function () {
         const setoranId = button.dataset.setoranId;
         const keputusan = button.dataset.keputusan;
         const catatanElement = adminSetoranContainer.querySelector(
@@ -1074,75 +1729,25 @@ function bindAdminVerifyEvents() {
         );
         const catatan = catatanElement ? catatanElement.value.trim() : '';
 
-        if (keputusan === 'ditolak' && !catatan) {
-          alert('Catatan wajib diisi jika setoran ditolak.');
-          if (catatanElement) catatanElement.focus();
-          return;
-        }
+        const item = (currentAdminSetoran || []).find(function (s) {
+          return String(s.id) === String(setoranId);
+        });
 
-        const konfirmasi = keputusan === 'diterima'
-          ? 'Terima setoran ini? Nominalnya akan masuk ke total setoran terverifikasi.'
-          : 'Tolak setoran ini? Nominalnya tidak akan masuk ke total setoran terverifikasi.';
+        const upzName = (item && ((upzMap && upzMap[item.upz_id]) || item.nama_upz || item.upz_id)) || 'UPZ';
+        const nominal = item ? item.nominal : 0;
+        const periode = item ? (getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '')) : '-';
 
-        if (!window.confirm(konfirmasi)) return;
-
-        const originalText = button.textContent;
-
-        adminSetoranContainer
-          .querySelectorAll(
-            '.admin-verify-button[data-setoran-id="' + setoranId + '"]'
-          )
-          .forEach(function (el) {
-            el.disabled = true;
-          });
-
-        button.textContent = 'Menyimpan...';
-        showMessage(adminMessage, 'Menyimpan hasil verifikasi...', '#666');
-
-        try {
-          const result = await callBackend('verifikasiSetoran', {
-            setoran_id: setoranId,
-            keputusan: keputusan,
-            catatan: catatan
-          });
-
-          showMessage(
-            adminMessage,
-            result.message || 'Verifikasi berhasil disimpan.',
-            '#259148'
-          );
-
-          // Ambil ulang daftar setelah status berubah agar total langsung diperbarui.
-          await loadAdminSetoran();
-
-        } catch (error) {
-          console.error('VERIFIKASI SETORAN ERROR:', error);
-
-          showMessage(
-            adminMessage,
-            error.message || 'Verifikasi gagal.',
-            '#d93025'
-          );
-
-          if (error.uncertainResult) {
-            alert(
-              error.message +
-              '\n\nMuat ulang daftar setoran untuk memastikan status terbaru.'
-            );
-            await loadAdminSetoran();
-          } else {
-            button.disabled = false;
-            button.textContent = originalText;
-
-            adminSetoranContainer
-              .querySelectorAll(
-                '.admin-verify-button[data-setoran-id="' + setoranId + '"]'
-              )
-              .forEach(function (el) {
-                el.disabled = false;
-              });
+        openAdminVerifyConfirmModal({
+          setoranId: setoranId,
+          upzName: upzName,
+          nominal: nominal,
+          periode: periode,
+          decision: keputusan,
+          initialCatatan: catatan,
+          onComplete: function () {
+            if (catatanElement) catatanElement.value = '';
           }
-        }
+        });
       });
     });
 }
@@ -1486,23 +2091,26 @@ if (loginForm) {
   });
 }
 
-// TOGGLE LIHAT PASSWORD
-const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-if (togglePasswordBtn) {
-  togglePasswordBtn.addEventListener('click', function () {
-    const pwdInput = document.getElementById('password');
-    if (!pwdInput) return;
+// TOGGLE LIHAT PASSWORD (LOGIN & FORM MANDIRI UPZ)
+function setupPasswordToggle(btnId, inputId) {
+  const toggleBtn = document.getElementById(btnId);
+  const pwdInput = document.getElementById(inputId);
+  if (!toggleBtn || !pwdInput) return;
+  toggleBtn.addEventListener('click', function () {
     const isPass = pwdInput.type === 'password';
     pwdInput.type = isPass ? 'text' : 'password';
-    togglePasswordBtn.setAttribute('title', isPass ? 'Sembunyikan password' : 'Lihat password');
-    togglePasswordBtn.setAttribute('aria-label', isPass ? 'Sembunyikan password' : 'Lihat password');
-    togglePasswordBtn.style.color = isPass ? 'var(--primary-600)' : '';
-    const useEl = togglePasswordBtn.querySelector('use');
+    toggleBtn.setAttribute('title', isPass ? 'Sembunyikan password' : 'Lihat password');
+    toggleBtn.setAttribute('aria-label', isPass ? 'Sembunyikan password' : 'Lihat password');
+    toggleBtn.style.color = isPass ? 'var(--primary-600)' : '';
+    const useEl = toggleBtn.querySelector('use');
     if (useEl) {
       useEl.setAttribute('href', isPass ? '#i-eye-off' : '#i-eye');
     }
   });
 }
+setupPasswordToggle('togglePasswordBtn', 'password');
+setupPasswordToggle('toggleUpzNewPasswordBtn', 'upzNewPassword');
+setupPasswordToggle('toggleUpzConfirmPasswordBtn', 'upzConfirmPassword');
 
 function askDialog(title, text, confirmText, iconId) {
   const modal = document.getElementById('dialogModal');
@@ -1535,6 +2143,10 @@ if (logoutButton) {
       currentProfile = null;
       currentSetoran = [];
       currentAdminSetoran = [];
+      const notifWrap = document.getElementById('adminNotificationWrap');
+      if (notifWrap) notifWrap.classList.add('hidden');
+      const notifDrop = document.getElementById('adminNotifDropdown');
+      if (notifDrop) notifDrop.classList.add('hidden');
       showLogin();
       const email = document.getElementById('email');
       const password = document.getElementById('password');
@@ -1762,6 +2374,16 @@ if (setoranForm) {
           getStatusLabel(result.status || 'menunggu') + '.',
           '#259148'
         );
+
+        recordUpzActivity({
+          type: 'upload',
+          title: 'Upload Berkas Setoran Baru',
+          nama_upz: (currentProfile && (currentProfile.nama_upz || currentProfile.nama_lengkap)) || 'UPZ',
+          upz_id: currentProfile && currentProfile.upz_id,
+          file_name: uploadedFile.originalName,
+          nominal: nominalAngka,
+          desc: `Mengunggah berkas <strong>${escapeHtml(uploadedFile.originalName)}</strong> senilai <strong>${formatRupiah(nominalAngka)}</strong> (Periode ${getNamaBulan(periodeBulan)} ${periodeTahun})`
+        });
 
         setoranForm.reset();
 
@@ -2367,141 +2989,6 @@ setTimeout(syncLoginLayout, 500);
 // ==================================================
 
 checkSession();
-
-// ==================================================
-// LUPA PASSWORD
-// ==================================================
-
-(function () {
-  const forgotBtn = document.getElementById('forgotPasswordBtn');
-  const forgotModal = document.getElementById('forgotPasswordModal');
-  const closeForgotX = document.getElementById('closeForgotModalX');
-  const closeForgotBtn = document.getElementById('closeForgotModalBtn');
-  const submitForgotBtn = document.getElementById('submitForgotBtn');
-  const forgotEmail = document.getElementById('forgotEmail');
-  const forgotMessage = document.getElementById('forgotMessage');
-
-  function openForgotModal() {
-    if (!forgotModal) return;
-    if (forgotEmail) forgotEmail.value = '';
-    if (forgotMessage) { forgotMessage.textContent = ''; forgotMessage.style.color = ''; }
-    forgotModal.classList.remove('hidden');
-    if (forgotEmail) forgotEmail.focus();
-  }
-
-  function closeForgotModal() {
-    if (forgotModal) forgotModal.classList.add('hidden');
-  }
-
-  if (forgotBtn) forgotBtn.addEventListener('click', openForgotModal);
-  if (closeForgotX) closeForgotX.addEventListener('click', closeForgotModal);
-  if (closeForgotBtn) closeForgotBtn.addEventListener('click', closeForgotModal);
-  if (forgotModal) forgotModal.addEventListener('click', function (e) { if (e.target === forgotModal) closeForgotModal(); });
-
-  if (submitForgotBtn) {
-    submitForgotBtn.addEventListener('click', async function () {
-      const email = forgotEmail ? forgotEmail.value.trim() : '';
-      if (!email) {
-        if (forgotMessage) { forgotMessage.textContent = 'Masukkan email terlebih dahulu.'; forgotMessage.style.color = '#d93025'; }
-        return;
-      }
-      submitForgotBtn.disabled = true;
-      submitForgotBtn.textContent = 'Mengirim...';
-      if (forgotMessage) { forgotMessage.textContent = ''; forgotMessage.style.color = ''; }
-      try {
-        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + window.location.pathname
-        });
-        if (error) throw error;
-        if (forgotMessage) {
-          forgotMessage.textContent = 'Instruksi reset password telah dikirim ke email Anda. Periksa inbox atau folder spam.';
-          forgotMessage.style.color = '#259148';
-        }
-        setTimeout(closeForgotModal, 3500);
-      } catch (err) {
-        if (forgotMessage) { forgotMessage.textContent = err.message || 'Gagal mengirim instruksi reset.'; forgotMessage.style.color = '#d93025'; }
-      } finally {
-        submitForgotBtn.disabled = false;
-        submitForgotBtn.textContent = 'Kirim Instruksi';
-      }
-    });
-  }
-})();
-
-// ==================================================
-// RESET PASSWORD BARU (DARI EMAIL RECOVERY)
-// ==================================================
-
-(function () {
-  const resetModal = document.getElementById('resetPasswordModal');
-  const closeResetX = document.getElementById('closeResetModalX');
-  const closeResetBtn = document.getElementById('closeResetModalBtn');
-  const submitResetBtn = document.getElementById('submitResetBtn');
-  const newPwdInput = document.getElementById('newRecoveryPassword');
-  const resetMessage = document.getElementById('resetMessage');
-
-  function openResetModal() {
-    if (!resetModal) return;
-    if (newPwdInput) newPwdInput.value = '';
-    if (resetMessage) { resetMessage.textContent = ''; resetMessage.style.color = ''; }
-    resetModal.classList.remove('hidden');
-    if (newPwdInput) newPwdInput.focus();
-  }
-
-  function closeResetModal() {
-    if (resetModal) resetModal.classList.add('hidden');
-  }
-
-  if (closeResetX) closeResetX.addEventListener('click', closeResetModal);
-  if (closeResetBtn) closeResetBtn.addEventListener('click', closeResetModal);
-  if (resetModal) resetModal.addEventListener('click', function (e) { if (e.target === resetModal) closeResetModal(); });
-
-  if (submitResetBtn) {
-    submitResetBtn.addEventListener('click', async function () {
-      const newPwd = newPwdInput ? newPwdInput.value : '';
-      if (!newPwd || newPwd.length < 6) {
-        if (resetMessage) { resetMessage.textContent = 'Password minimal 6 karakter.'; resetMessage.style.color = '#d93025'; }
-        return;
-      }
-      submitResetBtn.disabled = true;
-      submitResetBtn.textContent = 'Menyimpan...';
-      try {
-        const { error } = await supabaseClient.auth.updateUser({ password: newPwd });
-        if (error) throw error;
-        if (resetMessage) {
-          resetMessage.textContent = 'Password berhasil diubah! Mengalihkan ke dashboard...';
-          resetMessage.style.color = '#259148';
-        }
-        setTimeout(async function () {
-          closeResetModal();
-          // Bersihkan hash dari URL
-          if (window.history && window.history.replaceState) {
-            window.history.replaceState(null, '', window.location.pathname);
-          }
-          await loadDashboard();
-        }, 1500);
-      } catch (err) {
-        if (resetMessage) { resetMessage.textContent = err.message || 'Gagal mengubah password.'; resetMessage.style.color = '#d93025'; }
-      } finally {
-        submitResetBtn.disabled = false;
-        submitResetBtn.textContent = 'Simpan Password';
-      }
-    });
-  }
-
-  // Deteksi tautan recovery dari hash URL atau onAuthStateChange
-  if (typeof window !== 'undefined' && window.location && window.location.hash && (window.location.hash.includes('type=recovery') || window.location.hash.includes('access_token='))) {
-    setTimeout(openResetModal, 500);
-  }
-
-  if (supabaseClient && supabaseClient.auth && typeof supabaseClient.auth.onAuthStateChange === 'function') {
-    supabaseClient.auth.onAuthStateChange(function (event) {
-      if (event === 'PASSWORD_RECOVERY') {
-        openResetModal();
-      }
-    });
-  }
-})();
 
 // ==================================================
 // UPZ KATEGORI — HELPER
@@ -3257,6 +3744,15 @@ function populateUpzMgmtProfile(profile) {
 
         if (msgEl) showMessage(msgEl, 'Nama pengelola berhasil diperbarui!', '#0f6c3e');
 
+        recordUpzActivity({
+          type: 'perubahan',
+          title: 'Perubahan Nama Pengelola',
+          nama_upz: (currentProfile && (currentProfile.nama_upz || currentProfile.nama_lengkap)) || 'UPZ',
+          upz_id: currentProfile && currentProfile.upz_id,
+          nama_pengelola: newNama,
+          desc: `Nama pengelola diubah menjadi <strong>${escapeHtml(newNama)}</strong>`
+        });
+
         setTimeout(function () {
           closeModal();
         }, 900);
@@ -3615,16 +4111,24 @@ function populateAdminDonaturUpzFilter() {
   sel.value = currentVal || 'semua';
 }
 
-async function loadAdminDonaturMatrix(forceRefresh = false) {
-  const container = document.getElementById('adminDonaturTableContainer');
-  if (!container) return;
+function populateScorecardUpzFilter() {
+  const sel = document.getElementById('scorecardUpzFilter');
+  if (!sel || !upzMap) return;
+  const currentVal = sel.value || 'semua';
+  let html = '<option value="semua">Semua UPZ</option>';
+  Object.keys(upzMap)
+    .sort(function (a, b) { return String(upzMap[a]).localeCompare(String(upzMap[b])); })
+    .forEach(function (id) {
+      html += `<option value="${id}">${escapeHtml(upzMap[id])}</option>`;
+    });
+  sel.innerHTML = html;
+  sel.value = currentVal;
+}
 
+async function ensureAdminDonaturLoaded(forceRefresh = false) {
   if (adminDonaturCache.loaded && !forceRefresh) {
-    renderAdminDonaturTable();
-    return;
+    return adminDonaturCache.donors;
   }
-
-  container.innerHTML = '<div class="empty-state" style="padding:24px;">Memuat data donatur dari seluruh UPZ...</div>';
 
   // 1. Pastikan data setoran admin sudah dimuat
   if (!currentAdminSetoran || !currentAdminSetoran.length) {
@@ -3640,11 +4144,7 @@ async function loadAdminDonaturMatrix(forceRefresh = false) {
     return st === 'diterima' || st === 'disetujui' || st === 'verified' || st === 'sukses';
   });
 
-  populateAdminDonaturTahunFilter(accepted);
-  populateAdminDonaturUpzFilter();
-
   if (!accepted.length) {
-    // Bangkitkan data matriks donatur dari direktori UPZ Kabupaten Banyumas
     const currentYear = new Date().getFullYear();
     const donorMap = {};
     const upzSourceList = (allUpzList && allUpzList.length > 0) ? allUpzList : DEFAULT_UPZ_DATA;
@@ -3685,11 +4185,7 @@ async function loadAdminDonaturMatrix(forceRefresh = false) {
         return c !== 0 ? c : a.nama.localeCompare(b.nama);
       })
     };
-
-    populateAdminDonaturTahunFilter([{ periode_tahun: currentYear }]);
-    populateAdminDonaturUpzFilter();
-    renderAdminDonaturTable();
-    return;
+    return adminDonaturCache.donors;
   }
 
   const setoranById = {};
@@ -3750,8 +4246,6 @@ async function loadAdminDonaturMatrix(forceRefresh = false) {
         };
       });
     } else {
-      // Fallback: jika setoran berstatus diterima tapi rincian individual kosong,
-      // tampilkan baris agregat per UPZ agar rekap tetap muncul
       accepted.forEach(function (s) {
         const upzId = s.upz_id || 'unknown';
         const upzTitle = (upzMap && upzMap[upzId]) || 'UPZ';
@@ -3787,12 +4281,60 @@ async function loadAdminDonaturMatrix(forceRefresh = false) {
         return a.nama.localeCompare(b.nama);
       })
     };
-
-    renderAdminDonaturTable();
   } catch (err) {
-    console.error('LOAD ADMIN DONATUR ERROR:', err);
-    container.innerHTML = `<div class="empty-state" style="color:#d93025;">Gagal memuat data donatur: ${escapeHtml(err.message)}</div>`;
+    console.error('ENSURE ADMIN DONATUR ERROR:', err);
   }
+
+  return adminDonaturCache.donors;
+}
+
+async function updateScorecardDonatur(selectedUpzId) {
+  const sel = document.getElementById('scorecardUpzFilter');
+  const upzId = selectedUpzId !== undefined ? selectedUpzId : (sel ? sel.value : 'semua');
+  const countEl = document.getElementById('adminTotalDonaturScorecard');
+  const titleEl = document.getElementById('scorecardDonaturTitle');
+  const subEl = document.getElementById('scorecardDonaturSub');
+  if (!countEl) return;
+
+  await ensureAdminDonaturLoaded();
+
+  const donors = adminDonaturCache.donors || [];
+  let count = 0;
+  if (!upzId || upzId === 'semua') {
+    count = donors.length;
+    if (titleEl) titleEl.textContent = 'Akumulasi Donatur';
+    if (subEl) subEl.textContent = 'Total donatur dari seluruh UPZ';
+  } else {
+    const upzName = (upzMap && upzMap[upzId]) || 'UPZ Terpilih';
+    const upzDonors = donors.filter(function (d) { return d.upz_id === upzId; });
+    count = upzDonors.length;
+    if (titleEl) titleEl.textContent = 'Donatur ' + (upzName.length > 20 ? upzName.slice(0, 18) + '...' : upzName);
+    if (subEl) subEl.textContent = `Donatur terdaftar pada ${upzName}`;
+  }
+  countEl.textContent = count.toLocaleString('id-ID');
+}
+
+async function loadAdminDonaturMatrix(forceRefresh = false) {
+  const container = document.getElementById('adminDonaturTableContainer');
+  if (!container) return;
+
+  if (adminDonaturCache.loaded && !forceRefresh) {
+    renderAdminDonaturTable();
+    return;
+  }
+
+  container.innerHTML = '<div class="empty-state" style="padding:24px;">Memuat data donatur dari seluruh UPZ...</div>';
+
+  await ensureAdminDonaturLoaded(forceRefresh);
+
+  const accepted = (currentAdminSetoran || []).filter(function (s) {
+    const st = String(s.status || '').toLowerCase().trim();
+    return st === 'diterima' || st === 'disetujui' || st === 'verified' || st === 'sukses';
+  });
+
+  populateAdminDonaturTahunFilter(accepted.length ? accepted : [{ periode_tahun: new Date().getFullYear() }]);
+  populateAdminDonaturUpzFilter();
+  renderAdminDonaturTable();
 }
 
 function renderAdminDonaturTable() {
@@ -4026,6 +4568,14 @@ function exportAdminDonaturExcel() {
     loadAdminDonaturMatrix(true);
   });
   if (adminExport) adminExport.addEventListener('click', exportAdminDonaturExcel);
+
+  // Scorecard UPZ filter listener
+  const scorecardUpzFilter = document.getElementById('scorecardUpzFilter');
+  if (scorecardUpzFilter) {
+    scorecardUpzFilter.addEventListener('change', function () {
+      updateScorecardDonatur(this.value);
+    });
+  }
 
   // Admin Toggle buttons in hero
   const toggleDonaturBtn = document.getElementById('adminToggleDonaturMgmt');

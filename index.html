@@ -46,6 +46,7 @@
     <symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></symbol>
     <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
     <symbol id="i-bar-chart" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
   </svg>
 
   <!-- ====================================== -->
@@ -102,10 +103,6 @@
             </div>
           </div>
 
-          <div class="login-field-footer">
-            <button type="button" id="forgotPasswordBtn" class="btn-link">Lupa password?</button>
-          </div>
-
           <button type="submit" id="loginButton" class="btn btn-primary btn-block btn-lg">Login</button>
         </form>
 
@@ -144,6 +141,44 @@
         <button type="button" id="headerRefreshButton" class="btn btn-ghost btn-icon-only header-icon-btn" aria-label="Refresh Data" title="Muat Ulang Data">
           <svg class="icon"><use href="#i-refresh"></use></svg>
         </button>
+
+        <!-- Tombol & Dropdown Notifikasi Admin -->
+        <div id="adminNotificationWrap" class="notif-dropdown-wrap hidden">
+          <button type="button" id="adminNotifButton" class="btn btn-ghost btn-icon-only header-icon-btn notif-bell-btn" aria-label="Notifikasi Aktivitas UPZ" title="Notifikasi Aktivitas UPZ" aria-expanded="false" aria-haspopup="true">
+            <svg class="icon"><use href="#i-bell"></use></svg>
+            <span id="adminNotifBadge" class="notif-badge hidden">0</span>
+          </button>
+
+          <div id="adminNotifDropdown" class="notif-dropdown hidden" role="region" aria-label="Notifikasi Aktivitas UPZ">
+            <div class="notif-header">
+              <div class="notif-header-title">
+                <svg class="icon"><use href="#i-bell"></use></svg>
+                <span>Notifikasi Aktivitas UPZ</span>
+                <span id="notifUnreadPill" class="notif-unread-pill hidden">0 baru</span>
+              </div>
+              <button type="button" id="markAllNotifsReadBtn" class="notif-action-link" title="Tandai semua notifikasi sudah dibaca">
+                Tandai dibaca
+              </button>
+            </div>
+
+            <div class="notif-tabs">
+              <button type="button" class="notif-tab active" data-tab="semua">Semua</button>
+              <button type="button" class="notif-tab" data-tab="upload">Upload Berkas</button>
+              <button type="button" class="notif-tab" data-tab="perubahan">Perubahan Data</button>
+            </div>
+
+            <div id="adminNotifList" class="notif-list">
+              <div class="notif-empty">Memuat notifikasi...</div>
+            </div>
+
+            <div class="notif-footer">
+              <span class="notif-footer-hint"><span class="live-dot"></span> Pembaruan real-time</span>
+              <button type="button" id="refreshNotifsBtn" class="notif-footer-btn" title="Muat ulang notifikasi">
+                <svg class="icon"><use href="#i-refresh"></use></svg> Segarkan
+              </button>
+            </div>
+          </div>
+        </div>
 
         <!-- Menu Hamburger Dropdown -->
         <div class="menu-dropdown-wrap">
@@ -242,6 +277,24 @@
             <div class="summary-card">
               <div class="summary-icon tone-violet"><svg class="icon"><use href="#i-building"></use></svg></div>
               <div><div class="summary-title">UPZ Berpartisipasi</div><div id="adminJumlahUpz" class="summary-value">0</div></div>
+            </div>
+            <!-- KARTU AKUMULASI DONATUR DENGAN DROPDOWN FILTER PER UPZ -->
+            <div class="summary-card summary-card-donatur">
+              <div class="scorecard-top-row">
+                <div class="summary-icon tone-teal">
+                  <svg class="icon"><use href="#i-users"></use></svg>
+                </div>
+                <div class="scorecard-select-wrap">
+                  <select id="scorecardUpzFilter" class="scorecard-select" aria-label="Filter Donatur per UPZ" title="Pilih UPZ untuk melihat jumlah donaturnya">
+                    <option value="semua">Semua UPZ</option>
+                  </select>
+                </div>
+              </div>
+              <div class="scorecard-bottom-content">
+                <div class="summary-title" id="scorecardDonaturTitle">Akumulasi Donatur</div>
+                <div id="adminTotalDonaturScorecard" class="summary-value tone-teal-value">0</div>
+                <div id="scorecardDonaturSub" class="summary-sub-hint">Total donatur dari seluruh UPZ</div>
+              </div>
             </div>
           </div>
 
@@ -846,6 +899,9 @@
                 <div class="input-icon">
                   <svg class="icon"><use href="#i-lock"></use></svg>
                   <input type="password" id="upzNewPassword" placeholder="Minimal 6 karakter" required minlength="6">
+                  <button type="button" id="toggleUpzNewPasswordBtn" class="toggle-password-btn" aria-label="Lihat password" title="Lihat password">
+                    <svg class="icon"><use href="#i-eye"></use></svg>
+                  </button>
                 </div>
               </div>
               <div class="form-group">
@@ -853,6 +909,9 @@
                 <div class="input-icon">
                   <svg class="icon"><use href="#i-lock"></use></svg>
                   <input type="password" id="upzConfirmPassword" placeholder="Ulangi password baru" required minlength="6">
+                  <button type="button" id="toggleUpzConfirmPasswordBtn" class="toggle-password-btn" aria-label="Lihat password" title="Lihat password">
+                    <svg class="icon"><use href="#i-eye"></use></svg>
+                  </button>
                 </div>
               </div>
               <button type="submit" id="upzChangePasswordBtn" class="btn btn-primary btn-block">Simpan Password Baru</button>
@@ -963,35 +1022,6 @@
     </div>
   </div>
 
-  <div id="forgotPasswordModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="forgotModalTitle">
-    <div class="modal-card modal-sm">
-      <div class="modal-header">
-        <div class="modal-heading"><div class="modal-icon"><svg class="icon"><use href="#i-mail"></use></svg></div><div><h3 id="forgotModalTitle">Lupa Password</h3><p class="modal-subtitle">Masukkan email akun Anda.</p></div></div>
-        <button type="button" id="closeForgotModalX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
-      </div>
-      <div class="modal-scroll"><div class="form-group"><label for="forgotEmail">Email</label><input type="email" id="forgotEmail" placeholder="nama@email.com" required></div><div id="forgotMessage" class="form-message"></div></div>
-      <div class="modal-footer"><button type="button" id="closeForgotModalBtn" class="btn btn-ghost">Batal</button><button type="button" id="submitForgotBtn" class="btn btn-primary">Kirim Instruksi</button></div>
-    </div>
-  </div>
-
-  <!-- MODAL ATUR PASSWORD BARU (EMAIL RECOVERY) -->
-  <div id="resetPasswordModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
-    <div class="modal-card modal-sm">
-      <div class="modal-header">
-        <div class="modal-heading"><div class="modal-icon"><svg class="icon"><use href="#i-lock"></use></svg></div><div><h3 id="resetModalTitle">Atur Password Baru</h3><p class="modal-subtitle">Masukkan password baru Anda.</p></div></div>
-        <button type="button" id="closeResetModalX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
-      </div>
-      <div class="modal-scroll">
-        <div class="form-group">
-          <label for="newRecoveryPassword">Password Baru</label>
-          <input type="password" id="newRecoveryPassword" placeholder="Minimal 6 karakter" required>
-        </div>
-        <div id="resetMessage" class="form-message"></div>
-      </div>
-      <div class="modal-footer"><button type="button" id="closeResetModalBtn" class="btn btn-ghost">Batal</button><button type="button" id="submitResetBtn" class="btn btn-primary">Simpan Password</button></div>
-    </div>
-  </div>
-
   <!-- MODAL TAMBAH / EDIT AKUN UPZ (ADMIN) -->
   <div id="upzFormModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="upzFormModalTitle">
     <div class="modal-card modal-md">
@@ -1084,6 +1114,57 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI VERIFIKASI SETORAN (ADMIN) -->
+  <div id="adminVerifyConfirmModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="verifyConfirmModalTitle">
+    <div class="modal-card modal-sm verify-confirm-card">
+      <div class="modal-header">
+        <div class="modal-heading">
+          <div id="verifyConfirmIconBox" class="modal-icon verify-icon-diterima">
+            <svg class="icon"><use href="#i-check"></use></svg>
+          </div>
+          <div>
+            <h3 id="verifyConfirmModalTitle">Konfirmasi Setoran</h3>
+            <p id="verifyConfirmModalSubtitle" class="modal-subtitle">Periksa rincian sebelum mengambil keputusan.</p>
+          </div>
+        </div>
+        <button type="button" id="closeVerifyConfirmX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+      </div>
+      <div class="modal-scroll">
+        <div class="verify-confirm-summary">
+          <div class="confirm-row">
+            <span class="confirm-label">Nama UPZ</span>
+            <span id="adminConfirmUpzName" class="confirm-val">-</span>
+          </div>
+          <div class="confirm-row">
+            <span class="confirm-label">Nominal Setoran</span>
+            <span id="adminConfirmNominal" class="confirm-val confirm-nominal">-</span>
+          </div>
+          <div class="confirm-row">
+            <span class="confirm-label">Periode</span>
+            <span id="adminConfirmPeriode" class="confirm-val">-</span>
+          </div>
+          <div class="confirm-row">
+            <span class="confirm-label">Keputusan</span>
+            <span id="adminConfirmDecisionBadge" class="confirm-val">-</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:14px;margin-bottom:0;">
+          <label for="confirmVerifyCatatan" id="confirmCatatanLabel">Catatan Verifikasi</label>
+          <textarea id="confirmVerifyCatatan" class="form-control" rows="3" placeholder="Tuliskan catatan verifikasi (wajib diisi jika ditolak)..." style="width:100%;resize:vertical;"></textarea>
+          <div id="confirmVerifyErrorMsg" class="form-message" style="margin-top:6px;display:none;color:#dc2626;font-size:12px;font-weight:600;"></div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;">
+        <button type="button" id="cancelVerifyConfirmBtn" class="btn btn-ghost">Batal</button>
+        <button type="button" id="executeVerifyConfirmBtn" class="btn btn-primary">
+          <svg class="icon"><use href="#i-check"></use></svg>
+          <span id="executeVerifyConfirmText">Ya, Konfirmasi</span>
+        </button>
       </div>
     </div>
   </div>
