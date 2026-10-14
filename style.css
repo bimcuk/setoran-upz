@@ -2538,6 +2538,139 @@ textarea:focus {
 .upz-status-nonaktif { background: var(--badge-red-bg); color: var(--badge-red-fg); }
 
 /* ==================================================
+   UPZ MANAGEMENT PAGINATION
+   ================================================== */
+.upz-pagination-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 4px 6px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--slate-600);
+}
+
+.upz-pagination-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--slate-600);
+}
+
+.upz-pagination-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.upz-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--slate-200);
+  background: #ffffff;
+  color: var(--slate-700);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.upz-page-btn:hover:not(:disabled) {
+  background: var(--slate-100);
+  border-color: var(--slate-300);
+  color: var(--slate-900);
+}
+
+.upz-page-btn.active {
+  background: var(--brand-600, #259148);
+  border-color: var(--brand-600, #259148);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.upz-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: var(--slate-200);
+  background: var(--slate-50);
+}
+
+.upz-page-btn.jump-btn {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0 11px;
+  background: var(--slate-50);
+  color: var(--brand-700, #1c743a);
+  border-color: var(--slate-300);
+}
+
+.upz-page-btn.jump-btn:hover:not(:disabled) {
+  background: var(--brand-50, #f0fdf4);
+  border-color: var(--brand-500, #22c55e);
+  color: var(--brand-800, #166534);
+}
+
+.upz-page-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  color: var(--slate-400);
+  font-weight: 700;
+}
+
+.upz-jump-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+}
+
+.upz-jump-input {
+  width: 58px;
+  height: 34px;
+  text-align: center;
+  padding: 0 4px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--slate-200);
+  font-size: 13px;
+  color: var(--slate-800);
+  background: #ffffff;
+}
+
+.upz-jump-input:focus {
+  outline: none;
+  border-color: var(--brand-500, #22c55e);
+  box-shadow: 0 0 0 3px rgba(37, 145, 72, 0.15);
+}
+
+@media (max-width: 768px) {
+  .upz-pagination-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .upz-pagination-controls {
+    justify-content: center;
+  }
+  .upz-pagination-info {
+    justify-content: center;
+  }
+}
+
+
+/* ==================================================
    DONATUR TABLE (UPZ)
    ================================================== */
 .donatur-table-wrap {

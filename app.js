@@ -2557,6 +2557,38 @@ const DEFAULT_UPZ_DATA = [
 ];
 
 let allUpzList = []; // [{id, nama_lengkap, email, nama_upz, kategori, status, upz_id}]
+let upzMgmtCurrentPage = 1;
+const UPZ_PAGE_SIZE = 10;
+
+function getPaginationRange(current, total) {
+  if (total <= 7) {
+    const pages = [];
+    for (let i = 1; i <= total; i++) pages.push(i);
+    return pages;
+  }
+  const pages = [1];
+  let start = Math.max(2, current - 1);
+  let end = Math.min(total - 1, current + 1);
+
+  if (current <= 3) {
+    end = 4;
+  }
+  if (current >= total - 2) {
+    start = total - 3;
+  }
+
+  if (start > 2) {
+    pages.push('...');
+  }
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  if (end < total - 1) {
+    pages.push('...');
+  }
+  pages.push(total);
+  return pages;
+}
 
 async function loadUpzList() {
   const container = document.getElementById('upzMgmtContainer');
@@ -2684,37 +2716,55 @@ function renderUpzMgmtTable() {
   if (search.trim()) {
     const q = search.trim().toLowerCase();
     filtered = filtered.filter(function (u) {
-      return u.nama_upz.toLowerCase().includes(q) || u.nama_lengkap.toLowerCase().includes(q) || u.email.toLowerCase().includes(q);
+      return (
+        (u.nama_upz || '').toLowerCase().includes(q) ||
+        (u.nama_lengkap || '').toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q)
+      );
     });
   }
   if (kategori && kategori !== 'semua') {
     filtered = filtered.filter(function (u) { return u.kategori === kategori; });
   }
 
-  if (countEl) countEl.textContent = 'Menampilkan ' + filtered.length + ' dari ' + allUpzList.length + ' UPZ';
-
   if (!filtered.length) {
-    container.innerHTML = '<div class="empty-state">Tidak ada UPZ yang sesuai pencarian.</div>';
+    if (countEl) countEl.innerHTML = `Menampilkan <strong>0</strong> dari <strong>${allUpzList.length.toLocaleString('id-ID')}</strong> UPZ`;
+    container.innerHTML = '<div class="empty-state" style="padding:32px 16px;">Tidak ada UPZ yang sesuai pencarian.</div>';
     return;
   }
 
-  let html = `<table class="upz-mgmt-table">
-    <thead>
-      <tr>
-        <th>No.</th>
-        <th>Nama UPZ</th>
-        <th>Pengelola / Email</th>
-        <th>Kategori</th>
-        <th>Status</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody>`;
+  const totalPages = Math.ceil(filtered.length / UPZ_PAGE_SIZE) || 1;
+  if (upzMgmtCurrentPage > totalPages) upzMgmtCurrentPage = totalPages;
+  if (upzMgmtCurrentPage < 1) upzMgmtCurrentPage = 1;
 
-  filtered.forEach(function (u, i) {
+  const startIdx = (upzMgmtCurrentPage - 1) * UPZ_PAGE_SIZE;
+  const endIdx = Math.min(startIdx + UPZ_PAGE_SIZE, filtered.length);
+  const pageItems = filtered.slice(startIdx, endIdx);
+
+  if (countEl) {
+    const isFiltered = filtered.length !== allUpzList.length;
+    countEl.innerHTML = `Menampilkan <strong>${(startIdx + 1).toLocaleString('id-ID')} - ${endIdx.toLocaleString('id-ID')}</strong> dari <strong>${filtered.length.toLocaleString('id-ID')}</strong> UPZ${isFiltered ? ` (disaring dari total ${allUpzList.length.toLocaleString('id-ID')} UPZ)` : ''} &bull; <span style="color:var(--slate-700);font-weight:600;">Halaman ${upzMgmtCurrentPage} dari ${totalPages}</span>`;
+  }
+
+  let html = `<div class="upz-mgmt-table-wrap">
+    <table class="upz-mgmt-table">
+      <thead>
+        <tr>
+          <th style="width:55px;">No.</th>
+          <th>Nama UPZ</th>
+          <th>Pengelola / Email</th>
+          <th>Kategori</th>
+          <th>Status</th>
+          <th style="text-align:center;width:90px;">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+  pageItems.forEach(function (u, i) {
     const statusClass = u.status === 'aktif' ? 'upz-status-aktif' : 'upz-status-nonaktif';
+    const rowNum = startIdx + i + 1;
     html += `<tr>
-      <td style="color:var(--slate-400);font-size:12px;">${i + 1}</td>
+      <td style="color:var(--slate-400);font-size:12px;font-weight:600;">${rowNum}</td>
       <td>
         <div class="nama-upz">${escapeHtml(u.nama_upz || '-')}</div>
       </td>
@@ -2724,7 +2774,7 @@ function renderUpzMgmtTable() {
       </td>
       <td>${renderKategoriChip(u.kategori)}</td>
       <td><span class="upz-status-badge ${statusClass}">${escapeHtml(u.status || 'aktif')}</span></td>
-      <td>
+      <td style="text-align:center;">
         <button type="button" class="btn btn-soft btn-sm upz-edit-btn"
           data-profile-id="${escapeHtml(u.profile_id)}"
           data-upz-id="${escapeHtml(u.upz_id || '')}"
@@ -2739,8 +2789,94 @@ function renderUpzMgmtTable() {
     </tr>`;
   });
 
-  html += '</tbody></table>';
+  html += '</tbody></table></div>';
+
+  // PAGINATION CONTROLS
+  if (totalPages > 1) {
+    const pageRange = getPaginationRange(upzMgmtCurrentPage, totalPages);
+    const canJumpPrev100 = upzMgmtCurrentPage > 10;
+    const canJumpNext100 = upzMgmtCurrentPage <= totalPages - 10;
+    const prevPage = Math.max(1, upzMgmtCurrentPage - 1);
+    const nextPage = Math.min(totalPages, upzMgmtCurrentPage + 1);
+    const jumpPrev100Page = Math.max(1, upzMgmtCurrentPage - 10);
+    const jumpNext100Page = Math.min(totalPages, upzMgmtCurrentPage + 10);
+
+    html += `<div class="upz-pagination-wrapper">
+      <div class="upz-pagination-info">
+        Halaman <strong>${upzMgmtCurrentPage}</strong> dari <strong>${totalPages}</strong> (${filtered.length.toLocaleString('id-ID')} data)
+      </div>
+      <div class="upz-pagination-controls">
+        <button type="button" class="upz-page-btn jump-btn" data-page="${jumpPrev100Page}" ${canJumpPrev100 ? '' : 'disabled'} title="Lompat 100 data ke belakang (-10 halaman)">
+          &laquo; 100 Data
+        </button>
+        <button type="button" class="upz-page-btn" data-page="${prevPage}" ${upzMgmtCurrentPage === 1 ? 'disabled' : ''} title="Halaman sebelumnya">
+          &lsaquo;
+        </button>`;
+
+    pageRange.forEach(function (p) {
+      if (p === '...') {
+        html += `<span class="upz-page-ellipsis">&hellip;</span>`;
+      } else {
+        const isActive = p === upzMgmtCurrentPage;
+        html += `<button type="button" class="upz-page-btn ${isActive ? 'active' : ''}" data-page="${p}" ${isActive ? 'disabled' : ''}>
+          ${p}
+        </button>`;
+      }
+    });
+
+    html += `<button type="button" class="upz-page-btn" data-page="${nextPage}" ${upzMgmtCurrentPage === totalPages ? 'disabled' : ''} title="Halaman berikutnya">
+          &rsaquo;
+        </button>
+        <button type="button" class="upz-page-btn jump-btn" data-page="${jumpNext100Page}" ${canJumpNext100 ? '' : 'disabled'} title="Lompat 100 data ke depan (+10 halaman)">
+          100 Data &raquo;
+        </button>
+
+        <form class="upz-jump-form" id="upzJumpForm">
+          <span style="font-size:12px;color:var(--slate-500);">Ke hal:</span>
+          <input type="number" id="upzJumpInput" class="upz-jump-input" min="1" max="${totalPages}" value="${upzMgmtCurrentPage}" title="Ketik nomor halaman">
+          <button type="submit" class="btn btn-soft btn-sm" style="padding:0 10px;height:34px;">Buka</button>
+        </form>
+      </div>
+    </div>`;
+  }
+
   container.innerHTML = html;
+
+  // Bind pagination button clicks
+  container.querySelectorAll('.upz-page-btn[data-page]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (btn.disabled) return;
+      const targetPage = parseInt(btn.dataset.page, 10);
+      if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages) {
+        upzMgmtCurrentPage = targetPage;
+        renderUpzMgmtTable();
+        const topEl = document.getElementById('adminUpzManagement');
+        if (topEl) {
+          topEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+
+  // Bind Jump Form submit
+  const jumpForm = container.querySelector('#upzJumpForm');
+  if (jumpForm) {
+    jumpForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const jumpInput = container.querySelector('#upzJumpInput');
+      if (!jumpInput) return;
+      let targetPage = parseInt(jumpInput.value, 10);
+      if (isNaN(targetPage)) return;
+      if (targetPage < 1) targetPage = 1;
+      if (targetPage > totalPages) targetPage = totalPages;
+      upzMgmtCurrentPage = targetPage;
+      renderUpzMgmtTable();
+      const topEl = document.getElementById('adminUpzManagement');
+      if (topEl) {
+        topEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
 
   // Bind edit buttons
   container.querySelectorAll('.upz-edit-btn').forEach(function (btn) {
@@ -2893,9 +3029,24 @@ function closeUpzFormModal() {
   const kategoriSelect = document.getElementById('upzMgmtKategori');
   const refreshBtn = document.getElementById('upzMgmtRefresh');
 
-  if (searchInput) searchInput.addEventListener('input', renderUpzMgmtTable);
-  if (kategoriSelect) kategoriSelect.addEventListener('change', renderUpzMgmtTable);
-  if (refreshBtn) refreshBtn.addEventListener('click', loadUpzList);
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      upzMgmtCurrentPage = 1;
+      renderUpzMgmtTable();
+    });
+  }
+  if (kategoriSelect) {
+    kategoriSelect.addEventListener('change', function () {
+      upzMgmtCurrentPage = 1;
+      renderUpzMgmtTable();
+    });
+  }
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', function () {
+      upzMgmtCurrentPage = 1;
+      loadUpzList();
+    });
+  }
 
   // Admin toggle UPZ management
   const toggleBtn = document.getElementById('adminToggleUpzMgmt');
