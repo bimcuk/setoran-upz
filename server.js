@@ -296,6 +296,91 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ============================================================
+  // ENDPOINT: Update/Edit Akun UPZ (Admin only)
+  // POST /api/update-upz
+  // Body: { token, profile_id, upz_id, nama_upz, nama_lengkap, kategori, status, password, email }
+  // ============================================================
+  if (req.url === '/api/update-upz' && req.method === 'POST') {
+    const sendJson = (statusCode, data) => {
+      res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(data));
+    };
+
+    try {
+      const body = await readBody(req);
+      const { token, profile_id, upz_id, nama_upz, nama_lengkap, kategori, status, password, email } = body;
+
+      if (!token) return sendJson(401, { success: false, message: 'Token tidak ditemukan.' });
+      if (!nama_upz) return sendJson(400, { success: false, message: 'Nama UPZ wajib diisi.' });
+
+      // Verifikasi caller adalah admin
+      await verifyAdminToken(token);
+
+      const sKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
+      const headers = {
+        'apikey': sKey,
+        'Authorization': `Bearer ${sKey}`,
+        'Content-Type': 'application/json'
+      };
+
+      // 1. Update tabel upz jika ada upz_id atau kode matching
+      if (upz_id) {
+        try {
+          const upzRes = await fetch(`${SUPABASE_URL}/rest/v1/upz?id=eq.${encodeURIComponent(upz_id)}`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ nama_upz: nama_upz, kategori: kategori })
+          });
+          console.log(`[UPDATE-UPZ] table upz patch HTTP ${upzRes.status}`);
+        } catch (uErr) {
+          console.warn('[UPDATE-UPZ] upz table patch error:', uErr.message);
+        }
+      }
+
+      // 2. Update tabel profiles
+      if (profile_id) {
+        try {
+          const profRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(profile_id)}`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ nama_lengkap: nama_lengkap || nama_upz, nama_upz: nama_upz, status: status })
+          });
+          console.log(`[UPDATE-UPZ] table profiles patch HTTP ${profRes.status}`);
+        } catch (pErr) {
+          console.warn('[UPDATE-UPZ] profiles table patch error:', pErr.message);
+        }
+      }
+
+      // 3. Update password auth jika diberikan dan service role key tersedia
+      if (password && profile_id && SUPABASE_SERVICE_ROLE_KEY && SUPABASE_SERVICE_ROLE_KEY !== 'ISI_SERVICE_ROLE_KEY_DISINI') {
+        try {
+          await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${encodeURIComponent(profile_id)}`, {
+            method: 'PUT',
+            headers: {
+              'apikey': SUPABASE_SERVICE_ROLE_KEY,
+              'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password: password })
+          });
+          console.log(`[UPDATE-UPZ] password updated for user ${profile_id}`);
+        } catch (pwErr) {
+          console.warn('[UPDATE-UPZ] password update warn:', pwErr.message);
+        }
+      }
+
+      return sendJson(200, {
+        success: true,
+        message: 'Data UPZ berhasil diperbarui.'
+      });
+
+    } catch (err) {
+      console.error('[UPDATE-UPZ ERROR]', err.message);
+      return sendJson(500, { success: false, message: err.message });
+    }
+  }
+
+  // ============================================================
   // ENDPOINT: Get complete UPZ list (602+ records)
   // GET /api/upz-list
   // ============================================================

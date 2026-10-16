@@ -52,6 +52,8 @@
     <symbol id="i-external-link" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
     <symbol id="i-message-circle" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
     <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
+    <symbol id="i-more-vertical" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></symbol>
+    <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></symbol>
   </svg>
 
   <!-- ====================================== -->
@@ -62,15 +64,17 @@
     <div class="splash-orb splash-orb-2"></div>
     <div class="splash-content">
       <div class="splash-logo-wrap">
-        <img src="assets/logo_baznas_banyumas.png" alt="BAZNAS Kabupaten Banyumas" class="splash-logo">
+        <img src="assets/logo_baznas_banyumas_white.png" alt="BAZNAS Kabupaten Banyumas" class="splash-logo">
       </div>
       <div class="splash-tagline">
-        <h2 class="splash-title">Amanah tersalurkan,<br>tercatat dengan rapi.</h2>
-        <p class="splash-sub">Sistem Informasi Pengelolaan UPZ BAZNAS Banyumas</p>
+        <div id="splashGreetingRole" class="splash-role-pill">Memverifikasi Akun...</div>
+        <h2 id="splashGreetingName" class="splash-title">Assalamualaikum</h2>
+        <p class="splash-sub">BAZNAS Kabupaten Banyumas</p>
       </div>
-      <div class="splash-loader-wrap">
-        <div class="splash-spinner"></div>
-        <span class="splash-loader-text">Menyiapkan dashboard sistem...</span>
+      <div class="splash-action-wrap">
+        <button type="button" id="btnEnterAppFromSplash" class="btn btn-primary splash-enter-btn">
+          <span>Masuk ke Aplikasi</span>
+        </button>
       </div>
     </div>
   </div>
@@ -229,11 +233,11 @@
               <button type="button" class="menu-item" id="menuAdminSetoran" role="menuitem">
                 <svg class="icon"><use href="#i-receipt"></use></svg><span>Daftar Setoran</span>
               </button>
-              <button type="button" class="menu-item" id="menuAdminPentasharufan" role="menuitem">
-                <svg class="icon"><use href="#i-hand-heart"></use></svg><span>Perbantuan Pentasharufan</span>
-              </button>
               <button type="button" class="menu-item" id="menuAdminDonatur" role="menuitem">
                 <svg class="icon"><use href="#i-users"></use></svg><span>Daftar Donatur</span>
+              </button>
+              <button type="button" class="menu-item" id="menuAdminPentasharufan" role="menuitem">
+                <svg class="icon"><use href="#i-hand-heart"></use></svg><span>Perbantuan Pentasharufan</span>
               </button>
               <button type="button" class="menu-item" id="menuAdminUpz" role="menuitem">
                 <svg class="icon"><use href="#i-building"></use></svg><span>Manajemen Akun UPZ</span>
@@ -252,14 +256,14 @@
               <button type="button" class="menu-item" id="menuUpzInput" role="menuitem">
                 <svg class="icon"><use href="#i-upload"></use></svg><span>Input Setoran</span>
               </button>
-              <button type="button" class="menu-item" id="menuUpzPentasharufan" role="menuitem">
-                <svg class="icon"><use href="#i-hand-heart"></use></svg><span>Perbantuan Pentasharufan</span>
-              </button>
               <button type="button" class="menu-item" id="menuUpzDonatur" role="menuitem">
                 <svg class="icon"><use href="#i-users"></use></svg><span>Daftar Donatur</span>
               </button>
               <button type="button" class="menu-item" id="menuUpzRiwayat" role="menuitem">
                 <svg class="icon"><use href="#i-receipt"></use></svg><span>Riwayat Setoran</span>
+              </button>
+              <button type="button" class="menu-item" id="menuUpzPentasharufan" role="menuitem">
+                <svg class="icon"><use href="#i-hand-heart"></use></svg><span>Perbantuan Pentasharufan</span>
               </button>
               <button type="button" class="menu-item" id="menuUpzMgmt" role="menuitem">
                 <svg class="icon"><use href="#i-building"></use></svg><span>Manajemen UPZ</span>
@@ -317,16 +321,14 @@
             </div>
 
             <!-- BARIS 2 -->
-            <div class="summary-card">
+            <div class="summary-card card-with-corner-action">
+              <button type="button" id="btnDetailKategoriUpz" class="summary-corner-btn" title="Lihat rincian per kategori UPZ" aria-label="Lihat rincian per kategori UPZ">
+                <svg class="icon"><use href="#i-file-text"></use></svg>
+              </button>
               <div class="summary-icon tone-violet"><svg class="icon"><use href="#i-building"></use></svg></div>
-              <div style="flex:1;">
+              <div>
                 <div class="summary-title">Jumlah UPZ Terdata</div>
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;">
-                  <div id="adminJumlahUpzTerdata" class="summary-value">602</div>
-                  <button type="button" id="btnDetailKategoriUpz" class="btn btn-soft btn-xs upz-detail-btn" title="Lihat rincian per kategori UPZ">
-                    <svg class="icon"><use href="#i-eye"></use></svg><span>Detail Kategori</span>
-                  </button>
-                </div>
+                <div id="adminJumlahUpzTerdata" class="summary-value">602</div>
               </div>
             </div>
             <div class="summary-card">
@@ -336,18 +338,16 @@
                 <div id="adminJumlahUpzPartisipasi" class="summary-value">0</div>
               </div>
             </div>
-            <div class="summary-card">
+            <div class="summary-card card-with-corner-action">
+              <button type="button" id="btnDetailDonatur" class="summary-corner-btn" title="Lihat Rincian Muzaki &amp; Munfik" aria-label="Lihat Rincian Muzaki &amp; Munfik">
+                <svg class="icon"><use href="#i-file-text"></use></svg>
+              </button>
               <div class="summary-icon tone-teal"><svg class="icon"><use href="#i-users"></use></svg></div>
-              <div style="flex:1;">
+              <div>
                 <div class="summary-title">Jumlah Donatur</div>
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;">
-                  <div id="triggerDonaturBreakdown" style="display:flex;align-items:baseline;gap:6px;cursor:pointer;" title="Klik untuk melihat rincian Muzaki dan Munfik">
-                    <span id="adminTotalDonaturScorecard" class="summary-value">0</span>
-                    <span class="dfb-value-unit" style="font-size:12px;color:var(--slate-500);">Donatur</span>
-                  </div>
-                  <button type="button" id="btnDetailDonatur" class="btn btn-soft btn-xs" title="Lihat Rincian Muzaki &amp; Munfik">
-                    <svg class="icon"><use href="#i-eye"></use></svg><span>Rincian</span>
-                  </button>
+                <div id="triggerDonaturBreakdown" style="display:flex;align-items:baseline;gap:6px;cursor:pointer;" title="Klik untuk melihat rincian Muzaki dan Munfik">
+                  <span id="adminTotalDonaturScorecard" class="summary-value">0</span>
+                  <span class="dfb-value-unit" style="font-size:12px;color:var(--slate-500);">Donatur</span>
                 </div>
               </div>
             </div>
@@ -1140,7 +1140,7 @@
           <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-hand-heart"></use></svg></div>
         </div>
 
-        <div class="content-grid-2">
+        <div class="content-grid-2 content-grid-penta">
           <!-- FORM PENGAJUAN PENTASHARUFAN -->
           <section class="content-card">
             <div class="section-header">
@@ -1167,18 +1167,18 @@
               </div>
 
               <!-- Baris Nominal & Jumlah Penerima -->
-              <div class="form-row-2">
-                <div class="form-group">
+              <div class="form-row-2 penta-form-row">
+                <div class="form-group penta-form-group">
                   <label for="pentaNominal">Nominal Bantuan (Rp) <span class="required-star">*</span></label>
-                  <div class="input-icon">
-                    <span class="input-prefix">Rp</span>
+                  <div class="input-icon penta-input-icon">
+                    <span class="input-icon-rp" aria-hidden="true">Rp</span>
                     <input type="text" id="pentaNominal" placeholder="0" inputmode="numeric" required>
                   </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group penta-form-group">
                   <label for="pentaJumlahPenerima">Jumlah Penerima Manfaat <span class="required-star">*</span></label>
-                  <div class="input-icon">
+                  <div class="input-icon penta-input-icon">
                     <svg class="icon"><use href="#i-users"></use></svg>
                     <input type="number" id="pentaJumlahPenerima" min="1" placeholder="Contoh: 25" required>
                   </div>
@@ -1266,7 +1266,7 @@
     </main>
 
     <footer class="app-footer">
-      <span>Sistem Pelaporan &amp; Pentasharufan UPZ · Tim IT BAZNAS Kabupaten Banyumas</span>
+      <span>Sistem Pelaporan UPZ v.1 - Tim IT BAZNAS Banyumas</span>
     </footer>
   </div>
 
@@ -1300,7 +1300,11 @@
         </div>
       </div>
 
-      <div class="modal-footer">
+      <div class="modal-footer" id="detailModalFooter">
+        <a id="detailWaConfirmButton" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-wa-confirm hidden" title="Konfirmasi via WhatsApp">
+          <svg class="icon"><use href="#i-message-circle"></use></svg>
+          <span>Konfirmasi Setoran</span>
+        </a>
         <button type="button" id="detailCloseButton" class="btn btn-ghost">Tutup</button>
         <button type="button" id="detailDownloadButton" class="btn btn-soft"><svg class="icon"><use href="#i-download"></use></svg><span>Unduh Excel</span></button>
       </div>
@@ -1513,12 +1517,6 @@
             <span id="modalProfStatus" class="confirm-val badge badge-success">Aktif</span>
           </div>
         </div>
-      </div>
-      <div class="modal-footer" style="display:flex;justify-content:space-between;align-items:center;">
-        <button type="button" id="btnModalEditProfileTrigger" class="btn btn-soft btn-sm">
-          <svg class="icon"><use href="#i-edit"></use></svg><span>Edit Profil</span>
-        </button>
-        <button type="button" id="closeUpzProfileInfoBtn" class="btn btn-ghost">Tutup</button>
       </div>
     </div>
   </div>
@@ -1745,6 +1743,51 @@
     </div>
   </div>
 
+  <!-- MODAL KONFIRMASI HAPUS PENTASHARUFAN -->
+  <div id="deletePentaModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="deletePentaTitle">
+    <div class="modal-card modal-sm delete-confirm-card">
+      <div class="modal-header">
+        <div class="modal-heading">
+          <div class="modal-icon tone-danger-bg">
+            <svg class="icon"><use href="#i-trash-2"></use></svg>
+          </div>
+          <div>
+            <h3 id="deletePentaTitle">Hapus Permohonan Pentasharufan</h3>
+            <p class="modal-subtitle">Konfirmasi penghapusan permohonan pentasharufan.</p>
+          </div>
+        </div>
+        <button type="button" id="closeDeletePentaX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+      </div>
+      <div class="modal-scroll">
+        <div class="verify-confirm-summary">
+          <div class="confirm-row">
+            <span class="confirm-label">Program</span>
+            <span id="delConfirmPentaProgram" class="confirm-val">-</span>
+          </div>
+          <div class="confirm-row">
+            <span class="confirm-label">Nominal</span>
+            <span id="delConfirmPentaNominal" class="confirm-val confirm-nominal">-</span>
+          </div>
+          <div class="confirm-row">
+            <span class="confirm-label">Penerima</span>
+            <span id="delConfirmPentaPenerima" class="confirm-val">-</span>
+          </div>
+        </div>
+        <div class="modal-notice modal-notice-danger" style="margin-top:12px;">
+          <svg class="icon"><use href="#i-alert"></use></svg>
+          <span>Data permohonan pentasharufan akan dihapus secara permanen.</span>
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;">
+        <button type="button" id="cancelDeletePentaBtn" class="btn btn-ghost">Batal</button>
+        <button type="button" id="executeDeletePentaBtn" class="btn btn-danger">
+          <svg class="icon"><use href="#i-trash-2"></use></svg>
+          <span id="executeDeletePentaText">Ya, Hapus Data</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL PRATINJAU FOTO PENTASHARUFAN -->
   <div id="previewFotoModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="previewFotoTitle">
     <div class="modal-card modal-md photo-preview-card">
@@ -1788,9 +1831,9 @@
       <div class="modal-scroll" style="padding:16px;">
         <input type="hidden" id="uploadBszSetoranId" value="">
         <div class="form-group">
-          <label for="inputBszFile">Pilih Berkas BSZ (PDF / Gambar / Doc):</label>
-          <input type="file" id="inputBszFile" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="padding:8px;">
-          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:4px;">Format didukung: PDF, JPG, PNG (Maks 5MB)</div>
+          <label for="inputBszFile">Pilih Berkas BSZ (PDF / RAR / Dokumen):</label>
+          <input type="file" id="inputBszFile" class="form-control" accept=".pdf,.rar,.zip,.jpg,.jpeg,.png,.doc,.docx" style="padding:8px;">
+          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:4px;">Format didukung: PDF, RAR, ZIP, Dokumen, Gambar (Maks 20MB)</div>
         </div>
         <div id="uploadBszCurrentFileNotice" class="hidden" style="margin-top:12px;padding:8px 12px;background:var(--slate-100);border-radius:6px;font-size:12px;"></div>
         <div id="uploadBszMsg" class="form-message" style="margin-top:8px;"></div>
@@ -1801,6 +1844,41 @@
           <svg class="icon"><use href="#i-upload"></use></svg>
           <span id="saveUploadBszBtnText">Simpan &amp; Terbitkan BSZ</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PENJELASAN STATUS / CATATAN ADMIN -->
+  <div id="statusExplanationModal" class="modal-overlay hidden" style="z-index:99999;" role="dialog" aria-modal="true" aria-labelledby="statusModalTitle">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <div class="modal-heading">
+          <div id="statusModalIconBox" class="modal-icon tone-green"><svg class="icon"><use href="#i-shield"></use></svg></div>
+          <div>
+            <h3 id="statusModalTitle">Status Setoran</h3>
+            <p id="statusModalSubtitle" class="modal-subtitle">Informasi verifikasi setoran BAZNAS</p>
+          </div>
+        </div>
+        <button type="button" id="closeStatusModalX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+      </div>
+      <div class="modal-scroll" style="padding:18px 22px;">
+        <div class="meta-item" style="margin-bottom:12px;">
+          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">UPZ &amp; Periode</label>
+          <div id="statusModalMeta" style="font-weight:600;color:var(--slate-800);margin-top:2px;">-</div>
+        </div>
+        <div class="meta-item" style="margin-bottom:14px;">
+          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">Status Terverifikasi</label>
+          <div style="margin-top:4px;"><span id="statusModalBadge" class="status-badge">-</span></div>
+        </div>
+        <div class="meta-item">
+          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">Keterangan / Catatan Admin</label>
+          <div id="statusModalCatatanBox" style="margin-top:6px;padding:12px 14px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:8px;font-size:13px;line-height:1.5;color:var(--slate-700);white-space:pre-wrap;">
+            Tidak ada catatan tambahan dari admin.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;">
+        <button type="button" id="closeStatusModalBtn" class="btn btn-ghost">Tutup</button>
       </div>
     </div>
   </div>
@@ -1821,51 +1899,6 @@
     </div>
   </div>
 
-  <!-- FLOATING WHATSAPP SERVICE WIDGET -->
-  <aside id="floatingWaWidget" class="floating-wa-widget" aria-label="Bantuan dan Layanan WhatsApp">
-    <div id="waPopoverCard" class="wa-popover-card hidden">
-      <div class="wa-popover-header">
-        <div class="wa-popover-title-row">
-          <svg class="icon wa-header-icon"><use href="#i-message-circle"></use></svg>
-          <div>
-            <div class="wa-popover-title">Layanan BAZNAS Banyumas</div>
-            <div class="wa-popover-sub">Hubungi admin resmi via WhatsApp</div>
-          </div>
-        </div>
-        <button type="button" id="closeWaPopoverBtn" class="wa-close-btn" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
-      </div>
-
-      <div class="wa-popover-body">
-        <a href="https://wa.me/6281469734792?text=Assalamu%27alaikum%20Admin%20BAZNAS%20Banyumas%2C%20saya%20ingin%20konfirmasi%20donasi." target="_blank" rel="noopener noreferrer" class="wa-contact-card">
-          <div class="wa-contact-icon tone-green-bg">
-            <svg class="icon"><use href="#i-message-circle"></use></svg>
-          </div>
-          <div class="wa-contact-details">
-            <span class="wa-contact-title">Konfirmasi Donasi</span>
-            <span class="wa-contact-desc">Setoran Zakat &amp; Infak UPZ</span>
-            <span class="wa-contact-phone">+62 814-6973-4792</span>
-          </div>
-        </a>
-
-        <a href="https://wa.me/6285133744077?text=Assalamu%27alaikum%20Admin%20BAZNAS%20Banyumas%2C%20saya%20ingin%20konfirmasi%20pentasharufan%20dan%20hak%20amil%20UPZ." target="_blank" rel="noopener noreferrer" class="wa-contact-card">
-          <div class="wa-contact-icon tone-green-bg">
-            <svg class="icon"><use href="#i-hand-heart"></use></svg>
-          </div>
-          <div class="wa-contact-details">
-            <span class="wa-contact-title">Pentasharufan &amp; Hak Amil</span>
-            <span class="wa-contact-desc">Bantuan Penyaluran &amp; Hak Amil</span>
-            <span class="wa-contact-phone">+62 851-3374-4077</span>
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <button type="button" id="toggleWaWidgetBtn" class="wa-floating-btn" aria-label="Bantuan WhatsApp" title="Hubungi Layanan WhatsApp BAZNAS">
-      <svg class="icon wa-fab-icon"><use href="#i-message-circle"></use></svg>
-      <span class="wa-floating-label">Bantuan WA</span>
-      <span class="wa-pulse-ring"></span>
-    </button>
-  </aside>
 
   <!-- TOAST -->
   <div id="toastStack" class="toast-stack" role="status" aria-live="polite"></div>

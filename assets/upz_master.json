@@ -1,0 +1,6012 @@
+[
+  {
+    "row_num": "2",
+    "nama_upz": "Badan Kepegawaian Pengembangan SDM (BKPSDM)",
+    "nama_lengkap": "PIC",
+    "kode": "bkpsdm",
+    "email": "bkpsdm@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "3",
+    "nama_upz": "Badan Kesatuan Bangsa dan Politik (BAKESBANGPOL)",
+    "nama_lengkap": "PIC",
+    "kode": "bakesbangpol",
+    "email": "bakesbangpol@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "4",
+    "nama_upz": "Badan Keuangan dan Aset Daerah (BKAD)",
+    "nama_lengkap": "PIC",
+    "kode": "bkad",
+    "email": "bkad@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "5",
+    "nama_upz": "Badan Penanggulangan Bencana Daerah (BPBD)",
+    "nama_lengkap": "PIC",
+    "kode": "bpbd",
+    "email": "bpbd@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "6",
+    "nama_upz": "Badan Pendapatan Daerah (BAPENDA)",
+    "nama_lengkap": "PIC",
+    "kode": "bapenda",
+    "email": "bapenda@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "7",
+    "nama_upz": "Badan Perencanaan Pembangunan Riset dan Inovasi Daerah (BAPPERIDA)",
+    "nama_lengkap": "PIC",
+    "kode": "baperrida",
+    "email": "baperrida@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "8",
+    "nama_upz": "Dinas Arsip dan Perpustakaan Daerah (DINARPUSDA)",
+    "nama_lengkap": "PIC",
+    "kode": "dinarpusda",
+    "email": "dinarpusda@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "9",
+    "nama_upz": "Dinas Kependudukan dan Pencatatan Sipil (DINDUKCAPIL)",
+    "nama_lengkap": "PIC",
+    "kode": "dindukcapil",
+    "email": "dindukcapil@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "10",
+    "nama_upz": "Dinas Kesehatan dan Keluarga Berencana (DINKES KB)",
+    "nama_lengkap": "PIC",
+    "kode": "dinkeskb",
+    "email": "dinkeskb@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "11",
+    "nama_upz": "Dinas Ketahanan Pangan dan Perikanan (DKPP)",
+    "nama_lengkap": "PIC",
+    "kode": "dkpp",
+    "email": "dkpp@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "12",
+    "nama_upz": "Dinas Komunikasi dan Informatika (DINKOMINFO)",
+    "nama_lengkap": "PIC",
+    "kode": "dinkominfo",
+    "email": "dinkominfo@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "13",
+    "nama_upz": "Dinas Koperasi Usaha Kecil dan Menengah dan Perdagangan (DKUKMP)",
+    "nama_lengkap": "PIC",
+    "kode": "dkukmp",
+    "email": "dkukmp@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "14",
+    "nama_upz": "Dinas Lingkungan Hidup (DLH)",
+    "nama_lengkap": "PIC",
+    "kode": "dlh",
+    "email": "dlh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "15",
+    "nama_upz": "Dinas Pekerjaan Umum (DPU)",
+    "nama_lengkap": "PIC",
+    "kode": "dpu",
+    "email": "dpu@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "16",
+    "nama_upz": "Dinas Pemberdayaan Masyarakat dan Desa (DINPERMASDES)",
+    "nama_lengkap": "PIC",
+    "kode": "dinpermasdes",
+    "email": "dinpermasdes@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "17",
+    "nama_upz": "Dinas Pemuda, Olahraga, Kebudayaan dan Pariwisata (DINPORABUDPAR)",
+    "nama_lengkap": "PIC",
+    "kode": "dinporabudpar",
+    "email": "dinporabudpar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "18",
+    "nama_upz": "Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP)",
+    "nama_lengkap": "PIC",
+    "kode": "dpmptsp",
+    "email": "dpmptsp@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "19",
+    "nama_upz": "Dinas Pendidikan (DINDIK)",
+    "nama_lengkap": "PIC",
+    "kode": "dindik",
+    "email": "dindik@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "20",
+    "nama_upz": "Dinas Perhubungan (DINHUB)",
+    "nama_lengkap": "PIC",
+    "kode": "dinhub",
+    "email": "dinhub@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "21",
+    "nama_upz": "Dinas Pertanian (DINPERTAN)",
+    "nama_lengkap": "PIC",
+    "kode": "dinpertan",
+    "email": "dinpertan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "22",
+    "nama_upz": "Dinas Perumahan dan Kawasan Permukiman (DINPERKIM)",
+    "nama_lengkap": "PIC",
+    "kode": "dinperkim",
+    "email": "dinperkim@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "23",
+    "nama_upz": "Dinas Sosial, Pemberdayaan Perempuan dan Perlindungan Anak (DINSOS P3A)",
+    "nama_lengkap": "PIC",
+    "kode": "dinsosp3a",
+    "email": "dinsosp3a@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "24",
+    "nama_upz": "Dinas Tenaga Kerja dan Perindustrian (DINAKERIN)",
+    "nama_lengkap": "PIC",
+    "kode": "dinakerin",
+    "email": "dinakerin@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "25",
+    "nama_upz": "Inspektorat",
+    "nama_lengkap": "PIC",
+    "kode": "inspektorat",
+    "email": "inspektorat@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "26",
+    "nama_upz": "Rumah Sakit Khusus Mata Purwokerto (RSKM PURWOKERTO)",
+    "nama_lengkap": "PIC",
+    "kode": "rskm",
+    "email": "rskm@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "27",
+    "nama_upz": "Rumah Sakit Umum Daerah Ajibarang (RSUD AJIBARANG)",
+    "nama_lengkap": "PIC",
+    "kode": "rsudajibarang",
+    "email": "rsudajibarang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "28",
+    "nama_upz": "Rumah Sakit Umum Daerah Banyumas (RSUD BANYUMAS)",
+    "nama_lengkap": "PIC",
+    "kode": "rsudbanyumas",
+    "email": "rsudbanyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "29",
+    "nama_upz": "Satuan Polisi Pamong Praja (SATPOL PP)",
+    "nama_lengkap": "PIC",
+    "kode": "satpolpp",
+    "email": "satpolpp@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "30",
+    "nama_upz": "Sekretariat Daerah (SETDA)",
+    "nama_lengkap": "PIC",
+    "kode": "setda",
+    "email": "setda@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "31",
+    "nama_upz": "Sekretariat DPRD (SETWAN)",
+    "nama_lengkap": "PIC",
+    "kode": "setwan",
+    "email": "setwan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "OPD",
+    "keterangan": ""
+  },
+  {
+    "row_num": "32",
+    "nama_upz": "PT BPR BKK Jateng (Perseroda) Cabang Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "bprbkkjateng",
+    "email": "bprbkkjateng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "33",
+    "nama_upz": "BPR BKK Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "bprbkkpwt",
+    "email": "bprbkkpwt@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "34",
+    "nama_upz": "Bulog Kab.Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "bulog",
+    "email": "bulog@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "35",
+    "nama_upz": "PERUMDAM TIRTA SATRIA",
+    "nama_lengkap": "PIC",
+    "kode": "pdam",
+    "email": "pdam@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "36",
+    "nama_upz": "RRI Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "rri",
+    "email": "rri@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "37",
+    "nama_upz": "KEMENAG Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "kemenag",
+    "email": "kemenag@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "38",
+    "nama_upz": "KPPN Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "kppn",
+    "email": "kppn@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "39",
+    "nama_upz": "Pengadilan Agama Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "pap",
+    "email": "pap@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "40",
+    "nama_upz": "PERHUTANI KPH BMS Barat",
+    "nama_lengkap": "PIC",
+    "kode": "perhutanikph",
+    "email": "perhutanikph@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "41",
+    "nama_upz": "POLRESTA Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "polresta",
+    "email": "polresta@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "42",
+    "nama_upz": "BPN Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "bpn",
+    "email": "bpn@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "43",
+    "nama_upz": "Lapas Kelas II A Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "lapas2a",
+    "email": "lapas2a@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "44",
+    "nama_upz": "Korem 071/Wijayakusuma",
+    "nama_lengkap": "PIC",
+    "kode": "korem",
+    "email": "korem@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "45",
+    "nama_upz": "Badan Narkotika Nasional Kab.Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "bkn",
+    "email": "bkn@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "46",
+    "nama_upz": "KPU Kab. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "kpu",
+    "email": "kpu@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "47",
+    "nama_upz": "Balai Permasyarakatan Kelas II Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "lapas2",
+    "email": "lapas2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "48",
+    "nama_upz": "Rutan Kelas IIB Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "rutan2b",
+    "email": "rutan2b@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Vertikal",
+    "keterangan": ""
+  },
+  {
+    "row_num": "49",
+    "nama_upz": "Kecamatan Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "ajibarang",
+    "email": "ajibarang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "50",
+    "nama_upz": "Kecamatan Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "banyumas",
+    "email": "banyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "51",
+    "nama_upz": "Kecamatan Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "baturraden",
+    "email": "baturraden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "52",
+    "nama_upz": "Kecamatan Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "cilongok",
+    "email": "cilongok@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "53",
+    "nama_upz": "Kecamatan Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "gumelar",
+    "email": "gumelar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "54",
+    "nama_upz": "Kecamatan Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "jatilawang",
+    "email": "jatilawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "55",
+    "nama_upz": "Kecamatan Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "kalibagor",
+    "email": "kalibagor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "56",
+    "nama_upz": "Kecamatan Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "karanglewas",
+    "email": "karanglewas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "57",
+    "nama_upz": "Kecamatan Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "kebasen",
+    "email": "kebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "58",
+    "nama_upz": "Kecamatan Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "kedungbanteng",
+    "email": "kedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "59",
+    "nama_upz": "Kecamatan Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "kembaran",
+    "email": "kembaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "60",
+    "nama_upz": "Kecamatan Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "kemranjen",
+    "email": "kemranjen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "61",
+    "nama_upz": "Kecamatan Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "lumbir",
+    "email": "lumbir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "62",
+    "nama_upz": "Kecamatan Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "patikraja",
+    "email": "patikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "63",
+    "nama_upz": "Kecamatan Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "pekuncen",
+    "email": "pekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "64",
+    "nama_upz": "Kecamatan Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "purwojati",
+    "email": "purwojati@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "65",
+    "nama_upz": "Kecamatan Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "pwtbarat",
+    "email": "pwtbarat@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "66",
+    "nama_upz": "Kecamatan Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "pwtselatan",
+    "email": "pwtselatan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "67",
+    "nama_upz": "Kecamatan Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "pwttimur",
+    "email": "pwttimur@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "68",
+    "nama_upz": "Kecamatan Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "pwtutara",
+    "email": "pwtutara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "69",
+    "nama_upz": "Kecamatan Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "rawalo",
+    "email": "rawalo@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "70",
+    "nama_upz": "Kecamatan Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "sokaraja",
+    "email": "sokaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "71",
+    "nama_upz": "Kecamatan Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "somagede",
+    "email": "somagede@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "72",
+    "nama_upz": "Kecamatan Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "sumbang",
+    "email": "sumbang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "73",
+    "nama_upz": "Kecamatan Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "sumpiuh",
+    "email": "sumpiuh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "74",
+    "nama_upz": "Kecamatan Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "tambak",
+    "email": "tambak@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "75",
+    "nama_upz": "Kecamatan Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "wangon",
+    "email": "wangon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kecamatan",
+    "keterangan": ""
+  },
+  {
+    "row_num": "76",
+    "nama_upz": "Korwilcam Dindik Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "kwcajibarang",
+    "email": "kwcajibarang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "77",
+    "nama_upz": "Korwilcam Dindik Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "kwcbanyumas",
+    "email": "kwcbanyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "78",
+    "nama_upz": "Korwilcam Dindik Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "kwcbaturraden",
+    "email": "kwcbaturraden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "79",
+    "nama_upz": "Korwilcam Dindik Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "kwccilongok",
+    "email": "kwccilongok@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "80",
+    "nama_upz": "Korwilcam Dindik Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "kwcgumelar",
+    "email": "kwcgumelar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "81",
+    "nama_upz": "Korwilcam Dindik Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "kwcjatilawang",
+    "email": "kwcjatilawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "82",
+    "nama_upz": "Korwilcam Dindik Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "kwckalibagor",
+    "email": "kwckalibagor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "83",
+    "nama_upz": "Korwilcam Dindik Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "kwckaranglewas",
+    "email": "kwckaranglewas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "84",
+    "nama_upz": "Korwilcam Dindik Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "kwckebasen",
+    "email": "kwckebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "85",
+    "nama_upz": "Korwilcam Dindik Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "kwckedungbanteng",
+    "email": "kwckedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "86",
+    "nama_upz": "Korwilcam Dindik Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "kwckembaran",
+    "email": "kwckembaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "87",
+    "nama_upz": "Korwilcam Dindik Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "kwckemranjen",
+    "email": "kwckemranjen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "88",
+    "nama_upz": "Korwilcam Dindik Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "kwclumbir",
+    "email": "kwclumbir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "89",
+    "nama_upz": "Korwilcam Dindik Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "kwcpatikraja",
+    "email": "kwcpatikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "90",
+    "nama_upz": "Korwilcam Dindik Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "kwcpekuncen",
+    "email": "kwcpekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "91",
+    "nama_upz": "Korwilcam Dindik Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "kwcpurwojati",
+    "email": "kwcpurwojati@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "92",
+    "nama_upz": "Korwilcam Dindik Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "kwcpwtbarat",
+    "email": "kwcpwtbarat@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "93",
+    "nama_upz": "Korwilcam Dindik Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "kwcpwtselatan",
+    "email": "kwcpwtselatan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "94",
+    "nama_upz": "Korwilcam Dindik Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "kwcpwttimur",
+    "email": "kwcpwttimur@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "95",
+    "nama_upz": "Korwilcam Dindik Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "kwcpwtutara",
+    "email": "kwcpwtutara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "96",
+    "nama_upz": "Korwilcam Dindik Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "kwcrawalo",
+    "email": "kwcrawalo@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "97",
+    "nama_upz": "Korwilcam Dindik Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "kwcsokaraja",
+    "email": "kwcsokaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "98",
+    "nama_upz": "Korwilcam Dindik Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "kwcsomagede",
+    "email": "kwcsomagede@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "99",
+    "nama_upz": "Korwilcam Dindik Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "kwcsumbang",
+    "email": "kwcsumbang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "100",
+    "nama_upz": "Korwilcam Dindik Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "kwcsumpiuh",
+    "email": "kwcsumpiuh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "101",
+    "nama_upz": "Korwilcam Dindik Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "kwctambak",
+    "email": "kwctambak@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "102",
+    "nama_upz": "Korwilcam Dindik Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "kwcwangon",
+    "email": "kwcwangon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Korwilcam",
+    "keterangan": ""
+  },
+  {
+    "row_num": "103",
+    "nama_upz": "Puskesmas Ajibarang I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmajibarang1",
+    "email": "pkmajibarang1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "104",
+    "nama_upz": "Puskesmas Ajibarang II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmajibarang2",
+    "email": "pkmajibarang2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "105",
+    "nama_upz": "Puskesmas Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "pkmbanyumas",
+    "email": "pkmbanyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "106",
+    "nama_upz": "Puskesmas Baturraden I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmbaturraden1",
+    "email": "pkmbaturraden1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "107",
+    "nama_upz": "Puskesmas Baturraden II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmbaturraden2",
+    "email": "pkmbaturraden2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "108",
+    "nama_upz": "Puskesmas Cilongok I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmcilongok1",
+    "email": "pkmcilongok1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "109",
+    "nama_upz": "Puskesmas Cilongok II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmcilongok2",
+    "email": "pkmcilongok2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "110",
+    "nama_upz": "Puskesmas Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "pkmgumelar",
+    "email": "pkmgumelar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "111",
+    "nama_upz": "Puskesmas Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "pkmjatilawang",
+    "email": "pkmjatilawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "112",
+    "nama_upz": "Puskesmas Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "pkmkalibagor",
+    "email": "pkmkalibagor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "113",
+    "nama_upz": "Puskesmas Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "pkmkaranglewas",
+    "email": "pkmkaranglewas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "114",
+    "nama_upz": "Puskesmas Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "pkmkebasen",
+    "email": "pkmkebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "115",
+    "nama_upz": "Puskesmas Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "pkmkedungbanteng",
+    "email": "pkmkedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "116",
+    "nama_upz": "Puskesmas Kembaran I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmkembaran1",
+    "email": "pkmkembaran1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "117",
+    "nama_upz": "Puskesmas Kembaran II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmkembaran2",
+    "email": "pkmkembaran2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "118",
+    "nama_upz": "Puskesmas Kemranjen I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmkemranjen1",
+    "email": "pkmkemranjen1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "119",
+    "nama_upz": "Puskesmas Kemranjen II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmkemranjen2",
+    "email": "pkmkemranjen2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "120",
+    "nama_upz": "Puskesmas Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "pkmlumbir",
+    "email": "pkmlumbir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "121",
+    "nama_upz": "Puskesmas Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpatikraja",
+    "email": "pkmpatikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "122",
+    "nama_upz": "Puskesmas Pekuncen I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpekuncen1",
+    "email": "pkmpekuncen1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "123",
+    "nama_upz": "Puskesmas Pekuncen II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpekuncen2",
+    "email": "pkmpekuncen2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "124",
+    "nama_upz": "Puskesmas Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpurwojati",
+    "email": "pkmpurwojati@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "125",
+    "nama_upz": "Puskesmas Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpwtbarat",
+    "email": "pkmpwtbarat@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "126",
+    "nama_upz": "Puskesmas Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpwtselatan",
+    "email": "pkmpwtselatan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "127",
+    "nama_upz": "Puskesmas Purwokerto Timur I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpwttimur1",
+    "email": "pkmpwttimur1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "128",
+    "nama_upz": "Puskesmas Purwokerto Timur II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpwttmur2",
+    "email": "pkmpwttmur2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "129",
+    "nama_upz": "Puskesmas Purwokerto Utara I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpwtutara1",
+    "email": "pkmpwtutara1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "130",
+    "nama_upz": "Puskesmas Purwokerto Utara II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmpwtutara2",
+    "email": "pkmpwtutara2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "131",
+    "nama_upz": "Puskesmas Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "pkmrawalo",
+    "email": "pkmrawalo@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "132",
+    "nama_upz": "Puskesmas Sokaraja I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmsokaraja1",
+    "email": "pkmsokaraja1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "133",
+    "nama_upz": "Puskesmas Sokaraja II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmsokaraja2",
+    "email": "pkmsokaraja2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "134",
+    "nama_upz": "Puskesmas Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "pkmsomagede",
+    "email": "pkmsomagede@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "135",
+    "nama_upz": "Puskesmas Sumbang I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmsumbang1",
+    "email": "pkmsumbang1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "136",
+    "nama_upz": "Puskesmas Sumbang II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmsumbang2",
+    "email": "pkmsumbang2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "137",
+    "nama_upz": "Puskesmas Sumpiuh I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmsumpiuh1",
+    "email": "pkmsumpiuh1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "138",
+    "nama_upz": "Puskesmas Sumpiuh II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmsumpiuh2",
+    "email": "pkmsumpiuh2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "139",
+    "nama_upz": "Puskesmas Tambak I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmtambak1",
+    "email": "pkmtambak1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "140",
+    "nama_upz": "Puskesmas Tambak II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmtambak2",
+    "email": "pkmtambak2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "141",
+    "nama_upz": "Puskesmas Wangon I",
+    "nama_lengkap": "PIC",
+    "kode": "pkmwangon1",
+    "email": "pkmwangon1@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "142",
+    "nama_upz": "Puskesmas Wangon II",
+    "nama_lengkap": "PIC",
+    "kode": "pkmwangon2",
+    "email": "pkmwangon2@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "143",
+    "nama_upz": "KPIA Kartini",
+    "nama_lengkap": "PIC",
+    "kode": "kpia",
+    "email": "kpia@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "144",
+    "nama_upz": "KKPM Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "kkpm",
+    "email": "kkpm@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Puskesmas",
+    "keterangan": ""
+  },
+  {
+    "row_num": "145",
+    "nama_upz": "SMP N 1 Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1ajibarang",
+    "email": "smpn1ajibarang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "146",
+    "nama_upz": "SMP N 1 Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1banyumas",
+    "email": "smpn1banyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "147",
+    "nama_upz": "SMP N 1 Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1baturraden",
+    "email": "smpn1baturraden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "148",
+    "nama_upz": "SMP N 1 Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1cilongok",
+    "email": "smpn1cilongok@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "149",
+    "nama_upz": "SMP N 1 Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1gumelar",
+    "email": "smpn1gumelar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "150",
+    "nama_upz": "SMP N 1 Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1jatilawang",
+    "email": "smpn1jatilawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "151",
+    "nama_upz": "SMP N 1 Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1kalibagor",
+    "email": "smpn1kalibagor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "152",
+    "nama_upz": "SMP N 1 Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1karanglewas",
+    "email": "smpn1karanglewas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "153",
+    "nama_upz": "SMP N 1 Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1kebasen",
+    "email": "smpn1kebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "154",
+    "nama_upz": "SMP N 1 Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1kedungbanteng",
+    "email": "smpn1kedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "155",
+    "nama_upz": "SMP N 1 Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1kembaran",
+    "email": "smpn1kembaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "156",
+    "nama_upz": "SMP N 1 Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1kemranjen",
+    "email": "smpn1kemranjen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "157",
+    "nama_upz": "SMP N 1 Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1lumbir",
+    "email": "smpn1lumbir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "158",
+    "nama_upz": "SMP N 1 Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1patikraja",
+    "email": "smpn1patikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "159",
+    "nama_upz": "SMP N 1 Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1pekuncen",
+    "email": "smpn1pekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "160",
+    "nama_upz": "SMP N 1 Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1purwojati",
+    "email": "smpn1purwojati@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "161",
+    "nama_upz": "SMP N 1 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1purwokerto",
+    "email": "smpn1purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "162",
+    "nama_upz": "SMP N 1 Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1rawalo",
+    "email": "smpn1rawalo@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "163",
+    "nama_upz": "SMP N 1 Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1sokaraja",
+    "email": "smpn1sokaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "164",
+    "nama_upz": "SMP N 1 Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1somagede",
+    "email": "smpn1somagede@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "165",
+    "nama_upz": "SMP N 1 Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1sumbang",
+    "email": "smpn1sumbang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "166",
+    "nama_upz": "SMP N 1 Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1sumpiuh",
+    "email": "smpn1sumpiuh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "167",
+    "nama_upz": "SMP N 1 Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1tambak",
+    "email": "smpn1tambak@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "168",
+    "nama_upz": "SMP N 1 Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "smpn1wangon",
+    "email": "smpn1wangon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "169",
+    "nama_upz": "SMP N 10 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn10pwt",
+    "email": "smpn10pwt@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "170",
+    "nama_upz": "SMP N 2 Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2ajibarang",
+    "email": "smpn2ajibarang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "171",
+    "nama_upz": "SMP N 2 Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2banyumas",
+    "email": "smpn2banyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "172",
+    "nama_upz": "SMP N 2 Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2baturraden",
+    "email": "smpn2baturraden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "173",
+    "nama_upz": "SMP N 2 Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2cilongok",
+    "email": "smpn2cilongok@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "174",
+    "nama_upz": "SMP N 2 Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2gumelar",
+    "email": "smpn2gumelar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "175",
+    "nama_upz": "SMP N 2 Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2jatilawang",
+    "email": "smpn2jatilawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "176",
+    "nama_upz": "SMP N 2 Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2kalibagor",
+    "email": "smpn2kalibagor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "177",
+    "nama_upz": "SMP N 2 Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2karanglewas",
+    "email": "smpn2karanglewas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "178",
+    "nama_upz": "SMP N 2 Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2kebasen",
+    "email": "smpn2kebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "179",
+    "nama_upz": "SMP N 2 Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2kedungbanteng",
+    "email": "smpn2kedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "180",
+    "nama_upz": "SMP N 2 Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2kembaran",
+    "email": "smpn2kembaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "181",
+    "nama_upz": "SMP N 2 Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2kemranjen",
+    "email": "smpn2kemranjen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "182",
+    "nama_upz": "SMP N 2 Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2lumbir",
+    "email": "smpn2lumbir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "183",
+    "nama_upz": "SMP N 2 Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2patikraja",
+    "email": "smpn2patikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "184",
+    "nama_upz": "SMP N 2 Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2pekuncen",
+    "email": "smpn2pekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "185",
+    "nama_upz": "SMP N 2 Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2purwojati",
+    "email": "smpn2purwojati@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "186",
+    "nama_upz": "SMP N 2 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2purwokerto",
+    "email": "smpn2purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "187",
+    "nama_upz": "SMP N 2 Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2rawalo",
+    "email": "smpn2rawalo@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "188",
+    "nama_upz": "SMP N 2 Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2sokaraja",
+    "email": "smpn2sokaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "189",
+    "nama_upz": "SMP N 2 Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2somagede",
+    "email": "smpn2somagede@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "190",
+    "nama_upz": "SMP N 2 Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2sumbang",
+    "email": "smpn2sumbang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "191",
+    "nama_upz": "SMP N 2 Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2sumpiuh",
+    "email": "smpn2sumpiuh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "192",
+    "nama_upz": "SMP N 2 Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2tambak",
+    "email": "smpn2tambak@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "193",
+    "nama_upz": "SMP N 2 Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "smpn2wangon",
+    "email": "smpn2wangon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "194",
+    "nama_upz": "SMP N 3 Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3ajibarang",
+    "email": "smpn3ajibarang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "195",
+    "nama_upz": "SMP N 3 Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3banyumas",
+    "email": "smpn3banyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "196",
+    "nama_upz": "SMP N 3 Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3cilongok",
+    "email": "smpn3cilongok@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "197",
+    "nama_upz": "SMP N 3 Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3gumelar",
+    "email": "smpn3gumelar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "198",
+    "nama_upz": "SMP N 3 Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3kalibagor",
+    "email": "smpn3kalibagor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "199",
+    "nama_upz": "SMP N 3 Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3karanglewas",
+    "email": "smpn3karanglewas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "200",
+    "nama_upz": "SMP N 3 Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3kebasen",
+    "email": "smpn3kebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "201",
+    "nama_upz": "SMP N 3 Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3kedungbanteng",
+    "email": "smpn3kedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "202",
+    "nama_upz": "SMP N 3 Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3lumbir",
+    "email": "smpn3lumbir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "203",
+    "nama_upz": "SMP N 3 Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3pekuncen",
+    "email": "smpn3pekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "204",
+    "nama_upz": "SMP N 3 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3purwokerto",
+    "email": "smpn3purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "205",
+    "nama_upz": "SMP N 3 Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3sokaraja",
+    "email": "smpn3sokaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "206",
+    "nama_upz": "SMP N 3 Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3sumbang",
+    "email": "smpn3sumbang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "207",
+    "nama_upz": "SMP N 3 Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "smpn3wangon",
+    "email": "smpn3wangon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "208",
+    "nama_upz": "SMP N 4 Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "smpn4banyumas",
+    "email": "smpn4banyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "209",
+    "nama_upz": "SMP N 4 Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "smpn4kalibagor",
+    "email": "smpn4kalibagor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "210",
+    "nama_upz": "SMP N 4 Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "smpn4kedungbanteng",
+    "email": "smpn4kedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "211",
+    "nama_upz": "SMP N 4 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn4purwokerto",
+    "email": "smpn4purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "212",
+    "nama_upz": "SMP N 4 Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "smpn4sumbang",
+    "email": "smpn4sumbang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "213",
+    "nama_upz": "SMP N 5 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn5purwokerto",
+    "email": "smpn5purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "214",
+    "nama_upz": "SMP N 6 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn6purwokerto",
+    "email": "smpn6purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "215",
+    "nama_upz": "SMP N 7 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn7purwokerto",
+    "email": "smpn7purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "216",
+    "nama_upz": "SMP N 8 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn8purwokerto",
+    "email": "smpn8purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "217",
+    "nama_upz": "SMP N 9 Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "smpn9purwokerto",
+    "email": "smpn9purwokerto@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "SMP Negeri",
+    "keterangan": ""
+  },
+  {
+    "row_num": "218",
+    "nama_upz": "Kelurahan Bantarsoka, Kec. Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "kelbantarsoka",
+    "email": "kelbantarsoka@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "bantarsoka"
+  },
+  {
+    "row_num": "219",
+    "nama_upz": "Kelurahan Karanglewas Lor, Kec. Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "kelkaranglewaslor",
+    "email": "kelkaranglewaslor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "karanglewaslor"
+  },
+  {
+    "row_num": "220",
+    "nama_upz": "Kelurahan Kedungwuluh, Kec. Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "kelkedungwuluh",
+    "email": "kelkedungwuluh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "kedungwuluh"
+  },
+  {
+    "row_num": "221",
+    "nama_upz": "Kelurahan Kober, Kec. Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "kelkober",
+    "email": "kelkober@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "kober"
+  },
+  {
+    "row_num": "222",
+    "nama_upz": "Kelurahan Pasir Kidul, Kec. Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "kelpasirkidul",
+    "email": "kelpasirkidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "pasirkidul"
+  },
+  {
+    "row_num": "223",
+    "nama_upz": "Kelurahan Pasirmuncang, Kec. Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "kelpasirmuncang",
+    "email": "kelpasirmuncang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "pasirmuncang"
+  },
+  {
+    "row_num": "224",
+    "nama_upz": "Kelurahan Rejasari, Kec. Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "kelrejasari",
+    "email": "kelrejasari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "rejasari"
+  },
+  {
+    "row_num": "225",
+    "nama_upz": "Kelurahan Arcawinangun, Kec. Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "kelarcawinangun",
+    "email": "kelarcawinangun@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "arcawinangun"
+  },
+  {
+    "row_num": "226",
+    "nama_upz": "Kelurahan Kranji, Kec. Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "kelkranji",
+    "email": "kelkranji@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "kranji"
+  },
+  {
+    "row_num": "227",
+    "nama_upz": "Kelurahan Mersi, Kec. Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "kelmersi",
+    "email": "kelmersi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "mersi"
+  },
+  {
+    "row_num": "228",
+    "nama_upz": "Kelurahan Purwokerto Lor, Kec. Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "kelpurwokertolor",
+    "email": "kelpurwokertolor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "purwokertolor"
+  },
+  {
+    "row_num": "229",
+    "nama_upz": "Kelurahan Purwokerto Wetan, Kec. Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "kelpurwokertowetan",
+    "email": "kelpurwokertowetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "purwokertowetan"
+  },
+  {
+    "row_num": "230",
+    "nama_upz": "Kelurahan Sokanegara, Kec. Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "kelsokanegara",
+    "email": "kelsokanegara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "sokanegara"
+  },
+  {
+    "row_num": "231",
+    "nama_upz": "Kelurahan Bancarkembar, Kec. Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "kelbancarkembar",
+    "email": "kelbancarkembar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "bancarkembar"
+  },
+  {
+    "row_num": "232",
+    "nama_upz": "Kelurahan Bobosan, Kec. Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "kelbobosan",
+    "email": "kelbobosan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "bobosan"
+  },
+  {
+    "row_num": "233",
+    "nama_upz": "Kelurahan Grendeng, Kec. Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "kelgrendeng",
+    "email": "kelgrendeng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "grendeng"
+  },
+  {
+    "row_num": "234",
+    "nama_upz": "Kelurahan Karangwangkal, Kec. Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "kelkarangwangkal",
+    "email": "kelkarangwangkal@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "karangwangkal"
+  },
+  {
+    "row_num": "235",
+    "nama_upz": "Kelurahan Pabuaran, Kec. Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "kelpabuaran",
+    "email": "kelpabuaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "pabuaran"
+  },
+  {
+    "row_num": "236",
+    "nama_upz": "Kelurahan Purwanegara, Kec. Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "kelpurwanegara",
+    "email": "kelpurwanegara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "purwanegara"
+  },
+  {
+    "row_num": "237",
+    "nama_upz": "Kelurahan Sumampir, Kec. Purwokerto Utara",
+    "nama_lengkap": "PIC",
+    "kode": "kelsumampir",
+    "email": "kelsumampir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "sumampir"
+  },
+  {
+    "row_num": "238",
+    "nama_upz": "Kelurahan Berkoh, Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "kelberkoh",
+    "email": "kelberkoh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "berkoh"
+  },
+  {
+    "row_num": "239",
+    "nama_upz": "Kelurahan Karangklesem, Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "kelkarangklesem",
+    "email": "kelkarangklesem@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "karangklesem"
+  },
+  {
+    "row_num": "240",
+    "nama_upz": "Kelurahan Karangpucung, Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "kelkarangpucung",
+    "email": "kelkarangpucung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "karangpucung"
+  },
+  {
+    "row_num": "241",
+    "nama_upz": "Kelurahan Purwokerto Kidul, Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "kelpurwokertokidul",
+    "email": "kelpurwokertokidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "purwokertokidul"
+  },
+  {
+    "row_num": "242",
+    "nama_upz": "Kelurahan Purwokerto Kulon, Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "kelpurwokertokulon",
+    "email": "kelpurwokertokulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "purwokertokulon"
+  },
+  {
+    "row_num": "243",
+    "nama_upz": "Kelurahan Tanjung, Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "keltanjung",
+    "email": "keltanjung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "tanjung"
+  },
+  {
+    "row_num": "244",
+    "nama_upz": "Kelurahan Teluk, Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "kelteluk",
+    "email": "kelteluk@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "teluk"
+  },
+  {
+    "row_num": "245",
+    "nama_upz": "Kelurahan Kebokura, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "kelkebokura",
+    "email": "kelkebokura@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "kebokura"
+  },
+  {
+    "row_num": "246",
+    "nama_upz": "Kelurahan Kradenan, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "kelkradenan",
+    "email": "kelkradenan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "kradenan"
+  },
+  {
+    "row_num": "247",
+    "nama_upz": "Kelurahan Sumpiuh, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "kelsumpiuh",
+    "email": "kelsumpiuh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Kelurahan",
+    "keterangan": "sumpiuh"
+  },
+  {
+    "row_num": "248",
+    "nama_upz": "Desa Ajibarang Kulon, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dsajibarangkulon",
+    "email": "dsajibarangkulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "ajibarangkulon"
+  },
+  {
+    "row_num": "249",
+    "nama_upz": "Desa Ajibarang Wetan, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dsajibarangwetan",
+    "email": "dsajibarangwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "ajibarangwetan"
+  },
+  {
+    "row_num": "250",
+    "nama_upz": "Desa Banjarsari, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanjarsari",
+    "email": "dsbanjarsari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banjarsari"
+  },
+  {
+    "row_num": "251",
+    "nama_upz": "Desa Ciberung, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dsciberung",
+    "email": "dsciberung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "ciberung"
+  },
+  {
+    "row_num": "252",
+    "nama_upz": "Desa Darmakradenan, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dsdarmakradenan",
+    "email": "dsdarmakradenan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "darmakradenan"
+  },
+  {
+    "row_num": "253",
+    "nama_upz": "Desa Jingkang, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dsjingkang",
+    "email": "dsjingkang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "jingkang"
+  },
+  {
+    "row_num": "254",
+    "nama_upz": "Desa Kalibenda, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dskalibenda",
+    "email": "dskalibenda@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalibenda"
+  },
+  {
+    "row_num": "255",
+    "nama_upz": "Desa Karangbawang, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangbawang",
+    "email": "dskarangbawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangbawang"
+  },
+  {
+    "row_num": "256",
+    "nama_upz": "Desa Lesmana, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dslesmana",
+    "email": "dslesmana@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "lesmana"
+  },
+  {
+    "row_num": "257",
+    "nama_upz": "Desa Pancasan, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dspancasan",
+    "email": "dspancasan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pancasan"
+  },
+  {
+    "row_num": "258",
+    "nama_upz": "Desa Pancurendang, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dspancurendang",
+    "email": "dspancurendang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pancurendang"
+  },
+  {
+    "row_num": "259",
+    "nama_upz": "Desa Pandansari, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dspandansari",
+    "email": "dspandansari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pandansari"
+  },
+  {
+    "row_num": "260",
+    "nama_upz": "Desa Sawangan, Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dssawangan",
+    "email": "dssawangan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sawangan"
+  },
+  {
+    "row_num": "261",
+    "nama_upz": "Desa Tipar (Tipar Kidul), Kec. Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "dstiparkidul",
+    "email": "dstiparkidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tiparkidul"
+  },
+  {
+    "row_num": "262",
+    "nama_upz": "Desa Binangun, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dsbinangun",
+    "email": "dsbinangun@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "binangun"
+  },
+  {
+    "row_num": "263",
+    "nama_upz": "Desa Danaraja, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dsdanaraja",
+    "email": "dsdanaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "danaraja"
+  },
+  {
+    "row_num": "264",
+    "nama_upz": "Desa Dawuhan, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dsdawuhan",
+    "email": "dsdawuhan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "dawuhan"
+  },
+  {
+    "row_num": "265",
+    "nama_upz": "Desa Kalisube, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dskalisube",
+    "email": "dskalisube@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalisube"
+  },
+  {
+    "row_num": "266",
+    "nama_upz": "Desa Karangrau, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangraubanyumas",
+    "email": "dskarangraubanyumas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangraubanyumas"
+  },
+  {
+    "row_num": "267",
+    "nama_upz": "Desa Kedunggede, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dskedunggede",
+    "email": "dskedunggede@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedunggede"
+  },
+  {
+    "row_num": "268",
+    "nama_upz": "Desa Kedunguter, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dskedunguter",
+    "email": "dskedunguter@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedunguter"
+  },
+  {
+    "row_num": "269",
+    "nama_upz": "Desa Kejawar, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dskejawar",
+    "email": "dskejawar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kejawar"
+  },
+  {
+    "row_num": "270",
+    "nama_upz": "Desa Papringan, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dspapringan",
+    "email": "dspapringan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "papringan"
+  },
+  {
+    "row_num": "271",
+    "nama_upz": "Desa Pasinggangan, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dspasinggangan",
+    "email": "dspasinggangan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pasinggangan"
+  },
+  {
+    "row_num": "272",
+    "nama_upz": "Desa Pekunden, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dspekunden",
+    "email": "dspekunden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pekunden"
+  },
+  {
+    "row_num": "273",
+    "nama_upz": "Desa Sudagaran, Kec. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "dssudagaran",
+    "email": "dssudagaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sudagaran"
+  },
+  {
+    "row_num": "274",
+    "nama_upz": "Desa Karangmangu, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangmangubaturraden",
+    "email": "dskarangmangubaturraden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangmangubaturraden"
+  },
+  {
+    "row_num": "275",
+    "nama_upz": "Desa Karangsalam Lor, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangsalamlor",
+    "email": "dskarangsalamlor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangsalamlor"
+  },
+  {
+    "row_num": "276",
+    "nama_upz": "Desa Karangtengah, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangtengahbaturraden",
+    "email": "dskarangtengahbaturraden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangtengahbaturraden"
+  },
+  {
+    "row_num": "277",
+    "nama_upz": "Desa Kebumen, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dskebumen",
+    "email": "dskebumen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kebumen"
+  },
+  {
+    "row_num": "278",
+    "nama_upz": "Desa Kemutug Kidul, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dskemutugkidul",
+    "email": "dskemutugkidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kemutugkidul"
+  },
+  {
+    "row_num": "279",
+    "nama_upz": "Desa Kemutug Lor, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dskemutuglor",
+    "email": "dskemutuglor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kemutuglor"
+  },
+  {
+    "row_num": "280",
+    "nama_upz": "Desa Ketenger, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dsketenger",
+    "email": "dsketenger@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "ketenger"
+  },
+  {
+    "row_num": "281",
+    "nama_upz": "Desa Kutasari, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dskutasari",
+    "email": "dskutasari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kutasari"
+  },
+  {
+    "row_num": "282",
+    "nama_upz": "Desa Pamijen, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dspamijenbaturraden",
+    "email": "dspamijenbaturraden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pamijenbaturraden"
+  },
+  {
+    "row_num": "283",
+    "nama_upz": "Desa Pandak, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dspandakbaturraden",
+    "email": "dspandakbaturraden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pandakbaturraden"
+  },
+  {
+    "row_num": "284",
+    "nama_upz": "Desa Purwosari, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dspurwosari",
+    "email": "dspurwosari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "purwosari"
+  },
+  {
+    "row_num": "285",
+    "nama_upz": "Desa Rempoah, Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "dsrempoah",
+    "email": "dsrempoah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "rempoah"
+  },
+  {
+    "row_num": "286",
+    "nama_upz": "Desa Batuanten, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dsbatuanten",
+    "email": "dsbatuanten@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "batuanten"
+  },
+  {
+    "row_num": "287",
+    "nama_upz": "Desa Cikidang, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dscikidang",
+    "email": "dscikidang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cikidang"
+  },
+  {
+    "row_num": "288",
+    "nama_upz": "Desa Cilongok, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dscilongok",
+    "email": "dscilongok@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cilongok"
+  },
+  {
+    "row_num": "289",
+    "nama_upz": "Desa Gununglurah, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dsgununglurah",
+    "email": "dsgununglurah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gununglurah"
+  },
+  {
+    "row_num": "290",
+    "nama_upz": "Desa Jatisaba, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dsjatisaba",
+    "email": "dsjatisaba@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "jatisaba"
+  },
+  {
+    "row_num": "291",
+    "nama_upz": "Desa Kalisari, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dskalisari",
+    "email": "dskalisari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalisari"
+  },
+  {
+    "row_num": "292",
+    "nama_upz": "Desa Karanglo, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranglo",
+    "email": "dskaranglo@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanglo"
+  },
+  {
+    "row_num": "293",
+    "nama_upz": "Desa Karangtengah, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangtengahcilongok",
+    "email": "dskarangtengahcilongok@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangtengahcilongok"
+  },
+  {
+    "row_num": "294",
+    "nama_upz": "Desa Kasegeran, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dskasegeran",
+    "email": "dskasegeran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kasegeran"
+  },
+  {
+    "row_num": "295",
+    "nama_upz": "Desa Langgongsari, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dslanggongsari",
+    "email": "dslanggongsari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "langgongsari"
+  },
+  {
+    "row_num": "296",
+    "nama_upz": "Desa Pageraji, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dspageraji",
+    "email": "dspageraji@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pageraji"
+  },
+  {
+    "row_num": "297",
+    "nama_upz": "Desa Panembangan, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dspanembangan",
+    "email": "dspanembangan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "panembangan"
+  },
+  {
+    "row_num": "298",
+    "nama_upz": "Desa Panusupan, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dspanusupan",
+    "email": "dspanusupan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "panusupan"
+  },
+  {
+    "row_num": "299",
+    "nama_upz": "Desa Pejogol, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dspejogol",
+    "email": "dspejogol@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pejogol"
+  },
+  {
+    "row_num": "300",
+    "nama_upz": "Desa Pernasidi, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dspernasidi",
+    "email": "dspernasidi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pernasidi"
+  },
+  {
+    "row_num": "301",
+    "nama_upz": "Desa Rancamaya, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dsrancamaya",
+    "email": "dsrancamaya@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "rancamaya"
+  },
+  {
+    "row_num": "302",
+    "nama_upz": "Desa Sambirata, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dssambirata",
+    "email": "dssambirata@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sambirata"
+  },
+  {
+    "row_num": "303",
+    "nama_upz": "Desa Sokawera, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dssokaweracilongok",
+    "email": "dssokaweracilongok@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sokaweracilongok"
+  },
+  {
+    "row_num": "304",
+    "nama_upz": "Desa Sudimara, Kec. Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "dssudimana",
+    "email": "dssudimana@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sudimana"
+  },
+  {
+    "row_num": "305",
+    "nama_upz": "Desa Cihonje, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dscihonje",
+    "email": "dscihonje@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cihonje"
+  },
+  {
+    "row_num": "306",
+    "nama_upz": "Desa Cilangkap, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dscilangkap",
+    "email": "dscilangkap@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cilangkap"
+  },
+  {
+    "row_num": "307",
+    "nama_upz": "Desa Gancang, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dsgancang",
+    "email": "dsgancang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gancang"
+  },
+  {
+    "row_num": "308",
+    "nama_upz": "Desa Gumelar, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dsgumelar",
+    "email": "dsgumelar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gumelar"
+  },
+  {
+    "row_num": "309",
+    "nama_upz": "Desa Karangkemojing, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangkemojing",
+    "email": "dskarangkemojing@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangkemojing"
+  },
+  {
+    "row_num": "310",
+    "nama_upz": "Desa Kedungurang, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungurang",
+    "email": "dskedungurang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungurang"
+  },
+  {
+    "row_num": "311",
+    "nama_upz": "Desa Paningkaban, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dspaningkaban",
+    "email": "dspaningkaban@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "paningkaban"
+  },
+  {
+    "row_num": "312",
+    "nama_upz": "Desa Samudra Kulon, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dssamudrakulon",
+    "email": "dssamudrakulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "samudrakulon"
+  },
+  {
+    "row_num": "313",
+    "nama_upz": "Desa Samudra, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dssamudra",
+    "email": "dssamudra@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "samudra"
+  },
+  {
+    "row_num": "314",
+    "nama_upz": "Desa Tlaga, Kec. Gumelar",
+    "nama_lengkap": "PIC",
+    "kode": "dstlaga",
+    "email": "dstlaga@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tlaga"
+  },
+  {
+    "row_num": "315",
+    "nama_upz": "Desa Adisara, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dsadisara",
+    "email": "dsadisara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "adisara"
+  },
+  {
+    "row_num": "316",
+    "nama_upz": "Desa Bantar, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dsbantar",
+    "email": "dsbantar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "bantar"
+  },
+  {
+    "row_num": "317",
+    "nama_upz": "Desa Gentawangi, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dsgentawangi",
+    "email": "dsgentawangi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gentawangi"
+  },
+  {
+    "row_num": "318",
+    "nama_upz": "Desa Gunung Wetan, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dsgunungwetan",
+    "email": "dsgunungwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gunungwetan"
+  },
+  {
+    "row_num": "319",
+    "nama_upz": "Desa Karanganyar, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranganyarjatilawang",
+    "email": "dskaranganyarjatilawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanganyarjatilawang"
+  },
+  {
+    "row_num": "320",
+    "nama_upz": "Desa Karanglewas, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranglewas",
+    "email": "dskaranglewas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanglewas"
+  },
+  {
+    "row_num": "321",
+    "nama_upz": "Desa Kedungwringin, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungwringinjatilawang",
+    "email": "dskedungwringinjatilawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungwringinjatilawang"
+  },
+  {
+    "row_num": "322",
+    "nama_upz": "Desa Margasana, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dsmargasana",
+    "email": "dsmargasana@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "margasana"
+  },
+  {
+    "row_num": "323",
+    "nama_upz": "Desa Pekuncen, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dspekuncenjatilawang",
+    "email": "dspekuncenjatilawang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pekuncenjatilawang"
+  },
+  {
+    "row_num": "324",
+    "nama_upz": "Desa Tinggarjaya, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dstinggarjaya",
+    "email": "dstinggarjaya@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tinggarjaya"
+  },
+  {
+    "row_num": "325",
+    "nama_upz": "Desa Tunjung, Kec. Jatilawang",
+    "nama_lengkap": "PIC",
+    "kode": "dstunjung",
+    "email": "dstunjung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tunjung"
+  },
+  {
+    "row_num": "326",
+    "nama_upz": "Desa Kalibagor, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dskalibagor",
+    "email": "dskalibagor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalibagor"
+  },
+  {
+    "row_num": "327",
+    "nama_upz": "Desa Kalicupak Kidul, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dskalicupakkidul",
+    "email": "dskalicupakkidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalicupakkidul"
+  },
+  {
+    "row_num": "328",
+    "nama_upz": "Desa Kalicupak Lor, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dskalicupaklor",
+    "email": "dskalicupaklor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalicupaklor"
+  },
+  {
+    "row_num": "329",
+    "nama_upz": "Desa Kaliori, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dskaliori",
+    "email": "dskaliori@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kaliori"
+  },
+  {
+    "row_num": "330",
+    "nama_upz": "Desa Kalisogra Wetan, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dskalisograwetan",
+    "email": "dskalisograwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalisograwetan"
+  },
+  {
+    "row_num": "331",
+    "nama_upz": "Desa Karangdadap, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangdadap",
+    "email": "dskarangdadap@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangdadap"
+  },
+  {
+    "row_num": "332",
+    "nama_upz": "Desa Pajerukan, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dspajerukan",
+    "email": "dspajerukan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pajerukan"
+  },
+  {
+    "row_num": "333",
+    "nama_upz": "Desa Pekaja, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dspekaja",
+    "email": "dspekaja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pekaja"
+  },
+  {
+    "row_num": "334",
+    "nama_upz": "Desa Petir, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dspetir",
+    "email": "dspetir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "petir"
+  },
+  {
+    "row_num": "335",
+    "nama_upz": "Desa Srowot, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dssrowot",
+    "email": "dssrowot@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "srowot"
+  },
+  {
+    "row_num": "336",
+    "nama_upz": "Desa Suro, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dssuro",
+    "email": "dssuro@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "suro"
+  },
+  {
+    "row_num": "337",
+    "nama_upz": "Desa Wlahar Wetan, Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "dswlaharwetan",
+    "email": "dswlaharwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "wlaharwetan"
+  },
+  {
+    "row_num": "338",
+    "nama_upz": "Desa Babakan, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dsbabakan",
+    "email": "dsbabakan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "babakan"
+  },
+  {
+    "row_num": "339",
+    "nama_upz": "Desa Jipang, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dsjipang",
+    "email": "dsjipang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "jipang"
+  },
+  {
+    "row_num": "340",
+    "nama_upz": "Desa Karanggude kulon, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranggudekulon",
+    "email": "dskaranggudekulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanggudekulon"
+  },
+  {
+    "row_num": "341",
+    "nama_upz": "Desa Karangkemiri, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangkemirikrlewas",
+    "email": "dskarangkemirikrlewas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangkemirikrlewas"
+  },
+  {
+    "row_num": "342",
+    "nama_upz": "Desa Karanglewas Kidul, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranglewaskidul",
+    "email": "dskaranglewaskidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanglewaskidul"
+  },
+  {
+    "row_num": "343",
+    "nama_upz": "Desa Kediri, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dskediri",
+    "email": "dskediri@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kediri"
+  },
+  {
+    "row_num": "344",
+    "nama_upz": "Desa Pangebatan, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dspangebatan",
+    "email": "dspangebatan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pangebatan"
+  },
+  {
+    "row_num": "345",
+    "nama_upz": "Desa Pasir Kulon, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dspasirkulon",
+    "email": "dspasirkulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pasirkulon"
+  },
+  {
+    "row_num": "346",
+    "nama_upz": "Desa Pasir Lor, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dspasirlor",
+    "email": "dspasirlor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pasirlor"
+  },
+  {
+    "row_num": "347",
+    "nama_upz": "Desa Pasir Wetan, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dspasirwetan",
+    "email": "dspasirwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pasirwetan"
+  },
+  {
+    "row_num": "348",
+    "nama_upz": "Desa Singasari, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dssingasari",
+    "email": "dssingasari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "singasari"
+  },
+  {
+    "row_num": "349",
+    "nama_upz": "Desa Sunyalangu, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dssunyalangu",
+    "email": "dssunyalangu@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sunyalangu"
+  },
+  {
+    "row_num": "350",
+    "nama_upz": "Desa Tamansari, Kec. Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "dstamansari",
+    "email": "dstamansari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tamansari"
+  },
+  {
+    "row_num": "351",
+    "nama_upz": "Desa Adisana, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dsadisana",
+    "email": "dsadisana@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "adisana"
+  },
+  {
+    "row_num": "352",
+    "nama_upz": "Desa Bangsa, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dsbangsa",
+    "email": "dsbangsa@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "bangsa"
+  },
+  {
+    "row_num": "353",
+    "nama_upz": "Desa Cindaga, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dscindaga",
+    "email": "dscindaga@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cindaga"
+  },
+  {
+    "row_num": "354",
+    "nama_upz": "Desa Gambarsari, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dsgambarsari",
+    "email": "dsgambarsari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gambarsari"
+  },
+  {
+    "row_num": "355",
+    "nama_upz": "Desa Kalisalak, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dskalisalak",
+    "email": "dskalisalak@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalisalak"
+  },
+  {
+    "row_num": "356",
+    "nama_upz": "Desa Kaliwedi, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dskaliwedi",
+    "email": "dskaliwedi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kaliwedi"
+  },
+  {
+    "row_num": "357",
+    "nama_upz": "Desa Karangsari, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangsarikebasen",
+    "email": "dskarangsarikebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangsarikebasen"
+  },
+  {
+    "row_num": "358",
+    "nama_upz": "Desa Kebasen, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dskebasen",
+    "email": "dskebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kebasen"
+  },
+  {
+    "row_num": "359",
+    "nama_upz": "Desa Mandirancan, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dsmandirancan",
+    "email": "dsmandirancan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "mandirancan"
+  },
+  {
+    "row_num": "360",
+    "nama_upz": "Desa Randegan, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dsrandegankebasen",
+    "email": "dsrandegankebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "randegankebasen"
+  },
+  {
+    "row_num": "361",
+    "nama_upz": "Desa Sawangan, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dssawangankebasen",
+    "email": "dssawangankebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sawangankebasen"
+  },
+  {
+    "row_num": "362",
+    "nama_upz": "Desa Tumiyang, Kec. Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "dstumiyangkebasen",
+    "email": "dstumiyangkebasen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tumiyangkebasen"
+  },
+  {
+    "row_num": "363",
+    "nama_upz": "Desa Baseh, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dsbaseh",
+    "email": "dsbaseh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "baseh"
+  },
+  {
+    "row_num": "364",
+    "nama_upz": "Desa Beji, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dsbeji",
+    "email": "dsbeji@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "beji"
+  },
+  {
+    "row_num": "365",
+    "nama_upz": "Desa Dawuhan Kulon, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dsdawuhankulon",
+    "email": "dsdawuhankulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "dawuhankulon"
+  },
+  {
+    "row_num": "366",
+    "nama_upz": "Desa Dawuhan Wetan, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dsdawuhanwetan",
+    "email": "dsdawuhanwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "dawuhanwetan"
+  },
+  {
+    "row_num": "367",
+    "nama_upz": "Desa Kalikesur, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dskalikesur",
+    "email": "dskalikesur@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalikesur"
+  },
+  {
+    "row_num": "368",
+    "nama_upz": "Desa Karangnangka, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangnangka",
+    "email": "dskarangnangka@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangnangka"
+  },
+  {
+    "row_num": "369",
+    "nama_upz": "Desa Karangsalam Kidul, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangsalamkidul",
+    "email": "dskarangsalamkidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangsalamkidul"
+  },
+  {
+    "row_num": "370",
+    "nama_upz": "Desa Kebocoran, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dskebocoran",
+    "email": "dskebocoran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kebocoran"
+  },
+  {
+    "row_num": "371",
+    "nama_upz": "Desa Kedungbanteng, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungbanteng",
+    "email": "dskedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungbanteng"
+  },
+  {
+    "row_num": "372",
+    "nama_upz": "Desa Keniten, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dskeniten",
+    "email": "dskeniten@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "keniten"
+  },
+  {
+    "row_num": "373",
+    "nama_upz": "Desa Kutaliman, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dskutaliman",
+    "email": "dskutaliman@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kutaliman"
+  },
+  {
+    "row_num": "374",
+    "nama_upz": "Desa Melung, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dsmelung",
+    "email": "dsmelung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "melung"
+  },
+  {
+    "row_num": "375",
+    "nama_upz": "Desa Windujaya, Kec. Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "dswindujaya",
+    "email": "dswindujaya@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "windujaya"
+  },
+  {
+    "row_num": "376",
+    "nama_upz": "Desa Bantarwuni, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dsbantarwuni",
+    "email": "dsbantarwuni@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "bantarwuni"
+  },
+  {
+    "row_num": "377",
+    "nama_upz": "Desa Bojong, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dsbojong",
+    "email": "dsbojong@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "bojong"
+  },
+  {
+    "row_num": "378",
+    "nama_upz": "Desa Bojongsari, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dsbojongsari",
+    "email": "dsbojongsari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "bojongsari"
+  },
+  {
+    "row_num": "379",
+    "nama_upz": "Desa Dukuhwaluh, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dsdukuhwaluh",
+    "email": "dsdukuhwaluh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "dukuhwaluh"
+  },
+  {
+    "row_num": "380",
+    "nama_upz": "Desa Karangsari, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangsarikembaran",
+    "email": "dskarangsarikembaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangsarikembaran"
+  },
+  {
+    "row_num": "381",
+    "nama_upz": "Desa Karangsoka, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangsoka",
+    "email": "dskarangsoka@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangsoka"
+  },
+  {
+    "row_num": "382",
+    "nama_upz": "Desa Karangtengah, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangtengahkembaran",
+    "email": "dskarangtengahkembaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangtengahkembaran"
+  },
+  {
+    "row_num": "383",
+    "nama_upz": "Desa Kembaran, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dskembaran",
+    "email": "dskembaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kembaran"
+  },
+  {
+    "row_num": "384",
+    "nama_upz": "Desa Kramat, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dskramat",
+    "email": "dskramat@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kramat"
+  },
+  {
+    "row_num": "385",
+    "nama_upz": "Desa Ledug, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dsledug",
+    "email": "dsledug@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "ledug"
+  },
+  {
+    "row_num": "386",
+    "nama_upz": "Desa Pliken, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dspliken",
+    "email": "dspliken@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pliken"
+  },
+  {
+    "row_num": "387",
+    "nama_upz": "Desa Purbadana, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dspurbadana",
+    "email": "dspurbadana@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "purbadana"
+  },
+  {
+    "row_num": "388",
+    "nama_upz": "Desa Purwodadi, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dspurwodadikembaran",
+    "email": "dspurwodadikembaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "purwodadikembaran"
+  },
+  {
+    "row_num": "389",
+    "nama_upz": "Desa Sambeng Kulon, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dssambengkulon",
+    "email": "dssambengkulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sambengkulon"
+  },
+  {
+    "row_num": "390",
+    "nama_upz": "Desa Sambeng Wetan, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dssambengwetan",
+    "email": "dssambengwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sambengwetan"
+  },
+  {
+    "row_num": "391",
+    "nama_upz": "Desa Tambak Sari Kidul, Kec. Kembaran",
+    "nama_lengkap": "PIC",
+    "kode": "dstambaksarikidul",
+    "email": "dstambaksarikidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tambaksarikidul"
+  },
+  {
+    "row_num": "392",
+    "nama_upz": "Desa Alas Malang, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dsalasmalang",
+    "email": "dsalasmalang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "alasmalang"
+  },
+  {
+    "row_num": "393",
+    "nama_upz": "Desa Grujugan, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dsgrujugan",
+    "email": "dsgrujugan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "grujugan"
+  },
+  {
+    "row_num": "394",
+    "nama_upz": "Desa Karanggintung, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranggintungkemranjen",
+    "email": "dskaranggintungkemranjen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanggintungkemranjen"
+  },
+  {
+    "row_num": "395",
+    "nama_upz": "Desa Karangjati, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangjati",
+    "email": "dskarangjati@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangjati"
+  },
+  {
+    "row_num": "396",
+    "nama_upz": "Desa Karangsalam, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangsalam",
+    "email": "dskarangsalam@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangsalam"
+  },
+  {
+    "row_num": "397",
+    "nama_upz": "Desa Kebarongan, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dskebarongan",
+    "email": "dskebarongan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kebarongan"
+  },
+  {
+    "row_num": "398",
+    "nama_upz": "Desa Kecila, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dskecila",
+    "email": "dskecila@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kecila"
+  },
+  {
+    "row_num": "399",
+    "nama_upz": "Desa Kedungpring, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungpring",
+    "email": "dskedungpring@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungpring"
+  },
+  {
+    "row_num": "400",
+    "nama_upz": "Desa Nusamangir, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dsnusamangir",
+    "email": "dsnusamangir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "nusamangir"
+  },
+  {
+    "row_num": "401",
+    "nama_upz": "Desa Pageralang, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dspageralang",
+    "email": "dspageralang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pageralang"
+  },
+  {
+    "row_num": "402",
+    "nama_upz": "Desa Sibalung, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dssibalung",
+    "email": "dssibalung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sibalung"
+  },
+  {
+    "row_num": "403",
+    "nama_upz": "Desa Sibrama, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dssibrama",
+    "email": "dssibrama@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sibrama"
+  },
+  {
+    "row_num": "404",
+    "nama_upz": "Desa Sidamulya, kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dssidamulya",
+    "email": "dssidamulya@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sidamulya"
+  },
+  {
+    "row_num": "405",
+    "nama_upz": "Desa Sirau, Kec. Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "dssirau",
+    "email": "dssirau@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sirau"
+  },
+  {
+    "row_num": "406",
+    "nama_upz": "Desa Besuki, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dsbesuki",
+    "email": "dsbesuki@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "besuki"
+  },
+  {
+    "row_num": "407",
+    "nama_upz": "Desa Canduk, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dscanduk",
+    "email": "dscanduk@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "canduk"
+  },
+  {
+    "row_num": "408",
+    "nama_upz": "Desa Cidora, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dscidora",
+    "email": "dscidora@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cidora"
+  },
+  {
+    "row_num": "409",
+    "nama_upz": "Desa Cingebul, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dscingebul",
+    "email": "dscingebul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cingebul"
+  },
+  {
+    "row_num": "410",
+    "nama_upz": "Desa Cirahab, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dscirahab",
+    "email": "dscirahab@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cirahab"
+  },
+  {
+    "row_num": "411",
+    "nama_upz": "Desa Dermaji, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dsdermaji",
+    "email": "dsdermaji@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "dermaji"
+  },
+  {
+    "row_num": "412",
+    "nama_upz": "Desa Karanggayam, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranggayam",
+    "email": "dskaranggayam@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanggayam"
+  },
+  {
+    "row_num": "413",
+    "nama_upz": "Desa Lumbir, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dslumbir",
+    "email": "dslumbir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "lumbir"
+  },
+  {
+    "row_num": "414",
+    "nama_upz": "Desa Parungkamal, Kec. Lumbir",
+    "nama_lengkap": "PIC",
+    "kode": "dsparungkamal",
+    "email": "dsparungkamal@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "parungkamal"
+  },
+  {
+    "row_num": "415",
+    "nama_upz": "Desa Karanganyar, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranganyarpatikraja",
+    "email": "dskaranganyarpatikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanganyarpatikraja"
+  },
+  {
+    "row_num": "416",
+    "nama_upz": "Desa Karangendep, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangendep",
+    "email": "dskarangendep@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangendep"
+  },
+  {
+    "row_num": "417",
+    "nama_upz": "Desa Kedungrandu, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungrandu",
+    "email": "dskedungrandu@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungrandu"
+  },
+  {
+    "row_num": "418",
+    "nama_upz": "Desa Kedungwringin, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungwringinpatikraja",
+    "email": "dskedungwringinpatikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungwringinpatikraja"
+  },
+  {
+    "row_num": "419",
+    "nama_upz": "Desa Kedungwuluh Kidul, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungwuluhkidul",
+    "email": "dskedungwuluhkidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungwuluhkidul"
+  },
+  {
+    "row_num": "420",
+    "nama_upz": "Desa Kedungwuluh Lor, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungwuluhlor",
+    "email": "dskedungwuluhlor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungwuluhlor"
+  },
+  {
+    "row_num": "421",
+    "nama_upz": "Desa Notog, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dsnotog",
+    "email": "dsnotog@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "notog"
+  },
+  {
+    "row_num": "422",
+    "nama_upz": "Desa Patikraja, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dspatikraja",
+    "email": "dspatikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "patikraja"
+  },
+  {
+    "row_num": "423",
+    "nama_upz": "Desa Pegalongan, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dspegalongan",
+    "email": "dspegalongan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pegalongan"
+  },
+  {
+    "row_num": "424",
+    "nama_upz": "Desa Sawangan Wetan, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dssawanganwetan",
+    "email": "dssawanganwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sawanganwetan"
+  },
+  {
+    "row_num": "425",
+    "nama_upz": "Desa Sidabowa, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dssidabowa",
+    "email": "dssidabowa@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sidabowa"
+  },
+  {
+    "row_num": "426",
+    "nama_upz": "Desa Sokawera, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dssokawerapatikraja",
+    "email": "dssokawerapatikraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sokawerapatikraja"
+  },
+  {
+    "row_num": "427",
+    "nama_upz": "Desa Wlahar Kulon, Kec. Patikraja",
+    "nama_lengkap": "PIC",
+    "kode": "dswlaharkulon",
+    "email": "dswlaharkulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "wlaharkulon"
+  },
+  {
+    "row_num": "428",
+    "nama_upz": "Desa Banjaranyar, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanjaranyarpekuncen",
+    "email": "dsbanjaranyarpekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banjaranyarpekuncen"
+  },
+  {
+    "row_num": "429",
+    "nama_upz": "Desa Candinegara, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dscandinegara",
+    "email": "dscandinegara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "candinegara"
+  },
+  {
+    "row_num": "430",
+    "nama_upz": "Desa Cibangkong, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dscibangkong",
+    "email": "dscibangkong@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cibangkong"
+  },
+  {
+    "row_num": "431",
+    "nama_upz": "Desa Cikawung, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dscikawung",
+    "email": "dscikawung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cikawung"
+  },
+  {
+    "row_num": "432",
+    "nama_upz": "Desa Cikembulan, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dscikembulan",
+    "email": "dscikembulan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cikembulan"
+  },
+  {
+    "row_num": "433",
+    "nama_upz": "Desa Glempang, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dsglempang",
+    "email": "dsglempang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "glempang"
+  },
+  {
+    "row_num": "434",
+    "nama_upz": "Desa Karangkemiri, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangkemiripekuncen",
+    "email": "dskarangkemiripekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangkemiripekuncen"
+  },
+  {
+    "row_num": "435",
+    "nama_upz": "Desa Karangklesem, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangklesem",
+    "email": "dskarangklesem@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangklesem"
+  },
+  {
+    "row_num": "436",
+    "nama_upz": "Desa Krajan, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dskrajan",
+    "email": "dskrajan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "krajan"
+  },
+  {
+    "row_num": "437",
+    "nama_upz": "Desa Kranggan, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dskranggan",
+    "email": "dskranggan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kranggan"
+  },
+  {
+    "row_num": "438",
+    "nama_upz": "Desa Pasiraman Kidul, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dspasiramankidul",
+    "email": "dspasiramankidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pasiramankidul"
+  },
+  {
+    "row_num": "439",
+    "nama_upz": "Desa Pasiraman Lor, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dspasiramanlor",
+    "email": "dspasiramanlor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pasiramanlor"
+  },
+  {
+    "row_num": "440",
+    "nama_upz": "Desa Pekuncen, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dspekuncen",
+    "email": "dspekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pekuncen"
+  },
+  {
+    "row_num": "441",
+    "nama_upz": "Desa Petahunan, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dspetahunan",
+    "email": "dspetahunan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "petahunan"
+  },
+  {
+    "row_num": "442",
+    "nama_upz": "Desa Tumiyang, Kec. Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "dstumiyangpekuncen",
+    "email": "dstumiyangpekuncen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tumiyangpekuncen"
+  },
+  {
+    "row_num": "443",
+    "nama_upz": "Desa Gerduren, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dsgerduren",
+    "email": "dsgerduren@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gerduren"
+  },
+  {
+    "row_num": "444",
+    "nama_upz": "Desa Kaliputih, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dskaliputih",
+    "email": "dskaliputih@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kaliputih"
+  },
+  {
+    "row_num": "445",
+    "nama_upz": "Desa Kalitapen, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dskalitapen",
+    "email": "dskalitapen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalitapen"
+  },
+  {
+    "row_num": "446",
+    "nama_upz": "Desa Kaliurip, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dskaliurip",
+    "email": "dskaliurip@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kaliurip"
+  },
+  {
+    "row_num": "447",
+    "nama_upz": "Desa Kaliwangi, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dskaliwangi",
+    "email": "dskaliwangi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kaliwangi"
+  },
+  {
+    "row_num": "448",
+    "nama_upz": "Desa Karangmangu, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangmangupurwojati",
+    "email": "dskarangmangupurwojati@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangmangupurwojati"
+  },
+  {
+    "row_num": "449",
+    "nama_upz": "Desa Karangtalun Kidul, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangtalunkidul",
+    "email": "dskarangtalunkidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangtalunkidul"
+  },
+  {
+    "row_num": "450",
+    "nama_upz": "Desa Karangtalun Lor, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangtalunlor",
+    "email": "dskarangtalunlor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangtalunlor"
+  },
+  {
+    "row_num": "451",
+    "nama_upz": "Desa Klapasawit, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dsklapasawit",
+    "email": "dsklapasawit@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "klapasawit"
+  },
+  {
+    "row_num": "452",
+    "nama_upz": "Desa Purwojati, Kec. Purwojati",
+    "nama_lengkap": "PIC",
+    "kode": "dspurwojati",
+    "email": "dspurwojati@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "purwojati"
+  },
+  {
+    "row_num": "453",
+    "nama_upz": "Desa Banjarparakan, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanjarparakan",
+    "email": "dsbanjarparakan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banjarparakan"
+  },
+  {
+    "row_num": "454",
+    "nama_upz": "Desa Losari, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dslosari",
+    "email": "dslosari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "losari"
+  },
+  {
+    "row_num": "455",
+    "nama_upz": "Desa Menganti, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dsmenganti",
+    "email": "dsmenganti@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "menganti"
+  },
+  {
+    "row_num": "456",
+    "nama_upz": "Desa Pesawahan, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dspesawahan",
+    "email": "dspesawahan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pesawahan"
+  },
+  {
+    "row_num": "457",
+    "nama_upz": "Desa Rawalo, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dsrawalo",
+    "email": "dsrawalo@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "rawalo"
+  },
+  {
+    "row_num": "458",
+    "nama_upz": "Desa Sanggreman, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dssanggreman",
+    "email": "dssanggreman@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sanggreman"
+  },
+  {
+    "row_num": "459",
+    "nama_upz": "Desa Sidamulih, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dssidamulih",
+    "email": "dssidamulih@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sidamulih"
+  },
+  {
+    "row_num": "460",
+    "nama_upz": "Desa Tambaknegara, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dstambaknegara",
+    "email": "dstambaknegara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tambaknegara"
+  },
+  {
+    "row_num": "461",
+    "nama_upz": "Desa Tipar, Kec. Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "dstipar",
+    "email": "dstipar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tipar"
+  },
+  {
+    "row_num": "462",
+    "nama_upz": "Desa Banjaranyar, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanjaranyarsokaraja",
+    "email": "dsbanjaranyarsokaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banjaranyarsokaraja"
+  },
+  {
+    "row_num": "463",
+    "nama_upz": "Desa Banjarsari Kidul, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanjarsarikidul",
+    "email": "dsbanjarsarikidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banjarsarikidul"
+  },
+  {
+    "row_num": "464",
+    "nama_upz": "Desa Jompo Kulon, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dsjompokulon",
+    "email": "dsjompokulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "jompokulon"
+  },
+  {
+    "row_num": "465",
+    "nama_upz": "Desa Kalikidang, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskalikidang",
+    "email": "dskalikidang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kalikidang"
+  },
+  {
+    "row_num": "466",
+    "nama_upz": "Desa Karangduren, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangduren",
+    "email": "dskarangduren@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangduren"
+  },
+  {
+    "row_num": "467",
+    "nama_upz": "Desa Karangkedawung, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangkedawung",
+    "email": "dskarangkedawung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangkedawung"
+  },
+  {
+    "row_num": "468",
+    "nama_upz": "Desa Karangnanas, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangnanas",
+    "email": "dskarangnanas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangnanas"
+  },
+  {
+    "row_num": "469",
+    "nama_upz": "Desa Karangrau, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangrausokaraja",
+    "email": "dskarangrausokaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangrausokaraja"
+  },
+  {
+    "row_num": "470",
+    "nama_upz": "Desa Kedondong, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dskedondong",
+    "email": "dskedondong@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedondong"
+  },
+  {
+    "row_num": "471",
+    "nama_upz": "Desa Klahang, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dsklahang",
+    "email": "dsklahang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "klahang"
+  },
+  {
+    "row_num": "472",
+    "nama_upz": "Desa Lemberang, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dslemberang",
+    "email": "dslemberang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "lemberang"
+  },
+  {
+    "row_num": "473",
+    "nama_upz": "Desa Pamijen, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dspamijensokaraja",
+    "email": "dspamijensokaraja@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pamijensokaraja"
+  },
+  {
+    "row_num": "474",
+    "nama_upz": "Desa Sokaraja Kidul, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dssokarajakidul",
+    "email": "dssokarajakidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sokarajakidul"
+  },
+  {
+    "row_num": "475",
+    "nama_upz": "Desa Sokaraja Kulon, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dssokarajakulon",
+    "email": "dssokarajakulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sokarajakulon"
+  },
+  {
+    "row_num": "476",
+    "nama_upz": "Desa Sokaraja Lor, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dssokarajalor",
+    "email": "dssokarajalor@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sokarajalor"
+  },
+  {
+    "row_num": "477",
+    "nama_upz": "Desa Sokaraja Tengah, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dssokarajatengah",
+    "email": "dssokarajatengah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sokarajatengah"
+  },
+  {
+    "row_num": "478",
+    "nama_upz": "Desa Sokaraja Wetan, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dssokarajawetan",
+    "email": "dssokarajawetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sokarajawetan"
+  },
+  {
+    "row_num": "479",
+    "nama_upz": "Desa Wiradadi, Kec. Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "dswiradadi",
+    "email": "dswiradadi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "wiradadi"
+  },
+  {
+    "row_num": "480",
+    "nama_upz": "Desa Kanding, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "dskanding",
+    "email": "dskanding@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kanding"
+  },
+  {
+    "row_num": "481",
+    "nama_upz": "Desa Kemawi, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "dskemawi",
+    "email": "dskemawi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kemawi"
+  },
+  {
+    "row_num": "482",
+    "nama_upz": "Desa Klinting, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "dsklinting",
+    "email": "dsklinting@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "klinting"
+  },
+  {
+    "row_num": "483",
+    "nama_upz": "Desa Piasa Kulon, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "dspiasakulon",
+    "email": "dspiasakulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "piasakulon"
+  },
+  {
+    "row_num": "484",
+    "nama_upz": "Desa Plana, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "dsplana",
+    "email": "dsplana@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "plana"
+  },
+  {
+    "row_num": "485",
+    "nama_upz": "Desa Sokawera, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "dssokawerasomagede",
+    "email": "dssokawerasomagede@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sokawerasomagede"
+  },
+  {
+    "row_num": "486",
+    "nama_upz": "Desa Somagede, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "dssomagede",
+    "email": "dssomagede@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "somagede"
+  },
+  {
+    "row_num": "487",
+    "nama_upz": "Desa Tanggeran, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "dstanggeran",
+    "email": "dstanggeran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tanggeran"
+  },
+  {
+    "row_num": "488",
+    "nama_upz": "Desa Banjarsari Kulon, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanjarsarikulon",
+    "email": "dsbanjarsarikulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banjarsarikulon"
+  },
+  {
+    "row_num": "489",
+    "nama_upz": "Desa Banjarsari Wetan, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanjarsariwetan",
+    "email": "dsbanjarsariwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banjarsariwetan"
+  },
+  {
+    "row_num": "490",
+    "nama_upz": "Desa Banteran, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanteran",
+    "email": "dsbanteran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banteran"
+  },
+  {
+    "row_num": "491",
+    "nama_upz": "Desa Ciberem, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dsciberem",
+    "email": "dsciberem@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "ciberem"
+  },
+  {
+    "row_num": "492",
+    "nama_upz": "Desa Datar, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dsdatar",
+    "email": "dsdatar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "datar"
+  },
+  {
+    "row_num": "493",
+    "nama_upz": "Desa Gandatapa, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dsgandatapa",
+    "email": "dsgandatapa@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gandatapa"
+  },
+  {
+    "row_num": "494",
+    "nama_upz": "Desa Karanggintung, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranggintungsumbang",
+    "email": "dskaranggintungsumbang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanggintungsumbang"
+  },
+  {
+    "row_num": "495",
+    "nama_upz": "Desa Karangturi, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangturi",
+    "email": "dskarangturi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangturi"
+  },
+  {
+    "row_num": "496",
+    "nama_upz": "Desa Kebanggan, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dskebanggan",
+    "email": "dskebanggan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kebanggan"
+  },
+  {
+    "row_num": "497",
+    "nama_upz": "Desa Kedungmalang, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dskedungmalang",
+    "email": "dskedungmalang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kedungmalang"
+  },
+  {
+    "row_num": "498",
+    "nama_upz": "Desa Kotayasa, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dskotayasa",
+    "email": "dskotayasa@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kotayasa"
+  },
+  {
+    "row_num": "499",
+    "nama_upz": "Desa Limpakuwus, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dslimpakuwus",
+    "email": "dslimpakuwus@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "limpakuwus"
+  },
+  {
+    "row_num": "500",
+    "nama_upz": "Desa Sikapat, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dssikapat",
+    "email": "dssikapat@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sikapat"
+  },
+  {
+    "row_num": "501",
+    "nama_upz": "Desa Silado, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dssilado",
+    "email": "dssilado@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "silado"
+  },
+  {
+    "row_num": "502",
+    "nama_upz": "Desa Sumbang, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dssumbang",
+    "email": "dssumbang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "sumbang"
+  },
+  {
+    "row_num": "503",
+    "nama_upz": "Desa Susukan, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dssusukan",
+    "email": "dssusukan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "susukan"
+  },
+  {
+    "row_num": "504",
+    "nama_upz": "Desa Tambaksogra, Kec. Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "dstambaksogra",
+    "email": "dstambaksogra@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "tambaksogra"
+  },
+  {
+    "row_num": "505",
+    "nama_upz": "Desa Banjarpanepen, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanjarpanepen",
+    "email": "dsbanjarpanepen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banjarpanepen"
+  },
+  {
+    "row_num": "506",
+    "nama_upz": "Desa Karanggedang, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dskaranggedang",
+    "email": "dskaranggedang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karanggedang"
+  },
+  {
+    "row_num": "507",
+    "nama_upz": "Desa Kemiri, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dskemiri",
+    "email": "dskemiri@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kemiri"
+  },
+  {
+    "row_num": "508",
+    "nama_upz": "Desa Ketanda, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dsketanda",
+    "email": "dsketanda@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "ketanda"
+  },
+  {
+    "row_num": "509",
+    "nama_upz": "Desa Kuntili, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dskuntili",
+    "email": "dskuntili@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kuntili"
+  },
+  {
+    "row_num": "510",
+    "nama_upz": "Desa Lebeng, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dslebeng",
+    "email": "dslebeng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "lebeng"
+  },
+  {
+    "row_num": "511",
+    "nama_upz": "Desa Nusadadi, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dsnusadadi",
+    "email": "dsnusadadi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "nusadadi"
+  },
+  {
+    "row_num": "512",
+    "nama_upz": "Desa Pandak, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dspandaksumpiuh",
+    "email": "dspandaksumpiuh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pandaksumpiuh"
+  },
+  {
+    "row_num": "513",
+    "nama_upz": "Desa Selandaka, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dsselandaka",
+    "email": "dsselandaka@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "selandaka"
+  },
+  {
+    "row_num": "514",
+    "nama_upz": "Desa Selanegara, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "dsselanegara",
+    "email": "dsselanegara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "selanegara"
+  },
+  {
+    "row_num": "515",
+    "nama_upz": "Desa Buniayu, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dsbuniayu",
+    "email": "dsbuniayu@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "buniayu"
+  },
+  {
+    "row_num": "516",
+    "nama_upz": "Desa Gebangsari, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dsgebangsari",
+    "email": "dsgebangsari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gebangsari"
+  },
+  {
+    "row_num": "517",
+    "nama_upz": "Desa Gumelar Kidul, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dsgumelarkidul",
+    "email": "dsgumelarkidul@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "gumelarkidul"
+  },
+  {
+    "row_num": "518",
+    "nama_upz": "Desa Kamulyan, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dskamulyan",
+    "email": "dskamulyan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "kamulyan"
+  },
+  {
+    "row_num": "519",
+    "nama_upz": "Desa Karangpetir, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangpetir",
+    "email": "dskarangpetir@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangpetir"
+  },
+  {
+    "row_num": "520",
+    "nama_upz": "Desa Karangpucung, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dskarangpucung",
+    "email": "dskarangpucung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "karangpucung"
+  },
+  {
+    "row_num": "521",
+    "nama_upz": "Desa Pesantren, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dspesantren",
+    "email": "dspesantren@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "pesantren"
+  },
+  {
+    "row_num": "522",
+    "nama_upz": "Desa Plangkapan, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dsplangkapan",
+    "email": "dsplangkapan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "plangkapan"
+  },
+  {
+    "row_num": "523",
+    "nama_upz": "Desa Prembun, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dsprembun",
+    "email": "dsprembun@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "prembun"
+  },
+  {
+    "row_num": "524",
+    "nama_upz": "Desa Purwodadi, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dspurwodaditambak",
+    "email": "dspurwodaditambak@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "purwodaditambak"
+  },
+  {
+    "row_num": "525",
+    "nama_upz": "Desa Watuagung, Kec. Tambak",
+    "nama_lengkap": "PIC",
+    "kode": "dswatuagung",
+    "email": "dswatuagung@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "watuagung"
+  },
+  {
+    "row_num": "526",
+    "nama_upz": "Desa Banteran, Kec. Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "dsbanteranwangon",
+    "email": "dsbanteranwangon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "banteranwangon"
+  },
+  {
+    "row_num": "527",
+    "nama_upz": "Desa Cikakak, Kec. Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "dscikakak",
+    "email": "dscikakak@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "cikakak"
+  },
+  {
+    "row_num": "528",
+    "nama_upz": "Desa Jurangbahas, Kec. Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "dsjurangbahas",
+    "email": "dsjurangbahas@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "jurangbahas"
+  },
+  {
+    "row_num": "529",
+    "nama_upz": "Desa Klapagading, Kec. Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "dsklapagading",
+    "email": "dsklapagading@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "klapagading"
+  },
+  {
+    "row_num": "530",
+    "nama_upz": "Desa Randegan, Kec. Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "dsrandeganwangon",
+    "email": "dsrandeganwangon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "randeganwangon"
+  },
+  {
+    "row_num": "531",
+    "nama_upz": "Desa Wangon, Kec. Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "dswangon",
+    "email": "dswangon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "wangon"
+  },
+  {
+    "row_num": "532",
+    "nama_upz": "Desa Windunegara, Kec. Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "dswindunegara",
+    "email": "dswindunegara@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "windunegara"
+  },
+  {
+    "row_num": "533",
+    "nama_upz": "Desa Wlahar, Kec. Wangon",
+    "nama_lengkap": "PIC",
+    "kode": "dswlahar",
+    "email": "dswlahar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Desa",
+    "keterangan": "wlahar"
+  },
+  {
+    "row_num": "534",
+    "nama_upz": "Masjid Agung Baitussalam Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "mab",
+    "email": "mab@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "535",
+    "nama_upz": "Masjid Al-Badar Desa Banjarsari Wetan, Sumbang",
+    "nama_lengkap": "PIC",
+    "kode": "albadar",
+    "email": "albadar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "536",
+    "nama_upz": "Masjid Al-Fath Lesmana, Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "alfath",
+    "email": "alfath@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "537",
+    "nama_upz": "Masjid Al-Fattah Karangsalam, Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "alfattahkarangsalam",
+    "email": "alfattahkarangsalam@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "538",
+    "nama_upz": "Masjid Ali Bin Abi Tholib Karangrau, Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "ali",
+    "email": "ali@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "539",
+    "nama_upz": "Masjid Al-Ma'unah Karangdadap, Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "almaunah",
+    "email": "almaunah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "540",
+    "nama_upz": "Masjid At-Taqwa Karangrau, Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "attaqwakarangrau",
+    "email": "attaqwakarangrau@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "541",
+    "nama_upz": "Masjid At-Taqwa Pekunden, Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "attaqwapekunden",
+    "email": "attaqwapekunden@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "542",
+    "nama_upz": "Masjid Az Zahra",
+    "nama_lengkap": "PIC",
+    "kode": "azzahra",
+    "email": "azzahra@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "543",
+    "nama_upz": "Masjid Baiturrohim Purwokerto Wetan, Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "baiturrohimpwtwetan",
+    "email": "baiturrohimpwtwetan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "544",
+    "nama_upz": "Masjid Jami Al Muslimin Kranji, Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "jamialmuslimin",
+    "email": "jamialmuslimin@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "545",
+    "nama_upz": "Masjid Jami Al-Hidayah, Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "jamialhidayah",
+    "email": "jamialhidayah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "546",
+    "nama_upz": "Masjid Jami An-Nur Pekunden, Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "jamiannur",
+    "email": "jamiannur@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "547",
+    "nama_upz": "Masjid Jami Baiturrohmah Kalikidang, Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "jamibaiturrohmah",
+    "email": "jamibaiturrohmah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "548",
+    "nama_upz": "Masjid Jami Baiturrokhman Mersi, Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "jamibaiturrokhmah",
+    "email": "jamibaiturrokhmah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "549",
+    "nama_upz": "Masjid Jami Pomeswawi, Kemranjen",
+    "nama_lengkap": "PIC",
+    "kode": "jamipomeswawi",
+    "email": "jamipomeswawi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "550",
+    "nama_upz": "Masjid Mifta Akbar Pekunden, Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "miftaakbar",
+    "email": "miftaakbar@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "551",
+    "nama_upz": "Masjid Muhajirin Purwokerto Wetan, Purwokerto Timur",
+    "nama_lengkap": "PIC",
+    "kode": "muhajirin",
+    "email": "muhajirin@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "552",
+    "nama_upz": "Masjid Nur Laila Karangrau, Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "nurlaila",
+    "email": "nurlaila@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "553",
+    "nama_upz": "Masjid Nurul Hikmah Kaliwedi, Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "nurulhikmah",
+    "email": "nurulhikmah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "554",
+    "nama_upz": "Masjid Nurul Ikhlas Kalirungga, Rawalo",
+    "nama_lengkap": "PIC",
+    "kode": "nurulikhlaskalirungga",
+    "email": "nurulikhlaskalirungga@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "555",
+    "nama_upz": "Masjid Nurul Ikhlas Teluk, Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "nurulikhlasteluk",
+    "email": "nurulikhlasteluk@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "556",
+    "nama_upz": "Masjid Nurul Ikhsan Kalibenda, Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "nurulikhsan",
+    "email": "nurulikhsan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "557",
+    "nama_upz": "Masjid Nurul Iman Tumiyang, Pekuncen",
+    "nama_lengkap": "PIC",
+    "kode": "nurulimantumiyang",
+    "email": "nurulimantumiyang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "558",
+    "nama_upz": "Masjid Nurul Nurhuda Jipang, Karanglewas",
+    "nama_lengkap": "PIC",
+    "kode": "nurulnurhuda",
+    "email": "nurulnurhuda@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "559",
+    "nama_upz": "Masjid RSU Siaga Medika",
+    "nama_lengkap": "PIC",
+    "kode": "rsusiagamedika",
+    "email": "rsusiagamedika@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "560",
+    "nama_upz": "Masjid Sabilul Huda, Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "sabilulhuda",
+    "email": "sabilulhuda@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "561",
+    "nama_upz": "Masjid Suhada Ciberung, Ajibarang",
+    "nama_lengkap": "PIC",
+    "kode": "suhada",
+    "email": "suhada@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "562",
+    "nama_upz": "Masjid Wijayakusuma Karangsalam Kidul, Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "wijayakusuma",
+    "email": "wijayakusuma@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "563",
+    "nama_upz": "Mushola Al Iklhas Kedungkambang Pekunden, Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "alikhlaskedungkambang",
+    "email": "alikhlaskedungkambang@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "564",
+    "nama_upz": "Musholla Al Ikhlas Sudagaran, Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "alikhlassudagaran",
+    "email": "alikhlassudagaran@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "565",
+    "nama_upz": "Musholla Baiturrokhim Pasinggangan, Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "baiturrokhim",
+    "email": "baiturrokhim@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "566",
+    "nama_upz": "Masjid Al-Muhajirin Teluk",
+    "nama_lengkap": "PIC",
+    "kode": "almuhajirin",
+    "email": "almuhajirin@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "567",
+    "nama_upz": "Mushola An-Nur Rejasari,Purwokerto Barat",
+    "nama_lengkap": "PIC",
+    "kode": "annurrejasari",
+    "email": "annurrejasari@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "568",
+    "nama_upz": "Masjid Baiturrahman Karangnanas, Sokaraja",
+    "nama_lengkap": "PIC",
+    "kode": "baiturrahman",
+    "email": "baiturrahman@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "569",
+    "nama_upz": "Masjid Baitul Muttaqin Bancarkembar",
+    "nama_lengkap": "PIC",
+    "kode": "baitulmuttaqin",
+    "email": "baitulmuttaqin@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "570",
+    "nama_upz": "Masjid Nurul Amal",
+    "nama_lengkap": "PIC",
+    "kode": "nurulamal",
+    "email": "nurulamal@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "571",
+    "nama_upz": "Masjid Usman Bin Affan Perum GSMT Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "usman",
+    "email": "usman@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "572",
+    "nama_upz": "Masjid Al Hidayah Desa Ketenger Kec. Baturraden",
+    "nama_lengkap": "PIC",
+    "kode": "alhidayah",
+    "email": "alhidayah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "573",
+    "nama_upz": "Mushola Sabilittaqwa Lebeng, Kec. Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "sabilittaqwa",
+    "email": "sabilittaqwa@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "574",
+    "nama_upz": "Masjid At Taqwa",
+    "nama_lengkap": "PIC",
+    "kode": "attaqwa",
+    "email": "attaqwa@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "575",
+    "nama_upz": "Masjid Al Muttaqin Srowot, Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "almuttaqin",
+    "email": "almuttaqin@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "576",
+    "nama_upz": "Masjid At Taqwa Desa Srowot",
+    "nama_lengkap": "PIC",
+    "kode": "attaqwasrowot",
+    "email": "attaqwasrowot@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "577",
+    "nama_upz": "Masjid Al Ikhlas Kedungbanteng",
+    "nama_lengkap": "PIC",
+    "kode": "alikhlaskedungbanteng",
+    "email": "alikhlaskedungbanteng@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "578",
+    "nama_upz": "Masjid Birul Walidain Desa Srowot Kec. Kalibagor",
+    "nama_lengkap": "PIC",
+    "kode": "birulwalidain",
+    "email": "birulwalidain@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "579",
+    "nama_upz": "Masjid Baitushomad Kaliwedi, Kebasen",
+    "nama_lengkap": "PIC",
+    "kode": "baitushomad",
+    "email": "baitushomad@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "580",
+    "nama_upz": "Masjid Sabilussalam Sokawera, Cilongok",
+    "nama_lengkap": "PIC",
+    "kode": "sabilussalam",
+    "email": "sabilussalam@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "581",
+    "nama_upz": "Masjid Nurul Iman, Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "nurulimanpwtselatan",
+    "email": "nurulimanpwtselatan@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "582",
+    "nama_upz": "Masjid Baiturrohmah Kalikidang, Sokarja",
+    "nama_lengkap": "PIC",
+    "kode": "baiturrohmah",
+    "email": "baiturrohmah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "583",
+    "nama_upz": "Masjid Baiturrahmah Kalikidang",
+    "nama_lengkap": "PIC",
+    "kode": "baiturrahmah",
+    "email": "baiturrahmah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "584",
+    "nama_upz": "Masjid Agung Nur Sulaiman Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "nursulaiman",
+    "email": "nursulaiman@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "585",
+    "nama_upz": "Masjid An Nur Selandaka, Sumpiuh",
+    "nama_lengkap": "PIC",
+    "kode": "annurselandaka",
+    "email": "annurselandaka@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "586",
+    "nama_upz": "Masjid Jami Al- Ishlah Banjaranyar (MT.Al Barokah)",
+    "nama_lengkap": "PIC",
+    "kode": "jamialishlah",
+    "email": "jamialishlah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "587",
+    "nama_upz": "Masjid Al Mutaqqin Grand Tanjung Elok Purwokerto",
+    "nama_lengkap": "PIC",
+    "kode": "almutaqqin",
+    "email": "almutaqqin@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "588",
+    "nama_upz": "Masjid Ar-Roudloh Kelurahan Purwokerto Kulon Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "arroudloh",
+    "email": "arroudloh@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "589",
+    "nama_upz": "Masjid Jamiatul Muttaqin Kel. Purwokerto Kulon Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "jamiatulmuttaqin",
+    "email": "jamiatulmuttaqin@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "590",
+    "nama_upz": "Masjid Al-Firdaus Kel. Purwokerto Kulon Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "alfirdaus",
+    "email": "alfirdaus@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "591",
+    "nama_upz": "Masjid Khasbi Kel.Purwokerto Kulon Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "khasbi",
+    "email": "khasbi@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "592",
+    "nama_upz": "Masjid Baiturrohim Kelurahan Purwokerto Kulon Kec. Purwokerto Selatan",
+    "nama_lengkap": "PIC",
+    "kode": "baiturrohimpwtkulon",
+    "email": "baiturrohimpwtkulon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "593",
+    "nama_upz": "Masjid Nurul Islam",
+    "nama_lengkap": "PIC",
+    "kode": "nurulislam",
+    "email": "nurulislam@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "594",
+    "nama_upz": "Masjid Jami' Al Furqon",
+    "nama_lengkap": "PIC",
+    "kode": "jamialfurqon",
+    "email": "jamialfurqon@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "595",
+    "nama_upz": "Masjid Darussalam Desa Klinting, Kec. Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "darussalam",
+    "email": "darussalam@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "596",
+    "nama_upz": "Masjid Al - Fattah Desa Somakaton",
+    "nama_lengkap": "PIC",
+    "kode": "alfattahsomakaton",
+    "email": "alfattahsomakaton@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "597",
+    "nama_upz": "Masjid Al Istiqomah Pamijen",
+    "nama_lengkap": "PIC",
+    "kode": "alistiqomah",
+    "email": "alistiqomah@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "598",
+    "nama_upz": "Masjid Besar Baiturrohim",
+    "nama_lengkap": "PIC",
+    "kode": "mbb",
+    "email": "mbb@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "599",
+    "nama_upz": "Masjid Al Huda Klinting, Somagede",
+    "nama_lengkap": "PIC",
+    "kode": "alhuda",
+    "email": "alhuda@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "600",
+    "nama_upz": "Masjid Jami Nurul Chusen Desa Kedunggede",
+    "nama_lengkap": "PIC",
+    "kode": "jaminurulchusen",
+    "email": "jaminurulchusen@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Masjid",
+    "keterangan": ""
+  },
+  {
+    "row_num": "601",
+    "nama_upz": "IPPK Kab. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "ippk",
+    "email": "ippk@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Organisasi",
+    "keterangan": ""
+  },
+  {
+    "row_num": "602",
+    "nama_upz": "Persatuan Wredatama Republik Indonesia (PWRI) Kab. Banyumas",
+    "nama_lengkap": "PIC",
+    "kode": "pwri",
+    "email": "pwri@baznasbanyumas.com",
+    "role": "upz",
+    "kategori": "Organisasi",
+    "keterangan": ""
+  }
+]
