@@ -492,26 +492,74 @@ function syncAdminNotifications() {
       });
     }
 
-    // Dari riwayat aktivitas perubahan UPZ (nama pengelola / profil mandiri)
+    // Dari riwayat aktivitas lokal fallback
     try {
       const actLogs = JSON.parse(localStorage.getItem('upz_activity_logs_v1') || '[]');
       if (Array.isArray(actLogs)) {
         actLogs.forEach(function (log) {
-          notifs.push({
-            id: log.id,
-            type: log.type || 'perubahan',
-            category: 'Perubahan Data',
-            title: log.title || 'Perubahan Data UPZ',
-            nama_upz: log.nama_upz || 'UPZ',
-            upz_id: log.upz_id,
-            desc: log.desc || 'Terdapat pembaruan data dari UPZ',
-            timestamp: log.timestamp || new Date().toISOString(),
-            status: 'info',
-            read: adminReadNotifIds.has(log.id)
-          });
+          if (!notifs.some(n => n.id === log.id)) {
+            notifs.push({
+              id: log.id,
+              type: log.type || 'perubahan',
+              category: 'Perubahan Data',
+              title: log.title || 'Perubahan Data UPZ',
+              nama_upz: log.nama_upz || 'UPZ',
+              upz_id: log.upz_id,
+              desc: log.desc || 'Terdapat pembaruan data dari UPZ',
+              timestamp: log.timestamp || new Date().toISOString(),
+              status: 'info',
+              read: adminReadNotifIds.has(log.id)
+            });
+          }
         });
       }
     } catch (_) {}
+  }
+
+  // 3. Ambil notifikasi aktivitas realtime dari server database (/api/notifications)
+  if (typeof getValidAuthToken === 'function') {
+    getValidAuthToken().then(function (token) {
+      if (!token) return;
+      fetch('/api/notifications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token })
+      }).then(function (res) {
+        if (!res.ok) return null;
+        return res.json();
+      }).then(function (json) {
+        if (!json || !json.success || !Array.isArray(json.data)) return;
+        let hasNew = false;
+        json.data.forEach(function (an) {
+          if (!notifs.some(function (n) { return n.id === an.id; })) {
+            notifs.push({
+              id: an.id,
+              type: an.type || 'perubahan',
+              category: an.category || 'Perubahan Akun',
+              title: an.title || 'Pembaruan Data Akun',
+              nama_upz: an.nama_upz || 'UPZ',
+              upz_id: an.upz_id,
+              desc: an.desc,
+              timestamp: an.timestamp || new Date().toISOString(),
+              status: an.status || 'info',
+              read: adminReadNotifIds.has(an.id)
+            });
+            hasNew = true;
+          }
+        });
+        if (hasNew) {
+          notifs.sort(function (a, b) {
+            const timeA = new Date(a.timestamp).getTime() || 0;
+            const timeB = new Date(b.timestamp).getTime() || 0;
+            return timeB - timeA;
+          });
+          adminNotifications = notifs;
+          renderAdminNotificationUI();
+        }
+      }).catch(function (err) {
+        console.warn('Sync server notifications notice:', err);
+      });
+    }).catch(function () {});
   }
 
   // Urutkan dari notifikasi terbaru

@@ -680,6 +680,28 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ============================================================
+  // ENDPOINT: Realtime notifications (audit_logs & aktivitas)
+  // POST or GET /api/notifications
+  // ============================================================
+  if ((req.url === '/api/notifications' || req.url.startsWith('/api/notifications?')) && (req.method === 'POST' || req.method === 'GET')) {
+    const handler = require('./api/notifications.js');
+    if (req.method === 'POST') {
+      const body = await readBody(req);
+      req.body = body;
+    }
+    const resAdapter = {
+      status: (code) => {
+        res.writeHead(code, { 'Content-Type': 'application/json' });
+        return resAdapter;
+      },
+      json: (data) => {
+        res.end(JSON.stringify(data));
+      }
+    };
+    return handler(req, resAdapter);
+  }
+
+  // ============================================================
   // ENDPOINT: Get complete UPZ list (tergabung dengan profil, SK, & Ketua)
   // GET /api/upz-list
   // ============================================================
