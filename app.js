@@ -1054,12 +1054,154 @@ async function callBackend(action, payload = {}) {
 }
 
 // ==================================================
-// TAMPILAN HALAMAN
+// TAMPILAN HALAMAN & RESET DATA VISUAL
 // ==================================================
 
+function clearAllUserVisualData() {
+  currentProfile = null;
+  currentSetoran = [];
+  currentFilteredUpzSetoran = [];
+  currentAdminSetoran = [];
+  currentFilteredAdminSetoran = [];
+  upzMap = {};
+  activeDetailItem = null;
+  adminCurrentPage = 1;
+  upzCurrentPage = 1;
+  excelData = [];
+  totalNominalExcel = 0;
+  excelValid = false;
+
+  // Reset semua cache lokal
+  if (typeof upzDonaturCache !== 'undefined') {
+    upzDonaturCache = { upzId: null, loaded: false, donors: [] };
+  }
+  if (typeof adminDonaturCache !== 'undefined') {
+    adminDonaturCache = { loaded: false, data: [] };
+  }
+  if (typeof cachedRkatConfig !== 'undefined') {
+    cachedRkatConfig = { target_tahun: 0, global_unlocked: false, unlocked_year: 0, upz_settings: {}, loaded: false };
+  }
+  if (typeof cachedUpzPentaRecords !== 'undefined') {
+    cachedUpzPentaRecords = [];
+  }
+  if (typeof cachedAdminPentaRecords !== 'undefined') {
+    cachedAdminPentaRecords = [];
+  }
+
+  // 1. Bersihkan Header & Info Pengguna
+  const userName = document.getElementById('userName');
+  if (userName) userName.textContent = '-';
+  const upzName = document.getElementById('upzName');
+  if (upzName) upzName.textContent = '-';
+  const userRoleBadge = document.getElementById('userRoleBadge');
+  if (userRoleBadge) {
+    userRoleBadge.textContent = '';
+    userRoleBadge.className = 'badge user-role-badge';
+  }
+  const headerChip = document.getElementById('headerUserChip');
+  if (headerChip) {
+    const avatar = headerChip.querySelector('.avatar, .user-avatar, .header-avatar');
+    if (avatar) avatar.textContent = '';
+  }
+  const mgmtPengelolaEl = document.getElementById('upzMgmtProfilePengelola');
+  if (mgmtPengelolaEl) mgmtPengelolaEl.textContent = '-';
+  const mgmtUpzEl = document.getElementById('upzMgmtProfileUpz');
+  if (mgmtUpzEl) mgmtUpzEl.textContent = '-';
+  const headerKategoriBadge = document.getElementById('headerKategoriBadge');
+  if (headerKategoriBadge) {
+    headerKategoriBadge.classList.add('hidden');
+    headerKategoriBadge.innerHTML = '';
+  }
+
+  // 2. Bersihkan Scorecard & Ringkasan UPZ
+  const totalSetoran = document.getElementById('totalSetoran');
+  if (totalSetoran) totalSetoran.textContent = 'Rp 0';
+  const jumlahTransaksi = document.getElementById('jumlahTransaksi');
+  if (jumlahTransaksi) jumlahTransaksi.textContent = '0';
+  const jumlahDonatur = document.getElementById('jumlahDonatur');
+  if (jumlahDonatur) jumlahDonatur.textContent = '0';
+
+  // 3. Bersihkan Riwayat Setoran UPZ
+  const riwayatContainer = document.getElementById('riwayatContainer');
+  if (riwayatContainer) riwayatContainer.innerHTML = '';
+  if (upzFilterTahun) upzFilterTahun.innerHTML = '<option value="semua">Semua Tahun</option>';
+  if (upzFilterBulan) upzFilterBulan.value = 'semua';
+  if (upzFilterStatus) upzFilterStatus.value = 'semua';
+  if (upzFilterCount) upzFilterCount.textContent = '';
+
+  // 4. Bersihkan Form Setoran UPZ
+  if (setoranForm) {
+    try { setoranForm.reset(); } catch (_) {}
+  }
+  if (fileExcel) fileExcel.value = '';
+  if (fileExcelInfo) { fileExcelInfo.textContent = ''; fileExcelInfo.classList.add('hidden'); }
+  if (excelPreview) excelPreview.innerHTML = '';
+  if (nominalSetoran) nominalSetoran.value = '';
+  if (setoranMessage) { setoranMessage.textContent = ''; setoranMessage.style.display = 'none'; }
+
+  // 5. Bersihkan Rekap Donatur & Pentasharufan & RKAT
+  const donaturTableContainer = document.getElementById('donaturTableContainer');
+  if (donaturTableContainer) donaturTableContainer.innerHTML = '';
+  const adminDonaturTableContainer = document.getElementById('adminDonaturTableContainer');
+  if (adminDonaturTableContainer) adminDonaturTableContainer.innerHTML = '';
+  const upzPentaContainer = document.getElementById('upzPentaRiwayatContainer');
+  if (upzPentaContainer) upzPentaContainer.innerHTML = '';
+  const adminPentaContainer = document.getElementById('adminPentaTableBody');
+  if (adminPentaContainer) adminPentaContainer.innerHTML = '';
+  const rkatTableBody = document.getElementById('rkatTableBody');
+  if (rkatTableBody) rkatTableBody.innerHTML = '';
+  const adminRkatTableBody = document.getElementById('adminRkatTableBody');
+  if (adminRkatTableBody) adminRkatTableBody.innerHTML = '';
+
+  // 6. Bersihkan Data Admin Setoran & Ringkasan
+  if (adminSetoranContainer) adminSetoranContainer.innerHTML = '';
+  const adminJumlahTransaksi = document.getElementById('adminJumlahTransaksi');
+  if (adminJumlahTransaksi) adminJumlahTransaksi.textContent = '0';
+  const adminJumlahMenunggu = document.getElementById('adminJumlahMenunggu');
+  if (adminJumlahMenunggu) adminJumlahMenunggu.textContent = '0';
+  const adminTotalNominal = document.getElementById('adminTotalNominal');
+  if (adminTotalNominal) adminTotalNominal.textContent = 'Rp 0';
+  const adminPartisipasi = document.getElementById('adminJumlahUpzPartisipasi');
+  if (adminPartisipasi) adminPartisipasi.textContent = '0';
+  const adminTerdata = document.getElementById('adminJumlahUpzTerdata') || document.getElementById('adminJumlahUpz');
+  if (adminTerdata) adminTerdata.textContent = '0';
+  if (adminFilterStatus) adminFilterStatus.value = 'semua';
+  if (adminSearchInput) adminSearchInput.value = '';
+  if (adminFilterUpz) adminFilterUpz.innerHTML = '<option value="semua">Semua UPZ</option>';
+  if (adminFilterTanggal) adminFilterTanggal.value = '';
+  if (adminFilterBulan) adminFilterBulan.value = 'semua';
+  if (adminFilterTahun) adminFilterTahun.value = 'semua';
+  if (adminFilterNominal) adminFilterNominal.value = 'semua';
+  if (adminFilterCount) adminFilterCount.textContent = '';
+  if (adminMessage) { adminMessage.textContent = ''; adminMessage.style.display = 'none'; }
+
+  // 7. Bersihkan Notifikasi
+  const notifWrap = document.getElementById('adminNotificationWrap');
+  if (notifWrap) notifWrap.classList.add('hidden');
+  const notifDrop = document.getElementById('adminNotifDropdown');
+  if (notifDrop) notifDrop.classList.add('hidden');
+  const notifList = document.getElementById('adminNotifList');
+  if (notifList) notifList.innerHTML = '';
+  const notifBadge = document.getElementById('adminNotifBadge');
+  if (notifBadge) { notifBadge.textContent = '0'; notifBadge.classList.add('hidden'); }
+
+  // 8. Tutup semua modal aktif
+  const openModals = document.querySelectorAll('.modal:not(.hidden)');
+  openModals.forEach(function (m) { m.classList.add('hidden'); });
+}
+
 function showLogin() {
-  document.body.classList.remove('is-logged-in', 'splash-active');
+  document.body.classList.remove('is-logged-in', 'splash-active', 'role-admin', 'role-upz');
   document.documentElement.classList.remove('splash-active');
+  const splash = document.getElementById('mobileLoginSplash');
+  if (splash) {
+    splash.classList.add('hidden');
+    splash.classList.remove('splash-fade-out');
+  }
+  isSplashDismissed = false;
+  isAppReadyAfterLogin = false;
+  isSplashEnterWaiting = false;
+  clearAllUserVisualData();
   if (loginPage) loginPage.classList.remove('hidden');
   if (dashboardPage) dashboardPage.classList.add('hidden');
 }
@@ -1167,6 +1309,10 @@ async function getDetailSetoran(setoranId) {
 async function loadDashboard(keepCurrentView = false) {
   if (isLoadingDashboard) return false;
 
+  if (!keepCurrentView) {
+    clearAllUserVisualData();
+  }
+
   isLoadingDashboard = true;
 
   try {
@@ -1269,7 +1415,7 @@ async function loadDashboard(keepCurrentView = false) {
       }
     }
 
-    // Sinkronisasi data profil pengelola terbaru dari Supabase profiles / extras
+    // Sinkronisasi data profil pengelola terbaru dari Supabase profiles / user_metadata / extras
     try {
       const pId = currentProfile.id || currentProfile.profile_id;
       if (pId) {
@@ -1283,6 +1429,13 @@ async function loadDashboard(keepCurrentView = false) {
           if (profData.no_sk) currentProfile.no_sk = profData.no_sk;
           if (profData.nama_ketua) currentProfile.nama_ketua = profData.nama_ketua;
         }
+      }
+      const { data: authUserData } = await supabaseClient.auth.getUser();
+      if (authUserData && authUserData.user && authUserData.user.user_metadata) {
+        const um = authUserData.user.user_metadata;
+        if (um.nama_pengelola) currentProfile.nama_lengkap = um.nama_pengelola;
+        if (um.no_sk) currentProfile.no_sk = um.no_sk;
+        if (um.nama_ketua) currentProfile.nama_ketua = um.nama_ketua;
       }
     } catch (_) {}
 
@@ -1374,6 +1527,10 @@ async function loadDashboard(keepCurrentView = false) {
     setTimeout(function () {
       if (typeof _tryShowKategoriBadge === 'function') _tryShowKategoriBadge();
     }, 100);
+
+    if (typeof syncBszList === 'function') {
+      syncBszList().catch(function (e) { console.warn('Sync bsz in loadDashboard:', e); });
+    }
 
     return true;
 
@@ -1474,32 +1631,9 @@ function renderRiwayat(setoran) {
     const id = escapeHtml(item.id || '');
     const status = String(item.status || 'menunggu').toLowerCase();
 
-    const bsz = (typeof getBszRecord === 'function') ? getBszRecord(id) : null;
-    const isAccepted = (status === 'diterima' || status === 'disetujui' || status === 'verified' || status === 'sukses');
-    const isRejected = (status === 'ditolak');
-    const isPending = (status === 'menunggu');
-
-    let bszBtnHtml = '';
-    if (isRejected) {
-      bszBtnHtml = '';
-    } else if (isPending) {
-      bszBtnHtml = `<button type="button" class="btn btn-ghost btn-disabled upz-action-btn" disabled style="opacity:0.45;cursor:not-allowed;" title="Menunggu konfirmasi admin"><svg class="icon"><use href="#i-download"></use></svg><span>Unduh BSZ</span></button>`;
-    } else if (isAccepted && !bsz) {
-      bszBtnHtml = `<button type="button" class="btn btn-ghost btn-disabled upz-action-btn" disabled style="opacity:0.45;cursor:not-allowed;" title="BSZ belum diunggah oleh admin"><svg class="icon"><use href="#i-download"></use></svg><span>Unduh BSZ</span></button>`;
-    } else if (isAccepted && bsz) {
-      bszBtnHtml = `<button type="button" class="btn btn-soft upz-action-btn upz-download-bsz-btn" data-bsz-id="${id}" title="Unduh Bukti Setor Zakat resmi"><svg class="icon"><use href="#i-download"></use></svg><span>Unduh BSZ</span></button>`;
-    }
-
-    return `<article class="riwayat-item" data-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div></div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions upz-riwayat-actions-stacked"><button type="button" class="btn btn-soft upz-action-btn history-preview-button" data-preview-id="${id}"><svg class="icon"><use href="#i-eye"></use></svg><span>Preview</span></button>${bszBtnHtml}</div></div></article>`;
+    return `<article class="riwayat-item" data-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div></div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions"><button type="button" class="btn btn-soft btn-sm btn-icon-only history-preview-button" data-preview-id="${id}" title="Rincian Setoran" aria-label="Rincian Setoran"><svg class="icon"><use href="#i-file-text"></use></svg></button></div></div></article>`;
   }).join('') + renderPagination('upz', upzCurrentPage, totalPages);
   bindHistoryPreviewEvents(container, false);
-  container.querySelectorAll('.upz-download-bsz-btn').forEach(function (button) {
-    button.addEventListener('click', function () {
-      if (typeof downloadBszFile === 'function') {
-        downloadBszFile(button.dataset.bszId);
-      }
-    });
-  });
 }
 
 function renderPagination(type, page, totalPages) {
@@ -1674,17 +1808,45 @@ async function downloadSetoranExcel(item, button) {
 async function openDetailModal(setoranId, isAdmin) {
   const item = (isAdmin ? currentAdminSetoran : currentSetoran).find(function (row) {
     return String(row.id) === String(setoranId);
+  }) || (currentAdminSetoran || []).concat(currentSetoran || []).find(function (row) {
+    return String(row.id) === String(setoranId);
   });
   if (!item || !detailModal) return;
+  activeDetailItem = item;
   const status = String(item.status || 'menunggu').toLowerCase();
   detailModalSubtitle.textContent = (isAdmin ? (upzMap[item.upz_id] || item.upz_id || '-') + ' · ' : '') + formatTanggal(item.tanggal_setor);
   detailModalMeta.innerHTML = '<div class="meta-item"><label>Nominal</label><div>' + escapeHtml(formatRupiah(item.nominal)) + '</div></div>' +
     '<div class="meta-item"><label>Periode</label><div>' + escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + item.periode_tahun) + '</div></div>' +
     '<div class="meta-item"><label>Status</label><div><span class="status-badge ' + getStatusClass(status) + '">' + escapeHtml(getStatusLabel(status)) + '</span></div></div>' +
-    '<div class="meta-item"><label>File</label><div class="text-break">' + escapeHtml(item.file_name || 'Tidak tersedia') + '</div></div>';
+    '<div class="meta-item"><label>File Rincian</label><div class="text-break">' + escapeHtml(item.file_name || 'Tidak tersedia') + '</div></div>';
   detailModalBody.innerHTML = '<p class="empty-state">Memuat rincian donatur...</p>';
   detailModalVerify.classList.toggle('hidden', !(isAdmin && status === 'menunggu'));
-  detailDownloadButton.classList.toggle('hidden', !item.file_path);
+  detailDownloadButton.classList.toggle('hidden', !item.file_path && !item.id);
+
+  // Update BSZ Section di dalam modal
+  updateDetailModalBszSection(item.id, isAdmin);
+  if (typeof syncBszList === 'function') {
+    syncBszList().then(function () {
+      if (activeDetailItem && String(activeDetailItem.id) === String(item.id)) {
+        updateDetailModalBszSection(item.id, isAdmin);
+      }
+    }).catch(function () {});
+  }
+
+  // Tombol Hapus Setoran di dalam modal:
+  // Admin: selalu aktif
+  // UPZ: aktif jika status 'menunggu'
+  const delBtn = document.getElementById('detailDeleteButton');
+  if (delBtn) {
+    if (isAdmin || status === 'menunggu') {
+      delBtn.style.display = 'inline-flex';
+      delBtn.onclick = function () {
+        openDeleteSetoranModal(item);
+      };
+    } else {
+      delBtn.style.display = 'none';
+    }
+  }
 
   // Tombol Konfirmasi Setoran WhatsApp: Hanya untuk role UPZ (!isAdmin)
   const waBtn = document.getElementById('detailWaConfirmButton');
@@ -1716,11 +1878,191 @@ async function openDetailModal(setoranId, isAdmin) {
   } catch (error) {
     detailModalBody.innerHTML = '<p class="form-message" style="color:#dc2626">' + escapeHtml(error.message) + '</p>';
   }
-  activeDetailItem = item;
+
   detailDownloadButton.onclick = function () {
-    const source = (isAdmin ? adminSetoranContainer : document.getElementById('riwayatContainer')).querySelector('[data-download-id="' + CSS.escape(String(item.id)) + '"]');
-    if (source) source.click();
+    downloadSetoranExcelFile(item);
   };
+}
+
+function updateDetailModalDocsSection(setoranId, isAdmin) {
+  const docConfigs = [
+    {
+      key: 'bsz',
+      name: 'Bukti Setor Zakat (BSZ)',
+      rowId: 'detailDocRow_bsz',
+      uploadBtnId: 'detailUploadBszBtn',
+      downloadBtnId: 'detailDownloadBszBtn',
+      descId: 'detailDocDesc_bsz',
+      emptyDescAdmin: 'Belum diterbitkan. Unggah berkas BSZ resmi untuk UPZ.',
+      emptyDescUpz: 'Belum diterbitkan oleh Admin BAZNAS.'
+    },
+    {
+      key: 'tf_penta',
+      name: 'Bukti Transfer Pentasharufan',
+      rowId: 'detailDocRow_tf_penta',
+      uploadBtnId: 'detailUploadBtn_tf_penta',
+      downloadBtnId: 'detailDownloadBtn_tf_penta',
+      descId: 'detailDocDesc_tf_penta',
+      emptyDescAdmin: 'Belum diunggah. Unggah bukti transfer jika perbantuan telah disalurkan.',
+      emptyDescUpz: 'Bukti transfer perbantuan pentasharufan belum diunggah Admin.'
+    },
+    {
+      key: 'tf_amil',
+      name: 'Bukti Transfer Hak Amil UPZ',
+      rowId: 'detailDocRow_tf_amil',
+      uploadBtnId: 'detailUploadBtn_tf_amil',
+      downloadBtnId: 'detailDownloadBtn_tf_amil',
+      descId: 'detailDocDesc_tf_amil',
+      emptyDescAdmin: 'Belum diunggah. Unggah bukti transfer pencairan hak amil (5%) UPZ.',
+      emptyDescUpz: 'Bukti transfer hak amil belum diunggah Admin.'
+    },
+    {
+      key: 'tf_salin',
+      name: 'Bukti Transfer Salin Aslimas',
+      rowId: 'detailDocRow_tf_salin',
+      uploadBtnId: 'detailUploadBtn_tf_salin',
+      downloadBtnId: 'detailDownloadBtn_tf_salin',
+      descId: 'detailDocDesc_tf_salin',
+      emptyDescAdmin: 'Belum diunggah. Unggah bukti transfer program Salin Aslimas.',
+      emptyDescUpz: 'Bukti transfer Salin Aslimas belum diunggah Admin.'
+    }
+  ];
+
+  docConfigs.forEach(function (cfg) {
+    const doc = (typeof getTransferDocRecord === 'function') ? getTransferDocRecord(setoranId, cfg.key) : null;
+    const rowEl = document.getElementById(cfg.rowId);
+    const descEl = document.getElementById(cfg.descId);
+    const uploadBtn = document.getElementById(cfg.uploadBtnId);
+    const downloadBtn = document.getElementById(cfg.downloadBtnId);
+
+    if (doc && doc.file_name) {
+      if (rowEl) {
+        rowEl.classList.remove('is-empty');
+        rowEl.classList.add('is-uploaded');
+        rowEl.setAttribute('title', 'Klik untuk mengunduh ' + cfg.name);
+        rowEl.onclick = function (e) {
+          if (e.target.closest('.detail-doc-actions')) return;
+          downloadTransferDocFile(setoranId, cfg.key);
+        };
+      }
+      const ext = (doc.file_name.split('.').pop() || '').toUpperCase();
+      if (descEl) {
+        descEl.innerHTML = `<span style="background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-right:6px;border:1px solid #bbf7d0;">${escapeHtml(ext)}</span> <strong>${escapeHtml(doc.file_name)}</strong>`;
+      }
+      if (downloadBtn) {
+        downloadBtn.style.display = 'inline-flex';
+        downloadBtn.disabled = false;
+        downloadBtn.className = 'btn btn-soft btn-sm btn-icon-only detail-doc-download-btn';
+        downloadBtn.style.opacity = '1';
+        downloadBtn.style.cursor = 'pointer';
+        downloadBtn.setAttribute('title', 'Unduh ' + cfg.name);
+        downloadBtn.setAttribute('aria-label', 'Unduh ' + cfg.name);
+        downloadBtn.innerHTML = '<svg class="icon"><use href="#i-download"></use></svg>';
+        downloadBtn.onclick = function (e) {
+          e.stopPropagation();
+          downloadTransferDocFile(setoranId, cfg.key);
+        };
+      }
+      if (uploadBtn) {
+        if (isAdmin) {
+          uploadBtn.style.display = 'inline-flex';
+          uploadBtn.setAttribute('title', 'Ganti Berkas ' + cfg.name);
+          uploadBtn.setAttribute('aria-label', 'Ganti Berkas ' + cfg.name);
+          uploadBtn.innerHTML = '<svg class="icon"><use href="#i-upload"></use></svg>';
+          uploadBtn.onclick = function (e) {
+            e.stopPropagation();
+            openUploadDocModal(setoranId, cfg.key);
+          };
+        } else {
+          uploadBtn.style.display = 'none';
+        }
+      }
+    } else {
+      if (rowEl) {
+        rowEl.classList.add('is-empty');
+        rowEl.classList.remove('is-uploaded');
+        rowEl.removeAttribute('title');
+        rowEl.onclick = null;
+      }
+      if (descEl) {
+        descEl.textContent = isAdmin ? cfg.emptyDescAdmin : cfg.emptyDescUpz;
+      }
+      if (downloadBtn) {
+        downloadBtn.style.display = 'inline-flex';
+        downloadBtn.disabled = true;
+        downloadBtn.className = 'btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled';
+        downloadBtn.style.opacity = '0.35';
+        downloadBtn.style.cursor = 'not-allowed';
+        downloadBtn.setAttribute('title', 'Belum diunggah oleh admin');
+        downloadBtn.setAttribute('aria-label', 'Belum diunggah oleh admin');
+        downloadBtn.innerHTML = '<svg class="icon"><use href="#i-download"></use></svg>';
+        downloadBtn.onclick = null;
+      }
+      if (uploadBtn) {
+        if (isAdmin) {
+          uploadBtn.style.display = 'inline-flex';
+          uploadBtn.setAttribute('title', 'Upload ' + cfg.name);
+          uploadBtn.setAttribute('aria-label', 'Upload ' + cfg.name);
+          uploadBtn.innerHTML = '<svg class="icon"><use href="#i-upload"></use></svg>';
+          uploadBtn.onclick = function (e) {
+            e.stopPropagation();
+            openUploadDocModal(setoranId, cfg.key);
+          };
+        } else {
+          uploadBtn.style.display = 'none';
+        }
+      }
+    }
+  });
+}
+
+function updateDetailModalBszSection(setoranId, isAdmin) {
+  return updateDetailModalDocsSection(setoranId, isAdmin);
+}
+
+async function downloadSetoranExcelFile(item) {
+  if (!item) return;
+  const originalText = detailDownloadButton.innerHTML;
+  detailDownloadButton.disabled = true;
+  detailDownloadButton.innerHTML = '<span>Mengunduh...</span>';
+  try {
+    let downloaded = false;
+    if (item.file_path) {
+      try {
+        const { data: fileBlob, error } = await supabaseClient.storage.from(STORAGE_BUCKET).download(item.file_path);
+        if (!error && fileBlob && fileBlob.size > 0) {
+          const blobUrl = URL.createObjectURL(fileBlob);
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = item.file_name || 'rincian-setoran.xlsx';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(blobUrl);
+          downloaded = true;
+        }
+      } catch (e) {
+        console.warn('Storage download error:', e);
+      }
+    }
+    if (!downloaded) {
+      let detail = [];
+      try { detail = await getDetailSetoran(item.id); } catch (_) {}
+      const excelRows = [
+        ['No', 'Nama Muzaki', 'Nominal', 'Jenis', 'Keterangan'],
+        ...detail.map((d, i) => [i + 1, d.nama_muzaki || '-', Number(d.nominal || 0), d.jenis || '-', d.keterangan || '-'])
+      ];
+      const ws = XLSX.utils.aoa_to_sheet(excelRows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Rincian Setoran');
+      XLSX.writeFile(wb, item.file_name || `Setoran_${item.id.slice(0, 8)}.xlsx`);
+    }
+  } catch (err) {
+    alert('Gagal mengunduh file: ' + err.message);
+  } finally {
+    detailDownloadButton.disabled = false;
+    detailDownloadButton.innerHTML = originalText;
+  }
 }
 
 // ==================================================
@@ -2232,30 +2574,11 @@ function renderAdminSetoran(setoran) {
     const bszIcon = bsz ? '#i-check' : '#i-upload';
     const bszIconStyle = bsz ? 'color:var(--emerald-600);' : '';
 
-    return `<article class="riwayat-item admin-riwayat-item" data-admin-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div><strong>${escapeHtml(namaUpz)}</strong></div><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div></div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions admin-row-actions"><button type="button" class="btn btn-soft btn-sm btn-icon-only history-preview-button" data-preview-id="${id}" title="Preview / Lihat Rincian"><svg class="icon"><use href="#i-file-text"></use></svg></button><div class="table-kebab-menu"><button type="button" class="kebab-trigger-btn" data-kebab-id="${id}" title="Menu Aksi" aria-haspopup="true"><svg class="icon"><use href="#i-more-vertical"></use></svg></button><div class="kebab-dropdown hidden" id="kebabDropdown-${id}"><button type="button" class="kebab-item admin-upload-bsz-btn" data-bsz-id="${id}"><svg class="icon" style="${bszIconStyle}"><use href="${bszIcon}"></use></svg><span>${bszLabel}</span></button><button type="button" class="kebab-item admin-download-button" data-download-id="${id}"><svg class="icon"><use href="#i-download"></use></svg><span>Unduh Excel</span></button><button type="button" class="kebab-item kebab-item-danger admin-delete-setoran-btn" data-delete-id="${id}"><svg class="icon"><use href="#i-trash-2"></use></svg><span>Hapus Setoran</span></button></div></div></div></div>${isPending ? `<div class="admin-verify-inline"><label for="catatan-${id}">Catatan verifikasi</label><textarea id="catatan-${id}" class="admin-catatan" data-catatan-id="${id}" rows="2" placeholder="Catatan wajib diisi jika ditolak."></textarea><div class="verify-actions"><button type="button" class="admin-verify-button btn btn-primary" data-keputusan="diterima" data-setoran-id="${id}">Terima</button><button type="button" class="admin-verify-button btn btn-danger" data-keputusan="ditolak" data-setoran-id="${id}">Tolak</button></div></div>` : ''}</article>`;
+    return `<article class="riwayat-item admin-riwayat-item" data-admin-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div><strong>${escapeHtml(namaUpz)}</strong></div><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div></div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions admin-row-actions"><button type="button" class="btn btn-soft btn-sm btn-icon-only history-preview-button" data-preview-id="${id}" title="Rincian Setoran" aria-label="Rincian Setoran"><svg class="icon"><use href="#i-file-text"></use></svg></button></div></div>${isPending ? `<div class="admin-verify-inline"><label for="catatan-${id}">Catatan verifikasi</label><textarea id="catatan-${id}" class="admin-catatan" data-catatan-id="${id}" rows="2" placeholder="Catatan wajib diisi jika ditolak."></textarea><div class="verify-actions"><button type="button" class="admin-verify-button btn btn-primary" data-keputusan="diterima" data-setoran-id="${id}">Terima</button><button type="button" class="admin-verify-button btn btn-danger" data-keputusan="ditolak" data-setoran-id="${id}">Tolak</button></div></div>` : ''}</article>`;
   }).join('') + renderPagination('admin', adminCurrentPage, totalPages);
   bindHistoryPreviewEvents(adminSetoranContainer, true);
   bindAdminVerifyEvents();
   bindAdminDownloadEvents();
-  adminSetoranContainer.querySelectorAll('.kebab-trigger-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      const id = btn.dataset.kebabId;
-      const dropdown = document.getElementById('kebabDropdown-' + id);
-      const isHidden = dropdown ? dropdown.classList.contains('hidden') : true;
-      document.querySelectorAll('.kebab-dropdown').forEach(function (d) { d.classList.add('hidden'); });
-      if (dropdown && isHidden) {
-        dropdown.classList.remove('hidden');
-      }
-    });
-  });
-  adminSetoranContainer.querySelectorAll('.admin-upload-bsz-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      document.querySelectorAll('.kebab-dropdown').forEach(function (d) { d.classList.add('hidden'); });
-      if (typeof openUploadBszModal === 'function') openUploadBszModal(btn.dataset.bszId);
-    });
-  });
   if (typeof bindAdminDeleteSetoranEvents === 'function') {
     bindAdminDeleteSetoranEvents();
   }
@@ -2662,6 +2985,7 @@ if (loginForm) {
     showMessage(message, '', '');
 
     try {
+      clearAllUserVisualData();
       // Reset status splash screen
       isSplashDismissed = false;
       isAppReadyAfterLogin = false;
@@ -2776,6 +3100,12 @@ if (loginForm) {
             enterBtn.disabled = false;
             enterBtn.innerHTML = '<span>Masuk ke Aplikasi</span>';
           }
+          // Auto-masuk ke dashboard secara elegan setelah jeda singkat (900ms)
+          setTimeout(function () {
+            if (!isSplashDismissed) {
+              hideMobileLoginSplash();
+            }
+          }, 900);
         }
       } else {
         hideMobileLoginSplash();
@@ -2857,13 +3187,7 @@ if (logoutButton) {
     try {
       const { error } = await supabaseClient.auth.signOut();
       if (error) throw error;
-      currentProfile = null;
-      currentSetoran = [];
-      currentAdminSetoran = [];
-      const notifWrap = document.getElementById('adminNotificationWrap');
-      if (notifWrap) notifWrap.classList.add('hidden');
-      const notifDrop = document.getElementById('adminNotifDropdown');
-      if (notifDrop) notifDrop.classList.add('hidden');
+      clearAllUserVisualData();
       showLogin();
       const email = document.getElementById('email');
       const password = document.getElementById('password');
@@ -3944,13 +4268,15 @@ async function loadUpzList() {
         const hasDeposited = activeUpzSet.has(uid) || (pUid && activeUpzSet.has(pUid));
         const cleanEmail = (p.email && !p.email.includes('@upz.baznas')) ? p.email : (u.email || '-');
         return {
-          profile_id: p.id || u.id,
-          upz_id: u.id,
-          nama_lengkap: p.nama_lengkap || u.nama_upz || '',
+          profile_id: p.id || u.profile_id || u.id,
+          upz_id: u.id || u.upz_id,
+          nama_lengkap: u.nama_pengelola || u.nama_lengkap || p.nama_lengkap || u.nama_upz || '',
           email: cleanEmail,
-          status: hasDeposited ? 'Active' : 'Inactive',
+          status: hasDeposited ? 'Active' : (u.status || 'Inactive'),
           nama_upz: u.nama_upz || u.kode_upz || '',
-          kategori: u.kategori || '-'
+          kategori: u.kategori || '-',
+          no_sk: u.no_sk || p.no_sk || '',
+          nama_ketua: u.nama_ketua || p.nama_ketua || ''
         };
       });
     } else if (upzProfiles.length > 0) {
@@ -4024,6 +4350,8 @@ async function loadUpzList() {
           if (edit.kategori) u.kategori = edit.kategori;
           if (edit.email) u.email = edit.email;
           if (edit.status) u.status = edit.status;
+          if (edit.no_sk) u.no_sk = edit.no_sk;
+          if (edit.nama_ketua) u.nama_ketua = edit.nama_ketua;
         }
       });
     } catch (_) {}
@@ -4124,6 +4452,8 @@ function renderUpzMgmtTable() {
       <td>
         <div style="font-weight:600;color:var(--slate-800);">${escapeHtml(u.nama_lengkap || '-')}</div>
         <div class="email-upz">${escapeHtml(u.email || '-')}</div>
+        ${u.nama_ketua ? `<div style="font-size:11px;color:var(--slate-600);margin-top:2px;">Ketua: <strong>${escapeHtml(u.nama_ketua)}</strong></div>` : ''}
+        ${u.no_sk ? `<div style="font-size:11px;color:var(--emerald-700);margin-top:1px;">SK: ${escapeHtml(u.no_sk)}</div>` : ''}
       </td>
       <td class="td-kategori" style="text-align:center;">${renderKategoriChip(u.kategori)}</td>
       <td><span class="upz-status-badge ${statusClass}">${statusLabel}</span></td>
@@ -4137,6 +4467,8 @@ function renderUpzMgmtTable() {
             data-nama-upz="${escapeHtml(u.nama_upz)}"
             data-kategori="${escapeHtml(u.kategori)}"
             data-status="${escapeHtml(u.status)}"
+            data-no-sk="${escapeHtml(u.no_sk || '')}"
+            data-nama-ketua="${escapeHtml(u.nama_ketua || '')}"
             title="Edit Akun UPZ">
             <svg class="icon"><use href="#i-edit"></use></svg>
           </button>
@@ -4254,7 +4586,9 @@ function renderUpzMgmtTable() {
         email: btn.dataset.email,
         nama_upz: btn.dataset.namaUpz,
         kategori: btn.dataset.kategori,
-        status: btn.dataset.status
+        status: btn.dataset.status,
+        no_sk: btn.dataset.noSk || '',
+        nama_ketua: btn.dataset.namaKetua || ''
       });
     });
   });
@@ -4287,6 +4621,10 @@ function openUpzFormModal(opts) {
   document.getElementById('upzFormEmail').value = opts && opts.email ? opts.email : '';
   document.getElementById('upzFormPassword').value = '';
   document.getElementById('upzFormNamaUpz').value = opts && opts.nama_upz ? opts.nama_upz : '';
+  const noSkEl = document.getElementById('upzFormNoSk');
+  if (noSkEl) noSkEl.value = opts && opts.no_sk ? opts.no_sk : '';
+  const ketuaEl = document.getElementById('upzFormNamaKetua');
+  if (ketuaEl) ketuaEl.value = opts && opts.nama_ketua ? opts.nama_ketua : '';
   document.getElementById('upzFormKategori').value = opts && opts.kategori ? opts.kategori : '';
   document.getElementById('upzFormStatus').value = opts && opts.status ? opts.status : 'aktif';
 
@@ -4325,6 +4663,8 @@ function closeUpzFormModal() {
       const email = document.getElementById('upzFormEmail').value.trim();
       const password = document.getElementById('upzFormPassword').value;
       const namaUpz = document.getElementById('upzFormNamaUpz').value.trim();
+      const noSk = (document.getElementById('upzFormNoSk') || {}).value || '';
+      const namaKetua = (document.getElementById('upzFormNamaKetua') || {}).value || '';
       const kategori = document.getElementById('upzFormKategori').value;
       const status = document.getElementById('upzFormStatus').value;
       const upzId = saveBtn.dataset.upzId;
@@ -4370,6 +4710,8 @@ function closeUpzFormModal() {
                 upz_id: upzId,
                 nama_upz: namaUpz,
                 nama_lengkap: nama,
+                no_sk: noSk.trim(),
+                nama_ketua: namaKetua.trim(),
                 kategori: kategori,
                 status: status,
                 password: password || undefined,
@@ -4385,12 +4727,12 @@ function closeUpzFormModal() {
             if (upzId) {
               await supabaseClient
                 .from('upz')
-                .update({ nama_upz: namaUpz, kategori: kategori })
+                .update({ nama_upz: namaUpz, kategori: kategori, nama_pic: nama })
                 .eq('id', upzId);
             }
             await supabaseClient
               .from('profiles')
-              .update({ nama_lengkap: nama, status: status })
+              .update({ nama_lengkap: nama, status: status, email: email })
               .eq('id', profileId);
           } catch (spbErr) {
             console.warn('Direct Supabase update warning:', spbErr);
@@ -4402,6 +4744,8 @@ function closeUpzFormModal() {
             const editObj = {
               nama_upz: namaUpz,
               nama_lengkap: nama,
+              no_sk: noSk.trim(),
+              nama_ketua: namaKetua.trim(),
               kategori: kategori,
               email: email,
               status: status
@@ -4761,7 +5105,25 @@ function closeUpzProfileInfoModal() {
       if (msgEl) showMessage(msgEl, 'Menyimpan data profil...', '#0f6c3e');
 
       try {
-        // 1. Simpan ke local storage agar persisten
+        // 1. Simpan ke Supabase via endpoint /api/update-profile
+        try {
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          const token = session ? session.access_token : '';
+          await fetch('/api/update-profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              token: token,
+              nama_pengelola: newNama,
+              no_sk: newNoSk,
+              nama_ketua: newKetua
+            })
+          });
+        } catch (apiErr) {
+          console.warn('Endpoint /api/update-profile notice:', apiErr);
+        }
+
+        // 2. Simpan ke local storage agar persisten di browser ini
         saveUpzProfileExtras(currentProfile.upz_id || currentProfile.id, {
           no_sk: newNoSk,
           nama_ketua: newKetua,
@@ -4772,7 +5134,7 @@ function closeUpzProfileInfoModal() {
         currentProfile.nama_ketua = newKetua;
         currentProfile.nama_lengkap = newNama;
 
-        // 2. Update tabel profiles di Supabase jika memungkinkan
+        // 3. Update tabel profiles di Supabase jika memungkinkan
         try {
           await supabaseClient
             .from('profiles')
@@ -6345,7 +6707,8 @@ function navigateToView(viewName, skipScrollTop) {
       setoran: document.getElementById('adminViewSetoran'),
       pentasharufan: document.getElementById('adminViewPentasharufan'),
       donatur: document.getElementById('adminViewDonatur'),
-      upz: document.getElementById('adminViewUpz')
+      upz: document.getElementById('adminViewUpz'),
+      panduan: document.getElementById('adminViewPanduan')
     };
 
     Object.keys(adminViews).forEach(function (key) {
@@ -6366,6 +6729,10 @@ function navigateToView(viewName, skipScrollTop) {
       const upzSec = document.getElementById('adminUpzManagement');
       if (upzSec) upzSec.classList.remove('hidden');
       loadUpzList();
+    } else if (viewName === 'panduan') {
+      if (typeof renderSystemGuide === 'function') {
+        renderSystemGuide('adminGuideContainer', 'admin');
+      }
     }
   } else {
     const upzViews = {
@@ -6374,7 +6741,8 @@ function navigateToView(viewName, skipScrollTop) {
       pentasharufan: document.getElementById('upzViewPentasharufan'),
       donatur: document.getElementById('upzViewDonatur'),
       riwayat: document.getElementById('upzViewRiwayat'),
-      mgmt: document.getElementById('upzViewMgmt')
+      mgmt: document.getElementById('upzViewMgmt'),
+      panduan: document.getElementById('upzViewPanduan')
     };
 
     Object.keys(upzViews).forEach(function (key) {
@@ -6391,6 +6759,10 @@ function navigateToView(viewName, skipScrollTop) {
       loadUpzDonaturMatrix();
     } else if (viewName === 'mgmt') {
       populateUpzMgmtProfile(currentProfile);
+    } else if (viewName === 'panduan') {
+      if (typeof renderSystemGuide === 'function') {
+        renderSystemGuide('upzGuideContainer', 'upz');
+      }
     }
   }
 
@@ -6561,6 +6933,15 @@ function navigateToView(viewName, skipScrollTop) {
     });
   }
 
+  // PANDUAN SISTEM ADMIN MENU ACTION
+  const menuAdminPanduan = document.getElementById('menuAdminPanduan');
+  if (menuAdminPanduan) {
+    menuAdminPanduan.addEventListener('click', function () {
+      closeDropdown();
+      navigateToView('panduan');
+    });
+  }
+
   // UPZ MENU ACTIONS
   if (menuUpzBeranda) {
     menuUpzBeranda.addEventListener('click', function () {
@@ -6603,6 +6984,15 @@ function navigateToView(viewName, skipScrollTop) {
     menuUpzPentasharufan.addEventListener('click', function () {
       closeDropdown();
       navigateToView('pentasharufan');
+    });
+  }
+
+  // PANDUAN UPZ MENU ACTION
+  const menuUpzPanduan = document.getElementById('menuUpzPanduan');
+  if (menuUpzPanduan) {
+    menuUpzPanduan.addEventListener('click', function () {
+      closeDropdown();
+      navigateToView('panduan');
     });
   }
 
@@ -6877,6 +7267,9 @@ function initDeleteSetoranFeature() {
         }
 
         closeDeleteSetoranModal();
+        if (detailModal && !detailModal.classList.contains('hidden')) {
+          detailModal.classList.add('hidden');
+        }
         if (typeof showFloatingToast === 'function') {
           showFloatingToast('Setoran berhasil dihapus permanen.', 'success');
         } else {
@@ -6885,6 +7278,12 @@ function initDeleteSetoranFeature() {
 
         if (typeof loadAdminSetoran === 'function') {
           await loadAdminSetoran();
+        }
+        if (typeof filterAndRenderRiwayat === 'function') {
+          filterAndRenderRiwayat();
+        }
+        if (typeof loadDashboard === 'function') {
+          await loadDashboard(true);
         }
       } catch (err) {
         console.error('DELETE SETORAN ERROR:', err);
@@ -7086,33 +7485,75 @@ function closePreviewFotoModal() {
   if (imgEl) imgEl.src = '';
 }
 
-// 6c. Upload helper for Pentasharufan
+// 6c. Upload helper for Pentasharufan (via /api/upload-penta ke bucket 'pentasharufan')
 async function uploadPentaFile(file, subfolder, upzId) {
-  const ext = file.name.split('.').pop() || 'dat';
-  const cleanBase = file.name.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 30);
-  const filePath = `pentasharufan/${upzId || 'umum'}/${subfolder}/${Date.now()}_${cleanBase}.${ext}`;
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onerror = () => {
+      resolve({ filePath: '', publicUrl: '', originalName: file.name });
+    };
+    reader.onload = async function (e) {
+      const dataUrl = e.target.result;
+      const base64 = typeof dataUrl === 'string' && dataUrl.includes(',') ? dataUrl.split(',')[1] : '';
 
-  try {
-    const { data, error } = await supabaseClient.storage
-      .from(STORAGE_BUCKET)
-      .upload(filePath, file, { cacheControl: '3600', upsert: false });
+      try {
+        const res = await fetch('/api/upload-penta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: file.name,
+            type: file.type,
+            subfolder: subfolder,
+            upzId: upzId,
+            base64: base64
+          })
+        });
 
-    if (error) {
-      console.warn('Storage upload notice:', error.message);
-    }
-  } catch (storageErr) {
-    console.warn('Storage upload exception:', storageErr);
-  }
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.publicUrl) {
+            return resolve({
+              filePath: json.filePath,
+              publicUrl: json.publicUrl,
+              originalName: file.name
+            });
+          }
+        }
+      } catch (netErr) {
+        console.warn('API /api/upload-penta network warning:', netErr);
+      }
 
-  const { data: publicUrlData } = supabaseClient.storage
-    .from(STORAGE_BUCKET)
-    .getPublicUrl(filePath);
+      // Fallback direct upload ke bucket pentasharufan Supabase
+      const ext = file.name.split('.').pop() || 'dat';
+      const cleanBase = file.name.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 30);
+      const filePath = `pentasharufan/${upzId || 'umum'}/${subfolder}/${Date.now()}_${cleanBase}.${ext}`;
 
-  return {
-    filePath: filePath,
-    publicUrl: (publicUrlData && publicUrlData.publicUrl) ? publicUrlData.publicUrl : '',
-    originalName: file.name
-  };
+      try {
+        await supabaseClient.storage
+          .from('pentasharufan')
+          .upload(filePath, file, { cacheControl: '3600', upsert: true });
+      } catch (storageErr) {
+        console.warn('Storage upload exception:', storageErr);
+      }
+
+      let signedFallbackUrl = '';
+      try {
+        const { data: signData } = await supabaseClient.storage
+          .from('pentasharufan')
+          .createSignedUrl(filePath, 604800);
+        if (signData && signData.signedUrl) signedFallbackUrl = signData.signedUrl;
+      } catch (_) {}
+
+      const pubUrl = signedFallbackUrl || (subfolder === 'foto' ? dataUrl : `/api/penta-file?path=${encodeURIComponent(filePath)}`);
+
+      resolve({
+        filePath: filePath,
+        publicUrl: pubUrl,
+        originalName: file.name
+      });
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 // 6d. Initialize Pentasharufan Feature
@@ -7217,6 +7658,13 @@ function initPentasharufanFeature() {
         showMessage(pentaMessage, 'Silakan pilih Program / Jenis Pentasharufan.', '#d93025');
         return;
       }
+
+      const currentUpzId = currentProfile ? (currentProfile.upz_id || currentProfile.id) : null;
+      const rkatSetting = getUpzRkatSetting(currentUpzId);
+      if (!rkatSetting.rkat_unlocked) {
+        showMessage(pentaMessage, 'Akses perbantuan pentasharufan terkunci. Daftarkan RKAT UPZ Anda ke Admin BAZNAS terlebih dahulu via WhatsApp.', '#d93025');
+        return;
+      }
       if (!nominalVal || nominalVal <= 0) {
         showMessage(pentaMessage, 'Nominal bantuan pentasharufan wajib diisi dengan benar.', '#d93025');
         return;
@@ -7276,21 +7724,36 @@ function initPentasharufanFeature() {
           catatan_admin: ''
         };
 
-        // Simpan ke localStorage
-        saveLocalPentaRecord(pentaRecord);
-
-        // Simpan ke Supabase audit_logs
+        // 1. Simpan ke Supabase via endpoint /api/save-penta
+        let backendSaved = false;
         try {
-          await supabaseClient.from('audit_logs').insert([{
-            action: 'PENTASHARUFAN_SUBMIT',
-            user_id: currentProfile ? currentProfile.profile_id : null,
-            nama_upz: namaUpz,
-            module: 'pentasharufan',
-            description: JSON.stringify(pentaRecord)
-          }]);
-        } catch (supabaseErr) {
-          console.warn('Supabase audit_logs pentasharufan save notice:', supabaseErr);
+          const saveRes = await fetch('/api/save-penta', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ record: pentaRecord })
+          });
+          if (saveRes.ok) {
+            backendSaved = true;
+          }
+        } catch (apiErr) {
+          console.warn('API /api/save-penta notice:', apiErr);
         }
+
+        // 2. Fallback direct insert ke Supabase audit_logs (HANYA kolom valid: action, module, description)
+        if (!backendSaved) {
+          try {
+            await supabaseClient.from('audit_logs').insert([{
+              action: 'PENTASHARUFAN_SUBMIT',
+              module: 'pentasharufan',
+              description: JSON.stringify(pentaRecord)
+            }]);
+          } catch (supabaseErr) {
+            console.warn('Supabase audit_logs pentasharufan save notice:', supabaseErr);
+          }
+        }
+
+        // 3. Simpan ke localStorage agar instan
+        saveLocalPentaRecord(pentaRecord);
 
         showMessage(pentaMessage, 'Permohonan pentasharufan berhasil dikirim ke Admin BAZNAS.', '#259148');
         pentaForm.reset();
@@ -7434,6 +7897,729 @@ function initPentasharufanFeature() {
   }
 }
 
+// ============================================================
+// FITUR: RKAT LOCK & PERBANTUAN PENTASHARUFAN BUDGET
+// ============================================================
+let cachedRkatConfig = {
+  default: { persen_penta: 35, persen_amil: 5, tagihan_salin: 0 },
+  upz_settings: {}
+};
+let cachedUpzPentaRecords = [];
+let upzPentaChartInstance = null;
+let cachedAllUpzListRkat = [];
+
+async function fetchRkatConfig() {
+  try {
+    const res = await fetch('/api/rkat-config');
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data) {
+        cachedRkatConfig = json.data;
+        if (typeof refreshActiveGuide === 'function') {
+          refreshActiveGuide();
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('fetchRkatConfig warning:', err);
+  }
+  return cachedRkatConfig;
+}
+
+function getUpzRkatSetting(upzId) {
+  if (!cachedRkatConfig) {
+    cachedRkatConfig = { default: { persen_penta: 35, persen_amil: 5, tagihan_salin: 0 }, upz_settings: {} };
+  }
+  const def = (cachedRkatConfig && cachedRkatConfig.default) || { persen_penta: 35, persen_amil: 5, tagihan_salin: 0 };
+  const currentYear = new Date().getFullYear();
+  if (!upzId || !cachedRkatConfig.upz_settings) {
+    return Object.assign({ rkat_unlocked: false, unlocked_year: null, current_year: currentYear }, def);
+  }
+
+  let found = cachedRkatConfig.upz_settings[upzId];
+  if (!found) {
+    const keys = Object.keys(cachedRkatConfig.upz_settings);
+    for (let k of keys) {
+      const item = cachedRkatConfig.upz_settings[k];
+      if (item && (item.upz_id === upzId || String(k).toLowerCase() === String(upzId).toLowerCase() || (item.nama_upz && String(item.nama_upz).toLowerCase() === String(upzId).toLowerCase()))) {
+        found = item;
+        break;
+      }
+    }
+  }
+
+  let isUnlocked = found ? Boolean(found.rkat_unlocked) : false;
+  const unlockedYear = found ? (found.unlocked_year || (found.updated_at ? new Date(found.updated_at).getFullYear() : null)) : null;
+
+  // RKAT hanya berlaku untuk 1 tahun berjalan. Jika telah berganti tahun, auto-lock!
+  if (isUnlocked && unlockedYear && Number(unlockedYear) !== currentYear) {
+    isUnlocked = false;
+  }
+
+  return {
+    upz_id: upzId,
+    rkat_unlocked: isUnlocked,
+    unlocked_year: isUnlocked ? unlockedYear : null,
+    registered_year: unlockedYear,
+    current_year: currentYear,
+    persen_penta: (found && found.persen_penta !== undefined) ? Number(found.persen_penta) : def.persen_penta,
+    persen_amil: (found && found.persen_amil !== undefined) ? Number(found.persen_amil) : def.persen_amil,
+    tagihan_salin: (found && found.tagihan_salin !== undefined) ? Number(found.tagihan_salin) : def.tagihan_salin
+  };
+}
+
+function updateUpzRkatLockUI() {
+  const myUpzId = currentProfile ? (currentProfile.upz_id || currentProfile.id) : null;
+  const myNamaUpz = currentProfile ? (currentProfile.nama_upz || currentProfile.nama_lengkap || 'UPZ') : 'UPZ';
+  const setting = getUpzRkatSetting(myUpzId);
+  const currentYear = new Date().getFullYear();
+
+  const badgeWrap = document.getElementById('upzRkatStatusBadgeWrap');
+  const lockBanner = document.getElementById('upzRkatLockBanner');
+  const pentaForm = document.getElementById('pentaForm');
+  const waBtn = document.getElementById('upzRkatWaBtn');
+
+  if (waBtn) {
+    const waMsg = encodeURIComponent(
+      `Assalamualaikum BAZNAS Kabupaten Banyumas, kami dari UPZ ${myNamaUpz} ingin mendaftarkan dan konfirmasi dokumen RKAT (Rencana Kerja & Anggaran Tahunan) Tahun ${currentYear} agar akses fitur Perbantuan Pentasharufan dapat dibuka. Mohon verifikasinya, terima kasih.`
+    );
+    waBtn.href = `https://wa.me/6281368691114?text=${waMsg}`;
+  }
+
+  if (!setting.rkat_unlocked) {
+    const isExpired = setting.registered_year && Number(setting.registered_year) !== currentYear;
+    if (badgeWrap) {
+      badgeWrap.innerHTML = isExpired
+        ? `<span class="rkat-badge rkat-badge-locked"><svg class="icon" style="width:14px;height:14px;"><use href="#i-lock"></use></svg> RKAT Kedaluwarsa (${setting.registered_year})</span>`
+        : `<span class="rkat-badge rkat-badge-locked"><svg class="icon" style="width:14px;height:14px;"><use href="#i-lock"></use></svg> RKAT Belum Aktif (${currentYear})</span>`;
+    }
+    if (lockBanner) {
+      lockBanner.classList.remove('hidden');
+      const bannerTitle = lockBanner.querySelector('h3');
+      const bannerDesc = lockBanner.querySelector('p');
+      if (bannerTitle) {
+        bannerTitle.textContent = isExpired
+          ? `Masa Berlaku RKAT Tahun ${setting.registered_year} Telah Berakhir`
+          : `Akses Perbantuan Pentasharufan Tahun ${currentYear} Terkunci`;
+      }
+      if (bannerDesc) {
+        bannerDesc.innerHTML = isExpired
+          ? `Akses RKAT berlaku untuk 1 tahun anggaran. Karena sistem telah memasuki <strong>Tahun ${currentYear}</strong>, RKAT otomatis terkunci kembali. Silakan lakukan konfirmasi pembaruan RKAT tahun berjalan ke BAZNAS Banyumas.`
+          : `Fitur permohonan perbantuan pentasharufan hanya dapat diakses oleh UPZ yang telah mendaftarkan dan mengesahkan dokumen <strong>RKAT Tahun ${currentYear}</strong> di BAZNAS Kabupaten Banyumas.`;
+      }
+    }
+    if (pentaForm) {
+      pentaForm.querySelectorAll('input, select, textarea, button').forEach(function (el) {
+        el.disabled = true;
+      });
+      pentaForm.style.opacity = '0.5';
+      pentaForm.style.pointerEvents = 'none';
+    }
+  } else {
+    const yr = setting.unlocked_year || currentYear;
+    if (badgeWrap) {
+      badgeWrap.innerHTML = `<span class="rkat-badge rkat-badge-active"><svg class="icon" style="width:14px;height:14px;"><use href="#i-check"></use></svg> RKAT Terverifikasi & Aktif (${yr})</span>`;
+    }
+    if (lockBanner) lockBanner.classList.add('hidden');
+    if (pentaForm) {
+      pentaForm.querySelectorAll('input, select, textarea, button').forEach(function (el) {
+        el.disabled = false;
+      });
+      pentaForm.style.opacity = '1';
+      pentaForm.style.pointerEvents = 'auto';
+    }
+  }
+}
+
+function renderUpzPentaBudgetAndChart() {
+  const myUpzId = currentProfile ? (currentProfile.upz_id || currentProfile.id) : null;
+  const setting = getUpzRkatSetting(myUpzId);
+
+  const tahunSelect = document.getElementById('upzPentaFilterTahun');
+  const bulanSelect = document.getElementById('upzPentaFilterBulan');
+
+  const verifiedSetoran = (currentSetoran || []).filter(function (s) {
+    return String(s.status || '').toLowerCase() === 'diterima';
+  });
+
+  if (tahunSelect && tahunSelect.options.length === 0) {
+    const years = new Set();
+    const currentYear = new Date().getFullYear();
+    years.add(currentYear);
+    verifiedSetoran.forEach(function (s) {
+      const d = s.tanggal_setor || s.created_at;
+      if (d) {
+        const yr = new Date(d).getFullYear();
+        if (!isNaN(yr)) years.add(yr);
+      }
+    });
+    (cachedUpzPentaRecords || []).forEach(function (p) {
+      const d = p.created_at;
+      if (d) {
+        const yr = new Date(d).getFullYear();
+        if (!isNaN(yr)) years.add(yr);
+      }
+    });
+
+    const sortedYears = Array.from(years).sort(function (a, b) { return b - a; });
+    sortedYears.forEach(function (yr) {
+      const opt = document.createElement('option');
+      opt.value = String(yr);
+      opt.textContent = `Tahun ${yr}`;
+      tahunSelect.appendChild(opt);
+    });
+    const optSemua = document.createElement('option');
+    optSemua.value = 'semua';
+    optSemua.textContent = 'Semua Tahun';
+    tahunSelect.appendChild(optSemua);
+    tahunSelect.value = String(sortedYears[0] || currentYear);
+  }
+
+  if (tahunSelect && !tahunSelect.dataset.bound) {
+    tahunSelect.dataset.bound = 'true';
+    tahunSelect.addEventListener('change', renderUpzPentaBudgetAndChart);
+  }
+  if (bulanSelect && !bulanSelect.dataset.bound) {
+    bulanSelect.dataset.bound = 'true';
+    bulanSelect.addEventListener('change', renderUpzPentaBudgetAndChart);
+  }
+  const resetBtn = document.getElementById('upzPentaResetFilterBtn');
+  if (resetBtn && !resetBtn.dataset.bound) {
+    resetBtn.dataset.bound = 'true';
+    resetBtn.addEventListener('click', function () {
+      if (bulanSelect) bulanSelect.value = 'semua';
+      renderUpzPentaBudgetAndChart();
+    });
+  }
+
+  const selectedTahun = tahunSelect ? tahunSelect.value : 'semua';
+  const selectedBulan = bulanSelect ? bulanSelect.value : 'semua';
+
+  const filteredSetoran = verifiedSetoran.filter(function (s) {
+    const dStr = s.tanggal_setor || s.created_at;
+    if (!dStr) return false;
+    const d = new Date(dStr);
+    if (isNaN(d.getTime())) return false;
+    if (selectedTahun !== 'semua' && d.getFullYear() !== Number(selectedTahun)) return false;
+    if (selectedBulan !== 'semua' && (d.getMonth() + 1) !== Number(selectedBulan)) return false;
+    return true;
+  });
+
+  const filteredPenta = (cachedUpzPentaRecords || []).filter(function (p) {
+    const dStr = p.created_at;
+    if (!dStr) return false;
+    const d = new Date(dStr);
+    if (isNaN(d.getTime())) return false;
+    if (selectedTahun !== 'semua' && d.getFullYear() !== Number(selectedTahun)) return false;
+    if (selectedBulan !== 'semua' && (d.getMonth() + 1) !== Number(selectedBulan)) return false;
+    return true;
+  });
+
+  const totalSetoran = filteredSetoran.reduce(function (sum, s) {
+    return sum + Number(s.nominal || 0);
+  }, 0);
+
+  const persenPenta = setting.persen_penta !== undefined ? setting.persen_penta : 35;
+  const persenAmil = setting.persen_amil !== undefined ? setting.persen_amil : 5;
+  const tagihanSalinBulan = setting.tagihan_salin !== undefined ? Number(setting.tagihan_salin) : 0;
+
+  const alokasiPenta = Math.round(totalSetoran * (persenPenta / 100));
+  const hakAmil = Math.round(totalSetoran * (persenAmil / 100));
+
+  let countBulanSalin = 0;
+  if (selectedBulan !== 'semua') {
+    countBulanSalin = 1;
+  } else {
+    const distinctMonths = new Set();
+    filteredSetoran.forEach(function (s) {
+      const d = new Date(s.tanggal_setor || s.created_at);
+      if (!isNaN(d.getTime())) distinctMonths.add(d.getMonth() + 1);
+    });
+    countBulanSalin = distinctMonths.size > 0 ? distinctMonths.size : (filteredSetoran.length > 0 ? 1 : 0);
+  }
+  const totalTagihanSalin = tagihanSalinBulan * countBulanSalin;
+
+  const approvedPenta = filteredPenta.filter(function (p) {
+    const st = String(p.status || '').toLowerCase();
+    return st === 'disetujui' || st === 'selesai';
+  });
+  const realisasiPenta = approvedPenta.reduce(function (sum, p) {
+    return sum + Number(p.nominal || 0);
+  }, 0);
+
+  // Alur: Alokasi perbantuan dikurangi tagihan salin aslimas baru muncul sisa anggarannya
+  const sisaAnggaran = alokasiPenta - totalTagihanSalin - realisasiPenta;
+
+  const elTotalSetoran = document.getElementById('upzPentaTotalSetoran');
+  if (elTotalSetoran) elTotalSetoran.textContent = formatRupiah(totalSetoran);
+
+  const elSetoranSub = document.getElementById('upzPentaSetoranSub');
+  if (elSetoranSub) {
+    elSetoranSub.textContent = `${filteredSetoran.length} setoran terverifikasi`;
+  }
+
+  const elAlokasi = document.getElementById('upzPentaAlokasi');
+  if (elAlokasi) elAlokasi.textContent = formatRupiah(alokasiPenta);
+
+  const elPersenBadge = document.getElementById('upzPentaPersenPentaBadge');
+  if (elPersenBadge) {
+    elPersenBadge.textContent = `${persenPenta}% dari Setoran Masuk`;
+  }
+
+  const elRealisasi = document.getElementById('upzPentaRealisasi');
+  if (elRealisasi) elRealisasi.textContent = formatRupiah(realisasiPenta);
+
+  const elRealisasiSub = document.getElementById('upzPentaRealisasiSub');
+  if (elRealisasiSub) {
+    elRealisasiSub.textContent = `${approvedPenta.length} pengajuan disetujui`;
+  }
+
+  const elSisa = document.getElementById('upzPentaSisa');
+  if (elSisa) {
+    elSisa.textContent = formatRupiah(sisaAnggaran);
+    elSisa.style.color = sisaAnggaran >= 0 ? '#0f5132' : '#d93025';
+  }
+
+  const elSisaBadge = document.getElementById('upzPentaSisaBadge');
+  if (elSisaBadge) {
+    if (sisaAnggaran >= 0) {
+      elSisaBadge.textContent = totalTagihanSalin > 0
+        ? `Tersedia (net potong Salin ${formatRupiah(totalTagihanSalin)})`
+        : 'Tersedia untuk disalurkan';
+      elSisaBadge.style.color = '#16a34a';
+    } else {
+      elSisaBadge.textContent = 'Melebihi alokasi anggaran';
+      elSisaBadge.style.color = '#dc2626';
+    }
+  }
+
+  const elHakAmil = document.getElementById('upzPentaHakAmil');
+  if (elHakAmil) {
+    elHakAmil.textContent = formatRupiah(hakAmil);
+  }
+  const elHakAmilSub = document.getElementById('upzPentaHakAmilSub');
+  if (elHakAmilSub) {
+    elHakAmilSub.textContent = `${persenAmil}% dari Setoran Masuk`;
+  }
+
+  const elTagihanSalin = document.getElementById('upzPentaTagihanSalin');
+  if (elTagihanSalin) {
+    elTagihanSalin.textContent = formatRupiah(totalTagihanSalin);
+  }
+  const elTagihanSalinSub = document.getElementById('upzPentaTagihanSalinSub');
+  if (elTagihanSalinSub) {
+    if (selectedBulan === 'semua' && countBulanSalin > 1) {
+      elTagihanSalinSub.textContent = `Pengurang alokasi (${countBulanSalin} bln x ${formatRupiah(tagihanSalinBulan)})`;
+    } else {
+      elTagihanSalinSub.textContent = 'Pengurang alokasi perbantuan';
+    }
+  }
+
+  renderUpzPentaChart(selectedTahun === 'semua' ? new Date().getFullYear() : Number(selectedTahun), persenPenta);
+}
+
+function renderUpzPentaChart(tahun, persenPenta) {
+  const canvas = document.getElementById('upzPentaChart');
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  const bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const setoranMonthly = new Array(12).fill(0);
+  const alokasiMonthly = new Array(12).fill(0);
+  const realisasiMonthly = new Array(12).fill(0);
+
+  const verifiedSetoran = (currentSetoran || []).filter(function (s) {
+    return String(s.status || '').toLowerCase() === 'diterima';
+  });
+
+  verifiedSetoran.forEach(function (s) {
+    const dStr = s.tanggal_setor || s.created_at;
+    if (!dStr) return;
+    const d = new Date(dStr);
+    if (d.getFullYear() === tahun) {
+      const m = d.getMonth();
+      setoranMonthly[m] += Number(s.nominal || 0);
+    }
+  });
+
+  for (let i = 0; i < 12; i++) {
+    alokasiMonthly[i] = Math.round(setoranMonthly[i] * (persenPenta / 100));
+  }
+
+  (cachedUpzPentaRecords || []).forEach(function (p) {
+    const st = String(p.status || '').toLowerCase();
+    if (st === 'disetujui' || st === 'selesai') {
+      const dStr = p.created_at;
+      if (!dStr) return;
+      const d = new Date(dStr);
+      if (d.getFullYear() === tahun) {
+        const m = d.getMonth();
+        realisasiMonthly[m] += Number(p.nominal || 0);
+      }
+    }
+  });
+
+  const chartDesc = document.getElementById('upzPentaChartDesc');
+  if (chartDesc) {
+    chartDesc.textContent = `Grafik komparasi alokasi (${persenPenta}%) vs realisasi pentasharufan tahun ${tahun}.`;
+  }
+
+  if (upzPentaChartInstance) {
+    upzPentaChartInstance.destroy();
+    upzPentaChartInstance = null;
+  }
+
+  const ctx = canvas.getContext('2d');
+  upzPentaChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: bulanLabels,
+      datasets: [
+        {
+          label: 'Alokasi Pentasharufan',
+          data: alokasiMonthly,
+          backgroundColor: 'rgba(15, 81, 50, 0.75)',
+          borderColor: '#0f5132',
+          borderWidth: 1.5,
+          borderRadius: 6
+        },
+        {
+          label: 'Realisasi Ditasharufkan',
+          data: realisasiMonthly,
+          backgroundColor: 'rgba(37, 99, 235, 0.75)',
+          borderColor: '#2563eb',
+          borderWidth: 1.5,
+          borderRadius: 6
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            boxWidth: 12,
+            font: { family: "'Poppins', sans-serif", size: 12 }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return context.dataset.label + ': ' + formatRupiah(context.raw || 0);
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function (val) {
+              if (val >= 1000000) return 'Rp ' + (val / 1000000).toFixed(1) + ' jt';
+              if (val >= 1000) return 'Rp ' + (val / 1000).toFixed(0) + ' rb';
+              return 'Rp ' + val;
+            },
+            font: { family: "'Poppins', sans-serif", size: 11 }
+          },
+          grid: { color: 'rgba(0, 0, 0, 0.05)' }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { family: "'Poppins', sans-serif", size: 12 } }
+        }
+      }
+    }
+  });
+}
+
+// ------------------------------------------------------------
+// ADMIN RKAT MANAGEMENT FUNCTIONS
+// ------------------------------------------------------------
+function updateAdminRkatStatusDisplay(isUnlocked, unlockedYear) {
+  const currentYear = new Date().getFullYear();
+  const yr = unlockedYear || currentYear;
+  const statusEl = document.getElementById('adminRkatCurrentStatus');
+  const toggleBtn = document.getElementById('adminRkatToggleLockBtn');
+  if (statusEl) {
+    if (isUnlocked) {
+      statusEl.innerHTML = `<span class="rkat-badge rkat-badge-active"><svg class="icon" style="width:12px;height:12px;"><use href="#i-check"></use></svg> Aktif (Tahun ${yr})</span>`;
+    } else {
+      statusEl.innerHTML = `<span class="rkat-badge rkat-badge-locked"><svg class="icon" style="width:12px;height:12px;"><use href="#i-lock"></use></svg> Terkunci (${currentYear})</span>`;
+    }
+  }
+  if (toggleBtn) {
+    toggleBtn.dataset.unlocked = isUnlocked ? 'true' : 'false';
+    toggleBtn.dataset.unlockedYear = isUnlocked ? String(yr) : '';
+    if (isUnlocked) {
+      toggleBtn.className = 'btn btn-sm btn-outline-danger';
+      toggleBtn.innerHTML = '<svg class="icon" style="width:14px;height:14px;"><use href="#i-lock"></use></svg> Kunci Akses RKAT';
+    } else {
+      toggleBtn.className = 'btn btn-sm btn-primary';
+      toggleBtn.innerHTML = `<svg class="icon" style="width:14px;height:14px;"><use href="#i-check"></use></svg> Buka RKAT ${currentYear}`;
+    }
+  }
+}
+
+async function initAdminRkatManagement() {
+  await fetchRkatConfig();
+
+  const upzSelect = document.getElementById('adminRkatSelectUpz');
+  if (!upzSelect) return;
+
+  if (!cachedAllUpzListRkat.length) {
+    try {
+      const res = await fetch('/api/upz-list');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          cachedAllUpzListRkat = json.data;
+        }
+      }
+    } catch (_) {}
+
+    if (!cachedAllUpzListRkat.length && typeof allUpzList !== 'undefined' && allUpzList.length) {
+      cachedAllUpzListRkat = allUpzList;
+    } else if (!cachedAllUpzListRkat.length && typeof DEFAULT_UPZ_DATA !== 'undefined') {
+      cachedAllUpzListRkat = DEFAULT_UPZ_DATA;
+    }
+  }
+
+  // Populate select
+  const currentSelectVal = upzSelect.value;
+  let optHtml = '<option value="">-- Pilih UPZ --</option>';
+  cachedAllUpzListRkat.forEach(function (u) {
+    const uid = u.id || u.kode_upz;
+    const unama = u.nama_upz || u.nama_lengkap;
+    optHtml += `<option value="${escapeHtml(uid)}" ${uid === currentSelectVal ? 'selected' : ''}>${escapeHtml(unama)}</option>`;
+  });
+  upzSelect.innerHTML = optHtml;
+
+  renderAdminRkatTable();
+
+  if (!upzSelect.dataset.bound) {
+    upzSelect.dataset.bound = 'true';
+    upzSelect.addEventListener('change', function () {
+      const selectedId = upzSelect.value;
+      const detailsBox = document.getElementById('adminRkatUpzDetails');
+      if (!selectedId) {
+        if (detailsBox) detailsBox.classList.add('hidden');
+        return;
+      }
+
+      const u = cachedAllUpzListRkat.find(function (item) { return (item.id === selectedId || item.kode_upz === selectedId); });
+      const setting = getUpzRkatSetting(selectedId);
+
+      if (detailsBox) detailsBox.classList.remove('hidden');
+
+      updateAdminRkatStatusDisplay(setting.rkat_unlocked, setting.unlocked_year);
+
+      const pentaInput = document.getElementById('adminRkatPersenPenta');
+      if (pentaInput) pentaInput.value = setting.persen_penta !== undefined ? setting.persen_penta : 35;
+
+      const amilInput = document.getElementById('adminRkatPersenAmil');
+      if (amilInput) amilInput.value = setting.persen_amil !== undefined ? setting.persen_amil : 5;
+
+      const salinInput = document.getElementById('adminRkatTagihanSalin');
+      if (salinInput) salinInput.value = setting.tagihan_salin ? Number(setting.tagihan_salin).toLocaleString('id-ID') : '0';
+    });
+  }
+
+  const toggleBtn = document.getElementById('adminRkatToggleLockBtn');
+  if (toggleBtn && !toggleBtn.dataset.bound) {
+    toggleBtn.dataset.bound = 'true';
+    toggleBtn.addEventListener('click', function () {
+      const selectedId = upzSelect.value;
+      if (!selectedId) return;
+      const current = toggleBtn.dataset.unlocked === 'true';
+      updateAdminRkatStatusDisplay(!current, new Date().getFullYear());
+    });
+  }
+
+  const salinInput = document.getElementById('adminRkatTagihanSalin');
+  if (salinInput && !salinInput.dataset.bound) {
+    salinInput.dataset.bound = 'true';
+    salinInput.addEventListener('input', function () {
+      const raw = this.value.replace(/\D/g, '');
+      this.value = raw ? Number(raw).toLocaleString('id-ID') : '';
+    });
+  }
+
+  const saveBtn = document.getElementById('adminRkatSaveBtn');
+  const msgEl = document.getElementById('adminRkatMsg');
+  if (saveBtn && !saveBtn.dataset.bound) {
+    saveBtn.dataset.bound = 'true';
+    saveBtn.addEventListener('click', async function () {
+      const selectedId = upzSelect.value;
+      if (!selectedId) {
+        showMessage(msgEl, 'Pilih UPZ terlebih dahulu.', '#d93025');
+        return;
+      }
+      const u = cachedAllUpzListRkat.find(function (item) { return (item.id === selectedId || item.kode_upz === selectedId); });
+      const isUnlocked = toggleBtn ? toggleBtn.dataset.unlocked === 'true' : false;
+      const currentYear = new Date().getFullYear();
+      const pPenta = parseFloat(document.getElementById('adminRkatPersenPenta').value) || 35;
+      const pAmil = parseFloat(document.getElementById('adminRkatPersenAmil').value) || 5;
+      const tSalinStr = (document.getElementById('adminRkatTagihanSalin').value || '0').replace(/\D/g, '');
+      const tSalin = parseInt(tSalinStr, 10) || 0;
+
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Menyimpan...';
+      showMessage(msgEl, 'Menyimpan pengaturan UPZ...', '#0f6c3e');
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const token = session ? session.access_token : '';
+        const res = await fetch('/api/save-rkat-config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: token,
+            upz_id: selectedId,
+            nama_upz: u ? (u.nama_upz || u.nama_lengkap) : '',
+            rkat_unlocked: isUnlocked,
+            unlocked_year: isUnlocked ? currentYear : null,
+            persen_penta: pPenta,
+            persen_amil: pAmil,
+            tagihan_salin: tSalin
+          })
+        });
+
+        const json = await res.json();
+        if (!res.ok || !json.success) throw new Error(json.message || 'Gagal menyimpan.');
+
+        showMessage(msgEl, 'Pengaturan RKAT & alokasi berhasil disimpan!', '#16a34a');
+        await fetchRkatConfig();
+        renderAdminRkatTable(document.getElementById('adminRkatSearchTable') ? document.getElementById('adminRkatSearchTable').value.toLowerCase().trim() : '');
+      } catch (err) {
+        showMessage(msgEl, 'Error: ' + err.message, '#d93025');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<svg class="icon"><use href="#i-check"></use></svg> Simpan Pengaturan UPZ';
+      }
+    });
+  }
+
+  const searchInput = document.getElementById('adminRkatSearchTable');
+  if (searchInput && !searchInput.dataset.bound) {
+    searchInput.dataset.bound = 'true';
+    searchInput.addEventListener('input', function () {
+      renderAdminRkatTable(searchInput.value.toLowerCase().trim());
+    });
+  }
+}
+
+function renderAdminRkatTable(filterText = '') {
+  const tbody = document.getElementById('adminRkatTableBody');
+  if (!tbody) return;
+
+  const list = (cachedAllUpzListRkat || []).filter(function (u) {
+    if (!filterText) return true;
+    const name = (u.nama_upz || u.nama_lengkap || '').toLowerCase();
+    const kode = (u.kode_upz || '').toLowerCase();
+    return name.includes(filterText) || kode.includes(filterText);
+  });
+
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:16px;color:var(--slate-400);">Tidak ada data UPZ yang cocok.</td></tr>';
+    return;
+  }
+
+  let html = '';
+  list.forEach(function (u) {
+    const uid = u.id || u.kode_upz;
+    const unama = u.nama_upz || u.nama_lengkap || 'UPZ';
+    const setting = getUpzRkatSetting(uid);
+    const isUnlocked = setting.rkat_unlocked;
+    const currentYear = new Date().getFullYear();
+    const isExpired = !isUnlocked && setting.registered_year && Number(setting.registered_year) !== currentYear;
+
+    let statusBadge = '';
+    if (isUnlocked) {
+      statusBadge = `<span class="rkat-badge rkat-badge-active" style="font-size:11px;padding:2px 8px;" title="Berlaku untuk tahun ${setting.unlocked_year || currentYear}"><svg class="icon" style="width:10px;height:10px;"><use href="#i-check"></use></svg> Aktif (${setting.unlocked_year || currentYear})</span>`;
+    } else if (isExpired) {
+      statusBadge = `<span class="rkat-badge rkat-badge-locked" style="font-size:11px;padding:2px 8px;background:#fef2f2;color:#991b1b;border-color:#fecaca;" title="Kedaluwarsa tahun ${setting.registered_year}. Auto-lock di tahun ${currentYear}"><svg class="icon" style="width:10px;height:10px;"><use href="#i-clock"></use></svg> Kedaluwarsa (${setting.registered_year})</span>`;
+    } else {
+      statusBadge = `<span class="rkat-badge rkat-badge-locked" style="font-size:11px;padding:2px 8px;"><svg class="icon" style="width:10px;height:10px;"><use href="#i-lock"></use></svg> Terkunci</span>`;
+    }
+
+    const actionBtn = isUnlocked
+      ? `<button type="button" class="btn btn-xs btn-outline-danger rkat-quick-toggle" data-upz-id="${escapeHtml(uid)}" data-target-state="false" style="padding:2px 8px;font-size:11px;">Kunci</button>`
+      : `<button type="button" class="btn btn-xs btn-primary rkat-quick-toggle" data-upz-id="${escapeHtml(uid)}" data-target-state="true" style="padding:2px 8px;font-size:11px;">Buka RKAT ${currentYear}</button>`;
+
+    html += `
+      <tr style="border-bottom:1px solid var(--slate-100);">
+        <td style="padding:8px 10px;font-weight:500;">${escapeHtml(unama)}</td>
+        <td style="padding:8px 10px;">${statusBadge}</td>
+        <td style="padding:8px 10px;">${setting.persen_penta}%</td>
+        <td style="padding:8px 10px;">${setting.persen_amil}%</td>
+        <td style="padding:8px 10px;">${formatRupiah(setting.tagihan_salin || 0)}</td>
+        <td style="padding:8px 10px;text-align:center;white-space:nowrap;">
+          ${actionBtn}
+          <button type="button" class="btn btn-xs btn-ghost rkat-quick-edit" data-upz-id="${escapeHtml(uid)}" style="padding:2px 6px;margin-left:4px;" title="Pilih & Edit">
+            <svg class="icon" style="width:12px;height:12px;"><use href="#i-edit"></use></svg>
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = html;
+
+  tbody.querySelectorAll('.rkat-quick-toggle').forEach(function (btn) {
+    btn.addEventListener('click', async function () {
+      const upzId = btn.dataset.upzId;
+      const targetState = btn.dataset.targetState === 'true';
+      const u = cachedAllUpzListRkat.find(function (item) { return (item.id === upzId || item.kode_upz === upzId); });
+      const setting = getUpzRkatSetting(upzId);
+      const currentYear = new Date().getFullYear();
+
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const token = session ? session.access_token : '';
+        await fetch('/api/save-rkat-config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: token,
+            upz_id: upzId,
+            nama_upz: u ? (u.nama_upz || u.nama_lengkap) : '',
+            rkat_unlocked: targetState,
+            unlocked_year: targetState ? currentYear : null,
+            persen_penta: setting.persen_penta,
+            persen_amil: setting.persen_amil,
+            tagihan_salin: setting.tagihan_salin
+          })
+        });
+        await fetchRkatConfig();
+        renderAdminRkatTable(filterText);
+
+        const upzSelect = document.getElementById('adminRkatSelectUpz');
+        if (upzSelect && upzSelect.value === upzId) {
+          updateAdminRkatStatusDisplay(targetState, targetState ? currentYear : null);
+        }
+      } catch (err) {
+        console.error('Quick toggle error:', err);
+      }
+    });
+  });
+
+  tbody.querySelectorAll('.rkat-quick-edit').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const upzId = btn.dataset.upzId;
+      const upzSelect = document.getElementById('adminRkatSelectUpz');
+      if (upzSelect) {
+        upzSelect.value = upzId;
+        upzSelect.dispatchEvent(new Event('change'));
+        upzSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  });
+}
+
 // 6e. Load Riwayat Pentasharufan (Role UPZ)
 async function loadUpzPentasharufan() {
   const container = document.getElementById('upzPentaRiwayatContainer');
@@ -7444,8 +8630,27 @@ async function loadUpzPentasharufan() {
   const myUpzId = currentProfile ? currentProfile.upz_id : null;
   const myNamaUpz = currentProfile ? (currentProfile.nama_upz || currentProfile.nama_lengkap) : null;
 
-  // Gabungkan dari audit_logs dan localStorage
+  // Gabungkan dari endpoint backend /api/penta-list, audit_logs, dan localStorage
   let records = getLocalPentaRecords();
+
+  try {
+    const res = await fetch('/api/penta-list');
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        json.data.forEach(function (rec) {
+          const idx = records.findIndex(function (r) { return r.id === rec.id; });
+          if (idx >= 0) {
+            records[idx] = Object.assign({}, records[idx], rec);
+          } else {
+            records.push(rec);
+          }
+        });
+      }
+    }
+  } catch (apiErr) {
+    console.warn('Fetch /api/penta-list warning:', apiErr);
+  }
 
   try {
     const { data, error } = await supabaseClient
@@ -7458,8 +8663,14 @@ async function loadUpzPentasharufan() {
       data.forEach(function (log) {
         try {
           const parsed = JSON.parse(log.description);
-          if (parsed && parsed.id && !records.some(function (r) { return r.id === parsed.id; })) {
-            records.push(parsed);
+          if (parsed && parsed.id) {
+            const idx = records.findIndex(function (r) { return r.id === parsed.id; });
+            if (idx >= 0) {
+              if (parsed.status) records[idx].status = parsed.status;
+              if (parsed.catatan_admin !== undefined) records[idx].catatan_admin = parsed.catatan_admin;
+            } else {
+              records.push(parsed);
+            }
           }
         } catch (e) {}
       });
@@ -7477,6 +8688,11 @@ async function loadUpzPentasharufan() {
     return new Date(b.created_at || 0) - new Date(a.created_at || 0);
   });
 
+  cachedUpzPentaRecords = myRecords;
+  await fetchRkatConfig();
+  updateUpzRkatLockUI();
+  renderUpzPentaBudgetAndChart();
+
   if (!myRecords.length) {
     container.innerHTML = `
       <div class="empty-state" style="padding:32px 16px;">
@@ -7493,6 +8709,18 @@ async function loadUpzPentasharufan() {
     const stClass = st === 'disetujui' || st === 'selesai' ? 'status-diterima' : (st === 'ditolak' ? 'status-ditolak' : 'status-menunggu');
     const stLabel = st === 'disetujui' || st === 'selesai' ? 'Disetujui' : (st === 'ditolak' ? 'Ditolak' : 'Menunggu Review');
     const fotoSrc = rec.file_foto_url || rec.photo_fallback || '';
+    const myNamaUpz = currentProfile ? (currentProfile.nama_upz || currentProfile.nama_lengkap || 'UPZ') : 'UPZ';
+    const waText = encodeURIComponent(
+      `Assalamualaikum BAZNAS Kabupaten Banyumas, kami dari UPZ *${myNamaUpz}* telah mengajukan permohonan perbantuan pentasharufan:\n\n` +
+      `• Program: *${rec.jenis_program || '-'}*\n` +
+      `• Tanggal Pengajuan: ${formatTanggal(rec.created_at)}\n` +
+      `• Nominal Bantuan: *${formatRupiah(rec.nominal || 0)}*\n` +
+      `• Penerima Manfaat: ${(rec.jumlah_penerima || 0).toLocaleString('id-ID')} jiwa/mustahik\n` +
+      (rec.keterangan ? `• Keterangan: ${rec.keterangan}\n` : '') +
+      `• Status Saat Ini: *${stLabel}*\n\n` +
+      `Mohon untuk dapat diverifikasi dan ditindaklanjuti. Terima kasih.`
+    );
+    const waConfirmUrl = `https://wa.me/6285133744077?text=${waText}`;
 
     html += `
       <article class="penta-card" data-penta-id="${escapeHtml(rec.id)}">
@@ -7529,6 +8757,9 @@ async function loadUpzPentasharufan() {
                 <svg class="icon"><use href="#i-image"></use></svg><span>Lihat Foto Dokumentasi</span>
               </button>
             ` : ''}
+            <a href="${waConfirmUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp-xs" title="Konfirmasi permohonan ke Admin BAZNAS via WhatsApp">
+              <svg class="icon"><use href="#i-message-circle"></use></svg><span>Konfirmasi WA</span>
+            </a>
           </div>
         </div>
       </article>
@@ -7552,9 +8783,27 @@ async function loadAdminPentasharufan() {
   const container = document.getElementById('adminPentaTableContainer');
   if (!container) return;
 
-  container.innerHTML = '<div class="empty-state" style="padding:24px;">Memuat data pentasharufan...</div>';
-
+  // Gabungkan dari endpoint backend /api/penta-list, audit_logs, dan localStorage
   let records = getLocalPentaRecords();
+
+  try {
+    const res = await fetch('/api/penta-list');
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        json.data.forEach(function (rec) {
+          const idx = records.findIndex(function (r) { return r.id === rec.id; });
+          if (idx >= 0) {
+            records[idx] = Object.assign({}, records[idx], rec);
+          } else {
+            records.push(rec);
+          }
+        });
+      }
+    }
+  } catch (apiErr) {
+    console.warn('Fetch /api/penta-list warning:', apiErr);
+  }
 
   try {
     const { data, error } = await supabaseClient
@@ -7567,8 +8816,14 @@ async function loadAdminPentasharufan() {
       data.forEach(function (log) {
         try {
           const parsed = JSON.parse(log.description);
-          if (parsed && parsed.id && !records.some(function (r) { return r.id === parsed.id; })) {
-            records.push(parsed);
+          if (parsed && parsed.id) {
+            const idx = records.findIndex(function (r) { return r.id === parsed.id; });
+            if (idx >= 0) {
+              if (parsed.status) records[idx].status = parsed.status;
+              if (parsed.catatan_admin !== undefined) records[idx].catatan_admin = parsed.catatan_admin;
+            } else {
+              records.push(parsed);
+            }
           }
         } catch (e) {}
       });
@@ -7607,6 +8862,9 @@ async function loadAdminPentasharufan() {
 
   // Render Table
   filterAndRenderAdminPentaTable();
+
+  // Inisialisasi Manajemen Akses RKAT & Persentase UPZ
+  await initAdminRkatManagement();
 }
 
 function updateAdminPentaScorecards(records) {
@@ -7758,14 +9016,18 @@ function filterAndRenderAdminPentaTable() {
       saveLocalPentaRecord(rec);
 
       try {
-        await supabaseClient.from('audit_logs').insert([{
-          action: 'PENTASHARUFAN_STATUS_DISETUJUI',
-          user_id: currentProfile ? currentProfile.profile_id : null,
-          nama_upz: rec.nama_upz,
-          module: 'pentasharufan',
-          description: JSON.stringify(rec)
-        }]);
-      } catch (e) {}
+        await fetch('/api/update-penta-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: id,
+            status: 'disetujui',
+            admin_id: currentProfile ? currentProfile.id : null
+          })
+        });
+      } catch (e) {
+        console.warn('Update penta status warning:', e);
+      }
 
       updateAdminPentaScorecards(cachedAdminPentaRecords);
       filterAndRenderAdminPentaTable();
@@ -7790,14 +9052,19 @@ function filterAndRenderAdminPentaTable() {
       saveLocalPentaRecord(rec);
 
       try {
-        await supabaseClient.from('audit_logs').insert([{
-          action: 'PENTASHARUFAN_STATUS_DITOLAK',
-          user_id: currentProfile ? currentProfile.profile_id : null,
-          nama_upz: rec.nama_upz,
-          module: 'pentasharufan',
-          description: JSON.stringify(rec)
-        }]);
-      } catch (e) {}
+        await fetch('/api/update-penta-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: id,
+            status: 'ditolak',
+            catatan_admin: catatan || 'Ditolak oleh admin.',
+            admin_id: currentProfile ? currentProfile.id : null
+          })
+        });
+      } catch (e) {
+        console.warn('Update penta status warning:', e);
+      }
 
       updateAdminPentaScorecards(cachedAdminPentaRecords);
       filterAndRenderAdminPentaTable();
@@ -7850,6 +9117,11 @@ function initDeletePentaFeature() {
       const id = pendingDeletePentaId;
       deleteLocalPentaRecord(id);
       cachedAdminPentaRecords = cachedAdminPentaRecords.filter(function (r) { return String(r.id) !== String(id); });
+      fetch('/api/delete-penta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id, admin_id: currentProfile ? currentProfile.id : null })
+      }).catch(function (e) { console.warn('Delete penta notice:', e); });
       updateAdminPentaScorecards(cachedAdminPentaRecords);
       filterAndRenderAdminPentaTable();
       closeDeletePentaModal();
@@ -7919,7 +9191,31 @@ function initNewModalsFeature() {
 // ======================================================================
 // 6g. BUKTI SETOR ZAKAT (BSZ) FEATURE (ADMIN UPLOAD & UPZ DOWNLOAD)
 // ======================================================================
+// ======================================================================
+// 6g. DOKUMEN & BUKTI TRANSFER (BSZ, TF PENTA, TF AMIL, TF SALIN)
+// ======================================================================
 let bszRecords = {};
+let transferDocsRecords = {};
+
+async function syncTransferDocsList() {
+  try {
+    const res = await fetch('/api/transfer-docs-list');
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.success && json.data) {
+        transferDocsRecords = json.data;
+        try { localStorage.setItem('transfer_docs_cache', JSON.stringify(transferDocsRecords)); } catch (_) {}
+      }
+    }
+  } catch (err) {
+    console.warn('syncTransferDocsList fetch warning:', err);
+  }
+  try {
+    const cached = localStorage.getItem('transfer_docs_cache');
+    if (cached) transferDocsRecords = JSON.parse(cached);
+  } catch (_) {}
+  return transferDocsRecords;
+}
 
 async function syncBszList() {
   try {
@@ -7929,7 +9225,6 @@ async function syncBszList() {
       if (json && json.success && json.data) {
         bszRecords = json.data;
         try { localStorage.setItem('bsz_records_cache', JSON.stringify(bszRecords)); } catch (_) {}
-        return bszRecords;
       }
     }
   } catch (err) {
@@ -7939,6 +9234,7 @@ async function syncBszList() {
     const cached = localStorage.getItem('bsz_records_cache');
     if (cached) bszRecords = JSON.parse(cached);
   } catch (_) {}
+  await syncTransferDocsList();
   return bszRecords;
 }
 
@@ -7947,17 +9243,44 @@ function getBszRecord(setoranId) {
   return bszRecords[String(setoranId)] || null;
 }
 
-function openUploadBszModal(setoranId) {
+function getTransferDocRecord(setoranId, docType) {
+  if (!setoranId || !docType) return null;
+  if (docType === 'bsz') {
+    return getBszRecord(setoranId);
+  }
+  const sDocs = transferDocsRecords[String(setoranId)];
+  return (sDocs && sDocs[docType]) ? sDocs[docType] : null;
+}
+
+function openUploadDocModal(setoranId, docType) {
+  docType = docType || 'bsz';
   const modal = document.getElementById('uploadBszModal');
   if (!modal) return;
-  const item = (currentAdminSetoran || []).find(function (s) { return String(s.id) === String(setoranId); });
+  const item = (currentAdminSetoran || []).concat(currentSetoran || []).find(function (s) { return String(s.id) === String(setoranId); });
   const upzName = (item && ((upzMap && upzMap[item.upz_id]) || item.nama_upz || item.upz_id)) || 'UPZ';
 
+  const titles = {
+    bsz: { title: 'Unggah Bukti Setor Zakat (BSZ)', sub: 'Unggah berkas resmi BSZ untuk UPZ', label: 'Pilih Berkas BSZ (PDF / JPG / PNG):' },
+    tf_penta: { title: 'Unggah Bukti Transfer Pentasharufan', sub: 'Unggah bukti transfer perbantuan pentasharufan untuk UPZ', label: 'Pilih Bukti Transfer Pentasharufan (PDF / JPG / PNG):' },
+    tf_amil: { title: 'Unggah Bukti Transfer Hak Amil', sub: 'Unggah bukti transfer hak amil (5%) ke rekening UPZ', label: 'Pilih Bukti Transfer Hak Amil (PDF / JPG / PNG):' },
+    tf_salin: { title: 'Unggah Bukti Transfer Salin Aslimas', sub: 'Unggah bukti transfer program Salin Aslimas', label: 'Pilih Bukti Transfer Salin Aslimas (PDF / JPG / PNG):' }
+  };
+  const tInfo = titles[docType] || titles.bsz;
+
+  const titleEl = document.getElementById('uploadBszModalTitle');
+  if (titleEl) titleEl.textContent = tInfo.title;
+
   const subEl = document.getElementById('uploadBszModalSubtitle');
-  if (subEl) subEl.textContent = `Setoran: ${upzName} • ${item ? formatRupiah(item.nominal) : ''}`;
+  if (subEl) subEl.textContent = `${tInfo.sub} • ${upzName} (${item ? formatRupiah(item.nominal) : ''})`;
+
+  const labelEl = document.getElementById('uploadDocFileLabel');
+  if (labelEl) labelEl.textContent = tInfo.label;
 
   const idInput = document.getElementById('uploadBszSetoranId');
   if (idInput) idInput.value = setoranId;
+
+  const typeInput = document.getElementById('uploadDocType');
+  if (typeInput) typeInput.value = docType;
 
   const fileInput = document.getElementById('inputBszFile');
   if (fileInput) fileInput.value = '';
@@ -7966,15 +9289,15 @@ function openUploadBszModal(setoranId) {
   if (msgEl) { msgEl.textContent = ''; msgEl.className = 'form-message'; }
 
   const currentNotice = document.getElementById('uploadBszCurrentFileNotice');
-  const existing = getBszRecord(setoranId);
+  const existing = getTransferDocRecord(setoranId, docType);
   if (currentNotice) {
     if (existing && existing.file_name) {
       currentNotice.classList.remove('hidden');
-      currentNotice.innerHTML = `<strong>Berkas Saat Ini:</strong> ${escapeHtml(existing.file_name)} <span style="color:var(--slate-500);font-size:11px;">(${new Date(existing.uploaded_at).toLocaleDateString('id-ID')})</span> <a href="javascript:void(0)" id="previewCurrentBszLink" style="margin-left:8px;color:var(--primary);font-weight:600;">Lihat / Unduh</a>`;
-      const prevLink = document.getElementById('previewCurrentBszLink');
+      currentNotice.innerHTML = `<strong>Berkas Saat Ini:</strong> ${escapeHtml(existing.file_name)} <span style="color:var(--slate-500);font-size:11px;">(${new Date(existing.uploaded_at).toLocaleDateString('id-ID')})</span> <a href="javascript:void(0)" id="previewCurrentDocLink" style="margin-left:8px;color:var(--primary);font-weight:600;">Lihat / Unduh</a>`;
+      const prevLink = document.getElementById('previewCurrentDocLink');
       if (prevLink) {
         prevLink.addEventListener('click', function () {
-          downloadBszFile(setoranId);
+          downloadTransferDocFile(setoranId, docType);
         });
       }
     } else {
@@ -7985,10 +9308,14 @@ function openUploadBszModal(setoranId) {
 
   const btnText = document.getElementById('saveUploadBszBtnText');
   if (btnText) {
-    btnText.textContent = existing ? 'Perbarui Berkas BSZ' : 'Simpan & Terbitkan BSZ';
+    btnText.textContent = existing ? 'Perbarui Berkas' : 'Simpan & Unggah Berkas';
   }
 
   modal.classList.remove('hidden');
+}
+
+function openUploadBszModal(setoranId) {
+  return openUploadDocModal(setoranId, 'bsz');
 }
 
 function closeUploadBszModal() {
@@ -7996,19 +9323,20 @@ function closeUploadBszModal() {
   if (modal) modal.classList.add('hidden');
 }
 
-async function downloadBszFile(setoranId) {
-  const bsz = getBszRecord(setoranId);
-  if (!bsz) {
-    if (typeof showToast === 'function') showToast('Berkas BSZ belum tersedia untuk transaksi ini.', 'warning');
-    else alert('Berkas BSZ belum tersedia.');
+async function downloadTransferDocFile(setoranId, docType) {
+  docType = docType || 'bsz';
+  const doc = getTransferDocRecord(setoranId, docType);
+  if (!doc) {
+    if (typeof showToast === 'function') showToast('Berkas belum tersedia untuk transaksi ini.', 'warning');
+    else alert('Berkas belum tersedia.');
     return;
   }
 
   // 1. Jika ada file_data (base64 data url), unduh langsung
-  if (bsz.file_data && bsz.file_data.startsWith('data:')) {
+  if (doc.file_data && doc.file_data.startsWith('data:')) {
     const link = document.createElement('a');
-    link.href = bsz.file_data;
-    link.download = bsz.file_name || 'Bukti_Setor_Zakat.pdf';
+    link.href = doc.file_data;
+    link.download = doc.file_name || `${docType}_${setoranId.slice(0, 8)}.pdf`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -8016,14 +9344,14 @@ async function downloadBszFile(setoranId) {
   }
 
   // 2. Jika ada file_path di Supabase Storage
-  if (bsz.file_path) {
+  if (doc.file_path) {
     try {
-      const { data: fileBlob, error } = await supabaseClient.storage.from(STORAGE_BUCKET).download(bsz.file_path);
+      const { data: fileBlob, error } = await supabaseClient.storage.from(STORAGE_BUCKET).download(doc.file_path);
       if (!error && fileBlob) {
         const blobUrl = URL.createObjectURL(fileBlob);
         const link = document.createElement('a');
         link.href = blobUrl;
-        link.download = bsz.file_name || 'Bukti_Setor_Zakat.pdf';
+        link.download = doc.file_name || `${docType}_${setoranId.slice(0, 8)}.pdf`;
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -8031,11 +9359,15 @@ async function downloadBszFile(setoranId) {
         return;
       }
     } catch (e) {
-      console.warn('Storage BSZ download error:', e);
+      console.warn('Storage doc download error:', e);
     }
   }
 
-  alert('Gagal mengunduh berkas BSZ. Berkas tidak ditemukan.');
+  alert('Gagal mengunduh berkas. Berkas tidak ditemukan.');
+}
+
+function downloadBszFile(setoranId) {
+  return downloadTransferDocFile(setoranId, 'bsz');
 }
 
 function initBszUploadFeature() {
@@ -8045,6 +9377,7 @@ function initBszUploadFeature() {
   const saveBtn = document.getElementById('saveUploadBszBtn');
   const fileInput = document.getElementById('inputBszFile');
   const idInput = document.getElementById('uploadBszSetoranId');
+  const typeInput = document.getElementById('uploadDocType');
   const msgEl = document.getElementById('uploadBszMsg');
 
   if (closeX) closeX.addEventListener('click', closeUploadBszModal);
@@ -8058,6 +9391,8 @@ function initBszUploadFeature() {
   if (saveBtn) {
     saveBtn.addEventListener('click', async function () {
       const setoranId = idInput ? idInput.value : '';
+      const docType = (typeInput && typeInput.value) || 'bsz';
+
       if (!setoranId) {
         if (msgEl) showMessage(msgEl, 'ID setoran tidak valid.', '#d93025');
         return;
@@ -8065,7 +9400,14 @@ function initBszUploadFeature() {
 
       const file = fileInput && fileInput.files ? fileInput.files[0] : null;
       if (!file) {
-        if (msgEl) showMessage(msgEl, 'Pilih berkas BSZ terlebih dahulu.', '#d93025');
+        if (msgEl) showMessage(msgEl, 'Pilih berkas terlebih dahulu.', '#d93025');
+        return;
+      }
+
+      const validExts = ['pdf', 'jpg', 'jpeg', 'png'];
+      const ext = (file.name.split('.').pop() || '').toLowerCase();
+      if (!validExts.includes(ext)) {
+        if (msgEl) showMessage(msgEl, 'Format berkas harus PDF, JPG, atau PNG.', '#d93025');
         return;
       }
 
@@ -8075,7 +9417,7 @@ function initBszUploadFeature() {
       }
 
       saveBtn.disabled = true;
-      if (msgEl) showMessage(msgEl, 'Mengunggah berkas BSZ...', '#0f6c3e');
+      if (msgEl) showMessage(msgEl, 'Mengunggah berkas...', '#0f6c3e');
 
       try {
         const reader = new FileReader();
@@ -8089,49 +9431,62 @@ function initBszUploadFeature() {
         let storageFilePath = '';
         try {
           const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-          storageFilePath = `bsz/${setoranId}/${safeName}`;
+          storageFilePath = `docs/${docType}/${setoranId}/${safeName}`;
           await supabaseClient.storage.from(STORAGE_BUCKET).upload(storageFilePath, file, {
             upsert: true
           });
         } catch (stErr) {
-          console.warn('Upload BSZ to supabase storage fallback to local:', stErr);
+          console.warn('Upload doc to supabase storage fallback to local:', stErr);
         }
 
-        const item = (currentAdminSetoran || []).find(function (s) { return String(s.id) === String(setoranId); });
+        const item = (currentAdminSetoran || []).concat(currentSetoran || []).find(function (s) { return String(s.id) === String(setoranId); });
         const upzId = item ? (item.upz_id || '') : '';
 
-        const saveRes = await fetch('/api/save-bsz', {
+        const endpoint = (docType === 'bsz') ? '/api/save-bsz' : '/api/save-transfer-doc';
+        const payload = {
+          setoran_id: setoranId,
+          doc_type: docType,
+          file_name: file.name,
+          file_path: storageFilePath,
+          file_data: fileDataUrl,
+          upz_id: upzId,
+          uploaded_at: new Date().toISOString()
+        };
+
+        const saveRes = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            setoran_id: setoranId,
-            file_name: file.name,
-            file_path: storageFilePath,
-            file_data: fileDataUrl,
-            upz_id: upzId,
-            uploaded_at: new Date().toISOString()
-          })
+          body: JSON.stringify(payload)
         });
 
         const saveJson = await saveRes.json();
         if (!saveJson.success) {
-          throw new Error(saveJson.message || 'Gagal menyimpan data BSZ ke server.');
+          throw new Error(saveJson.message || 'Gagal menyimpan data berkas ke server.');
         }
 
-        bszRecords[setoranId] = saveJson.data;
-        try { localStorage.setItem('bsz_records_cache', JSON.stringify(bszRecords)); } catch (_) {}
+        if (docType === 'bsz') {
+          bszRecords[setoranId] = saveJson.data;
+          try { localStorage.setItem('bsz_records_cache', JSON.stringify(bszRecords)); } catch (_) {}
+        }
+        if (!transferDocsRecords[setoranId]) transferDocsRecords[setoranId] = {};
+        transferDocsRecords[setoranId][docType] = saveJson.data;
+        try { localStorage.setItem('transfer_docs_cache', JSON.stringify(transferDocsRecords)); } catch (_) {}
 
-        if (msgEl) showMessage(msgEl, 'Bukti Setor Zakat (BSZ) berhasil disimpan & diterbitkan!', '#0f6c3e');
-        if (typeof showToast === 'function') showToast('BSZ berhasil diterbitkan untuk UPZ.', 'success');
+        if (msgEl) showMessage(msgEl, 'Berkas berhasil disimpan & diterbitkan!', '#0f6c3e');
+        if (typeof showToast === 'function') showToast('Berkas berhasil diterbitkan.', 'success');
 
         setTimeout(function () {
           closeUploadBszModal();
           if (typeof renderAdminSetoran === 'function') renderAdminSetoran(currentAdminSetoran);
+          if (typeof renderRiwayat === 'function' && typeof currentSetoran !== 'undefined') renderRiwayat(currentSetoran);
+          if (typeof updateDetailModalDocsSection === 'function') {
+            updateDetailModalDocsSection(setoranId, currentProfile && currentProfile.role === 'admin');
+          }
         }, 800);
 
       } catch (err) {
-        console.error('SAVE BSZ ERROR:', err);
-        if (msgEl) showMessage(msgEl, 'Gagal mengunggah BSZ: ' + (err.message || 'Terjadi kesalahan'), '#d93025');
+        console.error('SAVE DOC ERROR:', err);
+        if (msgEl) showMessage(msgEl, 'Gagal mengunggah berkas: ' + (err.message || 'Terjadi kesalahan'), '#d93025');
       } finally {
         saveBtn.disabled = false;
       }
@@ -8257,4 +9612,1155 @@ if (document.readyState === 'loading') {
   runAllNewFeaturesInit();
 }
 
+// ======================================================================
+// 8. ENGINE BUKU PANDUAN PENGGUNAAN SISTEM DINAMIS & REKAMAN INTERAKTIF
+// ======================================================================
+
+const SYSTEM_GUIDE_REGISTRY = [
+  // ----------------------------------------------------
+  // ROLE: UPZ
+  // ----------------------------------------------------
+  {
+    id: 'upz_setoran',
+    role: 'upz',
+    kategori: 'Alur Utama',
+    tone: 'emerald',
+    badge: 'Alur Baku Transaksi',
+    judul: 'Alur Pengajuan Setoran ZIS & Upload Muzaki',
+    subjudul: 'Petunjuk lengkap pengisian data setoran, unggah bukti transfer, file Excel muzaki, dan validasi BAZNAS Banyumas.',
+    targetView: 'input',
+    targetLabel: 'Buka Input Setoran',
+    getLiveParams: function (ctx) {
+      return [
+        { label: 'Format Rincian Muzaki', value: 'File Excel (.xlsx / .xls)', icon: 'sheet' },
+        { label: 'Format Bukti Setor', value: 'Gambar / PDF (Maks 10MB)', icon: 'image' },
+        { label: 'Rekening Tujuan Resmi', value: 'BSI / Bank Jateng BAZNAS Banyumas', icon: 'building' },
+        { label: 'Status Awal Transaksi', value: 'Menunggu Verifikasi', icon: 'clock' }
+      ];
+    },
+    illustrationType: 'diagram-flow',
+    flowSteps: [
+      { num: '01', title: 'Input ZIS', desc: 'Pilih jenis & nominal setoran' },
+      { num: '02', title: 'Upload Berkas', desc: 'Bukti transfer & Excel muzaki' },
+      { num: '03', title: 'Verifikasi', desc: 'Admin validasi mutasi bank' },
+      { num: '04', title: 'Terbit BSZ', desc: 'Unduh Bukti Setor Zakat resmi' }
+    ],
+    steps: function () {
+      return [
+        {
+          title: 'Pengisian Formulir Setoran',
+          desc: 'Buka menu <strong>Input Setoran</strong> dari hamburger, tentukan jenis ZIS (Zakat Fitrah, Zakat Maal, Infak Terikat, dll), isikan nominal rupiah, tanggal setor, dan rekening bank tujuan.',
+          tag: 'Wajib'
+        },
+        {
+          title: 'Unggah Bukti Transfer & Excel Muzaki',
+          desc: 'Lampirkan foto struk transfer/bukti mutasi bank dan file Excel rincian donatur sesuai template standar BAZNAS.',
+          tag: 'Berkas'
+        },
+        {
+          title: 'Pemantauan Status & Hak Batal Mandiri',
+          desc: 'Setoran baru akan berstatus <em>Menunggu Verifikasi</em>. Selama status masih Menunggu, jika terdapat kekeliruan data atau duplikasi, UPZ dapat <strong>menghapus setoran mandiri</strong> langsung dari modal rincian berkas (ikon #i-file-text).',
+          tag: 'Fitur Baru'
+        },
+        {
+          title: 'Penerbitan Bukti Setor Zakat (BSZ)',
+          desc: 'Setelah Admin memverifikasi dana masuk, status berubah menjadi <em>Diverifikasi</em> dan tombol <strong>Unduh BSZ Resmi</strong> (format PDF/JPG/PNG) akan aktif di modal rincian setoran.',
+          tag: 'Legalitas'
+        }
+      ];
+    },
+    notice: {
+      type: 'tip',
+      text: 'Simpan file BSZ yang telah diunduh sebagai arsip legalitas pertanggungjawaban resmi UPZ kepada muzaki dan auditor syariah.'
+    }
+  },
+
+  {
+    id: 'upz_pentasharufan',
+    role: 'upz',
+    kategori: 'Pentasharufan & RKAT',
+    tone: 'teal',
+    badge: 'Kalkulasi Otomatis',
+    judul: 'Alur Perbantuan Pentasharufan & Anggaran RKAT',
+    subjudul: 'Pemanfaatan pagu perbantuan penyaluran dana ZIS untuk mustahik di lingkungan UPZ dengan sistem kuota terintegrasi.',
+    targetView: 'pentasharufan',
+    targetLabel: 'Buka Pentasharufan UPZ',
+    getLiveParams: function (ctx) {
+      return [
+        { label: 'Pagu Perbantuan Pentasharufan', value: ctx.pentaPersen + ' dari setoran bulan berjalan', icon: 'hand-heart' },
+        { label: 'Hak Amil UPZ', value: ctx.amilPersen + ' dari setoran', icon: 'wallet' },
+        { label: 'Tagihan Salin Aslimas', value: ctx.salinAslimas + ' / bulan', icon: 'receipt' },
+        { label: 'Status Akses RKAT Akun', value: ctx.rkatStatusText, icon: 'lock' },
+        { label: 'CS Konfirmasi WhatsApp', value: ctx.csPentaWa, icon: 'message-circle' }
+      ];
+    },
+    illustrationType: 'ui-mockup-penta',
+    steps: function (ctx) {
+      const waRkat = (ctx && ctx.csRkatWa) || '+62 813-6869-1114';
+      const waPenta = (ctx && ctx.csPentaWa) || '+62 851-3374-4077';
+      return [
+        {
+          title: 'Pengecekan Akses RKAT & WhatsApp CS',
+          desc: 'Bila form perbantuan terkunci, klik tombol hijau <strong>Daftarkan RKAT</strong> untuk menghubungi WhatsApp CS BAZNAS (' + waRkat + '). Admin akan membuka akses secara real-time.',
+          tag: 'Akses'
+        },
+        {
+          title: 'Pemantauan 6 Scorecard Anggaran',
+          desc: 'Sistem menyajikan 6 kartu anggaran: <em>1. Pagu Alokasi Pentasharufan</em>, <em>2. Tagihan Salin Aslimas</em>, <em>3. Hak Amil UPZ</em>, <em>4. Total Sudah Ditasharufkan</em>, <em>5. Sisa Anggaran Tersedia</em>, dan <em>6. Total Mustahik</em>.',
+          tag: 'Transparansi'
+        },
+        {
+          title: 'Pengajuan Permohonan Bantuan',
+          desc: 'Pilih program (Banyumas Peduli, Banyumas Cerdas, Banyumas Sehat, Banyumas Sejahtera, Banyumas Takwa, atau Salin Aslimas), masukkan nominal kebutuhan, serta upload daftar mustahik Excel dan foto kegiatan.',
+          tag: 'Dokumen'
+        },
+        {
+          title: 'Konfirmasi Cepat via WhatsApp',
+          desc: 'Setelah mengajukan permohonan, klik tombol <strong>Konfirmasi WhatsApp</strong> di baris riwayat permohonan ke nomor <strong>' + waPenta + '</strong> agar berkas segera diproses tim BAZNAS.',
+          tag: 'Respon Cepat'
+        }
+      ];
+    },
+    notice: {
+      type: 'warning',
+      text: 'Nominal pengajuan tidak boleh melampaui sisa anggaran perbantuan pentasharufan bulan berjalan yang tercatat di scorecard.'
+    }
+  },
+
+  {
+    id: 'upz_bsz_dokumen',
+    role: 'upz',
+    kategori: 'Dokumen & BSZ',
+    tone: 'purple',
+    badge: 'Terintegrasi',
+    judul: 'Manajemen BSZ & Pembatalan Transaksi',
+    subjudul: 'Panduan mengakses berkas Bukti Setor Zakat (BSZ) resmi dan pembatalan setoran keliru.',
+    targetView: 'riwayat',
+    targetLabel: 'Buka Riwayat Setoran',
+    getLiveParams: function (ctx) {
+      return [
+        { label: 'Format Berkas BSZ', value: ctx.bszFormats, icon: 'sheet' },
+        { label: 'Maksimal Ukuran File', value: '20 MB per dokumen', icon: 'upload' },
+        { label: 'Otoritas Hapus Mandiri', value: 'Hanya setoran status "Menunggu"', icon: 'shield' }
+      ];
+    },
+    illustrationType: 'ui-mockup-setoran',
+    steps: function () {
+      return [
+        {
+          title: 'Melihat Rincian Setoran',
+          desc: 'Pada tabel <strong>Riwayat Setoran</strong>, klik tombol ikon berkas (<code>#i-file-text</code>) pada baris transaksi untuk membuka dialog rincian lengkap setoran Anda.',
+          tag: 'Aksi'
+        },
+        {
+          title: 'Mengunduh BSZ Sah',
+          desc: 'Jika setoran telah berstatus <em>Diverifikasi</em> dan Admin BAZNAS telah menerbitkan BSZ, tombol hijau <strong>Unduh Berkas BSZ</strong> akan aktif. Klik untuk menyimpan file PDF/JPG/PNG ke perangkat Anda.',
+          tag: 'Download'
+        },
+        {
+          title: 'Membatalkan / Menghapus Setoran',
+          desc: 'Bila Anda salah menginput nominal atau terjadi double submit, selama status masih <em>Menunggu</em> Anda dapat menekan tombol merah <strong>Hapus Setoran Ini</strong> di dalam modal rincian.',
+          tag: 'Koreksi'
+        }
+      ];
+    },
+    notice: {
+      type: 'info',
+      text: 'Bila setoran sudah berstatus Diverifikasi namun terdapat kekeliruan data, hubungi Administrator BAZNAS untuk pembatalan transaksi.'
+    }
+  },
+
+  {
+    id: 'upz_profil',
+    role: 'upz',
+    kategori: 'Administrasi & Akun',
+    tone: 'amber',
+    badge: 'Sinkronisasi Otomatis',
+    judul: 'Manajemen Profil Lembaga & Kata Sandi UPZ',
+    subjudul: 'Pembaruan nama pengelola (PIC), nomor SK, nama ketua UPZ, dan perlindungan keamanan akun.',
+    targetView: 'mgmt',
+    targetLabel: 'Buka Manajemen UPZ',
+    getLiveParams: function (ctx) {
+      return [
+        { label: 'Status Sinkronisasi', value: 'Otomatis Cloud Supabase + Local', icon: 'refresh' },
+        { label: 'Panjang Sandi Minimum', value: '6 Karakter', icon: 'lock' },
+        { label: 'Helpdesk Teknis BAZNAS', value: ctx.helpdeskWa, icon: 'message-circle' }
+      ];
+    },
+    illustrationType: 'diagram-flow',
+    flowSteps: [
+      { num: '01', title: 'Edit Profil', desc: 'Ubah PIC, No SK & Ketua' },
+      { num: '02', title: 'Validasi', desc: 'Pengecekan integritas data' },
+      { num: '03', title: 'Sync Server', desc: 'Sinkronisasi instan ke admin' },
+      { num: '04', title: 'Ganti Sandi', desc: 'Keamanan akun berkala' }
+    ],
+    steps: function () {
+      return [
+        {
+          title: 'Perbarui Data Pengurus UPZ',
+          desc: 'Buka menu <strong>Manajemen UPZ</strong>, klik tombol <em>Edit Profil UPZ</em>. Anda dapat memperbarui Nama Pengelola / PIC, Nomor SK UPZ, dan Nama Ketua UPZ.',
+          tag: 'Profil'
+        },
+        {
+          title: 'Sinkronisasi Instan ke Administrator',
+          desc: 'Setiap pembaruan data profil UPZ langsung tersinkron ke database BAZNAS dan panel notifikasi aktivitas admin secara real-time.',
+          tag: 'Otomatis'
+        },
+        {
+          title: 'Pergantian Kata Sandi Berkala',
+          desc: 'Gunakan form <em>Ubah Kata Sandi</em> untuk mengganti password secara berkala demi menjamin keamanan data transaksi lembaga Anda.',
+          tag: 'Keamanan'
+        }
+      ];
+    },
+    notice: {
+      type: 'tip',
+      text: 'Jika terjadi kendala saat login atau lupa kata sandi, hubungi Helpdesk IT BAZNAS Banyumas melalui nomor resmi tertera.'
+    }
+  },
+
+  // ----------------------------------------------------
+  // ROLE: ADMIN
+  // ----------------------------------------------------
+  {
+    id: 'admin_verifikasi_setoran',
+    role: 'admin',
+    kategori: 'Alur Utama',
+    tone: 'emerald',
+    badge: 'Otoritas Verifikasi',
+    judul: 'Verifikasi Setoran UPZ & Penerbitan BSZ',
+    subjudul: 'SOP verifikasi mutasi dana masuk rekening BAZNAS, pemeriksaan rincian donatur muzaki, penerbitan BSZ resmi, dan pembatalan transaksi.',
+    targetView: 'setoran',
+    targetLabel: 'Buka Daftar Setoran',
+    getLiveParams: function (ctx) {
+      return [
+        { label: 'Format BSZ Diterima', value: ctx.bszFormats, icon: 'sheet' },
+        { label: 'Kapasitas Unggah Berkas', value: 'Maksimum 20 MB', icon: 'upload' },
+        { label: 'Hak Akses Hapus Transaksi', value: 'Administrator & Superadmin', icon: 'shield' }
+      ];
+    },
+    illustrationType: 'ui-mockup-setoran',
+    steps: function () {
+      return [
+        {
+          title: 'Pemeriksaan Mutasi Bank & Bukti Transfer',
+          desc: 'Buka menu <strong>Daftar Setoran</strong>, cari transaksi berstatus <em>Menunggu</em>. Cocokkan nominal pada bukti transfer dengan mutasi rekening BAZNAS Banyumas.',
+          tag: 'Audit'
+        },
+        {
+          title: 'Ubah Status ke Diverifikasi',
+          desc: 'Gunakan dropdown status untuk mengubah transaksi menjadi <em>Diverifikasi</em> setelah dana dipastikan masuk. Sistem akan langsung memperbarui saldo dan riwayat di sisi UPZ.',
+          tag: 'Validasi'
+        },
+        {
+          title: 'Unggah Berkas Bukti Setor Zakat (BSZ)',
+          desc: 'Klik tombol berkas (<code>#i-file-text</code>), lalu pada box <em>Unggah Berkas BSZ Resmi</em> pilih file (PDF, JPG, atau PNG maks 20MB) dan klik <strong>Unggah BSZ</strong>. Berkas seketika tersedia bagi UPZ.',
+          tag: 'BSZ'
+        },
+        {
+          title: 'Pembatalan / Hapus Setoran Keliru',
+          desc: 'Jika terjadi kesalahan fatal atau permohonan pembatalan dari UPZ, admin dapat menekan tombol merah <strong>Hapus Setoran Ini</strong> untuk membatalkan transaksi secara permanen.',
+          tag: 'Penghapusan'
+        }
+      ];
+    },
+    notice: {
+      type: 'warning',
+      text: 'Pastikan file BSZ yang diunggah memiliki stempel resmi BAZNAS Kabupaten Banyumas dan nomor seri bukti setor yang sah.'
+    }
+  },
+
+  {
+    id: 'admin_rkat_penta',
+    role: 'admin',
+    kategori: 'Pentasharufan & RKAT',
+    tone: 'teal',
+    badge: 'Alokasi Dinamis',
+    judul: 'Konfigurasi RKAT, Pagu Persentase & Approval Bantuan',
+    subjudul: 'Kontrol pembukaan lock RKAT, penentuan persentase perbantuan pentasharufan & hak amil, tagihan Salin Aslimas, serta approval bantuan.',
+    targetView: 'pentasharufan',
+    targetLabel: 'Buka Pentasharufan Admin',
+    getLiveParams: function (ctx) {
+      return [
+        { label: 'Default Pagu Pentasharufan', value: ctx.pentaPersen, icon: 'hand-heart' },
+        { label: 'Default Hak Amil UPZ', value: ctx.amilPersen, icon: 'wallet' },
+        { label: 'Nominal Salin Aslimas Aktif', value: ctx.salinAslimas + ' / bulan', icon: 'receipt' },
+        { label: 'WhatsApp Pendaftaran RKAT', value: ctx.csRkatWa, icon: 'message-circle' },
+        { label: 'WhatsApp Konfirmasi Permohonan', value: ctx.csPentaWa, icon: 'message-circle' }
+      ];
+    },
+    illustrationType: 'ui-mockup-penta',
+    steps: function (ctx) {
+      const waRkat = (ctx && ctx.csRkatWa) || '+62 813-6869-1114';
+      const pPenta = (ctx && ctx.pentaPersen) || '35%';
+      const pAmil = (ctx && ctx.amilPersen) || '5%';
+      return [
+        {
+          title: 'Buka Lock RKAT untuk UPZ Terkonfirmasi',
+          desc: 'Setelah UPZ menghubungi WhatsApp (' + waRkat + '), buka tab <em>Akses RKAT</em>, pilih nama UPZ dari dropdown, dan klik <strong>Buka Lock RKAT</strong> agar UPZ dapat mengakses form perbantuan.',
+          tag: 'Lock RKAT'
+        },
+        {
+          title: 'Kustomisasi Persentase Pagu & Hak Amil',
+          desc: 'Jika UPZ memiliki perjanjian anggaran khusus di luar default (' + pPenta + ' dan ' + pAmil + '), atur persentase spesifik pada form konfigurasi UPZ bersangkutan.',
+          tag: 'Kustomisasi'
+        },
+        {
+          title: 'Pengaturan Tagihan Salin Aslimas',
+          desc: 'Isikan besaran tagihan program Salin Aslimas pada box nominal mandiri yang berada tepat di samping keterangan label Rp.',
+          tag: 'Salin Aslimas'
+        },
+        {
+          title: 'Review & Unduh Berkas Mustahik',
+          desc: 'Pada tabel <em>Daftar Permohonan Pentasharufan</em>, periksa nominal pengajuan, unduh berkas Excel daftar mustahik & foto dokumentasi, lalu ubah status menjadi <strong>Disetujui</strong> atau <strong>Selesai</strong>.',
+          tag: 'Approval'
+        }
+      ];
+    },
+    notice: {
+      type: 'tip',
+      text: 'Semua perubahan persentase dan unlock RKAT langsung mengubah formula kalkulasi anggaran di dashboard UPZ tanpa perlu reload browser.'
+    }
+  },
+
+  {
+    id: 'admin_manajemen_upz',
+    role: 'admin',
+    kategori: 'Administrasi & Akun',
+    tone: 'amber',
+    badge: 'Sinkronisasi Cloud',
+    judul: 'Manajemen Akun UPZ & Sinkronisasi Supabase Auth',
+    subjudul: 'Pendaftaran instansi UPZ baru, klasifikasi kategori, penggantian email login dengan auto-sync Supabase, dan reset password.',
+    targetView: 'upz',
+    targetLabel: 'Buka Manajemen Akun UPZ',
+    getLiveParams: function (ctx) {
+      return [
+        { label: 'Otoritas Autentikasi', value: 'Supabase Auth + Database Server', icon: 'shield' },
+        { label: 'Auto-Sync Email Login', value: 'Aktif (Otomatis Sync ke Supabase)', icon: 'refresh' },
+        { label: 'Kategori Instansi UPZ', value: 'OPD, Korwilcam, SMP, Desa, Masjid, dll', icon: 'building' }
+      ];
+    },
+    illustrationType: 'diagram-flow',
+    flowSteps: [
+      { num: '01', title: 'Tambah Akun', desc: 'Isi instansi, email & sandi' },
+      { num: '02', title: 'Klasifikasi', desc: 'Tentukan kategori instansi' },
+      { num: '03', title: 'Auto-Sync', desc: 'Sinkronisasi ke Supabase Auth' },
+      { num: '04', title: 'Audit Log', desc: 'Pantau histori perubahaan' }
+    ],
+    steps: function () {
+      return [
+        {
+          title: 'Pendaftaran Akun UPZ Baru',
+          desc: 'Buka menu <strong>Manajemen Akun UPZ</strong>, klik tombol <em>Tambah UPZ Baru</em>. Isi nama instansi UPZ, email operasional, kata sandi, dan kategori instansi.',
+          tag: 'Pendaftaran'
+        },
+        {
+          title: 'Pembaruan Email & Auto-Sync Supabase',
+          desc: 'Bila email UPZ diubah melalui panel admin, sistem otomatis memperbarui akun auth di Supabase Auth sehingga pengguna UPZ dapat langsung login menggunakan email baru.',
+          tag: 'Supabase Sync'
+        },
+        {
+          title: 'Monitoring Notifikasi Aktivitas UPZ',
+          desc: 'Setiap aktivitas upload berkas setoran, permohonan pentasharufan, dan perubahan profil UPZ otomatis masuk ke dropdown lonceng notifikasi di header admin.',
+          tag: 'Notifikasi'
+        }
+      ];
+    },
+    notice: {
+      type: 'info',
+      text: 'Gunakan filter pencarian dan kategori untuk mengelola akun UPZ se-Kabupaten Banyumas dengan efisien.'
+    }
+  },
+
+  {
+    id: 'admin_export_rekap',
+    role: 'admin',
+    kategori: 'Dokumen & BSZ',
+    tone: 'purple',
+    badge: 'Pelaporan Resmi',
+    judul: 'Ekspor Rekapitulasi Excel & Audit Kinerja',
+    subjudul: 'Penerbitan rekapitulasi setoran ZIS berkala, ekspor database muzaki, dan analitik grafis eksekutif.',
+    targetView: 'beranda',
+    targetLabel: 'Buka Beranda Eksekutif',
+    getLiveParams: function (ctx) {
+      return [
+        { label: 'Format Dokumen Rekap', value: 'Microsoft Excel (.xlsx)', icon: 'sheet' },
+        { label: 'Filter Periode', value: 'Bulan, Tahun, & Kategori Lembaga', icon: 'calendar' },
+        { label: 'Visualisasi Grafis', value: 'Grafik Bulanan & Ranking Keaktifan UPZ', icon: 'bar-chart' }
+      ];
+    },
+    illustrationType: 'diagram-flow',
+    flowSteps: [
+      { num: '01', title: 'Pilih Menu', desc: 'Export Rekap Excel via Hamburger' },
+      { num: '02', title: 'Set Periode', desc: 'Tentukan bulan & tahun laporan' },
+      { num: '03', title: 'Generate', desc: 'Pemrosesan lembar kerja Excel' },
+      { num: '04', title: 'Unduh File', desc: 'File .xlsx siap diaudit' }
+    ],
+    steps: function () {
+      return [
+        {
+          title: 'Akses Menu Export Rekap Excel',
+          desc: 'Buka hamburger menu di sudut kanan atas, pilih <strong>Export Rekap Excel</strong>.',
+          tag: 'Menu'
+        },
+        {
+          title: 'Filter Rentang Waktu & Kategori',
+          desc: 'Tentukan filter bulan dan tahun pembukuan yang ingin direkap. Anda dapat memilih rekapitulasi seluruh kategori atau spesifik per klaster UPZ.',
+          tag: 'Filter'
+        },
+        {
+          title: 'Unduh File Excel Terstruktur',
+          desc: 'Klik tombol <em>Download Rekap</em>. File Excel akan di-generate secara otomatis berisi rincian tanggal, nama UPZ, jenis ZIS, nominal dana, status verifikasi, dan rekapan donatur.',
+          tag: 'Export'
+        }
+      ];
+    },
+    notice: {
+      type: 'tip',
+      text: 'Format ekspor telah distandardisasi sesuai Pedoman Tata Kelola Pelaporan BAZNAS RI.'
+    }
+  }
+];
+
+// DATA SKENARIO REKAMAN INTERAKTIF & SIMULASI ALUR
+const RECORDER_SCENARIOS = {
+  upz: [
+    {
+      id: 'rec_upz_1',
+      title: 'Rekaman 1: Input Setoran ZIS & Upload Berkas',
+      targetView: 'input',
+      steps: [
+        {
+          stepNum: 1,
+          time: '00:04',
+          title: 'Langkah 1: Pengisian Form & Rekening Tujuan',
+          desc: 'Pengurus UPZ membuka form input setoran, memilih jenis dana ZIS (misal Zakat Fitrah Rp 5.000.000), tanggal setor, dan rekening bank tujuan.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;gap:10px;width:100%;flex-wrap:wrap;">
+              <div style="background:#0f766e;color:#fff;padding:5px 12px;border-radius:6px;font-weight:600;font-size:12px;">Jenis: Zakat Fitrah</div>
+              <div style="background:rgba(255,255,255,0.06);padding:5px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#38bdf8;">Nominal: Rp 5.000.000</div>
+              <div style="background:rgba(255,255,255,0.06);padding:5px 12px;border-radius:6px;font-size:12px;color:#cbd5e1;">Bank: BSI BAZNAS</div>
+            </div>
+          `
+        },
+        {
+          stepNum: 2,
+          time: '00:08',
+          title: 'Langkah 2: Unggah Bukti Mutasi & Excel Muzaki',
+          desc: 'Lampirkan foto struk transfer mutasi bank serta file Excel rincian donatur sesuai format resmi BAZNAS Banyumas.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;gap:12px;width:100%;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:6px;color:#34d399;font-size:12px;"><svg class="icon" style="width:14px;height:14px;"><use href="#i-image"></use></svg> <span>bukti_mutasi_bank.jpg (Terlampir)</span></div>
+              <div style="display:flex;align-items:center;gap:6px;color:#38bdf8;font-size:12px;"><svg class="icon" style="width:14px;height:14px;"><use href="#i-sheet"></use></svg> <span>muzaki_50_orang.xlsx (Valid)</span></div>
+            </div>
+          `
+        },
+        {
+          stepNum: 3,
+          time: '00:12',
+          title: 'Langkah 3: Kirim Setoran & Status "Menunggu"',
+          desc: 'Transaksi langsung tersimpan ke cloud. Berstatus Menunggu Verifikasi. Selama status Menunggu, opsi Hapus Setoran aktif mandiri jika keliru.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
+              <span style="font-size:12px;color:#f8fafc;">Status Transaksi: <strong style="color:#fbbf24;">Menunggu Verifikasi Admin</strong></span>
+              <span style="background:rgba(239,68,68,0.2);color:#f87171;padding:3px 8px;border-radius:4px;font-size:11px;">Tersedia Opsi Hapus Mandiri</span>
+            </div>
+          `
+        },
+        {
+          stepNum: 4,
+          time: '00:16',
+          title: 'Langkah 4: Verifikasi Selesai & Unduh Berkas BSZ',
+          desc: 'Admin memeriksa transfer bank dan menerbitkan BSZ. Status berubah menjadi Diverifikasi dan tombol hijau Unduh BSZ Resmi siap diunduh.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
+              <span style="color:#34d399;font-weight:600;font-size:12px;"><svg class="icon" style="width:14px;height:14px;"><use href="#i-check"></use></svg> Status: Diverifikasi (Sah)</span>
+              <button type="button" class="guide-mockup-action-btn" style="background:#10b981;padding:5px 12px;"><svg class="icon" style="width:12px;height:12px;"><use href="#i-file-text"></use></svg> Unduh BSZ Sah (.PDF)</button>
+            </div>
+          `
+        }
+      ]
+    },
+    {
+      id: 'rec_upz_2',
+      title: 'Rekaman 2: Pendaftaran RKAT & 6 Scorecard Pentasharufan',
+      targetView: 'pentasharufan',
+      steps: [
+        {
+          stepNum: 1,
+          time: '00:04',
+          title: 'Langkah 1: Kunci RKAT Aktif & Hubungi CS WhatsApp',
+          desc: 'Jika perbantuan pentasharufan terkunci, UPZ menekan tombol hijau Daftarkan RKAT untuk menghubungi CS BAZNAS (+62 813-6869-1114).',
+          previewHtml: `
+            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
+              <span style="color:#f87171;font-size:12px;">Kunci RKAT Aktif: Form Perbantuan Belum Terbuka</span>
+              <span style="background:#16a34a;color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;">Daftarkan RKAT via WhatsApp</span>
+            </div>
+          `
+        },
+        {
+          stepNum: 2,
+          time: '00:08',
+          title: 'Langkah 2: Akses Dibuka & Monitor 6 Scorecard',
+          desc: 'Setelah admin membuka akses, 6 kartu anggaran otomatis menampilkan Pagu Perbantuan, Tagihan Salin Aslimas, dan Hak Amil UPZ.',
+          previewHtml: `
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;font-size:11px;">
+              <div style="background:rgba(255,255,255,0.05);padding:5px;border-radius:4px;text-align:center;"><span style="color:#94a3b8;">Pagu Penta</span><br><strong style="color:#34d399;">35% Setoran</strong></div>
+              <div style="background:rgba(255,255,255,0.05);padding:5px;border-radius:4px;text-align:center;"><span style="color:#94a3b8;">Salin Aslimas</span><br><strong style="color:#38bdf8;">Rp 0</strong></div>
+              <div style="background:rgba(255,255,255,0.05);padding:5px;border-radius:4px;text-align:center;"><span style="color:#94a3b8;">Hak Amil</span><br><strong style="color:#fbbf24;">5% Setoran</strong></div>
+            </div>
+          `
+        },
+        {
+          stepNum: 3,
+          time: '00:12',
+          title: 'Langkah 3: Ajukan Permohonan Bantuan',
+          desc: 'Pilih program (Banyumas Peduli, Banyumas Cerdas, dll), isi nominal kebutuhan mustahik sesuai sisa anggaran, dan lampirkan berkas.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;gap:12px;width:100%;font-size:12px;flex-wrap:wrap;">
+              <span style="color:#38bdf8;">Program: Banyumas Peduli</span>
+              <span style="color:#f8fafc;">Nominal Diajukan: Rp 1.500.000</span>
+              <span style="color:#34d399;">Pagu Anggaran: Tersedia</span>
+            </div>
+          `
+        },
+        {
+          stepNum: 4,
+          time: '00:16',
+          title: 'Langkah 4: Konfirmasi Cepat via WhatsApp',
+          desc: 'Klik tombol hijau Konfirmasi WhatsApp (+62 851-3374-4077) di kartu riwayat permohonan untuk percepatan verifikasi pencairan bantuan.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
+              <span style="font-size:12px;color:#94a3b8;">Pesan WhatsApp terformat otomatis dengan nomor registrasi</span>
+              <span style="background:#22c55e;color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;">Kirim WA (+62 851-3374-4077)</span>
+            </div>
+          `
+        }
+      ]
+    }
+  ],
+  admin: [
+    {
+      id: 'rec_admin_1',
+      title: 'Rekaman 1: Verifikasi Setoran & Unggah Berkas BSZ',
+      targetView: 'setoran',
+      steps: [
+        {
+          stepNum: 1,
+          time: '00:04',
+          title: 'Langkah 1: Review Mutasi Bank Setoran UPZ',
+          desc: 'Admin membuka Daftar Setoran, memeriksa bukti transfer struk bank dan rincian donatur Excel dari UPZ pemohon.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;gap:12px;width:100%;font-size:12px;flex-wrap:wrap;">
+              <span style="color:#cbd5e1;">UPZ Kecamatan / Desa</span>
+              <span style="color:#38bdf8;font-family:monospace;">Rp 10.000.000 (Zakat Maal)</span>
+              <span style="background:#78350f;color:#fde68a;padding:2px 6px;border-radius:4px;font-size:10px;">Menunggu</span>
+            </div>
+          `
+        },
+        {
+          stepNum: 2,
+          time: '00:08',
+          title: 'Langkah 2: Verifikasi & Penerbitan Dokumen',
+          desc: 'Admin mengubah status setoran menjadi Diverifikasi setelah dana masuk ke rekening BAZNAS Kabupaten Banyumas.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
+              <span style="color:#34d399;font-weight:600;font-size:12px;">Status Diubah: Diverifikasi (Sah)</span>
+              <span style="color:#94a3b8;font-size:11px;">Notifikasi real-time dikirim ke UPZ</span>
+            </div>
+          `
+        },
+        {
+          stepNum: 3,
+          time: '00:12',
+          title: 'Langkah 3: Unggah Berkas BSZ Resmi',
+          desc: 'Klik ikon berkas (#i-file-text), pilih file BSZ berstempel resmi BAZNAS (PDF/JPG/PNG maks 20MB), dan klik Unggah BSZ.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
+              <span style="font-size:12px;color:#f8fafc;"><svg class="icon" style="width:14px;height:14px;color:#38bdf8;"><use href="#i-upload"></use></svg> BSZ_UPZ_2026.pdf (1.2 MB)</span>
+              <span style="background:#0284c7;color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;">Unggah BSZ Berhasil</span>
+            </div>
+          `
+        }
+      ]
+    },
+    {
+      id: 'rec_admin_2',
+      title: 'Rekaman 2: Buka Kunci RKAT & Kustomisasi Pagu Anggaran',
+      targetView: 'pentasharufan',
+      steps: [
+        {
+          stepNum: 1,
+          time: '00:04',
+          title: 'Langkah 1: Pilih UPZ Pemohon di Panel RKAT',
+          desc: 'Admin membuka menu Perbantuan Pentasharufan, memilih nama UPZ dari dropdown pemohon RKAT.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;gap:12px;width:100%;font-size:12px;flex-wrap:wrap;">
+              <span style="color:#94a3b8;">Pilih UPZ:</span>
+              <span style="background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:6px;color:#f8fafc;font-weight:600;">UPZ Desa / OPD Pemohon</span>
+            </div>
+          `
+        },
+        {
+          stepNum: 2,
+          time: '00:08',
+          title: 'Langkah 2: Klik Tombol Buka Lock RKAT',
+          desc: 'Klik tombol Buka Lock RKAT. Status UPZ seketika berubah menjadi Terbuka (Aktif) dan dapat mengajukan permohonan bantuan.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px;">
+              <span style="color:#34d399;font-weight:600;font-size:12px;">Akses RKAT: Terbuka (Unlocked)</span>
+              <span style="background:#15803d;color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;">Simpan Status</span>
+            </div>
+          `
+        },
+        {
+          stepNum: 3,
+          time: '00:12',
+          title: 'Langkah 3: Atur Persentase Pagu & Salin Aslimas',
+          desc: 'Sesuaikan persentase perbantuan pentasharufan, hak amil, dan tagihan Salin Aslimas per bulan jika terdapat ketentuan khusus.',
+          previewHtml: `
+            <div style="display:flex;align-items:center;gap:12px;width:100%;font-size:12px;flex-wrap:wrap;">
+              <span style="color:#34d399;">Penta: 35%</span>
+              <span style="color:#fbbf24;">Hak Amil: 5%</span>
+              <span style="color:#38bdf8;">Salin: Rp 0 / bln</span>
+            </div>
+          `
+        }
+      ]
+    }
+  ]
+};
+
+// State Simulator Pemutar Rekaman Interaktif
+let activeRecorderRole = 'upz';
+let activeRecorderScenarioIdx = 0;
+let activeRecorderStepIdx = 0;
+let isRecorderPlaying = true;
+let recorderTimer = null;
+
+// Context Extractor untuk Mengambil Nilai Sistem Secara Real-Time
+function getGuideContext(role) {
+  let pentaPersen = '35%';
+  let amilPersen = '5%';
+  let salinAslimas = 'Rp 0';
+  let isUnlocked = false;
+
+  if (typeof getUpzRkatSetting === 'function') {
+    const upzId = (currentProfile && currentProfile.id) || null;
+    const rSetting = getUpzRkatSetting(upzId);
+    if (rSetting) {
+      pentaPersen = (rSetting.persen_penta != null ? rSetting.persen_penta : 35) + '%';
+      amilPersen = (rSetting.persen_amil != null ? rSetting.persen_amil : 5) + '%';
+      const rawSalin = rSetting.tagihan_salin != null ? rSetting.tagihan_salin : 0;
+      salinAslimas = typeof formatRupiahShort === 'function' ? formatRupiahShort(rawSalin) : 'Rp ' + rawSalin.toLocaleString('id-ID');
+      isUnlocked = !!rSetting.rkat_unlocked;
+    }
+  } else if (cachedRkatConfig && cachedRkatConfig.default) {
+    pentaPersen = (cachedRkatConfig.default.persen_penta || 35) + '%';
+    amilPersen = (cachedRkatConfig.default.persen_amil || 5) + '%';
+    const rawSalin = cachedRkatConfig.default.tagihan_salin || 0;
+    salinAslimas = typeof formatRupiahShort === 'function' ? formatRupiahShort(rawSalin) : 'Rp ' + rawSalin.toLocaleString('id-ID');
+  }
+
+  const currentYear = new Date().getFullYear();
+  const rkatStatusText = isUnlocked ? `Terbuka (RKAT ${currentYear} Aktif)` : `Terkunci (Perlu Konfirmasi RKAT ${currentYear})`;
+
+  return {
+    role: role,
+    pentaPersen: pentaPersen,
+    amilPersen: amilPersen,
+    salinAslimas: salinAslimas,
+    rkatStatusText: rkatStatusText,
+    csRkatWa: '+62 813-6869-1114',
+    csPentaWa: '+62 851-3374-4077',
+    helpdeskWa: '+62 814-6973-4792',
+    bszFormats: 'PDF, JPG, PNG (Maks 20MB)'
+  };
+}
+
+let activeGuideFilterCategory = 'semua';
+let activeGuideSearchQuery = '';
+
+// RENDERER UTAMA PANDUAN SISTEM
+function renderSystemGuide(containerId, role, filterCategory, searchQuery) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  activeRecorderRole = role || 'upz';
+  const currentCat = filterCategory !== undefined ? filterCategory : activeGuideFilterCategory;
+  const currentQuery = searchQuery !== undefined ? searchQuery.trim().toLowerCase() : activeGuideSearchQuery;
+  activeGuideFilterCategory = currentCat;
+  activeGuideSearchQuery = currentQuery;
+
+  const ctx = getGuideContext(role);
+
+  // Filter Modul Berdasarkan Role
+  let modules = SYSTEM_GUIDE_REGISTRY.filter(function (m) {
+    return m.role === role || m.role === 'both';
+  });
+
+  // Filter Kategori
+  if (currentCat && currentCat !== 'semua') {
+    modules = modules.filter(function (m) {
+      return m.kategori.toLowerCase().replace(/[^a-z0-9]/g, '') === currentCat.toLowerCase().replace(/[^a-z0-9]/g, '');
+    });
+  }
+
+  // Filter Search
+  if (currentQuery) {
+    modules = modules.filter(function (m) {
+      const inTitle = (m.judul || '').toLowerCase().includes(currentQuery);
+      const inSub = (m.subjudul || '').toLowerCase().includes(currentQuery);
+      const inKat = (m.kategori || '').toLowerCase().includes(currentQuery);
+      const stepItems = typeof m.steps === 'function' ? m.steps(ctx) : (m.steps || []);
+      const inSteps = stepItems.some(function (s) {
+        return (s.title || '').toLowerCase().includes(currentQuery) || (s.desc || '').toLowerCase().includes(currentQuery);
+      });
+      return inTitle || inSub || inKat || inSteps;
+    });
+  }
+
+  let html = '';
+
+  // 1. REKAMAN & SIMULASI ALUR SISTEM
+  const scenarios = RECORDER_SCENARIOS[role] || RECORDER_SCENARIOS.upz;
+  const currentScenario = scenarios[activeRecorderScenarioIdx] || scenarios[0];
+  const totalSteps = currentScenario.steps.length;
+  if (activeRecorderStepIdx >= totalSteps) activeRecorderStepIdx = 0;
+  const currentStep = currentScenario.steps[activeRecorderStepIdx] || currentScenario.steps[0];
+
+  html += `
+    <div class="guide-recorder-card" id="${containerId}_recorder">
+      <div class="recorder-header">
+        <div class="recorder-header-left">
+          <h3 class="recorder-title">${escapeHtml(currentScenario.title)}</h3>
+        </div>
+        <div class="recorder-scenario-pills">
+  `;
+
+  scenarios.forEach(function (sc, sIdx) {
+    const isAct = sIdx === activeRecorderScenarioIdx ? ' active' : '';
+    html += `<button type="button" class="recorder-scenario-btn${isAct}" data-scenario-idx="${sIdx}">Skenario ${sIdx + 1}</button>`;
+  });
+
+  html += `
+        </div>
+      </div>
+
+      <div class="recorder-screen-frame">
+        <div class="recorder-screen-topbar">
+          <div class="recorder-window-dots">
+            <span class="recorder-dot dot-red"></span>
+            <span class="recorder-dot dot-yellow"></span>
+            <span class="recorder-dot dot-green"></span>
+          </div>
+          <span class="recorder-playback-time">Langkah ${activeRecorderStepIdx + 1} dari ${totalSteps}</span>
+        </div>
+
+        <div class="recorder-stage">
+          <h4 class="recorder-step-heading">${escapeHtml(currentStep.title)}</h4>
+          <p class="recorder-step-desc">${escapeHtml(currentStep.desc)}</p>
+
+          <div class="recorder-sim-preview">
+            ${currentStep.previewHtml}
+          </div>
+        </div>
+      </div>
+
+      <div class="recorder-controls-bar">
+        <div class="recorder-playback-btns">
+          <button type="button" class="recorder-ctrl-btn" id="${containerId}_recPrev" title="Langkah Sebelumnya">
+            <span>&larr; Prev</span>
+          </button>
+          <button type="button" class="recorder-ctrl-btn btn-play" id="${containerId}_recPlayToggle" title="${isRecorderPlaying ? 'Jeda Simulasi' : 'Putar Simulasi'}">
+            <span>${isRecorderPlaying ? '⏸ Jeda' : '▶ Putar'}</span>
+          </button>
+          <button type="button" class="recorder-ctrl-btn" id="${containerId}_recNext" title="Langkah Berikutnya">
+            <span>Next &rarr;</span>
+          </button>
+        </div>
+
+        <div class="recorder-timeline-dots">
+  `;
+
+  for (let d = 0; d < totalSteps; d++) {
+    const isDotAct = d === activeRecorderStepIdx ? ' active' : '';
+    html += `<button type="button" class="timeline-step-dot${isDotAct}" data-step-idx="${d}">${d + 1}</button>`;
+  }
+
+  html += `
+        </div>
+
+        <div>
+          ${currentScenario.targetView ? `
+            <button type="button" class="recorder-practice-btn" data-target-view="${currentScenario.targetView}">
+              <span>Praktikkan Langsung</span>
+              <svg class="icon" style="width:13px;height:13px;"><use href="#i-chevron-right"></use></svg>
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+
+  // 2. KATEGORI PANDUAN
+  const categories = [
+    { key: 'semua', label: 'Semua Panduan' },
+    { key: 'alurutama', label: 'Alur Utama' },
+    { key: 'pentasharufanrkat', label: 'Pentasharufan & RKAT' },
+    { key: 'dokumenbsz', label: 'Dokumen & BSZ' },
+    { key: 'administrasiakun', label: 'Administrasi & Akun' }
+  ];
+
+  html += `
+    <div class="guide-toolbar">
+      <div class="guide-category-pills">
+  `;
+
+  categories.forEach(function (cat) {
+    const isActive = activeGuideFilterCategory === cat.key ? ' active' : '';
+    html += `<button type="button" class="guide-cat-btn${isActive}" data-category="${cat.key}">${cat.label}</button>`;
+  });
+
+  html += `
+      </div>
+    </div>
+  `;
+
+  // 3. GRID KARTU PANDUAN
+  if (modules.length === 0) {
+    html += `
+      <div class="empty-state" style="padding: 48px 24px; text-align: center; background: #ffffff; border-radius: 16px; border: 1px dashed var(--slate-300);">
+        <svg class="icon" style="width: 48px; height: 48px; color: var(--slate-400); margin-bottom: 12px;"><use href="#i-book-open"></use></svg>
+        <h3 style="font-size: 16px; color: var(--slate-700); margin: 0 0 6px 0;">Topik panduan tidak ditemukan</h3>
+        <p style="font-size: 13px; color: var(--slate-500); margin: 0 0 16px 0;">Pilih kategori panduan lainnya untuk melihat SOP sistem.</p>
+        <button type="button" class="btn btn-soft btn-sm" id="${containerId}_resetCategory">Tampilkan Semua Panduan</button>
+      </div>
+    `;
+  } else {
+    html += `<div class="guide-modules-grid">`;
+
+    modules.forEach(function (module) {
+      const liveParams = typeof module.getLiveParams === 'function' ? module.getLiveParams(ctx) : [];
+
+      html += `
+        <article class="guide-card" id="guide_card_${module.id}">
+          <div class="guide-card-header">
+            <div class="guide-card-header-left">
+              <span class="guide-card-cat-badge tone-${module.tone || 'emerald'}">${escapeHtml(module.kategori)} · ${escapeHtml(module.badge || 'SOP')}</span>
+              <h3 class="guide-card-title">${escapeHtml(module.judul)}</h3>
+              <p class="guide-card-desc">${escapeHtml(module.subjudul)}</p>
+            </div>
+            ${module.targetView ? `
+              <button type="button" class="guide-card-jump-btn" data-target-view="${module.targetView}" title="Buka halaman fitur ini langsung">
+                <span>${escapeHtml(module.targetLabel || 'Buka Fitur')}</span>
+                <svg class="icon"><use href="#i-chevron-right"></use></svg>
+              </button>
+            ` : ''}
+          </div>
+
+          <div class="guide-card-body">
+      `;
+
+      // Live Parameters Box
+      if (liveParams && liveParams.length > 0) {
+        html += `<div class="guide-live-param-box">`;
+        liveParams.forEach(function (param) {
+          html += `
+            <div class="guide-param-row">
+              <span class="guide-param-label">
+                <svg class="icon"><use href="#i-${param.icon || 'check'}"></use></svg>
+                ${escapeHtml(param.label)}
+              </span>
+              <span class="guide-param-value">${escapeHtml(param.value)}</span>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      }
+
+      // Visual Illustration Panel
+      html += `
+        <div class="guide-illustration-panel">
+          <div class="guide-illus-header">
+            <span class="guide-illus-title">
+              <svg class="icon" style="width:13px;height:13px;"><use href="#i-eye"></use></svg>
+              Ilustrasi Visual Alur Sistem
+            </span>
+            <span class="guide-illus-badge">${escapeHtml(module.kategori)}</span>
+          </div>
+      `;
+
+      if (module.illustrationType === 'diagram-flow' && module.flowSteps) {
+        html += `<div class="guide-flow-diagram">`;
+        module.flowSteps.forEach(function (st, idx) {
+          html += `
+            <div class="guide-flow-node${idx === 0 ? ' active-node' : ''}">
+              <span class="guide-flow-node-num">${escapeHtml(st.num)}</span>
+              <span class="guide-flow-node-text">${escapeHtml(st.title)}</span>
+            </div>
+          `;
+          if (idx < module.flowSteps.length - 1) {
+            html += `<span class="guide-flow-arrow">&rarr;</span>`;
+          }
+        });
+        html += `</div>`;
+      } else if (module.illustrationType === 'ui-mockup-penta') {
+        html += `
+          <div class="guide-scorecard-mini-grid">
+            <div class="guide-scorecard-mini">
+              <div class="guide-scorecard-mini-title">Pagu Perbantuan</div>
+              <div class="guide-scorecard-mini-val accent-green">${ctx.pentaPersen} Setoran</div>
+            </div>
+            <div class="guide-scorecard-mini">
+              <div class="guide-scorecard-mini-title">Salin Aslimas</div>
+              <div class="guide-scorecard-mini-val">${ctx.salinAslimas}</div>
+            </div>
+            <div class="guide-scorecard-mini">
+              <div class="guide-scorecard-mini-title">Hak Amil UPZ</div>
+              <div class="guide-scorecard-mini-val accent-amber">${ctx.amilPersen} Setoran</div>
+            </div>
+            <div class="guide-scorecard-mini">
+              <div class="guide-scorecard-mini-title">Telah Ditasharufkan</div>
+              <div class="guide-scorecard-mini-val">Otomatis Terhitung</div>
+            </div>
+            <div class="guide-scorecard-mini">
+              <div class="guide-scorecard-mini-title">Sisa Pagu Tersedia</div>
+              <div class="guide-scorecard-mini-val accent-green">Real-Time</div>
+            </div>
+            <div class="guide-scorecard-mini">
+              <div class="guide-scorecard-mini-title">Mustahik Terbantu</div>
+              <div class="guide-scorecard-mini-val">Akumulasi Orang</div>
+            </div>
+          </div>
+          <div style="margin-top: 10px; display:flex; align-items:center; justify-content:space-between; font-size:10.5px; color:#94a3b8; background:rgba(255,255,255,0.03); padding:4px 8px; border-radius:6px; flex-wrap:wrap; gap:6px;">
+            <span><svg class="icon" style="width:12px;height:12px;color:#22c55e;"><use href="#i-message-circle"></use></svg> WhatsApp CS: <strong>${ctx.csPentaWa}</strong></span>
+            <span style="color:#38bdf8;">Respon Cepat BAZNAS</span>
+          </div>
+        `;
+      } else if (module.illustrationType === 'ui-mockup-setoran') {
+        html += `
+          <div class="guide-ui-mockup-wrap">
+            <div class="guide-mockup-row">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-weight:600;color:#f8fafc;">Setoran Zakat & Infak UPZ</span>
+                <span class="guide-mockup-tag tag-success">Diverifikasi</span>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button type="button" class="guide-mockup-action-btn" title="Unduh Berkas BSZ Sah">
+                  <svg class="icon" style="width:11px;height:11px;"><use href="#i-file-text"></use></svg> Unduh BSZ
+                </button>
+              </div>
+            </div>
+            <div class="guide-mockup-row">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-weight:600;color:#cbd5e1;">Pengajuan Setoran Baru</span>
+                <span class="guide-mockup-tag tag-warning">Menunggu</span>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button type="button" class="guide-mockup-action-btn guide-mockup-btn-danger" title="Batal & Hapus Setoran Mandiri">
+                  <svg class="icon" style="width:11px;height:11px;"><use href="#i-trash-2"></use></svg> Hapus
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div style="font-size:12px;color:#cbd5e1;padding:8px 0;display:flex;align-items:center;gap:8px;">
+            <svg class="icon" style="width:14px;height:14px;color:#34d399;"><use href="#i-check"></use></svg>
+            Alur tersinkronisasi langsung dengan sistem validasi BAZNAS Kabupaten Banyumas.
+          </div>
+        `;
+      }
+
+      html += `</div>`; // Close illustration panel
+
+      // Steps List
+      const stepItems = typeof module.steps === 'function' ? module.steps(ctx) : (module.steps || []);
+      if (stepItems && stepItems.length > 0) {
+        html += `<div class="guide-steps-container">`;
+        stepItems.forEach(function (step, sIdx) {
+          html += `
+            <div class="guide-step-item">
+              <div class="guide-step-bubble">${sIdx + 1}</div>
+              <div class="guide-step-content">
+                <h4 class="guide-step-title">${escapeHtml(step.title)}</h4>
+                <p class="guide-step-desc">${step.desc}</p>
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      }
+
+      // Notice Box
+      if (module.notice) {
+        html += `
+          <div class="guide-alert-notice ${module.notice.type === 'tip' ? 'tone-emerald' : ''}">
+            <svg class="icon"><use href="#i-${module.notice.type === 'tip' ? 'check' : 'alert'}"></use></svg>
+            <div>${escapeHtml(module.notice.text)}</div>
+          </div>
+        `;
+      }
+
+      html += `
+          </div>
+        </article>
+      `;
+    });
+
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+
+  // BIND EVENT LISTENERS REKAMAN INTERAKTIF
+  // 1. Scenario Buttons
+  container.querySelectorAll('.recorder-scenario-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      activeRecorderScenarioIdx = Number(this.dataset.scenarioIdx) || 0;
+      activeRecorderStepIdx = 0;
+      renderSystemGuide(containerId, role, activeGuideFilterCategory);
+    });
+  });
+
+  // 2. Step Dot Buttons
+  container.querySelectorAll('.timeline-step-dot').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      activeRecorderStepIdx = Number(this.dataset.stepIdx) || 0;
+      renderSystemGuide(containerId, role, activeGuideFilterCategory);
+    });
+  });
+
+  // 3. Play / Pause Toggle
+  const playToggleBtn = document.getElementById(containerId + '_recPlayToggle');
+  if (playToggleBtn) {
+    playToggleBtn.addEventListener('click', function () {
+      isRecorderPlaying = !isRecorderPlaying;
+      if (!isRecorderPlaying && recorderTimer) {
+        clearInterval(recorderTimer);
+        recorderTimer = null;
+      }
+      renderSystemGuide(containerId, role, activeGuideFilterCategory);
+    });
+  }
+
+  // 4. Prev Button
+  const prevBtn = document.getElementById(containerId + '_recPrev');
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function () {
+      const sc = (RECORDER_SCENARIOS[role] || RECORDER_SCENARIOS.upz)[activeRecorderScenarioIdx];
+      if (activeRecorderStepIdx > 0) {
+        activeRecorderStepIdx--;
+      } else {
+        activeRecorderStepIdx = (sc.steps.length - 1);
+      }
+      renderSystemGuide(containerId, role, activeGuideFilterCategory);
+    });
+  }
+
+  // 5. Next Button
+  const nextBtn = document.getElementById(containerId + '_recNext');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+      const sc = (RECORDER_SCENARIOS[role] || RECORDER_SCENARIOS.upz)[activeRecorderScenarioIdx];
+      if (activeRecorderStepIdx < sc.steps.length - 1) {
+        activeRecorderStepIdx++;
+      } else {
+        activeRecorderStepIdx = 0;
+      }
+      renderSystemGuide(containerId, role, activeGuideFilterCategory);
+    });
+  }
+
+  // 6. Practice Jump Button
+  container.querySelectorAll('.recorder-practice-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const targetView = this.dataset.targetView;
+      if (targetView && typeof navigateToView === 'function') {
+        navigateToView(targetView);
+      }
+    });
+  });
+
+  // Start / Restart Auto-Play Timer
+  if (recorderTimer) {
+    clearInterval(recorderTimer);
+    recorderTimer = null;
+  }
+  if (isRecorderPlaying) {
+    recorderTimer = setInterval(function () {
+      const sc = (RECORDER_SCENARIOS[role] || RECORDER_SCENARIOS.upz)[activeRecorderScenarioIdx];
+      if (!sc) return;
+      if (activeRecorderStepIdx < sc.steps.length - 1) {
+        activeRecorderStepIdx++;
+      } else {
+        activeRecorderStepIdx = 0;
+      }
+      renderSystemGuide(containerId, role, activeGuideFilterCategory);
+    }, 4500);
+  }
+
+  // BIND EVENT LISTENERS UMUM
+  // Category Filter Buttons
+  container.querySelectorAll('.guide-cat-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const cat = this.dataset.category;
+      renderSystemGuide(containerId, role, cat);
+    });
+  });
+
+  // Reset Category Button (if visible)
+  const resetBtn = document.getElementById(containerId + '_resetCategory');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      renderSystemGuide(containerId, role, 'semua');
+    });
+  }
+
+  // Jump Action Buttons
+  container.querySelectorAll('.guide-card-jump-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const targetView = this.dataset.targetView;
+      if (targetView && typeof navigateToView === 'function') {
+        navigateToView(targetView);
+      }
+    });
+  });
+}
+
+// Extensibility API: Memungkinkan Penambahan Modul Panduan Dinamis dari Mana Saja
+function registerSystemGuideModule(moduleConfig) {
+  if (!moduleConfig || !moduleConfig.id) return;
+  const existingIdx = SYSTEM_GUIDE_REGISTRY.findIndex(function (m) {
+    return m.id === moduleConfig.id;
+  });
+  if (existingIdx >= 0) {
+    SYSTEM_GUIDE_REGISTRY[existingIdx] = Object.assign({}, SYSTEM_GUIDE_REGISTRY[existingIdx], moduleConfig);
+  } else {
+    SYSTEM_GUIDE_REGISTRY.push(moduleConfig);
+  }
+  refreshActiveGuide();
+}
+
+// Auto-Refresh Guide saat Terjadi Perubahan Konfigurasi Sistem
+function refreshActiveGuide() {
+  if (currentActiveView === 'panduan') {
+    const adminPageEl = document.getElementById('adminPage');
+    const isRoleAdmin = (currentProfile && currentProfile.role === 'admin') ||
+      (adminPageEl && !adminPageEl.classList.contains('hidden'));
+    if (isRoleAdmin) {
+      renderSystemGuide('adminGuideContainer', 'admin');
+    } else {
+      renderSystemGuide('upzGuideContainer', 'upz');
+    }
+  }
+}
+
+// Expose Secara Global untuk Integrasi Lintas Modul
+window.SYSTEM_GUIDE_REGISTRY = SYSTEM_GUIDE_REGISTRY;
+window.renderSystemGuide = renderSystemGuide;
+window.registerSystemGuideModule = registerSystemGuideModule;
+window.refreshActiveGuide = refreshActiveGuide;
 

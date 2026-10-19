@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
 
@@ -54,6 +54,11 @@
     <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
     <symbol id="i-more-vertical" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></symbol>
     <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></symbol>
+    <symbol id="i-book-open" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-help-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
   </svg>
 
   <!-- ====================================== -->
@@ -245,6 +250,9 @@
               <button type="button" class="menu-item" id="menuAdminExport" role="menuitem">
                 <svg class="icon"><use href="#i-sheet"></use></svg><span>Export Rekap Excel</span>
               </button>
+              <button type="button" class="menu-item" id="menuAdminPanduan" role="menuitem">
+                <svg class="icon"><use href="#i-book-open"></use></svg><span>Buku Panduan Sistem</span>
+              </button>
             </div>
 
             <!-- Menu Khusus UPZ -->
@@ -267,6 +275,9 @@
               </button>
               <button type="button" class="menu-item" id="menuUpzMgmt" role="menuitem">
                 <svg class="icon"><use href="#i-building"></use></svg><span>Manajemen UPZ</span>
+              </button>
+              <button type="button" class="menu-item" id="menuUpzPanduan" role="menuitem">
+                <svg class="icon"><use href="#i-book-open"></use></svg><span>Buku Panduan UPZ</span>
               </button>
             </div>
 
@@ -671,6 +682,109 @@
             </div>
           </div>
 
+          <!-- KELOLA AKSES RKAT & KETENTUAN ANGGARAN UPZ (ADMIN) -->
+          <section class="content-card rkat-admin-card" style="margin-bottom:24px;">
+            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+              <div>
+                <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-shield"></use></svg> Akses & Alokasi RKAT</span>
+                <h2>Kelola Akses RKAT & Persentase Anggaran UPZ</h2>
+                <p class="section-desc">Buka kunci akses perbantuan pentasharufan bagi UPZ yang telah konfirmasi RKAT, serta sesuaikan persentase pentasharufan, hak amil, dan tagihan Salin Aslimas.</p>
+              </div>
+            </div>
+
+            <div class="rkat-admin-grid">
+              <!-- Form Pengaturan UPZ Terpilih -->
+              <div class="rkat-form-box" style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:12px;padding:18px;">
+                <h3 style="font-size:15px;font-weight:600;margin-bottom:14px;color:var(--slate-800);display:flex;align-items:center;gap:8px;">
+                  <svg class="icon tone-teal"><use href="#i-edit"></use></svg> Atur Akses & Persentase UPZ
+                </h3>
+
+                <div class="form-group" style="margin-bottom:12px;">
+                  <label for="adminRkatSelectUpz" style="font-weight:600;font-size:13px;">Pilih UPZ <span class="required-star">*</span></label>
+                  <select id="adminRkatSelectUpz" class="form-control" style="width:100%;height:38px;padding:0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
+                    <option value="">-- Pilih UPZ --</option>
+                  </select>
+                </div>
+
+                <div id="adminRkatUpzDetails" class="rkat-upz-details hidden" style="margin-top:14px;display:flex;flex-direction:column;gap:12px;flex:1;">
+                  <!-- Status RKAT Aktif / Terkunci -->
+                  <div style="display:flex;align-items:center;justify-content:space-between;background:#fff;padding:12px 14px;border-radius:8px;border:1px solid var(--slate-200);gap:10px;">
+                    <div>
+                      <div style="font-size:12px;color:var(--slate-500);font-weight:500;">Status Akses RKAT</div>
+                      <div id="adminRkatCurrentStatus" style="font-weight:600;font-size:14px;margin-top:2px;">Terkunci</div>
+                    </div>
+                    <button type="button" id="adminRkatToggleLockBtn" class="btn btn-sm btn-outline-primary" style="white-space:nowrap;">
+                      Buka Akses RKAT
+                    </button>
+                  </div>
+
+                  <!-- Form Inputs -->
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div class="form-group">
+                      <label for="adminRkatPersenPenta" style="font-size:12px;font-weight:600;">% Pentasharufan</label>
+                      <div class="input-icon">
+                        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--slate-400);font-weight:600;">%</span>
+                        <input type="number" id="adminRkatPersenPenta" min="0" max="100" step="0.5" value="35" class="form-control" placeholder="35" style="height:38px;padding:0 28px 0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
+                      </div>
+                      <span style="font-size:11px;color:var(--slate-400);">Default: 35%</span>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="adminRkatPersenAmil" style="font-size:12px;font-weight:600;">% Hak Amil</label>
+                      <div class="input-icon">
+                        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--slate-400);font-weight:600;">%</span>
+                        <input type="number" id="adminRkatPersenAmil" min="0" max="100" step="0.5" value="5" class="form-control" placeholder="5" style="height:38px;padding:0 28px 0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
+                      </div>
+                      <span style="font-size:11px;color:var(--slate-400);">Default: 5%</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="margin-top:2px;">
+                    <label for="adminRkatTagihanSalin" style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Tagihan Salin Aslimas (Rp/bulan)</label>
+                    <div class="input-addon-group">
+                      <span class="input-addon-label">Rp</span>
+                      <input type="text" id="adminRkatTagihanSalin" class="form-control" placeholder="0" inputmode="numeric">
+                    </div>
+                    <span style="font-size:11px;color:var(--slate-400);display:block;margin-top:4px;">Kewajiban setoran program Salin Aslimas per bulan</span>
+                  </div>
+
+                  <div id="adminRkatMsg" class="form-message" role="status" aria-live="polite"></div>
+
+                  <button type="button" id="adminRkatSaveBtn" class="btn btn-primary btn-block" style="margin-top:auto;height:40px;">
+                    <svg class="icon"><use href="#i-check"></use></svg> Simpan Pengaturan UPZ
+                  </button>
+                </div>
+              </div>
+
+              <!-- Ringkasan Status RKAT Semua UPZ -->
+              <div class="rkat-table-box" style="background:#fff;border:1px solid var(--slate-200);border-radius:12px;padding:18px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                  <h3 style="font-size:15px;font-weight:600;color:var(--slate-800);display:flex;align-items:center;gap:8px;">
+                    <svg class="icon tone-green"><use href="#i-table"></use></svg> Daftar Akses RKAT & Persentase UPZ
+                  </h3>
+                  <input type="text" id="adminRkatSearchTable" placeholder="Cari UPZ..." style="padding:6px 12px;height:34px;font-size:12px;border:1px solid var(--slate-200);border-radius:6px;max-width:180px;box-sizing:border-box;">
+                </div>
+                <div class="rkat-table-scroll">
+                  <table class="table-compact" style="width:100%;font-size:12px;border-collapse:collapse;" id="adminRkatOverviewTable">
+                    <thead>
+                      <tr style="background:var(--slate-50);text-align:left;position:sticky;top:0;z-index:2;">
+                        <th style="padding:8px 10px;">Nama UPZ</th>
+                        <th style="padding:8px 10px;">Status RKAT</th>
+                        <th style="padding:8px 10px;">% Penta</th>
+                        <th style="padding:8px 10px;">% Amil</th>
+                        <th style="padding:8px 10px;">Tagihan Salin</th>
+                        <th style="padding:8px 10px;text-align:center;">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="adminRkatTableBody">
+                      <tr><td colspan="6" style="text-align:center;padding:16px;color:var(--slate-400);">Memuat data RKAT UPZ...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
           <!-- Tabel Pengajuan Pentasharufan -->
           <section class="content-card">
             <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
@@ -723,6 +837,20 @@
               <div class="empty-state" style="padding:24px;">Memuat data pentasharufan...</div>
             </div>
           </section>
+        </div>
+
+        <!-- 6. HALAMAN PANDUAN PENGGUNAAN SISTEM (ADMIN) -->
+        <div id="adminViewPanduan" class="admin-view hidden">
+          <div class="hero hero-admin page-title-banner">
+            <div class="hero-text page-title-text">
+              <span class="hero-eyebrow"><svg class="icon"><use href="#i-book-open"></use></svg>Dokumentasi &amp; SOP</span>
+              <h2 class="hero-title">Buku Panduan Sistem Administrator</h2>
+              <p class="hero-desc">Panduan operasional verifikasi setoran, konfigurasi RKAT pentasharufan, manajemen akun UPZ, dan alur kerja sistem terintegrasi.</p>
+            </div>
+            <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-book-open"></use></svg></div>
+          </div>
+
+          <div id="adminGuideContainer" class="system-guide-container"></div>
         </div>
 
       </section>
@@ -1140,15 +1268,151 @@
           <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-hand-heart"></use></svg></div>
         </div>
 
+        <!-- FILTER BULAN & TAHUN PERBANTUAN PENTASHARUFAN UPZ -->
+        <div class="penta-budget-filter-bar">
+          <div class="penta-filter-intro">
+            <div class="penta-filter-icon tone-teal">
+              <svg class="icon"><use href="#i-calendar"></use></svg>
+            </div>
+            <div>
+              <div class="penta-filter-label">Filter Periode Anggaran</div>
+              <div class="penta-filter-title">Alokasi Setoran & Pentasharufan</div>
+            </div>
+          </div>
+          <div class="penta-filter-controls">
+            <div class="filter-control-wrap">
+              <select id="upzPentaFilterTahun" class="penta-filter-select">
+                <!-- Dinamis -->
+              </select>
+            </div>
+            <div class="filter-control-wrap">
+              <select id="upzPentaFilterBulan" class="penta-filter-select">
+                <option value="semua">Semua Bulan</option>
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+              </select>
+            </div>
+            <button type="button" id="upzPentaResetFilterBtn" class="btn btn-ghost penta-filter-btn" title="Kembalikan ke semua bulan">
+              <svg class="icon"><use href="#i-refresh"></use></svg><span>Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SCORECARD ALOKASI ANGGARAN & REALISASI PENTASHARUFAN (6 KARTU - 3 PER BARIS) -->
+        <div class="summary-grid penta-budget-grid" id="upzPentaBudgetGrid">
+          <!-- 1. Total Setoran Masuk -->
+          <div class="summary-card">
+            <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-receipt"></use></svg></div>
+            <div>
+              <div class="summary-title">Setoran Masuk (Terverifikasi)</div>
+              <div id="upzPentaTotalSetoran" class="summary-value">Rp 0</div>
+              <div id="upzPentaSetoranSub" class="summary-sub">Basis perhitungan alokasi</div>
+            </div>
+          </div>
+
+          <!-- 2. Alokasi Perbantuan Pentasharufan -->
+          <div class="summary-card">
+            <div class="summary-icon tone-teal"><svg class="icon"><use href="#i-hand-heart"></use></svg></div>
+            <div>
+              <div class="summary-title">Alokasi Perbantuan Pentasharufan</div>
+              <div id="upzPentaAlokasi" class="summary-value" style="color:#0f5132;">Rp 0</div>
+              <div id="upzPentaPersenPentaBadge" class="summary-sub">35% dari Setoran Masuk</div>
+            </div>
+          </div>
+
+          <!-- 3. Yang Sudah Ditasharufkan -->
+          <div class="summary-card">
+            <div class="summary-icon tone-green"><svg class="icon"><use href="#i-check"></use></svg></div>
+            <div>
+              <div class="summary-title">Sudah Ditasharufkan</div>
+              <div id="upzPentaRealisasi" class="summary-value">Rp 0</div>
+              <div id="upzPentaRealisasiSub" class="summary-sub">0 permohonan disetujui</div>
+            </div>
+          </div>
+
+          <!-- 4. Sisa Anggaran Pentasharufan -->
+          <div class="summary-card">
+            <div class="summary-icon tone-amber" id="upzPentaSisaIcon"><svg class="icon"><use href="#i-wallet"></use></svg></div>
+            <div>
+              <div class="summary-title">Sisa Anggaran Pentasharufan</div>
+              <div id="upzPentaSisa" class="summary-value">Rp 0</div>
+              <div id="upzPentaSisaBadge" class="summary-sub" style="font-weight:600;">Tersedia untuk penyaluran</div>
+            </div>
+          </div>
+
+          <!-- 5. Hak Amil UPZ (Tersendiri) -->
+          <div class="summary-card">
+            <div class="summary-icon tone-purple"><svg class="icon"><use href="#i-users"></use></svg></div>
+            <div>
+              <div class="summary-title">Hak Amil UPZ</div>
+              <div id="upzPentaHakAmil" class="summary-value">Rp 0</div>
+              <div id="upzPentaHakAmilSub" class="summary-sub">5% dari Setoran Masuk</div>
+            </div>
+          </div>
+
+          <!-- 6. Tagihan Salin Aslimas (Tersendiri) -->
+          <div class="summary-card">
+            <div class="summary-icon tone-indigo"><svg class="icon"><use href="#i-tag"></use></svg></div>
+            <div>
+              <div class="summary-title">Tagihan Salin Aslimas</div>
+              <div id="upzPentaTagihanSalin" class="summary-value">Rp 0</div>
+              <div id="upzPentaTagihanSalinSub" class="summary-sub">Kewajiban program per bulan</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GRAFIK MONITORING PENTASHARUFAN UPZ -->
+        <section class="content-card penta-chart-card" style="margin-bottom:24px;">
+          <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div>
+              <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-bar-chart"></use></svg> Analitik Anggaran</span>
+              <h2>Grafik Tren Alokasi vs Realisasi Pentasharufan</h2>
+              <p class="section-desc" id="upzPentaChartDesc">Komparasi setoran masuk, alokasi perbantuan pentasharufan, dan realisasi penyaluran per bulan.</p>
+            </div>
+          </div>
+          <div class="penta-chart-wrap" style="position:relative;height:280px;width:100%;">
+            <canvas id="upzPentaChart"></canvas>
+          </div>
+        </section>
+
         <div class="content-grid-2 content-grid-penta">
           <!-- FORM PENGAJUAN PENTASHARUFAN -->
           <section class="content-card">
-            <div class="section-header">
+            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
                 <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-edit"></use></svg> Formulir Baru</span>
                 <h2>Form Permohonan Pentasharufan</h2>
                 <p class="section-desc">Lengkapi data permohonan, unggah daftar nama penerima (Excel), dan foto dokumentasi.</p>
               </div>
+              <div id="upzRkatStatusBadgeWrap"></div>
+            </div>
+
+            <!-- LOCK NOTICE BANNER (JIKA RKAT BELUM AKTIF) -->
+            <div id="upzRkatLockBanner" class="rkat-lock-banner hidden" style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;padding:24px;text-align:center;margin-bottom:20px;">
+              <div style="width:52px;height:52px;background:#fef3c7;color:#d97706;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px auto;">
+                <svg class="icon" style="width:28px;height:28px;"><use href="#i-lock"></use></svg>
+              </div>
+              <h3 style="font-size:17px;font-weight:700;color:#92400e;margin-bottom:6px;">Akses Perbantuan Pentasharufan Terkunci</h3>
+              <p style="font-size:13.5px;color:#78350f;max-width:520px;margin:0 auto 16px auto;line-height:1.5;">
+                Fitur permohonan perbantuan pentasharufan hanya dapat diakses oleh UPZ yang telah mendaftarkan dan mengesahkan dokumen <strong>RKAT (Rencana Kerja & Anggaran Tahunan)</strong> di BAZNAS Kabupaten Banyumas.
+              </p>
+              <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+                <a id="upzRkatWaBtn" href="https://wa.me/6281368691114" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="background:#25d366;color:#ffffff;font-weight:600;padding:10px 20px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
+                  <svg class="icon" style="width:18px;height:18px;"><use href="#i-message-circle"></use></svg>
+                  <span>Daftarkan RKAT via WhatsApp</span>
+                </a>
+              </div>
+              <p style="font-size:11.5px;color:#b45309;margin-top:12px;">Admin akan membuka akses formulir ini setelah konfirmasi RKAT UPZ Anda diterima.</p>
             </div>
 
             <form id="pentaForm" novalidate>
@@ -1263,6 +1527,22 @@
         </div>
       </div>
 
+      <!-- ====================================== -->
+      <!-- 7. HALAMAN PANDUAN PENGGUNAAN (UPZ)    -->
+      <!-- ====================================== -->
+      <div id="upzViewPanduan" class="upz-view upz-only hidden">
+        <div class="hero hero-upz page-title-banner">
+          <div class="hero-text page-title-text">
+            <span class="hero-eyebrow"><svg class="icon"><use href="#i-book-open"></use></svg>Panduan Penggunaan</span>
+            <h2 class="hero-title">Buku Panduan Pengoperasian UPZ</h2>
+            <p class="hero-desc">Petunjuk lengkap pengajuan setoran ZIS, perbantuan pentasharufan RKAT, unduh BSZ, dan pengelolaan akun UPZ.</p>
+          </div>
+          <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-book-open"></use></svg></div>
+        </div>
+
+        <div id="upzGuideContainer" class="system-guide-container"></div>
+      </div>
+
     </main>
 
     <footer class="app-footer">
@@ -1288,6 +1568,86 @@
 
       <div class="modal-scroll">
         <div id="detailModalMeta" class="detail-meta"></div>
+
+        <!-- SECTION DOKUMEN & BUKTI TRANSFER (BSZ, TF PENTASHARUFAN, TF HAK AMIL, TF SALIN ASLIMAS) -->
+        <div id="detailDocsSection" class="detail-docs-list">
+          <!-- 1. Bukti Setor Zakat (BSZ) -->
+          <div id="detailDocRow_bsz" class="detail-doc-card is-empty">
+            <div class="detail-doc-left">
+              <div id="detailDocIcon_bsz" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
+              <div>
+                <div class="detail-doc-title">Bukti Setor Zakat (BSZ) Resmi</div>
+                <div id="detailDocDesc_bsz" class="detail-doc-desc">Belum diterbitkan</div>
+              </div>
+            </div>
+            <div id="detailDocActions_bsz" class="detail-doc-actions">
+              <button type="button" id="detailUploadBszBtn" class="btn btn-ghost btn-sm btn-icon-only detail-doc-upload-btn" title="Upload BSZ" style="display: none;">
+                <svg class="icon"><use href="#i-upload"></use></svg>
+              </button>
+              <button type="button" id="detailDownloadBszBtn" class="btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
+                <svg class="icon"><use href="#i-download"></use></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Transfer Perbantuan Pentasharufan -->
+          <div id="detailDocRow_tf_penta" class="detail-doc-card is-empty">
+            <div class="detail-doc-left">
+              <div id="detailDocIcon_tf_penta" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
+              <div>
+                <div class="detail-doc-title">Bukti Transfer Pentasharufan</div>
+                <div id="detailDocDesc_tf_penta" class="detail-doc-desc">Belum diunggah</div>
+              </div>
+            </div>
+            <div id="detailDocActions_tf_penta" class="detail-doc-actions">
+              <button type="button" id="detailUploadBtn_tf_penta" class="btn btn-ghost btn-sm btn-icon-only detail-doc-upload-btn" title="Upload Bukti Transfer Pentasharufan" style="display: none;">
+                <svg class="icon"><use href="#i-upload"></use></svg>
+              </button>
+              <button type="button" id="detailDownloadBtn_tf_penta" class="btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
+                <svg class="icon"><use href="#i-download"></use></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Transfer Hak Amil UPZ -->
+          <div id="detailDocRow_tf_amil" class="detail-doc-card is-empty">
+            <div class="detail-doc-left">
+              <div id="detailDocIcon_tf_amil" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
+              <div>
+                <div class="detail-doc-title">Bukti Transfer Hak Amil UPZ</div>
+                <div id="detailDocDesc_tf_amil" class="detail-doc-desc">Belum diunggah</div>
+              </div>
+            </div>
+            <div id="detailDocActions_tf_amil" class="detail-doc-actions">
+              <button type="button" id="detailUploadBtn_tf_amil" class="btn btn-ghost btn-sm btn-icon-only detail-doc-upload-btn" title="Upload Bukti Transfer Hak Amil" style="display: none;">
+                <svg class="icon"><use href="#i-upload"></use></svg>
+              </button>
+              <button type="button" id="detailDownloadBtn_tf_amil" class="btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
+                <svg class="icon"><use href="#i-download"></use></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Transfer Salin Aslimas -->
+          <div id="detailDocRow_tf_salin" class="detail-doc-card is-empty">
+            <div class="detail-doc-left">
+              <div id="detailDocIcon_tf_salin" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
+              <div>
+                <div class="detail-doc-title">Bukti Transfer Salin Aslimas</div>
+                <div id="detailDocDesc_tf_salin" class="detail-doc-desc">Belum diunggah</div>
+              </div>
+            </div>
+            <div id="detailDocActions_tf_salin" class="detail-doc-actions">
+              <button type="button" id="detailUploadBtn_tf_salin" class="btn btn-ghost btn-sm btn-icon-only detail-doc-upload-btn" title="Upload Bukti Transfer Salin Aslimas" style="display: none;">
+                <svg class="icon"><use href="#i-upload"></use></svg>
+              </button>
+              <button type="button" id="detailDownloadBtn_tf_salin" class="btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
+                <svg class="icon"><use href="#i-download"></use></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div id="detailModalBody" class="detail-body"></div>
 
         <div id="detailModalVerify" class="verify-box hidden">
@@ -1300,13 +1660,20 @@
         </div>
       </div>
 
-      <div class="modal-footer" id="detailModalFooter">
-        <a id="detailWaConfirmButton" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-wa-confirm hidden" title="Konfirmasi via WhatsApp">
-          <svg class="icon"><use href="#i-message-circle"></use></svg>
-          <span>Konfirmasi Setoran</span>
-        </a>
-        <button type="button" id="detailCloseButton" class="btn btn-ghost">Tutup</button>
-        <button type="button" id="detailDownloadButton" class="btn btn-soft"><svg class="icon"><use href="#i-download"></use></svg><span>Unduh Excel</span></button>
+      <div class="modal-footer" id="detailModalFooter" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" id="detailDeleteButton" class="btn btn-danger-soft btn-sm" style="display: none;" title="Hapus setoran ini">
+            <svg class="icon"><use href="#i-trash-2"></use></svg><span>Hapus Setoran</span>
+          </button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
+          <a id="detailWaConfirmButton" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-wa-confirm hidden" title="Konfirmasi via WhatsApp">
+            <svg class="icon"><use href="#i-message-circle"></use></svg>
+            <span>Konfirmasi Setoran</span>
+          </a>
+          <button type="button" id="detailDownloadButton" class="btn btn-soft"><svg class="icon"><use href="#i-download"></use></svg><span>Unduh Excel</span></button>
+          <button type="button" id="detailCloseButton" class="btn btn-ghost">Tutup</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1399,6 +1766,14 @@
             <div class="form-group">
               <label for="upzFormNamaUpz">Nama UPZ</label>
               <input type="text" id="upzFormNamaUpz" placeholder="Nama resmi UPZ" required>
+            </div>
+            <div class="form-group">
+              <label for="upzFormNoSk">Nomor SK UPZ</label>
+              <input type="text" id="upzFormNoSk" placeholder="Contoh: 045/BAZNAS-BMS/SK-UPZ/2024">
+            </div>
+            <div class="form-group">
+              <label for="upzFormNamaKetua">Nama Ketua UPZ</label>
+              <input type="text" id="upzFormNamaKetua" placeholder="Nama lengkap Ketua UPZ">
             </div>
             <div class="form-group">
               <label for="upzFormKategori">Kategori UPZ</label>
@@ -1643,8 +2018,8 @@
     </div>
   </div>
 
-  <!-- MODAL KONFIRMASI HAPUS SETORAN (ADMIN) -->
-  <div id="deleteSetoranModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="deleteSetoranTitle">
+  <!-- MODAL KONFIRMASI HAPUS SETORAN -->
+  <div id="deleteSetoranModal" class="modal-overlay hidden" style="z-index: 10050;" role="dialog" aria-modal="true" aria-labelledby="deleteSetoranTitle">
     <div class="modal-card modal-sm delete-confirm-card">
       <div class="modal-header">
         <div class="modal-heading">
@@ -1815,8 +2190,8 @@
     </div>
   </div>
 
-  <!-- MODAL UPLOAD BSZ (ADMIN) -->
-  <div id="uploadBszModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="uploadBszModalTitle">
+  <!-- MODAL UPLOAD BSZ -->
+  <div id="uploadBszModal" class="modal-overlay hidden" style="z-index: 10050;" role="dialog" aria-modal="true" aria-labelledby="uploadBszModalTitle">
     <div class="modal-card modal-sm">
       <div class="modal-header">
         <div class="modal-heading">
@@ -1830,10 +2205,11 @@
       </div>
       <div class="modal-scroll" style="padding:16px;">
         <input type="hidden" id="uploadBszSetoranId" value="">
+        <input type="hidden" id="uploadDocType" value="bsz">
         <div class="form-group">
-          <label for="inputBszFile">Pilih Berkas BSZ (PDF / RAR / Dokumen):</label>
-          <input type="file" id="inputBszFile" class="form-control" accept=".pdf,.rar,.zip,.jpg,.jpeg,.png,.doc,.docx" style="padding:8px;">
-          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:4px;">Format didukung: PDF, RAR, ZIP, Dokumen, Gambar (Maks 20MB)</div>
+          <label id="uploadDocFileLabel" for="inputBszFile">Pilih Berkas (PDF / JPG / PNG):</label>
+          <input type="file" id="inputBszFile" class="form-control" accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" style="padding:8px;">
+          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:4px;">Format didukung: PDF, JPG, PNG (Maks 20MB)</div>
         </div>
         <div id="uploadBszCurrentFileNotice" class="hidden" style="margin-top:12px;padding:8px 12px;background:var(--slate-100);border-radius:6px;font-size:12px;"></div>
         <div id="uploadBszMsg" class="form-message" style="margin-top:8px;"></div>
@@ -1912,6 +2288,6 @@
   <!-- CHART.JS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=20"></script>
 </body>
 </html>
