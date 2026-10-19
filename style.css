@@ -6856,6 +6856,14 @@ body.role-admin #headerWebsiteBadge {
   color: #166534;
 }
 
+.detail-doc-card.admin-view {
+  cursor: default !important;
+}
+
+.detail-doc-card.admin-view:hover {
+  transform: none !important;
+}
+
 
 
 

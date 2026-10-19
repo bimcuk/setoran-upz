@@ -1821,7 +1821,7 @@ async function openDetailModal(setoranId, isAdmin) {
     '<div class="meta-item"><label>File Rincian</label><div class="text-break">' + escapeHtml(item.file_name || 'Tidak tersedia') + '</div></div>';
   detailModalBody.innerHTML = '<p class="empty-state">Memuat rincian donatur...</p>';
   detailModalVerify.classList.toggle('hidden', !(isAdmin && status === 'menunggu'));
-  detailDownloadButton.classList.toggle('hidden', !item.file_path && !item.id);
+  if (detailDownloadButton) detailDownloadButton.classList.toggle('hidden', !item.file_path && !item.id);
 
   // Update BSZ Section di dalam modal
   updateDetailModalBszSection(item.id, isAdmin);
@@ -1879,9 +1879,11 @@ async function openDetailModal(setoranId, isAdmin) {
     detailModalBody.innerHTML = '<p class="form-message" style="color:#dc2626">' + escapeHtml(error.message) + '</p>';
   }
 
-  detailDownloadButton.onclick = function () {
-    downloadSetoranExcelFile(item);
-  };
+  if (detailDownloadButton) {
+    detailDownloadButton.onclick = function () {
+      downloadSetoranExcelFile(item);
+    };
+  }
 }
 
 function updateDetailModalDocsSection(setoranId, isAdmin) {
@@ -1939,29 +1941,41 @@ function updateDetailModalDocsSection(setoranId, isAdmin) {
       if (rowEl) {
         rowEl.classList.remove('is-empty');
         rowEl.classList.add('is-uploaded');
-        rowEl.setAttribute('title', 'Klik untuk mengunduh ' + cfg.name);
-        rowEl.onclick = function (e) {
-          if (e.target.closest('.detail-doc-actions')) return;
-          downloadTransferDocFile(setoranId, cfg.key);
-        };
+        if (!isAdmin) {
+          rowEl.classList.remove('admin-view');
+          rowEl.setAttribute('title', 'Klik untuk mengunduh ' + cfg.name);
+          rowEl.onclick = function (e) {
+            if (e.target.closest('.detail-doc-actions')) return;
+            downloadTransferDocFile(setoranId, cfg.key);
+          };
+        } else {
+          rowEl.classList.add('admin-view');
+          rowEl.removeAttribute('title');
+          rowEl.onclick = null;
+        }
       }
       const ext = (doc.file_name.split('.').pop() || '').toUpperCase();
       if (descEl) {
         descEl.innerHTML = `<span style="background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-right:6px;border:1px solid #bbf7d0;">${escapeHtml(ext)}</span> <strong>${escapeHtml(doc.file_name)}</strong>`;
       }
       if (downloadBtn) {
-        downloadBtn.style.display = 'inline-flex';
-        downloadBtn.disabled = false;
-        downloadBtn.className = 'btn btn-soft btn-sm btn-icon-only detail-doc-download-btn';
-        downloadBtn.style.opacity = '1';
-        downloadBtn.style.cursor = 'pointer';
-        downloadBtn.setAttribute('title', 'Unduh ' + cfg.name);
-        downloadBtn.setAttribute('aria-label', 'Unduh ' + cfg.name);
-        downloadBtn.innerHTML = '<svg class="icon"><use href="#i-download"></use></svg>';
-        downloadBtn.onclick = function (e) {
-          e.stopPropagation();
-          downloadTransferDocFile(setoranId, cfg.key);
-        };
+        if (!isAdmin) {
+          downloadBtn.style.display = 'inline-flex';
+          downloadBtn.disabled = false;
+          downloadBtn.className = 'btn btn-soft btn-sm btn-icon-only detail-doc-download-btn';
+          downloadBtn.style.opacity = '1';
+          downloadBtn.style.cursor = 'pointer';
+          downloadBtn.setAttribute('title', 'Unduh ' + cfg.name);
+          downloadBtn.setAttribute('aria-label', 'Unduh ' + cfg.name);
+          downloadBtn.innerHTML = '<svg class="icon"><use href="#i-download"></use></svg>';
+          downloadBtn.onclick = function (e) {
+            e.stopPropagation();
+            downloadTransferDocFile(setoranId, cfg.key);
+          };
+        } else {
+          downloadBtn.style.display = 'none';
+          downloadBtn.onclick = null;
+        }
       }
       if (uploadBtn) {
         if (isAdmin) {
@@ -1983,20 +1997,27 @@ function updateDetailModalDocsSection(setoranId, isAdmin) {
         rowEl.classList.remove('is-uploaded');
         rowEl.removeAttribute('title');
         rowEl.onclick = null;
+        if (isAdmin) rowEl.classList.add('admin-view');
+        else rowEl.classList.remove('admin-view');
       }
       if (descEl) {
         descEl.textContent = isAdmin ? cfg.emptyDescAdmin : cfg.emptyDescUpz;
       }
       if (downloadBtn) {
-        downloadBtn.style.display = 'inline-flex';
-        downloadBtn.disabled = true;
-        downloadBtn.className = 'btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled';
-        downloadBtn.style.opacity = '0.35';
-        downloadBtn.style.cursor = 'not-allowed';
-        downloadBtn.setAttribute('title', 'Belum diunggah oleh admin');
-        downloadBtn.setAttribute('aria-label', 'Belum diunggah oleh admin');
-        downloadBtn.innerHTML = '<svg class="icon"><use href="#i-download"></use></svg>';
-        downloadBtn.onclick = null;
+        if (!isAdmin) {
+          downloadBtn.style.display = 'inline-flex';
+          downloadBtn.disabled = true;
+          downloadBtn.className = 'btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled';
+          downloadBtn.style.opacity = '0.35';
+          downloadBtn.style.cursor = 'not-allowed';
+          downloadBtn.setAttribute('title', 'Belum diunggah oleh admin');
+          downloadBtn.setAttribute('aria-label', 'Belum diunggah oleh admin');
+          downloadBtn.innerHTML = '<svg class="icon"><use href="#i-download"></use></svg>';
+          downloadBtn.onclick = null;
+        } else {
+          downloadBtn.style.display = 'none';
+          downloadBtn.onclick = null;
+        }
       }
       if (uploadBtn) {
         if (isAdmin) {
@@ -2022,9 +2043,11 @@ function updateDetailModalBszSection(setoranId, isAdmin) {
 
 async function downloadSetoranExcelFile(item) {
   if (!item) return;
-  const originalText = detailDownloadButton.innerHTML;
-  detailDownloadButton.disabled = true;
-  detailDownloadButton.innerHTML = '<span>Mengunduh...</span>';
+  const originalText = detailDownloadButton ? detailDownloadButton.innerHTML : '';
+  if (detailDownloadButton) {
+    detailDownloadButton.disabled = true;
+    detailDownloadButton.innerHTML = '<span>Mengunduh...</span>';
+  }
   try {
     let downloaded = false;
     if (item.file_path) {
@@ -2060,8 +2083,10 @@ async function downloadSetoranExcelFile(item) {
   } catch (err) {
     alert('Gagal mengunduh file: ' + err.message);
   } finally {
-    detailDownloadButton.disabled = false;
-    detailDownloadButton.innerHTML = originalText;
+    if (detailDownloadButton) {
+      detailDownloadButton.disabled = false;
+      detailDownloadButton.innerHTML = originalText;
+    }
   }
 }
 
