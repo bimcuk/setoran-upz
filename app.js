@@ -4230,7 +4230,7 @@ async function loadUpzList() {
       try {
         const { data: uData, error: uErr } = await supabaseClient
           .from('upz')
-          .select('id, kode_upz, nama_upz, kategori, status');
+          .select('id, kode_upz, nama_upz, kategori, status, nama_pic, email_pic');
         if (!uErr && Array.isArray(uData) && uData.length > 0) {
           upzRows = uData;
         }
@@ -4284,6 +4284,29 @@ async function loadUpzList() {
       if (p.upz_id) profileByUpzId[p.upz_id] = p;
     });
 
+    // Ambil metadata tambahan (no_sk, nama_ketua, nama_pengelola) dari audit_logs
+    let extraMetaByUpzId = {};
+    let extraMetaByProfileId = {};
+    try {
+      const { data: logData } = await supabaseClient
+        .from('audit_logs')
+        .select('description')
+        .eq('module', 'profile')
+        .order('created_at', { ascending: false })
+        .limit(300);
+      if (Array.isArray(logData)) {
+        logData.forEach(function (l) {
+          try {
+            const desc = typeof l.description === 'string' ? JSON.parse(l.description) : l.description;
+            if (desc && typeof desc === 'object') {
+              if (desc.upz_id && !extraMetaByUpzId[desc.upz_id]) extraMetaByUpzId[desc.upz_id] = desc;
+              if (desc.profile_id && !extraMetaByProfileId[desc.profile_id]) extraMetaByProfileId[desc.profile_id] = desc;
+            }
+          } catch (_) {}
+        });
+      }
+    } catch (_) {}
+
     // Kumpulkan ID UPZ yang pernah melakukan setoran
     const activeUpzSet = new Set();
     (currentAdminSetoran || []).forEach(function (s) {
@@ -4294,20 +4317,26 @@ async function loadUpzList() {
     if (upzRows.length > 0) {
       allUpzList = upzRows.map(function (u) {
         const p = profileByUpzId[u.id] || {};
+        const meta = extraMetaByUpzId[u.id] || (p.id && extraMetaByProfileId[p.id]) || {};
         const uid = String(u.id || '').toLowerCase();
         const pUid = String(p.upz_id || '').toLowerCase();
         const hasDeposited = activeUpzSet.has(uid) || (pUid && activeUpzSet.has(pUid));
-        const cleanEmail = (p.email && !p.email.includes('@upz.baznas')) ? p.email : (u.email || '-');
+        const cleanEmail = (p.email && !p.email.includes('@upz.baznas')) ? p.email : (u.email_pic || u.email || '-');
+        const validProfileName = (p.nama_lengkap && p.nama_lengkap.trim() !== 'PIC') ? p.nama_lengkap.trim() : '';
+        const validUpzPic = (u.nama_pic && u.nama_pic.trim() !== 'PIC') ? u.nama_pic.trim() : '';
+        const validMetaName = meta.nama_pengelola || meta.nama_lengkap || '';
+        const namaLengkap = validMetaName || validProfileName || u.nama_pengelola || validUpzPic || (u.nama_lengkap && u.nama_lengkap.trim() !== 'PIC' ? u.nama_lengkap : '') || u.nama_upz || '';
+
         return {
           profile_id: p.id || u.profile_id || u.id,
           upz_id: u.id || u.upz_id,
-          nama_lengkap: u.nama_pengelola || u.nama_lengkap || p.nama_lengkap || u.nama_upz || '',
+          nama_lengkap: namaLengkap,
           email: cleanEmail,
           status: hasDeposited ? 'Active' : (u.status || 'Inactive'),
           nama_upz: u.nama_upz || u.kode_upz || '',
           kategori: u.kategori || '-',
-          no_sk: u.no_sk || p.no_sk || '',
-          nama_ketua: u.nama_ketua || p.nama_ketua || ''
+          no_sk: meta.no_sk || u.no_sk || p.no_sk || '',
+          nama_ketua: meta.nama_ketua || u.nama_ketua || p.nama_ketua || ''
         };
       });
     } else if (upzProfiles.length > 0) {
@@ -5118,7 +5147,21 @@ function closeUpzProfileInfoModal() {
           console.warn('Endpoint /api/update-profile notice:', apiErr);
         }
 
-        // 2. Simpan ke local storage agar persisten di browser ini
+        // 2. Selalu simpan ke user_metadata di Supabase Auth via client SDK
+        try {
+          await supabaseClient.auth.updateUser({
+            data: {
+              nama_lengkap: newNama,
+              nama_pengelola: newNama,
+              no_sk: newNoSk,
+              nama_ketua: newKetua
+            }
+          });
+        } catch (authMetaErr) {
+          console.warn('supabase auth updateUser notice:', authMetaErr);
+        }
+
+        // 3. Simpan ke local storage agar persisten di browser ini
         saveUpzProfileExtras(currentProfile.upz_id || currentProfile.id, {
           no_sk: newNoSk,
           nama_ketua: newKetua,
@@ -5129,7 +5172,7 @@ function closeUpzProfileInfoModal() {
         currentProfile.nama_ketua = newKetua;
         currentProfile.nama_lengkap = newNama;
 
-        // 3. Update tabel profiles di Supabase jika memungkinkan
+        // 4. Update tabel profiles di Supabase jika memungkinkan
         try {
           await supabaseClient
             .from('profiles')
