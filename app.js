@@ -1446,13 +1446,13 @@ async function loadDashboard(keepCurrentView = false) {
     } catch (_) {}
 
     const extras = getUpzProfileExtras(currentProfile.upz_id || currentProfile.id);
-    if (extras.nama_pengelola) {
+    if (!currentProfile.nama_lengkap && extras.nama_pengelola) {
       currentProfile.nama_lengkap = extras.nama_pengelola;
     }
-    if (extras.no_sk) {
+    if (!currentProfile.no_sk && extras.no_sk) {
       currentProfile.no_sk = extras.no_sk;
     }
-    if (extras.nama_ketua) {
+    if (!currentProfile.nama_ketua && extras.nama_ketua) {
       currentProfile.nama_ketua = extras.nama_ketua;
     }
 
@@ -4910,15 +4910,76 @@ function populateUpzMgmtProfile(profile) {
     statusEl.className = isActive ? 'badge badge-success' : 'badge badge-danger';
   }
 
-  // Ambil email aktif dari sesi login Supabase yang sebenarnya
+  // Sinkronisasi data realtime dari sesi login Supabase Auth (email, metadata pengelola, SK, ketua)
   if (supabaseClient && supabaseClient.auth) {
-    supabaseClient.auth.getUser().then(function (res) {
+    supabaseClient.auth.getUser().then(async function (res) {
       const u = res && res.data && res.data.user;
-      if (u && u.email) {
+      if (!u) return;
+
+      if (u.email) {
         if (emailEl) emailEl.textContent = u.email;
         if (profile) profile.email = u.email;
       }
-    }).catch(function () {});
+
+      const um = u.user_metadata || {};
+      let noSk = um.no_sk || '';
+      let namaKetua = um.nama_ketua || '';
+      let namaPengelola = um.nama_pengelola || um.nama_lengkap || '';
+
+      // Fallback: periksa riwayat audit_logs Supabase jika metadata belum terisi
+      if (!noSk || !namaKetua || !namaPengelola) {
+        try {
+          const upzId = (profile && (profile.upz_id || profile.id)) || '';
+          const { data: logs } = await supabaseClient
+            .from('audit_logs')
+            .select('description')
+            .eq('module', 'profile')
+            .order('created_at', { ascending: false })
+            .limit(30);
+          if (Array.isArray(logs)) {
+            for (const l of logs) {
+              try {
+                const desc = typeof l.description === 'string' ? JSON.parse(l.description) : l.description;
+                if (desc && (desc.profile_id === u.id || (upzId && desc.upz_id === upzId))) {
+                  if (!noSk && desc.no_sk) noSk = desc.no_sk;
+                  if (!namaKetua && desc.nama_ketua) namaKetua = desc.nama_ketua;
+                  if (!namaPengelola && (desc.nama_pengelola || desc.nama_lengkap)) {
+                    namaPengelola = desc.nama_pengelola || desc.nama_lengkap;
+                  }
+                  break;
+                }
+              } catch (_) {}
+            }
+          }
+        } catch (_) {}
+      }
+
+      if (namaPengelola) {
+        if (pengelolaEl) pengelolaEl.textContent = namaPengelola;
+        if (profile) profile.nama_lengkap = namaPengelola;
+        const userNameEl = document.getElementById('userName');
+        if (userNameEl) userNameEl.textContent = namaPengelola;
+      }
+      if (noSk) {
+        if (noSkEl) noSkEl.textContent = noSk;
+        if (profile) profile.no_sk = noSk;
+      }
+      if (namaKetua) {
+        if (ketuaEl) ketuaEl.textContent = namaKetua;
+        if (profile) profile.nama_ketua = namaKetua;
+      }
+
+      // Sinkronkan cache lokal dengan data resmi dari Supabase
+      if (profile && (profile.upz_id || profile.id)) {
+        saveUpzProfileExtras(profile.upz_id || profile.id, {
+          no_sk: noSk || (profile && profile.no_sk) || '',
+          nama_ketua: namaKetua || (profile && profile.nama_ketua) || '',
+          nama_pengelola: namaPengelola || (profile && profile.nama_lengkap) || ''
+        });
+      }
+    }).catch(function (err) {
+      console.warn('Sync UPZ profile metadata notice:', err);
+    });
   }
 }
 
@@ -4937,7 +4998,7 @@ function openUpzProfileInfoModal() {
   const namaUpz = p.nama_upz || (upzMap && upzMap[p.upz_id]) || p.nama_lengkap || 'UPZ';
   const noSk = p.no_sk || extras.no_sk || 'Belum diisi (Klik Edit Profil)';
   const ketua = p.nama_ketua || extras.nama_ketua || 'Belum diisi (Klik Edit Profil)';
-  const pengelola = extras.nama_pengelola || p.nama_lengkap || '-';
+  const pengelola = p.nama_lengkap || extras.nama_pengelola || '-';
   const email = (p.email && !p.email.includes('@upz.baznas')) ? p.email : '-';
   const kategori = p.kategori || extras.kategori || 'UPZ';
   const st = String(p.status || '').toLowerCase();
