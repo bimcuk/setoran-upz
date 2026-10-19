@@ -958,30 +958,36 @@ function initAdminRealtimeNotifications() {
 // ==================================================
 // CALL BACKEND
 // ==================================================
+// HELPER: Ambil token Supabase valid & otomatis refresh jika expired
+// ==================================================
+async function getValidAuthToken() {
+  try {
+    let { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+    if (sessionError || !session) return null;
+    const now = Math.floor(Date.now() / 1000);
+    if (!session.expires_at || session.expires_at < now + 120) {
+      try {
+        const { data: refreshData, error: refreshError } = await supabaseClient.auth.refreshSession();
+        if (!refreshError && refreshData && refreshData.session) {
+          session = refreshData.session;
+        }
+      } catch (e) {
+        console.warn('Auto refresh session failed:', e);
+      }
+    }
+    return session ? session.access_token : null;
+  } catch (err) {
+    console.warn('getValidAuthToken failed:', err);
+    return null;
+  }
+}
 
 async function callBackend(action, payload = {}) {
-  let {
-    data: { session },
-    error: sessionError
-  } = await supabaseClient.auth.getSession();
-
-  if (sessionError || !session) {
+  const token = await getValidAuthToken();
+  if (!token) {
     await supabaseClient.auth.signOut().catch(function () {});
     showLogin();
-    throw new Error('Sesi login tidak ditemukan. Silakan login kembali.');
-  }
-
-  // Refresh token otomatis jika sudah atau hampir kedaluwarsa
-  const now = Math.floor(Date.now() / 1000);
-  if (session.expires_at && session.expires_at < now + 60) {
-    try {
-      const { data: refreshData, error: refreshError } = await supabaseClient.auth.refreshSession();
-      if (!refreshError && refreshData && refreshData.session) {
-        session = refreshData.session;
-      }
-    } catch (e) {
-      console.warn('Auto refresh session failed:', e);
-    }
+    throw new Error('Sesi login tidak ditemukan atau kedaluwarsa. Silakan login kembali.');
   }
 
   let response;
@@ -4711,87 +4717,46 @@ function closeUpzFormModal() {
       if (msgEl) { msgEl.textContent = ''; }
 
       try {
-        if (!profileId) {
-          // Mode: TAMBAH UPZ BARU
-          await callBackend('createUpz', {
-            email: email,
-            password: password,
-            nama: nama,
-            nama_upz: namaUpz,
-            kategori: kategori
-          });
-        } else {
-          // Mode: EDIT UPZ LAMA
-          // 1. Simpan perubahan ke endpoint server lokal jika tersedia
-          try {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            const token = session ? session.access_token : '';
-            await fetch('/api/update-upz', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                token: token,
-                profile_id: profileId,
-                upz_id: upzId,
-                nama_upz: namaUpz,
-                nama_lengkap: nama,
-                no_sk: noSk.trim(),
-                nama_ketua: namaKetua.trim(),
-                kategori: kategori,
-                status: status,
-                password: password || undefined,
-                email: email
-              })
-            });
-          } catch (servErr) {
-            console.warn('Endpoint /api/update-upz warning:', servErr);
-          }
-
-          // 2. Simpan juga langsung ke Supabase client
-          try {
-            if (upzId) {
-              await supabaseClient
-                .from('upz')
-                .update({ nama_upz: namaUpz, kategori: kategori, nama_pic: nama })
-                .eq('id', upzId);
-            }
-            await supabaseClient
-              .from('profiles')
-              .update({ nama_lengkap: nama, status: status, email: email })
-              .eq('id', profileId);
-          } catch (spbErr) {
-            console.warn('Direct Supabase update warning:', spbErr);
-          }
-
-          // 3. Simpan ke local cache agar langsung tampil di UI tanpa tergantung response database
-          try {
-            const editedMap = JSON.parse(localStorage.getItem('edited_upz_map') || '{}');
-            const editObj = {
-              nama_upz: namaUpz,
-              nama_lengkap: nama,
-              no_sk: noSk.trim(),
-              nama_ketua: namaKetua.trim(),
-              kategori: kategori,
-              email: email,
-              status: status
-            };
-            if (profileId) editedMap[profileId] = editObj;
-            if (upzId) editedMap[upzId] = editObj;
-            localStorage.setItem('edited_upz_map', JSON.stringify(editedMap));
-          } catch (_) {}
-
-          if (password) {
-            try {
-              await callBackend('updateUpzPassword', {
-                profile_id: profileId,
-                email: email,
-                new_password: password
-              });
-            } catch (_) {}
-          }
+        const token = await getValidAuthToken();
+        if (!token) {
+          throw new Error('Sesi login admin kedaluwarsa. Silakan refresh halaman atau login ulang.');
         }
 
-        if (msgEl) { msgEl.textContent = 'Data berhasil disimpan!'; msgEl.style.color = '#259148'; }
+        const updateRes = await fetch('/api/update-upz', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: token,
+            profile_id: profileId || undefined,
+            upz_id: upzId || undefined,
+            nama_upz: namaUpz,
+            nama_lengkap: nama,
+            no_sk: noSk.trim(),
+            nama_ketua: namaKetua.trim(),
+            kategori: kategori,
+            status: status,
+            password: password || undefined,
+            email: email
+          })
+        });
+
+        const updateJson = await updateRes.json().catch(() => ({}));
+        if (!updateRes.ok || !updateJson.success) {
+          throw new Error(updateJson.message || `Gagal menyimpan ke Supabase (HTTP ${updateRes.status})`);
+        }
+
+        // Hapus cache lokal override agar data murni sinkron langsung dari database Supabase
+        try {
+          const editedMap = JSON.parse(localStorage.getItem('edited_upz_map') || '{}');
+          if (profileId) delete editedMap[profileId];
+          if (upzId) delete editedMap[upzId];
+          localStorage.setItem('edited_upz_map', JSON.stringify(editedMap));
+        } catch (_) {}
+
+        if (msgEl) {
+          msgEl.textContent = 'Data akun berhasil disimpan dan disinkronkan ke Supabase!';
+          msgEl.style.color = '#259148';
+        }
         await loadUpzList();
         renderUpzMgmtTable();
         // Reload upzMap untuk filter admin
@@ -5132,18 +5097,23 @@ function closeUpzProfileInfoModal() {
       try {
         // 1. Simpan ke Supabase via endpoint /api/update-profile
         try {
-          const { data: { session } } = await supabaseClient.auth.getSession();
-          const token = session ? session.access_token : '';
-          await fetch('/api/update-profile', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              token: token,
-              nama_pengelola: newNama,
-              no_sk: newNoSk,
-              nama_ketua: newKetua
-            })
-          });
+          const token = await getValidAuthToken();
+          if (token) {
+            const upRes = await fetch('/api/update-profile', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                token: token,
+                nama_pengelola: newNama,
+                no_sk: newNoSk,
+                nama_ketua: newKetua
+              })
+            });
+            const upJson = await upRes.json().catch(() => ({}));
+            if (!upRes.ok || !upJson.success) {
+              console.warn('Endpoint /api/update-profile warning:', upJson.message);
+            }
+          }
         } catch (apiErr) {
           console.warn('Endpoint /api/update-profile notice:', apiErr);
         }
@@ -7368,8 +7338,8 @@ function initDeleteUpzFeature() {
       if (execText) execText.textContent = 'Menghapus...';
 
       try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        const token = session ? session.access_token : '';
+        const token = await getValidAuthToken();
+        if (!token) throw new Error('Sesi login admin kedaluwarsa. Silakan login ulang.');
 
         const res = await fetch('/api/delete-upz', {
           method: 'POST',

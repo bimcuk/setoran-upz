@@ -63,25 +63,26 @@ async function verifyAdminToken(token) {
   if (!userRes.ok) throw new Error('Token tidak valid atau sudah kedaluwarsa.');
   const user = await userRes.json();
 
-  // 2. Cek role dari tabel profiles
+  // 2. Cek role dari tabel profiles menggunakan SERVICE_ROLE_KEY (karena RLS memblokir anon key)
+  const sKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
   const profileRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/profiles?select=role,status&id=eq.${user.id}`,
+    `${SUPABASE_URL}/rest/v1/profiles?select=role,status&id=eq.${encodeURIComponent(user.id)}`,
     {
       headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${token}`
+        'apikey': sKey,
+        'Authorization': `Bearer ${sKey}`
       }
     }
   );
 
   const profiles = await profileRes.json();
   if (!Array.isArray(profiles) || !profiles.length) {
-    throw new Error('Profile tidak ditemukan.');
+    throw new Error('Profile admin tidak ditemukan di Supabase.');
   }
 
   const profile = profiles[0];
   if (profile.role !== 'admin' || profile.status !== 'aktif') {
-    throw new Error('Hanya admin aktif yang dapat mengubah password UPZ.');
+    throw new Error('Hanya admin aktif yang berwenang mengubah akun UPZ.');
   }
 
   return user;
@@ -360,10 +361,13 @@ const server = http.createServer(async (req, res) => {
       if (!token) return sendJson(401, { success: false, message: 'Token tidak ditemukan.' });
       if (!nama_upz) return sendJson(400, { success: false, message: 'Nama UPZ wajib diisi.' });
 
-      // Verifikasi caller adalah admin
+      // Verifikasi caller adalah admin aktif
       await verifyAdminToken(token);
 
       const sKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
+      if (!sKey || sKey === 'ISI_SERVICE_ROLE_KEY_DISINI') {
+        throw new Error('SUPABASE_SERVICE_ROLE_KEY belum dikonfigurasi di server.');
+      }
       const headers = {
         'apikey': sKey,
         'Authorization': `Bearer ${sKey}`,
@@ -372,72 +376,151 @@ const server = http.createServer(async (req, res) => {
 
       const cleanEmail = email ? String(email).trim().toLowerCase() : '';
 
-      // 1. Update Supabase Auth user (email, password, user_metadata) jika profile_id ada
-      if (profile_id && sKey && sKey !== 'ISI_SERVICE_ROLE_KEY_DISINI') {
-        try {
-          const authPatch = {};
-          if (cleanEmail) {
-            authPatch.email = cleanEmail;
-            authPatch.email_confirm = true;
-          }
-          if (password) {
-            authPatch.password = password;
-          }
-          const uMeta = {};
-          if (nama_lengkap) uMeta.nama_lengkap = nama_lengkap;
-          if (nama_lengkap) uMeta.nama_pengelola = nama_lengkap;
-          if (no_sk !== undefined) uMeta.no_sk = no_sk;
-          if (nama_ketua !== undefined) uMeta.nama_ketua = nama_ketua;
-          if (Object.keys(uMeta).length > 0) {
-            authPatch.user_metadata = uMeta;
-          }
+      // Tentukan targetAuthId (Auth User ID di Supabase Auth)
+      let targetAuthId = profile_id;
 
-          if (Object.keys(authPatch).length > 0) {
-            const authRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${encodeURIComponent(profile_id)}`, {
-              method: 'PUT',
-              headers,
-              body: JSON.stringify(authPatch)
-            });
-            console.log(`[UPDATE-UPZ] auth user patch HTTP ${authRes.status} for ${profile_id}`);
-          }
-        } catch (authErr) {
-          console.warn('[UPDATE-UPZ] auth user patch error:', authErr.message);
+      // Jika profile_id bukan UUID atau sama dengan upz_id, cari auth user id dari tabel profiles
+      if (!isUuid(targetAuthId) || (upz_id && targetAuthId === upz_id)) {
+        if (upz_id) {
+          try {
+            const pRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id,email&upz_id=eq.${encodeURIComponent(upz_id)}&limit=1`, { headers });
+            const pRows = await pRes.json();
+            if (Array.isArray(pRows) && pRows.length > 0 && isUuid(pRows[0].id)) {
+              targetAuthId = pRows[0].id;
+            }
+          } catch (_) {}
         }
       }
 
-      // 2. Update tabel profiles
-      if (profile_id) {
+      // Jika masih belum ditemukan, coba cari berdasarkan email di profiles
+      if (!isUuid(targetAuthId) && cleanEmail) {
         try {
-          const profPatch = {
-            nama_lengkap: nama_lengkap || nama_upz,
-            status: status || 'aktif'
-          };
-          if (cleanEmail) profPatch.email = cleanEmail;
-          const profRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(profile_id)}`, {
+          const pRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id&email=eq.${encodeURIComponent(cleanEmail)}&limit=1`, { headers });
+          const pRows = await pRes.json();
+          if (Array.isArray(pRows) && pRows.length > 0 && isUuid(pRows[0].id)) {
+            targetAuthId = pRows[0].id;
+          }
+        } catch (_) {}
+      }
+
+      // 1. UPDATE ATAU BUAT USER DI SUPABASE AUTH (auth.users)
+      if (targetAuthId && isUuid(targetAuthId)) {
+        const authPatch = {};
+        if (cleanEmail) {
+          authPatch.email = cleanEmail;
+          authPatch.email_confirm = true;
+        }
+        if (password) {
+          authPatch.password = password;
+        }
+        const uMeta = {};
+        if (nama_lengkap) uMeta.nama_lengkap = nama_lengkap;
+        if (nama_lengkap) uMeta.nama_pengelola = nama_lengkap;
+        if (no_sk !== undefined) uMeta.no_sk = no_sk;
+        if (nama_ketua !== undefined) uMeta.nama_ketua = nama_ketua;
+        if (Object.keys(uMeta).length > 0) {
+          authPatch.user_metadata = uMeta;
+        }
+
+        if (Object.keys(authPatch).length > 0) {
+          const authRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${encodeURIComponent(targetAuthId)}`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(authPatch)
+          });
+          const authData = await authRes.json().catch(() => ({}));
+          console.log(`[UPDATE-UPZ] auth user patch HTTP ${authRes.status} for ${targetAuthId}:`, authData.email || authData.message);
+          if (!authRes.ok) {
+            const errMsg = authData.message || authData.msg || authData.error_description || `Supabase Auth error (${authRes.status})`;
+            throw new Error(`Gagal update akun login Supabase Auth: ${errMsg}`);
+          }
+        }
+      } else {
+        // Mode: Buat Akun Auth Baru jika belum ada
+        if (!cleanEmail || !password) {
+          throw new Error('Email dan kata sandi wajib diisi untuk akun UPZ baru.');
+        }
+        const createAuthRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            email: cleanEmail,
+            password: password,
+            email_confirm: true,
+            user_metadata: {
+              nama_lengkap: nama_lengkap || nama_upz,
+              nama_pengelola: nama_lengkap || nama_upz,
+              no_sk: no_sk || '',
+              nama_ketua: nama_ketua || ''
+            }
+          })
+        });
+        const createAuthData = await createAuthRes.json().catch(() => ({}));
+        if (!createAuthRes.ok) {
+          const errMsg = createAuthData.message || createAuthData.msg || `Gagal membuat akun auth Supabase (${createAuthRes.status})`;
+          throw new Error(errMsg);
+        }
+        targetAuthId = createAuthData.id;
+      }
+
+      // 2. UPDATE ATAU INSERT TABEL UPZ
+      let finalUpzId = upz_id;
+      if (finalUpzId) {
+        const upzPatch = { nama_upz: nama_upz, kategori: kategori };
+        if (nama_lengkap) upzPatch.nama_pic = nama_lengkap;
+        if (cleanEmail) upzPatch.email_pic = cleanEmail;
+        const upzRes = await fetch(`${SUPABASE_URL}/rest/v1/upz?id=eq.${encodeURIComponent(finalUpzId)}`, {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify(upzPatch)
+        });
+        console.log(`[UPDATE-UPZ] table upz patch HTTP ${upzRes.status}`);
+      } else {
+        const insUpzRes = await fetch(`${SUPABASE_URL}/rest/v1/upz`, {
+          method: 'POST',
+          headers: { ...headers, 'Prefer': 'return=representation' },
+          body: JSON.stringify({
+            nama_upz: nama_upz,
+            kategori: kategori,
+            nama_pic: nama_lengkap,
+            email_pic: cleanEmail
+          })
+        });
+        const insUpzData = await insUpzRes.json().catch(() => []);
+        if (Array.isArray(insUpzData) && insUpzData.length > 0) {
+          finalUpzId = insUpzData[0].id;
+        }
+      }
+
+      // 3. UPDATE ATAU INSERT TABEL PROFILES
+      if (targetAuthId) {
+        const profPayload = {
+          nama_lengkap: nama_lengkap || nama_upz,
+          status: status || 'aktif',
+          role: 'upz'
+        };
+        if (cleanEmail) profPayload.email = cleanEmail;
+        if (finalUpzId) profPayload.upz_id = finalUpzId;
+
+        const checkProfRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(targetAuthId)}`, { headers });
+        const checkProfData = await checkProfRes.json().catch(() => []);
+        if (Array.isArray(checkProfData) && checkProfData.length > 0) {
+          const profRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(targetAuthId)}`, {
             method: 'PATCH',
             headers,
-            body: JSON.stringify(profPatch)
+            body: JSON.stringify(profPayload)
           });
           console.log(`[UPDATE-UPZ] table profiles patch HTTP ${profRes.status}`);
-        } catch (pErr) {
-          console.warn('[UPDATE-UPZ] profiles table patch error:', pErr.message);
-        }
-      }
-
-      // 3. Update tabel upz jika ada upz_id
-      if (upz_id) {
-        try {
-          const upzPatch = { nama_upz: nama_upz, kategori: kategori };
-          if (nama_lengkap) upzPatch.nama_pic = nama_lengkap;
-          if (cleanEmail) upzPatch.email_pic = cleanEmail;
-          const upzRes = await fetch(`${SUPABASE_URL}/rest/v1/upz?id=eq.${encodeURIComponent(upz_id)}`, {
-            method: 'PATCH',
+        } else {
+          const insProfRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
+            method: 'POST',
             headers,
-            body: JSON.stringify(upzPatch)
+            body: JSON.stringify({
+              id: targetAuthId,
+              ...profPayload
+            })
           });
-          console.log(`[UPDATE-UPZ] table upz patch HTTP ${upzRes.status}`);
-        } catch (uErr) {
-          console.warn('[UPDATE-UPZ] upz table patch error:', uErr.message);
+          console.log(`[UPDATE-UPZ] table profiles insert HTTP ${insProfRes.status}`);
         }
       }
 
@@ -449,16 +532,15 @@ const server = http.createServer(async (req, res) => {
           body: JSON.stringify({
             action: 'UPDATE_UPZ_PROFILE',
             module: 'profile',
-            user_id: isUuid(profile_id) ? profile_id : null,
+            user_id: isUuid(targetAuthId) ? targetAuthId : null,
             description: JSON.stringify({
-              upz_id: upz_id,
-              profile_id: profile_id,
-              nama_upz: nama_upz,
-              nama_lengkap: nama_lengkap,
+              upz_id: finalUpzId,
+              profile_id: targetAuthId,
               nama_pengelola: nama_lengkap,
-              email: cleanEmail,
+              nama_lengkap: nama_lengkap,
               no_sk: no_sk || '',
-              nama_ketua: nama_ketua || ''
+              nama_ketua: nama_ketua || '',
+              email: cleanEmail
             })
           })
         });
@@ -466,9 +548,13 @@ const server = http.createServer(async (req, res) => {
 
       return sendJson(200, {
         success: true,
-        message: 'Data UPZ dan akun login berhasil diperbarui di Supabase.'
+        message: 'Data UPZ dan akun login Supabase berhasil diperbarui.',
+        data: {
+          profile_id: targetAuthId,
+          upz_id: finalUpzId,
+          email: cleanEmail
+        }
       });
-
     } catch (err) {
       console.error('[UPDATE-UPZ ERROR]', err.message);
       return sendJson(500, { success: false, message: err.message });
