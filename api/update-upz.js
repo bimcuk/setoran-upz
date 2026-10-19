@@ -18,13 +18,17 @@ async function verifyAdminToken(token) {
   if (!userRes.ok) throw new Error('Token tidak valid atau sudah kedaluwarsa.');
   const user = await userRes.json();
 
-  const sKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
+  const authHeader = SUPABASE_SERVICE_ROLE_KEY
+    ? `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+    : `Bearer ${token}`;
+  const apiKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
+
   const profileRes = await fetch(
     `${SUPABASE_URL}/rest/v1/profiles?select=role,status&id=eq.${encodeURIComponent(user.id)}`,
     {
       headers: {
-        'apikey': sKey,
-        'Authorization': `Bearer ${sKey}`
+        'apikey': apiKey,
+        'Authorization': authHeader
       }
     }
   );
@@ -60,10 +64,10 @@ module.exports = async function handler(req, res) {
 
     await verifyAdminToken(token);
 
-    const sKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
-    if (!sKey) {
-      throw new Error('SUPABASE_SERVICE_ROLE_KEY belum dikonfigurasi di environment variables.');
+    if (!SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('SUPABASE_SERVICE_ROLE_KEY belum disetel di Environment Variables server/Vercel.');
     }
+    const sKey = SUPABASE_SERVICE_ROLE_KEY;
 
     const headers = {
       'apikey': sKey,

@@ -63,14 +63,18 @@ async function verifyAdminToken(token) {
   if (!userRes.ok) throw new Error('Token tidak valid atau sudah kedaluwarsa.');
   const user = await userRes.json();
 
-  // 2. Cek role dari tabel profiles menggunakan SERVICE_ROLE_KEY (karena RLS memblokir anon key)
-  const sKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
+  // 2. Cek role dari tabel profiles (gunakan SERVICE_ROLE_KEY jika ada, atau fallback ke user token)
+  const authHeader = SUPABASE_SERVICE_ROLE_KEY
+    ? `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+    : `Bearer ${token}`;
+  const apiKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
+
   const profileRes = await fetch(
     `${SUPABASE_URL}/rest/v1/profiles?select=role,status&id=eq.${encodeURIComponent(user.id)}`,
     {
       headers: {
-        'apikey': sKey,
-        'Authorization': `Bearer ${sKey}`
+        'apikey': apiKey,
+        'Authorization': authHeader
       }
     }
   );
