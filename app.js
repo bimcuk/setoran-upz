@@ -1000,7 +1000,7 @@ async function callBackend(action, payload = {}) {
       },
       body: JSON.stringify({
         action: action,
-        token: session.access_token,
+        token: token,
         payload: payload
       })
     });
