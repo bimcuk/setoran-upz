@@ -3558,13 +3558,128 @@ body.role-admin .user-chip:hover {
   color: #6b21a8;
 }
 
+.notif-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .notif-unread-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--brand-600, #259148);
   flex-shrink: 0;
-  margin-top: 14px;
+}
+
+.notif-kebab-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.notif-kebab-btn {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm, 6px);
+  color: var(--slate-400);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.notif-item:hover .notif-kebab-btn {
+  color: var(--slate-600);
+}
+
+.notif-kebab-btn:hover,
+.notif-kebab-btn:focus-visible {
+  background: var(--slate-200);
+  border-color: var(--slate-300);
+  color: var(--slate-900);
+}
+
+.notif-kebab-btn .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.notif-kebab-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 175px;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+  padding: 4px;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: dropdownAnim 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.notif-kebab-dropdown.hidden {
+  display: none !important;
+}
+
+.notif-kebab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--slate-700);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.notif-kebab-item .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--slate-500);
+  flex-shrink: 0;
+}
+
+.notif-kebab-item:hover {
+  background: var(--slate-100);
+  color: var(--slate-900);
+}
+
+.notif-kebab-item:hover .icon {
+  color: var(--slate-800);
+}
+
+.notif-kebab-item.danger {
+  color: #dc2626;
+}
+
+.notif-kebab-item.danger .icon {
+  color: #dc2626;
+}
+
+.notif-kebab-item.danger:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.notif-kebab-item.danger:hover .icon {
+  color: #b91c1c;
 }
 
 .notif-empty {

@@ -274,6 +274,7 @@ function showToast(titleOrMessage, type = 'info', description = '') {
 
 let adminNotifications = [];
 let adminReadNotifIds = new Set();
+let adminDeletedNotifIds = new Set();
 let activeNotifTab = 'semua';
 let realtimeNotifChannel = null;
 let isNotifSystemInitialized = false;
@@ -290,6 +291,21 @@ function loadReadNotifIds() {
 function saveReadNotifIds() {
   try {
     localStorage.setItem('admin_read_notif_ids_v1', JSON.stringify(Array.from(adminReadNotifIds)));
+  } catch (_) {}
+}
+
+function loadDeletedNotifIds() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('admin_deleted_notif_ids_v1') || '[]');
+    adminDeletedNotifIds = new Set(Array.isArray(saved) ? saved : []);
+  } catch (_) {
+    adminDeletedNotifIds = new Set();
+  }
+}
+
+function saveDeletedNotifIds() {
+  try {
+    localStorage.setItem('admin_deleted_notif_ids_v1', JSON.stringify(Array.from(adminDeletedNotifIds)));
   } catch (_) {}
 }
 
@@ -359,6 +375,7 @@ function recordUpzActivity(payload) {
 function syncAdminNotifications() {
   const notifs = [];
   loadReadNotifIds();
+  loadDeletedNotifIds();
   const isUpz = currentProfile && currentProfile.role === 'upz';
   const myUpzId = currentProfile ? String(currentProfile.upz_id || currentProfile.id || '').toLowerCase() : '';
 
@@ -548,12 +565,13 @@ function syncAdminNotifications() {
           }
         });
         if (hasNew) {
-          notifs.sort(function (a, b) {
+          const activeNotifs = notifs.filter(function (n) { return !adminDeletedNotifIds.has(String(n.id)); });
+          activeNotifs.sort(function (a, b) {
             const timeA = new Date(a.timestamp).getTime() || 0;
             const timeB = new Date(b.timestamp).getTime() || 0;
             return timeB - timeA;
           });
-          adminNotifications = notifs;
+          adminNotifications = activeNotifs;
           renderAdminNotificationUI();
         }
       }).catch(function (err) {
@@ -562,14 +580,15 @@ function syncAdminNotifications() {
     }).catch(function () {});
   }
 
-  // Urutkan dari notifikasi terbaru
-  notifs.sort(function (a, b) {
+  // Filter notifikasi yang telah dihapus & urutkan dari yang terbaru
+  const activeNotifs = notifs.filter(function (n) { return !adminDeletedNotifIds.has(String(n.id)); });
+  activeNotifs.sort(function (a, b) {
     const timeA = new Date(a.timestamp).getTime() || 0;
     const timeB = new Date(b.timestamp).getTime() || 0;
     return timeB - timeA;
   });
 
-  adminNotifications = notifs;
+  adminNotifications = activeNotifs;
   renderAdminNotificationUI();
 }
 
@@ -715,7 +734,24 @@ function renderAdminNotificationUI() {
             <span style="font-size:10px;color:var(--slate-400);">${escapeHtml(n.title)}</span>
           </div>
         </div>
-        ${isUnread ? '<div class="notif-unread-dot" title="Belum dibaca"></div>' : ''}
+        <div class="notif-item-actions">
+          ${isUnread ? '<span class="notif-unread-dot" title="Belum dibaca"></span>' : ''}
+          <div class="notif-kebab-menu">
+            <button type="button" class="notif-kebab-btn" title="Opsi notifikasi" aria-label="Opsi notifikasi" data-notif-id="${escapeHtml(n.id)}">
+              <svg class="icon"><use href="#i-more-vertical"></use></svg>
+            </button>
+            <div class="notif-kebab-dropdown hidden">
+              <button type="button" class="notif-kebab-item btn-notif-toggle-read" data-notif-id="${escapeHtml(n.id)}" data-action="${isUnread ? 'mark-read' : 'mark-unread'}">
+                <svg class="icon"><use href="#${isUnread ? 'i-check' : 'i-mail'}"></use></svg>
+                <span>${isUnread ? 'Tandai sudah dibaca' : 'Tandai belum dibaca'}</span>
+              </button>
+              <button type="button" class="notif-kebab-item danger btn-notif-delete" data-notif-id="${escapeHtml(n.id)}">
+                <svg class="icon"><use href="#i-trash-2"></use></svg>
+                <span>Hapus notifikasi</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     `;
   });
@@ -725,6 +761,9 @@ function renderAdminNotificationUI() {
   // Click on item
   listEl.querySelectorAll('.notif-item').forEach(function (el) {
     el.addEventListener('click', function (e) {
+      if (e.target.closest('.notif-kebab-menu')) {
+        return;
+      }
       if (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -865,6 +904,99 @@ function renderAdminNotificationUI() {
       }
     });
   });
+
+  // Setup 3-dots kebab buttons pada notifikasi
+  listEl.querySelectorAll('.notif-kebab-btn').forEach(function (kBtn) {
+    kBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const wrap = kBtn.closest('.notif-kebab-menu');
+      const menu = wrap ? wrap.querySelector('.notif-kebab-dropdown') : null;
+      if (!menu) return;
+      const isHidden = menu.classList.contains('hidden');
+
+      // Tutup semua kebab menu dropdown lainnya pada notifikasi
+      listEl.querySelectorAll('.notif-kebab-dropdown').forEach(function (d) {
+        if (d !== menu) d.classList.add('hidden');
+      });
+
+      menu.classList.toggle('hidden', !isHidden);
+
+      if (!menu.classList.contains('hidden')) {
+        const listRect = listEl.getBoundingClientRect();
+        const btnRect = kBtn.getBoundingClientRect();
+        if (btnRect.bottom + 95 > listRect.bottom) {
+          menu.style.top = 'auto';
+          menu.style.bottom = '100%';
+        } else {
+          menu.style.top = 'calc(100% + 4px)';
+          menu.style.bottom = 'auto';
+        }
+      }
+    });
+  });
+
+  // Action: Tandai belum dibaca / sudah dibaca
+  listEl.querySelectorAll('.btn-notif-toggle-read').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const notifId = btn.dataset.notifId;
+      const action = btn.dataset.action;
+      if (!notifId) return;
+
+      if (action === 'mark-unread') {
+        adminReadNotifIds.delete(String(notifId));
+        adminReadNotifIds.delete(notifId);
+        saveReadNotifIds();
+        const found = adminNotifications.find(function (n) { return String(n.id) === String(notifId); });
+        if (found) found.read = false;
+        renderAdminNotificationUI();
+        if (typeof showToast === 'function') {
+          showToast('Notifikasi ditandai belum dibaca', 'info');
+        }
+      } else {
+        adminReadNotifIds.add(String(notifId));
+        saveReadNotifIds();
+        const found = adminNotifications.find(function (n) { return String(n.id) === String(notifId); });
+        if (found) found.read = true;
+        renderAdminNotificationUI();
+        if (typeof showToast === 'function') {
+          showToast('Notifikasi ditandai sudah dibaca', 'success');
+        }
+      }
+    });
+  });
+
+  // Action: Hapus notifikasi
+  listEl.querySelectorAll('.btn-notif-delete').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const notifId = btn.dataset.notifId;
+      if (!notifId) return;
+
+      adminDeletedNotifIds.add(String(notifId));
+      saveDeletedNotifIds();
+
+      adminNotifications = adminNotifications.filter(function (n) {
+        return String(n.id) !== String(notifId);
+      });
+
+      try {
+        const stored = JSON.parse(localStorage.getItem('upz_activity_logs_v1') || '[]');
+        if (Array.isArray(stored)) {
+          const filtered = stored.filter(function (log) { return String(log.id) !== String(notifId); });
+          localStorage.setItem('upz_activity_logs_v1', JSON.stringify(filtered));
+        }
+      } catch (_) {}
+
+      renderAdminNotificationUI();
+      if (typeof showToast === 'function') {
+        showToast('Notifikasi berhasil dihapus', 'info');
+      }
+    });
+  });
 }
 
 function initAdminNotificationSystem() {
@@ -897,12 +1029,16 @@ function initAdminNotificationSystem() {
   document.addEventListener('click', function (e) {
     if (!dropdown || dropdown.classList.contains('hidden')) {
       // Check kebab dropdowns
-      if (!e.target.closest('.table-kebab-menu')) {
+      if (!e.target.closest('.table-kebab-menu') && !e.target.closest('.notif-kebab-menu')) {
         document.querySelectorAll('.kebab-dropdown').forEach(function (d) { d.classList.add('hidden'); });
+        document.querySelectorAll('.notif-kebab-dropdown').forEach(function (d) { d.classList.add('hidden'); });
       }
     } else if (!dropdown.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
       dropdown.classList.add('hidden');
       if (btn) btn.setAttribute('aria-expanded', 'false');
+      document.querySelectorAll('.notif-kebab-dropdown').forEach(function (d) { d.classList.add('hidden'); });
+    } else if (!e.target.closest('.notif-kebab-menu')) {
+      document.querySelectorAll('.notif-kebab-dropdown').forEach(function (d) { d.classList.add('hidden'); });
     }
   });
 
@@ -914,6 +1050,7 @@ function initAdminNotificationSystem() {
         if (btn) btn.setAttribute('aria-expanded', 'false');
       }
       document.querySelectorAll('.kebab-dropdown').forEach(function (d) { d.classList.add('hidden'); });
+      document.querySelectorAll('.notif-kebab-dropdown').forEach(function (d) { d.classList.add('hidden'); });
     }
   });
 
