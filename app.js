@@ -1006,6 +1006,7 @@ function initAdminNotificationSystem() {
   const btn = document.getElementById('adminNotifButton');
   const dropdown = document.getElementById('adminNotifDropdown');
   const markAllBtn = document.getElementById('markAllNotifsReadBtn');
+  const deleteAllBtn = document.getElementById('deleteAllNotifsBtn');
   const refreshBtn = document.getElementById('refreshNotifsBtn');
   const tabs = document.querySelectorAll('.notif-tabs .notif-tab');
 
@@ -1058,13 +1059,38 @@ function initAdminNotificationSystem() {
   if (markAllBtn) {
     markAllBtn.addEventListener('click', function (e) {
       e.stopPropagation();
+      if (!adminNotifications.length) {
+        showToast('Tidak ada pemberitahuan', 'info');
+        return;
+      }
       adminNotifications.forEach(function (n) {
         adminReadNotifIds.add(n.id);
         n.read = true;
       });
       saveReadNotifIds();
       renderAdminNotificationUI();
-      showToast('Semua notifikasi ditandai sudah dibaca', 'success');
+      showToast('Semua pemberitahuan ditandai sudah dibaca', 'success');
+    });
+  }
+
+  // Delete all notifications
+  if (deleteAllBtn) {
+    deleteAllBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!adminNotifications.length) {
+        showToast('Tidak ada pemberitahuan untuk dihapus', 'info');
+        return;
+      }
+      adminNotifications.forEach(function (n) {
+        adminDeletedNotifIds.add(String(n.id));
+      });
+      saveDeletedNotifIds();
+      adminNotifications = [];
+      try {
+        localStorage.setItem('upz_activity_logs_v1', '[]');
+      } catch (_) {}
+      renderAdminNotificationUI();
+      showToast('Semua pemberitahuan berhasil dihapus', 'info');
     });
   }
 

@@ -3380,6 +3380,49 @@ body.role-admin .user-chip:hover {
   border-radius: var(--radius-full);
 }
 
+.notif-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.notif-header-icon-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-sm, 6px);
+  color: var(--brand-700, #1c743a);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.notif-header-icon-btn .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.notif-header-icon-btn:hover {
+  background: var(--brand-50, #f0fdf4);
+  border-color: var(--brand-300, #86efac);
+  color: var(--brand-800, #15803d);
+}
+
+.notif-header-icon-btn.btn-danger {
+  color: #dc2626;
+  border-color: var(--slate-200);
+}
+
+.notif-header-icon-btn.btn-danger:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
 .notif-action-link {
   background: none;
   border: none;

@@ -198,9 +198,14 @@
                 <span>Notifikasi Aktivitas UPZ</span>
                 <span id="notifUnreadPill" class="notif-unread-pill hidden">0 baru</span>
               </div>
-              <button type="button" id="markAllNotifsReadBtn" class="notif-action-link" title="Tandai semua notifikasi sudah dibaca">
-                Tandai dibaca
-              </button>
+              <div class="notif-header-actions">
+                <button type="button" id="markAllNotifsReadBtn" class="notif-header-icon-btn" title="Tandai semua pemberitahuan sudah dibaca" aria-label="Tandai semua sudah dibaca">
+                  <svg class="icon"><use href="#i-check"></use></svg>
+                </button>
+                <button type="button" id="deleteAllNotifsBtn" class="notif-header-icon-btn btn-danger" title="Hapus semua pemberitahuan" aria-label="Hapus semua pemberitahuan">
+                  <svg class="icon"><use href="#i-trash-2"></use></svg>
+                </button>
+              </div>
             </div>
 
             <div class="notif-tabs">
