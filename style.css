@@ -3412,14 +3412,19 @@ body.role-admin .user-chip:hover {
   color: var(--brand-800, #15803d);
 }
 
-.notif-header-icon-btn.btn-danger {
+.notif-header-icon-btn.notif-btn-trash {
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
   color: #dc2626;
-  border-color: var(--slate-200);
 }
 
-.notif-header-icon-btn.btn-danger:hover {
-  background: #fee2e2;
-  border-color: #fca5a5;
+.notif-header-icon-btn.notif-btn-trash .icon {
+  color: #dc2626;
+}
+
+.notif-header-icon-btn.notif-btn-trash:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
   color: #b91c1c;
 }
 

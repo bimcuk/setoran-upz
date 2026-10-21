@@ -970,11 +970,20 @@ function renderAdminNotificationUI() {
 
   // Action: Hapus notifikasi
   listEl.querySelectorAll('.btn-notif-delete').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
+    btn.addEventListener('click', async function (e) {
       e.preventDefault();
       e.stopPropagation();
       const notifId = btn.dataset.notifId;
       if (!notifId) return;
+
+      const ok = await askDialog(
+        'Hapus Pemberitahuan?',
+        'Pemberitahuan ini akan dihapus dari daftar. Lanjutkan?',
+        'Ya, Hapus',
+        'i-trash-2',
+        true
+      );
+      if (!ok) return;
 
       adminDeletedNotifIds.add(String(notifId));
       saveDeletedNotifIds();
@@ -1057,12 +1066,21 @@ function initAdminNotificationSystem() {
 
   // Mark all as read
   if (markAllBtn) {
-    markAllBtn.addEventListener('click', function (e) {
+    markAllBtn.addEventListener('click', async function (e) {
       e.stopPropagation();
       if (!adminNotifications.length) {
         showToast('Tidak ada pemberitahuan', 'info');
         return;
       }
+      const ok = await askDialog(
+        'Tandai Semua Pemberitahuan?',
+        'Tandai semua pemberitahuan aktivitas UPZ sebagai sudah dibaca?',
+        'Ya, Tandai Dibaca',
+        'i-check',
+        false
+      );
+      if (!ok) return;
+
       adminNotifications.forEach(function (n) {
         adminReadNotifIds.add(n.id);
         n.read = true;
@@ -1075,12 +1093,21 @@ function initAdminNotificationSystem() {
 
   // Delete all notifications
   if (deleteAllBtn) {
-    deleteAllBtn.addEventListener('click', function (e) {
+    deleteAllBtn.addEventListener('click', async function (e) {
       e.stopPropagation();
       if (!adminNotifications.length) {
         showToast('Tidak ada pemberitahuan untuk dihapus', 'info');
         return;
       }
+      const ok = await askDialog(
+        'Hapus Semua Pemberitahuan?',
+        'Seluruh pemberitahuan aktivitas UPZ akan dihapus permanen. Lanjutkan?',
+        'Ya, Hapus Semua',
+        'i-trash-2',
+        true
+      );
+      if (!ok) return;
+
       adminNotifications.forEach(function (n) {
         adminDeletedNotifIds.add(String(n.id));
       });
@@ -3401,16 +3428,34 @@ setupPasswordToggle('togglePasswordBtn', 'password');
 setupPasswordToggle('toggleUpzNewPasswordBtn', 'upzNewPassword');
 setupPasswordToggle('toggleUpzConfirmPasswordBtn', 'upzConfirmPassword');
 
-function askDialog(title, text, confirmText, iconId) {
+function askDialog(title, text, confirmText, iconId, isDanger) {
   const modal = document.getElementById('dialogModal');
   if (!modal) return Promise.resolve(window.confirm(text));
   document.getElementById('dialogTitle').textContent = title;
   document.getElementById('dialogMessage').textContent = text;
-  document.getElementById('dialogConfirmButton').textContent = confirmText || 'Ya, Lanjutkan';
-  document.getElementById('dialogIcon').innerHTML = '<svg class="icon"><use href="#' + (iconId || 'i-alert') + '"></use></svg>';
+  const yes = document.getElementById('dialogConfirmButton');
+  yes.textContent = confirmText || 'Ya, Lanjutkan';
+  const iconContainer = document.getElementById('dialogIcon');
+  if (isDanger) {
+    yes.classList.remove('btn-primary');
+    yes.classList.add('btn-danger');
+    if (iconContainer) {
+      iconContainer.style.backgroundColor = '#fee2e2';
+      iconContainer.style.color = '#dc2626';
+    }
+  } else {
+    yes.classList.add('btn-primary');
+    yes.classList.remove('btn-danger');
+    if (iconContainer) {
+      iconContainer.style.backgroundColor = '';
+      iconContainer.style.color = '';
+    }
+  }
+  if (iconContainer) {
+    iconContainer.innerHTML = '<svg class="icon"><use href="#' + (iconId || 'i-alert') + '"></use></svg>';
+  }
   modal.classList.remove('hidden');
   return new Promise(function (resolve) {
-    const yes = document.getElementById('dialogConfirmButton');
     const no = document.getElementById('dialogCancelButton');
     function done(result) {
       modal.classList.add('hidden');
