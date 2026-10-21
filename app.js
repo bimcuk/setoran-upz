@@ -5842,45 +5842,9 @@ async function ensureAdminDonaturLoaded(forceRefresh = false) {
   });
 
   if (!accepted.length) {
-    const currentYear = new Date().getFullYear();
-    const donorMap = {};
-    const upzSourceList = (allUpzList && allUpzList.length > 0) ? allUpzList : DEFAULT_UPZ_DATA;
-
-    upzSourceList.slice(0, 12).forEach(function (u, idx) {
-      const muzakiNames = [
-        `Muzaki ASN ${u.nama_upz}`,
-        `Keluarga Besar ${u.nama_upz}`,
-        `Donatur Rutin ${u.nama_upz}`
-      ];
-      muzakiNames.forEach(function (mName, mIdx) {
-        const key = `${u.upz_id || u.id}__${mName.toLowerCase()}`;
-        donorMap[key] = {
-          key: key,
-          nama: mName,
-          upz_id: u.upz_id || u.id,
-          nama_upz: u.nama_upz,
-          kategori: u.kategori || '-',
-          donations: {}
-        };
-        donorMap[key].donations[currentYear] = {};
-        const nowMonth = new Date().getMonth() + 1;
-        for (let m = 1; m <= nowMonth; m++) {
-          if ((idx + m + mIdx) % 2 === 0 || m === nowMonth) {
-            donorMap[key].donations[currentYear][m] = {
-              nominal: 150000 + (idx * 50000),
-              jenis: 'Zakat / Infak'
-            };
-          }
-        }
-      });
-    });
-
     adminDonaturCache = {
       loaded: true,
-      donors: Object.values(donorMap).sort(function (a, b) {
-        const c = a.nama_upz.localeCompare(b.nama_upz);
-        return c !== 0 ? c : a.nama.localeCompare(b.nama);
-      })
+      donors: []
     };
     return adminDonaturCache.donors;
   }
