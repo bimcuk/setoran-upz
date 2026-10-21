@@ -1037,6 +1037,11 @@ function initAdminNotificationSystem() {
 
   // Close when clicking outside
   document.addEventListener('click', function (e) {
+    // Jangan tutup notif dropdown jika klik terjadi di dalam modal dialog atau modal konfirmasi
+    if (e.target.closest('#dialogModal') || e.target.closest('.modal-overlay')) {
+      return;
+    }
+
     if (!dropdown || dropdown.classList.contains('hidden')) {
       // Check kebab dropdowns
       if (!e.target.closest('.table-kebab-menu') && !e.target.closest('.notif-kebab-menu')) {
@@ -1055,6 +1060,10 @@ function initAdminNotificationSystem() {
   // Close on Escape
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
+      const dialogModal = document.getElementById('dialogModal');
+      if (dialogModal && !dialogModal.classList.contains('hidden')) {
+        return; // Dialog konfirmasi sedang terbuka, jangan tutup notif dropdown
+      }
       if (dropdown && !dropdown.classList.contains('hidden')) {
         dropdown.classList.add('hidden');
         if (btn) btn.setAttribute('aria-expanded', 'false');
@@ -3459,12 +3468,38 @@ function askDialog(title, text, confirmText, iconId, isDanger) {
     const no = document.getElementById('dialogCancelButton');
     function done(result) {
       modal.classList.add('hidden');
-      yes.removeEventListener('click', onYes); no.removeEventListener('click', onNo);
+      yes.removeEventListener('click', onYes);
+      no.removeEventListener('click', onNo);
+      modal.removeEventListener('click', onOverlay);
+      document.removeEventListener('keydown', onKey);
       resolve(result);
     }
-    function onYes() { done(true); }
-    function onNo() { done(false); }
-    yes.addEventListener('click', onYes); no.addEventListener('click', onNo);
+    function onYes(e) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      done(true);
+    }
+    function onNo(e) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      done(false);
+    }
+    function onOverlay(e) {
+      if (e.target === modal) {
+        e.preventDefault();
+        e.stopPropagation();
+        done(false);
+      }
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        done(false);
+      }
+    }
+    yes.addEventListener('click', onYes);
+    no.addEventListener('click', onNo);
+    modal.addEventListener('click', onOverlay);
+    document.addEventListener('keydown', onKey);
   });
 }
 
