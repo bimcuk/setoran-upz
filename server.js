@@ -1579,7 +1579,7 @@ const server = http.createServer(async (req, res) => {
 
     try {
       const body = await readBody(req);
-      const { token, upz_id, nama_upz, rkat_unlocked, persen_penta, persen_amil, tagihan_salin, unlocked_year } = body;
+      const { token, upz_id, nama_upz, rkat_unlocked, persen_penta, persen_amil, tagihan_salin, salin_bulan_transfer, unlocked_year } = body;
 
       if (!upz_id) {
         return sendJson(400, { success: false, message: 'upz_id wajib disertakan.' });
@@ -1624,6 +1624,7 @@ const server = http.createServer(async (req, res) => {
         persen_penta: persen_penta !== undefined ? Number(persen_penta) : (currentSetting.persen_penta !== undefined ? currentSetting.persen_penta : 35),
         persen_amil: persen_amil !== undefined ? Number(persen_amil) : (currentSetting.persen_amil !== undefined ? currentSetting.persen_amil : 5),
         tagihan_salin: tagihan_salin !== undefined ? Number(tagihan_salin) : (currentSetting.tagihan_salin !== undefined ? currentSetting.tagihan_salin : 0),
+        salin_bulan_transfer: Array.isArray(salin_bulan_transfer) ? salin_bulan_transfer.map(Number).filter(n => n >= 1 && n <= 12) : (Array.isArray(currentSetting.salin_bulan_transfer) ? currentSetting.salin_bulan_transfer : []),
         updated_at: new Date().toISOString()
       };
 

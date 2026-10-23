@@ -750,7 +750,26 @@
                       <span class="input-addon-label">Rp</span>
                       <input type="text" id="adminRkatTagihanSalin" class="form-control" placeholder="0" inputmode="numeric">
                     </div>
-                    <span style="font-size:11px;color:var(--slate-400);display:block;margin-top:4px;">Kewajiban setoran program Salin Aslimas per bulan</span>
+                    <span style="font-size:11px;color:var(--slate-400);display:block;margin-top:4px;">Nominal tagihan program Salin Aslimas per bulan</span>
+                  </div>
+
+                  <!-- Checklist Realisasi Transfer Salin Aslimas oleh BAZNAS -->
+                  <div class="form-group" style="margin-top:4px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+                      <label style="font-size:12px;font-weight:600;margin:0;color:var(--slate-800);">
+                        Bulan Ditransfer BAZNAS:
+                      </label>
+                      <div style="display:flex;gap:4px;">
+                        <button type="button" id="adminSalinSelectAllBtn" class="btn btn-ghost btn-xs" style="padding:2px 8px;font-size:11px;height:24px;">Pilih Semua</button>
+                        <button type="button" id="adminSalinClearAllBtn" class="btn btn-ghost btn-xs" style="padding:2px 8px;font-size:11px;height:24px;">Batal Semua</button>
+                      </div>
+                    </div>
+                    <div id="adminSalinMonthGrid" class="salin-month-grid">
+                      <!-- 12 Checkbox chips injected dynamically -->
+                    </div>
+                    <div id="adminSalinSummaryNotice" style="font-size:11.5px;color:var(--slate-600);margin-top:8px;background:#f8fafc;padding:8px 10px;border-radius:6px;border:1px solid var(--slate-200);line-height:1.4;">
+                      Ditransfer: <strong id="adminSalinCountLabel">0 bulan</strong> • Akumulasi: <strong id="adminSalinTotalLabel" style="color:#0f5132;">Rp 0</strong> (mengurangi alokasi pentasharufan)
+                    </div>
                   </div>
 
                   <div id="adminRkatMsg" class="form-message" role="status" aria-live="polite"></div>
@@ -1366,12 +1385,24 @@
           </div>
 
           <!-- 6. Tagihan Salin Aslimas (Tersendiri) -->
-          <div class="summary-card">
-            <div class="summary-icon tone-indigo"><svg class="icon"><use href="#i-tag"></use></svg></div>
-            <div>
-              <div class="summary-title">Tagihan Salin Aslimas</div>
-              <div id="upzPentaTagihanSalin" class="summary-value">Rp 0</div>
-              <div id="upzPentaTagihanSalinSub" class="summary-sub">Kewajiban program per bulan</div>
+          <div class="summary-card" style="flex-direction:column;align-items:stretch;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="summary-icon tone-indigo"><svg class="icon"><use href="#i-tag"></use></svg></div>
+              <div>
+                <div class="summary-title">Tagihan Salin Aslimas</div>
+                <div id="upzPentaTagihanSalin" class="summary-value">Rp 0</div>
+                <div id="upzPentaTagihanSalinSub" class="summary-sub">Kewajiban program per bulan</div>
+              </div>
+            </div>
+            <!-- Status Ditransfer BAZNAS (View-Only UPZ) -->
+            <div style="border-top:1px dashed var(--slate-200);padding-top:8px;">
+              <div style="font-size:11px;color:var(--slate-500);font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+                <span>Status Ditransfer BAZNAS:</span>
+                <span id="upzSalinTransferCountBadge" style="color:#15803d;font-weight:700;">0/12 Bln</span>
+              </div>
+              <div id="upzSalinMonthBadges" class="upz-salin-month-grid">
+                <!-- 12 Read-only month chips injected dynamically -->
+              </div>
             </div>
           </div>
         </div>
