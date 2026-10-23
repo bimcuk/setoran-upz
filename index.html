@@ -157,7 +157,7 @@
     <header class="topbar">
       <div class="topbar-brand">
         <div class="baznas-header-logo"><img class="baznas-logo baznas-logo-light" src="assets/logo_baznas_banyumas.png" alt="BAZNAS Banyumas"><img class="baznas-logo baznas-logo-dark" src="assets/logo_baznas_banyumas_white.png" alt="BAZNAS Banyumas"></div>
-        <div>
+        <div class="topbar-titles-wrap">
           <div class="topbar-title">Sistem Pelaporan UPZ</div>
           <div class="topbar-sub">BAZNAS Kabupaten Banyumas</div>
         </div>
@@ -701,8 +701,8 @@
 
             <div class="rkat-admin-grid">
               <!-- Form Pengaturan UPZ Terpilih -->
-              <div class="rkat-form-box" style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:12px;padding:18px;">
-                <h3 style="font-size:15px;font-weight:600;margin-bottom:14px;color:var(--slate-800);display:flex;align-items:center;gap:8px;">
+              <div class="rkat-form-box">
+                <h3 class="rkat-box-title">
                   <svg class="icon tone-teal"><use href="#i-edit"></use></svg> Atur Akses & Persentase UPZ
                 </h3>
 
@@ -713,9 +713,9 @@
                   </select>
                 </div>
 
-                <div id="adminRkatUpzDetails" class="rkat-upz-details hidden" style="margin-top:14px;display:flex;flex-direction:column;gap:12px;flex:1;">
+                <div id="adminRkatUpzDetails" class="rkat-upz-details hidden">
                   <!-- Status RKAT Aktif / Terkunci -->
-                  <div style="display:flex;align-items:center;justify-content:space-between;background:#fff;padding:12px 14px;border-radius:8px;border:1px solid var(--slate-200);gap:10px;">
+                  <div class="rkat-status-banner">
                     <div>
                       <div style="font-size:12px;color:var(--slate-500);font-weight:500;">Status Akses RKAT</div>
                       <div id="adminRkatCurrentStatus" style="font-weight:600;font-size:14px;margin-top:2px;">Terkunci</div>
@@ -726,7 +726,7 @@
                   </div>
 
                   <!-- Form Inputs -->
-                  <div class="form-grid-2" style="gap:12px;">
+                  <div class="form-grid-2 rkat-percent-grid" style="gap:12px;">
                     <div class="form-group">
                       <label for="adminRkatPersenPenta" style="font-size:12px;font-weight:600;">% Pentasharufan</label>
                       <div class="input-icon">
@@ -745,42 +745,42 @@
                   </div>
 
                   <!-- Tagihan Salin Aslimas Bulanan (Manual Nominal & Status Transfer) -->
-                  <div class="form-group" style="margin-top:4px;border:1px solid var(--slate-200);border-radius:8px;padding:12px;background:#f8fafc;">
-                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
-                      <div>
-                        <label style="font-size:12.5px;font-weight:700;margin:0;color:var(--slate-800);display:flex;align-items:center;gap:6px;">
+                  <div class="salin-aslimas-section">
+                    <div class="salin-section-header">
+                      <div class="salin-title-wrap">
+                        <label class="salin-header-label">
                           <svg class="icon" style="width:14px;height:14px;color:var(--slate-600);"><use href="#i-tag"></use></svg>
                           Tagihan Salin Aslimas & Status Transfer BAZNAS
                         </label>
-                        <span style="font-size:11px;color:var(--slate-500);display:block;margin-top:2px;">Input nominal per bulan secara manual & beri ceklis jika sudah ditransfer BAZNAS.</span>
+                        <span class="salin-header-sub">Input nominal per bulan secara manual & beri ceklis jika sudah ditransfer BAZNAS.</span>
                       </div>
-                      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                        <span style="font-size:11.5px;font-weight:600;color:var(--slate-700);">Tahun:</span>
-                        <select id="adminSalinTahunSelect" class="form-control" style="width:90px;height:28px;font-size:12px;font-weight:700;padding:2px 6px;border:1px solid var(--slate-300);border-radius:6px;background:#fff;"></select>
-                        <button type="button" id="adminSalinSelectAllBtn" class="btn btn-ghost btn-xs" style="padding:2px 8px;font-size:11px;height:28px;">Ceklis Semua</button>
-                        <button type="button" id="adminSalinClearAllBtn" class="btn btn-ghost btn-xs" style="padding:2px 8px;font-size:11px;height:28px;">Batal Ceklis</button>
+                      <div class="salin-toolbar-actions">
+                        <span class="salin-year-label">Tahun:</span>
+                        <select id="adminSalinTahunSelect" class="form-control salin-year-select"></select>
+                        <button type="button" id="adminSalinSelectAllBtn" class="btn btn-ghost btn-xs">Ceklis Semua</button>
+                        <button type="button" id="adminSalinClearAllBtn" class="btn btn-ghost btn-xs">Batal Ceklis</button>
                       </div>
                     </div>
 
                     <!-- Quick Uniform Nominal Apply -->
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;background:#fff;padding:6px 10px;border-radius:6px;border:1px solid var(--slate-200);flex-wrap:wrap;">
-                      <span style="font-size:11px;color:var(--slate-600);font-weight:500;white-space:nowrap;">Terapkan nominal sama:</span>
-                      <div class="salin-input-addon" style="max-width:160px;height:30px;">
+                    <div class="salin-quick-apply-wrap">
+                      <span class="salin-quick-label">Terapkan nominal sama:</span>
+                      <div class="salin-input-addon salin-quick-addon">
                         <span class="salin-addon-text">Rp</span>
                         <input type="text" id="adminSalinQuickNominal" class="salin-nom-input" placeholder="0" inputmode="numeric">
                       </div>
-                      <button type="button" id="adminSalinQuickApplyBtn" class="btn btn-xs btn-outline-primary" style="height:30px;font-size:11px;padding:0 10px;white-space:nowrap;">Terapkan ke 12 Bln</button>
+                      <button type="button" id="adminSalinQuickApplyBtn" class="btn btn-xs btn-outline-primary salin-quick-btn">Terapkan ke 12 Bln</button>
                     </div>
 
                     <!-- 12 Bulan Table -->
-                    <div style="max-height:260px;overflow-y:auto;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--slate-200);border-radius:6px;background:#fff;width:100%;">
-                      <table class="table" style="width:100%;min-width:320px;font-size:11.5px;margin:0;border-collapse:collapse;">
+                    <div class="salin-table-scroll-wrap">
+                      <table class="table salin-month-table" id="adminSalinMonthTable">
                         <thead style="position:sticky;top:0;background:var(--slate-100);z-index:2;">
                           <tr style="border-bottom:1px solid var(--slate-200);">
-                            <th style="padding:6px 8px;text-align:center;width:40px;">Ceklis</th>
-                            <th style="padding:6px 8px;width:90px;">Bulan</th>
-                            <th style="padding:6px 8px;">Nominal Tagihan (Rp)</th>
-                            <th style="padding:6px 8px;text-align:center;width:110px;">Status Transfer</th>
+                            <th style="padding:6px 4px;text-align:center;width:36px;">Ceklis</th>
+                            <th style="padding:6px 6px;width:75px;">Bulan</th>
+                            <th style="padding:6px 6px;">Nominal Tagihan (Rp)</th>
+                            <th style="padding:6px 6px;text-align:center;width:105px;">Status Transfer</th>
                           </tr>
                         </thead>
                         <tbody id="adminSalinMonthTableBody">
@@ -789,7 +789,7 @@
                       </table>
                     </div>
 
-                    <div id="adminSalinSummaryNotice" style="font-size:11.5px;color:var(--slate-700);margin-top:8px;background:#fff;padding:8px 10px;border-radius:6px;border:1px solid var(--slate-200);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+                    <div id="adminSalinSummaryNotice">
                       <div>Ditransfer BAZNAS: <strong id="adminSalinCountLabel">0 bulan</strong></div>
                       <div>Total Akumulasi: <strong id="adminSalinTotalLabel" style="color:#0f5132;">Rp 0</strong> (pengurang alokasi)</div>
                     </div>
@@ -804,15 +804,15 @@
               </div>
 
               <!-- Ringkasan Status RKAT Semua UPZ -->
-              <div class="rkat-table-box" style="background:#fff;border:1px solid var(--slate-200);border-radius:12px;padding:18px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-                  <h3 style="font-size:15px;font-weight:600;color:var(--slate-800);display:flex;align-items:center;gap:8px;">
+              <div class="rkat-table-box">
+                <div class="rkat-table-header">
+                  <h3 class="rkat-box-title">
                     <svg class="icon tone-green"><use href="#i-table"></use></svg> Daftar Akses RKAT & Persentase UPZ
                   </h3>
-                  <input type="text" id="adminRkatSearchTable" placeholder="Cari UPZ..." style="padding:6px 12px;height:34px;font-size:12px;border:1px solid var(--slate-200);border-radius:6px;max-width:180px;box-sizing:border-box;">
+                  <input type="text" id="adminRkatSearchTable" placeholder="Cari UPZ..." class="form-control rkat-search-input">
                 </div>
                 <div class="rkat-table-scroll">
-                  <table class="table-compact" style="width:100%;font-size:12px;border-collapse:collapse;" id="adminRkatOverviewTable">
+                  <table class="table-compact rkat-overview-table" id="adminRkatOverviewTable">
                     <thead>
                       <tr style="background:var(--slate-50);text-align:left;position:sticky;top:0;z-index:2;">
                         <th style="padding:8px 10px;">Nama UPZ</th>

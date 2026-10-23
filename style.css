@@ -2422,7 +2422,14 @@ body.role-admin .user-chip:hover {
 }
 
 #exportModal .modal-card {
-  overflow: visible !important;
+  border-radius: var(--radius-xl, 16px) !important;
+  overflow: hidden !important;
+}
+
+#exportModal .modal-card .modal-footer,
+#exportModal .export-config .modal-footer {
+  border-bottom-left-radius: var(--radius-xl, 16px) !important;
+  border-bottom-right-radius: var(--radius-xl, 16px) !important;
 }
 
 .export-config .modal-footer {
@@ -5789,11 +5796,10 @@ body.role-admin #headerWebsiteBadge {
   .topbar-brand {
     gap: 8px;
   }
-  .topbar-title {
-    font-size: 13.5px;
-  }
+  .topbar-titles-wrap,
+  .topbar-title,
   .topbar-sub {
-    font-size: 10px;
+    display: none !important;
   }
   .topbar-user {
     gap: 6px;
@@ -6098,6 +6104,9 @@ body.role-admin #headerWebsiteBadge {
   align-items: stretch !important;
   gap: 20px !important;
   margin-bottom: 12px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .rkat-form-box,
@@ -6107,6 +6116,211 @@ body.role-admin #headerWebsiteBadge {
   height: 100% !important;
   min-height: 440px !important;
   box-sizing: border-box !important;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: 12px;
+  padding: 18px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.rkat-table-box {
+  background: #fff;
+}
+
+.rkat-box-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: var(--slate-800);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rkat-upz-details {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.rkat-status-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--slate-200);
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.salin-aslimas-section {
+  margin-top: 4px;
+  border: 1px solid var(--slate-200);
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8fafc;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.salin-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.salin-title-wrap {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.salin-header-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--slate-800);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.salin-header-sub {
+  font-size: 11px;
+  color: var(--slate-500);
+  display: block;
+  margin-top: 2px;
+}
+
+.salin-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.salin-year-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--slate-700);
+}
+
+.salin-year-select {
+  width: 90px;
+  height: 28px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border: 1px solid var(--slate-300);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.salin-quick-apply-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--slate-200);
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.salin-quick-label {
+  font-size: 11px;
+  color: var(--slate-600);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.salin-quick-addon {
+  max-width: 160px;
+  height: 30px;
+}
+
+.salin-quick-btn {
+  height: 30px;
+  font-size: 11px;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.salin-table-scroll-wrap {
+  max-height: 260px;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--slate-200);
+  border-radius: 6px;
+  background: #fff;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.salin-month-table {
+  width: 100%;
+  min-width: 300px;
+  font-size: 11.5px;
+  margin: 0;
+  border-collapse: collapse;
+}
+
+#adminSalinSummaryNotice {
+  font-size: 11.5px;
+  color: var(--slate-700);
+  margin-top: 8px;
+  background: #fff;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--slate-200);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.rkat-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.rkat-search-input {
+  padding: 6px 12px;
+  height: 34px;
+  font-size: 12px;
+  border: 1px solid var(--slate-200);
+  border-radius: 6px;
+  max-width: 180px;
+  box-sizing: border-box;
 }
 
 .rkat-table-box .rkat-table-scroll {
@@ -6115,8 +6329,19 @@ body.role-admin #headerWebsiteBadge {
   max-height: 440px;
   overflow-y: auto;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--slate-100);
   border-radius: 8px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.rkat-overview-table {
+  width: 100%;
+  min-width: 480px;
+  font-size: 12px;
+  border-collapse: collapse;
 }
 
 .input-addon-group {
@@ -7295,14 +7520,8 @@ body {
     flex: 1 1 auto !important;
   }
 
-  .topbar-title {
-    font-size: 14px !important;
-    max-width: 170px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-
+  .topbar-titles-wrap,
+  .topbar-title,
   .topbar-sub {
     display: none !important;
   }
@@ -7549,6 +7768,25 @@ body {
   .modal-footer .btn {
     flex: 1 1 auto !important;
   }
+
+  /* Pop up Export Excel: border bawah rounded sama dengan atas pada mobile */
+  #exportModal.modal-overlay {
+    align-items: center !important;
+    padding: 16px !important;
+  }
+
+  #exportModal .modal-card {
+    border-radius: var(--radius-xl, 16px) !important;
+    margin: auto !important;
+    max-height: 88vh !important;
+    overflow: hidden !important;
+  }
+
+  #exportModal .modal-card .modal-footer,
+  #exportModal .export-config .modal-footer {
+    border-bottom-left-radius: var(--radius-xl, 16px) !important;
+    border-bottom-right-radius: var(--radius-xl, 16px) !important;
+  }
 }
 
 /* 8. Dropdowns on Small Mobile Screens */
@@ -7625,13 +7863,164 @@ body {
 
   .rkat-admin-grid {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .rkat-form-box,
   .rkat-table-box {
     min-height: auto !important;
     height: auto !important;
+    padding: 14px 10px !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .rkat-box-title {
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .rkat-status-banner {
+    padding: 10px 10px !important;
+    gap: 8px !important;
+  }
+
+  .rkat-status-banner .btn {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  .salin-aslimas-section {
+    padding: 10px 8px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .salin-section-header {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .salin-toolbar-actions {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .salin-year-select {
+    flex: 1 1 70px !important;
+    width: auto !important;
+  }
+
+  .salin-toolbar-actions .btn {
+    flex: 1 1 auto !important;
+    padding: 4px 6px !important;
+    font-size: 10.5px !important;
+  }
+
+  .salin-quick-apply-wrap {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .salin-quick-label {
+    margin-bottom: 4px !important;
+  }
+
+  .salin-quick-addon {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 32px !important;
+  }
+
+  .salin-quick-btn {
+    width: 100% !important;
+    height: 32px !important;
+  }
+
+  .salin-table-scroll-wrap {
+    max-height: 240px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+  }
+
+  .salin-month-table {
+    min-width: 290px !important;
+    font-size: 11px !important;
+    width: 100% !important;
+  }
+
+  .salin-month-table th,
+  .salin-month-table td {
+    padding: 6px 3px !important;
+  }
+
+  .salin-month-table .salin-input-addon {
+    height: 28px !important;
+    min-width: 75px !important;
+  }
+
+  .salin-month-table .admin-salin-status-badge {
+    font-size: 9.5px !important;
+    padding: 2px 4px !important;
+  }
+
+  #adminSalinSummaryNotice {
+    flex-direction: column !important;
+    gap: 4px !important;
+    font-size: 11px !important;
+    padding: 8px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+
+  .rkat-table-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .rkat-search-input {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .rkat-table-box .rkat-table-scroll {
+    min-height: 280px !important;
+    max-height: 380px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .rkat-overview-table {
+    min-width: 440px !important;
+    font-size: 11px !important;
+  }
+
+  .rkat-overview-table th,
+  .rkat-overview-table td {
+    padding: 6px 6px !important;
   }
 }
 
