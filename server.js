@@ -1579,7 +1579,7 @@ const server = http.createServer(async (req, res) => {
 
     try {
       const body = await readBody(req);
-      const { token, upz_id, nama_upz, rkat_unlocked, persen_penta, persen_amil, tagihan_salin, salin_bulan_transfer, salin_bulanan, unlocked_year } = body;
+      const { token, upz_id, nama_upz, rkat_unlocked, persen_penta, persen_amil, tagihan_salin, salin_bulan_transfer, salin_bulanan, tahun, unlocked_year } = body;
 
       if (!upz_id) {
         return sendJson(400, { success: false, message: 'upz_id wajib disertakan.' });
@@ -1640,6 +1640,10 @@ const server = http.createServer(async (req, res) => {
       const transferredMonths = cleanSalinBulanan.filter(x => x.transfer).map(x => x.bulan);
       const totalSalinTransferred = cleanSalinBulanan.filter(x => x.transfer).reduce((sum, x) => sum + x.nominal, 0);
 
+      const activeTahun = String(tahun || currentYear);
+      const salinTahunMap = Object.assign({}, currentSetting.salin_tahun || {});
+      salinTahunMap[activeTahun] = cleanSalinBulanan;
+
       const updatedSetting = {
         upz_id: upz_id,
         nama_upz: nama_upz || currentSetting.nama_upz || '',
@@ -1650,6 +1654,7 @@ const server = http.createServer(async (req, res) => {
         tagihan_salin: totalSalinTransferred,
         salin_bulan_transfer: transferredMonths,
         salin_bulanan: cleanSalinBulanan,
+        salin_tahun: salinTahunMap,
         updated_at: new Date().toISOString()
       };
 

@@ -8369,8 +8369,31 @@ function getUpzRkatSetting(upzId) {
     persen_amil: (found && found.persen_amil !== undefined) ? Number(found.persen_amil) : def.persen_amil,
     tagihan_salin: totalSalinTransferred,
     salin_bulan_transfer: transferredMonths,
-    salin_bulanan: salinBulanan
+    salin_bulanan: salinBulanan,
+    salin_tahun: (found && found.salin_tahun) || {}
   };
+}
+
+function getSalinBulananForYear(setting, targetYear) {
+  if (!setting) return [];
+  const yr = String(targetYear || new Date().getFullYear());
+  if (setting.salin_tahun && Array.isArray(setting.salin_tahun[yr]) && setting.salin_tahun[yr].length === 12) {
+    return setting.salin_tahun[yr];
+  }
+  if (Array.isArray(setting.salin_bulanan) && setting.salin_bulanan.length === 12) {
+    return setting.salin_bulanan;
+  }
+  const list = [];
+  const legacyTransferred = Array.isArray(setting.salin_bulan_transfer) ? setting.salin_bulan_transfer.map(Number) : [];
+  const legacyNominal = Number(setting.tagihan_salin) || 0;
+  for (let m = 1; m <= 12; m++) {
+    list.push({
+      bulan: m,
+      nominal: legacyNominal,
+      transfer: legacyTransferred.includes(m)
+    });
+  }
+  return list;
 }
 
 function updateUpzRkatLockUI() {
@@ -8526,7 +8549,37 @@ function renderUpzPentaBudgetAndChart() {
 
   const persenPenta = setting.persen_penta !== undefined ? setting.persen_penta : 35;
   const persenAmil = setting.persen_amil !== undefined ? setting.persen_amil : 5;
-  const salinBulanan = Array.isArray(setting.salin_bulanan) ? setting.salin_bulanan : [];
+  const salinFilterTahun = document.getElementById('upzSalinFilterTahun');
+  if (salinFilterTahun && salinFilterTahun.options.length === 0) {
+    const curYear = new Date().getFullYear();
+    const years = [curYear - 2, curYear - 1, curYear, curYear + 1];
+    salinFilterTahun.innerHTML = years.map(function (y) {
+      return `<option value="${y}" ${y === curYear ? 'selected' : ''}>Tahun ${y}</option>`;
+    }).join('');
+  }
+
+  if (salinFilterTahun && !salinFilterTahun.dataset.bound) {
+    salinFilterTahun.dataset.bound = 'true';
+    salinFilterTahun.addEventListener('change', function () {
+      renderUpzPentaBudgetAndChart();
+    });
+  }
+
+  if (selectedTahun !== 'semua' && salinFilterTahun) {
+    if (!Array.from(salinFilterTahun.options).some(function (opt) { return opt.value === selectedTahun; })) {
+      const opt = document.createElement('option');
+      opt.value = selectedTahun;
+      opt.textContent = `Tahun ${selectedTahun}`;
+      salinFilterTahun.appendChild(opt);
+    }
+    salinFilterTahun.value = selectedTahun;
+  }
+
+  const activeSalinYear = (selectedTahun !== 'semua')
+    ? selectedTahun
+    : (salinFilterTahun ? salinFilterTahun.value : String(new Date().getFullYear()));
+
+  const salinBulanan = getSalinBulananForYear(setting, activeSalinYear);
   const bulanFullNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
   const alokasiPenta = Math.round(totalSetoran * (persenPenta / 100));
@@ -8842,13 +8895,13 @@ function renderAdminSalinMonthTable(salinBulanan = []) {
     html += `
       <tr style="border-bottom:1px solid var(--slate-100);" data-month="${m}">
         <td style="text-align:center;padding:6px;">
-          <input type="checkbox" class="admin-salin-cb" data-month="${m}" ${isChecked ? 'checked' : ''} style="cursor:pointer;width:15px;height:15px;accent-color:#16a34a;">
+          <input type="checkbox" class="admin-salin-cb" data-month="${m}" ${isChecked ? 'checked' : ''} style="cursor:pointer;width:16px;height:16px;accent-color:#16a34a;margin:0;">
         </td>
         <td style="padding:6px 8px;font-weight:600;color:var(--slate-800);">${bulanNames[m - 1]}</td>
         <td style="padding:6px 8px;">
-          <div class="input-addon-group" style="height:28px;">
-            <span class="input-addon-label" style="font-size:11px;padding:0 6px;">Rp</span>
-            <input type="text" class="form-control admin-salin-nom-input" data-month="${m}" value="${nomStr}" placeholder="0" inputmode="numeric" style="height:28px;font-size:11.5px;padding:2px 8px;">
+          <div class="salin-input-addon">
+            <span class="salin-addon-text">Rp</span>
+            <input type="text" class="salin-nom-input admin-salin-nom-input" data-month="${m}" value="${nomStr}" placeholder="0" inputmode="numeric">
           </div>
         </td>
         <td style="padding:6px 8px;text-align:center;">
@@ -8918,6 +8971,27 @@ async function initAdminRkatManagement() {
   const upzSelect = document.getElementById('adminRkatSelectUpz');
   if (!upzSelect) return;
 
+  const salinTahunSelect = document.getElementById('adminSalinTahunSelect');
+  if (salinTahunSelect && salinTahunSelect.options.length === 0) {
+    const curYear = new Date().getFullYear();
+    const yearOptions = [curYear - 1, curYear, curYear + 1, curYear + 2];
+    salinTahunSelect.innerHTML = yearOptions.map(function (y) {
+      return `<option value="${y}" ${y === curYear ? 'selected' : ''}>${y}</option>`;
+    }).join('');
+  }
+
+  if (salinTahunSelect && !salinTahunSelect.dataset.bound) {
+    salinTahunSelect.dataset.bound = 'true';
+    salinTahunSelect.addEventListener('change', function () {
+      const selectedId = upzSelect.value;
+      if (!selectedId) return;
+      const setting = getUpzRkatSetting(selectedId);
+      const chosenYear = salinTahunSelect.value;
+      const list = getSalinBulananForYear(setting, chosenYear);
+      renderAdminSalinMonthTable(list);
+    });
+  }
+
   if (!cachedAllUpzListRkat.length) {
     try {
       const res = await fetch('/api/upz-list');
@@ -8971,7 +9045,9 @@ async function initAdminRkatManagement() {
       const amilInput = document.getElementById('adminRkatPersenAmil');
       if (amilInput) amilInput.value = setting.persen_amil !== undefined ? setting.persen_amil : 5;
 
-      renderAdminSalinMonthTable(setting.salin_bulanan || []);
+      const chosenYear = salinTahunSelect ? salinTahunSelect.value : String(new Date().getFullYear());
+      const list = getSalinBulananForYear(setting, chosenYear);
+      renderAdminSalinMonthTable(list);
     });
   }
 
@@ -9066,6 +9142,7 @@ async function initAdminRkatManagement() {
       const currentYear = new Date().getFullYear();
       const pPenta = parseFloat(document.getElementById('adminRkatPersenPenta').value) || 35;
       const pAmil = parseFloat(document.getElementById('adminRkatPersenAmil').value) || 5;
+      const chosenYear = salinTahunSelect ? salinTahunSelect.value : String(currentYear);
 
       const salinBulanan = [];
       for (let m = 1; m <= 12; m++) {
@@ -9102,7 +9179,8 @@ async function initAdminRkatManagement() {
             persen_amil: pAmil,
             tagihan_salin: totalSalinTransferred,
             salin_bulan_transfer: checkedMonths,
-            salin_bulanan: salinBulanan
+            salin_bulanan: salinBulanan,
+            tahun: chosenYear
           })
         });
 
@@ -9127,6 +9205,7 @@ async function initAdminRkatManagement() {
             tagihan_salin: totalSalinTransferred,
             salin_bulan_transfer: checkedMonths,
             salin_bulanan: salinBulanan,
+            tahun: chosenYear,
             updated_at: new Date().toISOString()
           };
           const { error: insErr } = await supabaseClient.from('audit_logs').insert([{
