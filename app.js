@@ -8350,8 +8350,8 @@ function getUpzRkatSetting(upzId) {
     } else {
       salinBulanan.push({
         bulan: m,
-        nominal: legacyNominal,
-        transfer: legacyTransferred.includes(m)
+        nominal: 0,
+        transfer: false
       });
     }
   }
@@ -8380,17 +8380,17 @@ function getSalinBulananForYear(setting, targetYear) {
   if (setting.salin_tahun && Array.isArray(setting.salin_tahun[yr]) && setting.salin_tahun[yr].length === 12) {
     return setting.salin_tahun[yr];
   }
-  if (Array.isArray(setting.salin_bulanan) && setting.salin_bulanan.length === 12) {
+  const curYear = String(new Date().getFullYear());
+  const activeYear = String(setting.unlocked_year || setting.current_year || curYear);
+  if (yr === activeYear && Array.isArray(setting.salin_bulanan) && setting.salin_bulanan.length === 12) {
     return setting.salin_bulanan;
   }
   const list = [];
-  const legacyTransferred = Array.isArray(setting.salin_bulan_transfer) ? setting.salin_bulan_transfer.map(Number) : [];
-  const legacyNominal = Number(setting.tagihan_salin) || 0;
   for (let m = 1; m <= 12; m++) {
     list.push({
       bulan: m,
-      nominal: legacyNominal,
-      transfer: legacyTransferred.includes(m)
+      nominal: 0,
+      transfer: false
     });
   }
   return list;
