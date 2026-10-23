@@ -389,7 +389,7 @@ const server = http.createServer(async (req, res) => {
 
     try {
       const body = await readBody(req);
-      const { token, profile_id, upz_id, nama_upz, nama_lengkap, kategori, status, password, email, no_sk, nama_ketua } = body;
+      const { token, profile_id, upz_id, kode_upz, nama_upz, nama_lengkap, kategori, status, password, email, no_sk, nama_ketua } = body;
 
       if (!token) return sendJson(401, { success: false, message: 'Token tidak ditemukan.' });
       if (!nama_upz) return sendJson(400, { success: false, message: 'Nama UPZ wajib diisi.' });
@@ -500,6 +500,7 @@ const server = http.createServer(async (req, res) => {
       let finalUpzId = upz_id;
       if (finalUpzId) {
         const upzPatch = { nama_upz: nama_upz, kategori: kategori };
+        if (kode_upz !== undefined) upzPatch.kode_upz = String(kode_upz).trim();
         if (nama_lengkap) upzPatch.nama_pic = nama_lengkap;
         if (cleanEmail) upzPatch.email_pic = cleanEmail;
         const upzRes = await fetch(`${SUPABASE_URL}/rest/v1/upz?id=eq.${encodeURIComponent(finalUpzId)}`, {
@@ -514,6 +515,7 @@ const server = http.createServer(async (req, res) => {
           headers: { ...headers, 'Prefer': 'return=representation' },
           body: JSON.stringify({
             nama_upz: nama_upz,
+            kode_upz: kode_upz ? String(kode_upz).trim() : (cleanEmail ? cleanEmail.split('@')[0] : ''),
             kategori: kategori,
             nama_pic: nama_lengkap,
             email_pic: cleanEmail
@@ -568,6 +570,7 @@ const server = http.createServer(async (req, res) => {
             user_id: isUuid(targetAuthId) ? targetAuthId : null,
             description: JSON.stringify({
               upz_id: finalUpzId,
+              kode_upz: kode_upz ? String(kode_upz).trim() : '',
               profile_id: targetAuthId,
               nama_pengelola: nama_lengkap,
               nama_lengkap: nama_lengkap,
@@ -713,7 +716,7 @@ const server = http.createServer(async (req, res) => {
   // POST or GET /api/notifications
   // ============================================================
   if ((req.url === '/api/notifications' || req.url.startsWith('/api/notifications?')) && (req.method === 'POST' || req.method === 'GET')) {
-    const handler = require('./api/notifications.js');
+    const handler = require('./lib/api/notifications.js');
     if (req.method === 'POST') {
       const body = await readBody(req);
       req.body = body;

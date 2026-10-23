@@ -267,6 +267,8 @@ function showToast(titleOrMessage, type = 'info', description = '') {
     }, 300);
   }, 4500);
 }
+window.showToast = showToast;
+window.showFloatingToast = showToast;
 
 // ==================================================
 // SISTEM NOTIFIKASI AKTIVITAS UPZ (ROLE ADMIN)
@@ -4593,6 +4595,7 @@ async function loadUpzList() {
         return {
           profile_id: p.id || u.profile_id || u.id,
           upz_id: u.id || u.upz_id,
+          kode_upz: u.kode_upz || '',
           nama_lengkap: namaLengkap,
           email: cleanEmail,
           status: hasDeposited ? 'Active' : (u.status || 'Inactive'),
@@ -4610,6 +4613,7 @@ async function loadUpzList() {
         return {
           profile_id: p.id,
           upz_id: p.upz_id || p.id,
+          kode_upz: p.kode_upz || '',
           nama_lengkap: p.nama_lengkap || '',
           email: cleanEmail,
           status: hasDeposited ? 'Active' : 'Inactive',
@@ -4719,6 +4723,7 @@ function renderUpzMgmtTable() {
     filtered = filtered.filter(function (u) {
       return (
         (u.nama_upz || '').toLowerCase().includes(q) ||
+        (u.kode_upz || '').toLowerCase().includes(q) ||
         (u.nama_lengkap || '').toLowerCase().includes(q) ||
         (u.email || '').toLowerCase().includes(q)
       );
@@ -4771,6 +4776,7 @@ function renderUpzMgmtTable() {
       <td style="color:var(--slate-400);font-size:12px;font-weight:600;">${rowNum}</td>
       <td>
         <div class="nama-upz">${escapeHtml(u.nama_upz || '-')}</div>
+        ${u.kode_upz ? `<div style="font-size:11px;color:var(--slate-500);font-weight:600;margin-top:2px;">Kode: <span class="badge" style="font-size:10.5px;padding:1px 6px;background:var(--slate-100);color:var(--slate-700);border:1px solid var(--slate-200);border-radius:4px;">${escapeHtml(u.kode_upz)}</span></div>` : ''}
       </td>
       <td>
         <div style="font-weight:600;color:var(--slate-800);">${escapeHtml(u.nama_lengkap || '-')}</div>
@@ -4785,6 +4791,7 @@ function renderUpzMgmtTable() {
           <button type="button" class="btn btn-soft btn-sm btn-icon-only upz-edit-btn"
             data-profile-id="${escapeHtml(u.profile_id)}"
             data-upz-id="${escapeHtml(u.upz_id || '')}"
+            data-kode-upz="${escapeHtml(u.kode_upz || '')}"
             data-nama="${escapeHtml(u.nama_lengkap)}"
             data-email="${escapeHtml(u.email)}"
             data-nama-upz="${escapeHtml(u.nama_upz)}"
@@ -4905,6 +4912,7 @@ function renderUpzMgmtTable() {
         mode: 'edit',
         profile_id: btn.dataset.profileId,
         upz_id: btn.dataset.upzId,
+        kode_upz: btn.dataset.kodeUpz || '',
         nama: btn.dataset.nama,
         email: btn.dataset.email,
         nama_upz: btn.dataset.namaUpz,
@@ -4944,6 +4952,8 @@ function openUpzFormModal(opts) {
   document.getElementById('upzFormEmail').value = opts && opts.email ? opts.email : '';
   document.getElementById('upzFormPassword').value = '';
   document.getElementById('upzFormNamaUpz').value = opts && opts.nama_upz ? opts.nama_upz : '';
+  const kodeEl = document.getElementById('upzFormKodeUpz');
+  if (kodeEl) kodeEl.value = opts && opts.kode_upz ? opts.kode_upz : '';
   const noSkEl = document.getElementById('upzFormNoSk');
   if (noSkEl) noSkEl.value = opts && opts.no_sk ? opts.no_sk : '';
   const ketuaEl = document.getElementById('upzFormNamaKetua');
@@ -4986,6 +4996,7 @@ function closeUpzFormModal() {
       const email = document.getElementById('upzFormEmail').value.trim();
       const password = document.getElementById('upzFormPassword').value;
       const namaUpz = document.getElementById('upzFormNamaUpz').value.trim();
+      const kodeUpz = (document.getElementById('upzFormKodeUpz') || {}).value || '';
       const noSk = (document.getElementById('upzFormNoSk') || {}).value || '';
       const namaKetua = (document.getElementById('upzFormNamaKetua') || {}).value || '';
       const kategori = document.getElementById('upzFormKategori').value;
@@ -5021,6 +5032,7 @@ function closeUpzFormModal() {
             token: token,
             profile_id: profileId || undefined,
             upz_id: upzId || undefined,
+            kode_upz: kodeUpz.trim(),
             nama_upz: namaUpz,
             nama_lengkap: nama,
             no_sk: noSk.trim(),
@@ -5049,6 +5061,12 @@ function closeUpzFormModal() {
           msgEl.textContent = 'Data akun berhasil disimpan dan disinkronkan ke Supabase!';
           msgEl.style.color = '#259148';
         }
+        if (typeof showToast === 'function') {
+          showToast('Data UPZ Berhasil Disimpan', 'success', `Perubahan data akun ${namaUpz}${kodeUpz ? ' (' + kodeUpz.trim() + ')' : ''} berhasil diterapkan.`);
+        }
+        if (typeof syncAdminNotifications === 'function') {
+          syncAdminNotifications();
+        }
         await loadUpzList();
         renderUpzMgmtTable();
         // Reload upzMap untuk filter admin
@@ -5057,6 +5075,9 @@ function closeUpzFormModal() {
       } catch (err) {
         console.error('SAVE UPZ ERROR:', err);
         if (msgEl) { msgEl.textContent = 'Gagal menyimpan: ' + err.message; msgEl.style.color = '#d93025'; }
+        if (typeof showToast === 'function') {
+          showToast('Gagal Menyimpan Data UPZ', 'error', err.message);
+        }
       } finally {
         saveBtn.disabled = false;
         saveBtn.innerHTML = origText;
@@ -7685,10 +7706,11 @@ function initDeleteUpzFeature() {
         }
 
         closeDeleteUpzModal();
-        if (typeof showFloatingToast === 'function') {
-          showFloatingToast('Akun UPZ berhasil dihapus permanen.', 'success');
-        } else {
-          alert('Akun UPZ berhasil dihapus permanen.');
+        if (typeof showToast === 'function') {
+          showToast('Akun UPZ Berhasil Dihapus', 'success', `Akun ${pendingDeleteUpzItem ? pendingDeleteUpzItem.nama_upz : 'UPZ'} telah dihapus permanen.`);
+        }
+        if (typeof syncAdminNotifications === 'function') {
+          syncAdminNotifications();
         }
 
         if (typeof loadUpzList === 'function') {
@@ -9222,6 +9244,13 @@ async function initAdminRkatManagement() {
 
       if (saved) {
         showMessage(msgEl, 'Pengaturan RKAT & alokasi berhasil disimpan!', '#16a34a');
+        const upzLabel = u ? (u.nama_upz || u.nama_lengkap) : 'UPZ';
+        if (typeof showToast === 'function') {
+          showToast('Pengaturan RKAT Berhasil Disimpan', 'success', `Konfigurasi RKAT & tagihan salin untuk ${upzLabel} berhasil diperbarui.`);
+        }
+        if (typeof syncAdminNotifications === 'function') {
+          syncAdminNotifications();
+        }
         await fetchRkatConfig();
         renderAdminRkatTable(document.getElementById('adminRkatSearchTable') ? document.getElementById('adminRkatSearchTable').value.toLowerCase().trim() : '');
       } else {
