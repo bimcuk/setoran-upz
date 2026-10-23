@@ -8334,6 +8334,31 @@ function getUpzRkatSetting(upzId) {
     isUnlocked = false;
   }
 
+  const rawSalinBulanan = (found && Array.isArray(found.salin_bulanan)) ? found.salin_bulanan : null;
+  const legacyTransferred = (found && Array.isArray(found.salin_bulan_transfer)) ? found.salin_bulan_transfer.map(Number) : [];
+  const legacyNominal = (found && found.tagihan_salin !== undefined) ? Number(found.tagihan_salin) : def.tagihan_salin;
+
+  const salinBulanan = [];
+  for (let m = 1; m <= 12; m++) {
+    const existing = rawSalinBulanan ? rawSalinBulanan.find(x => Number(x.bulan) === m) : null;
+    if (existing) {
+      salinBulanan.push({
+        bulan: m,
+        nominal: Math.max(0, Number(existing.nominal) || 0),
+        transfer: Boolean(existing.transfer)
+      });
+    } else {
+      salinBulanan.push({
+        bulan: m,
+        nominal: legacyNominal,
+        transfer: legacyTransferred.includes(m)
+      });
+    }
+  }
+
+  const transferredMonths = salinBulanan.filter(x => x.transfer).map(x => x.bulan);
+  const totalSalinTransferred = salinBulanan.filter(x => x.transfer).reduce((sum, x) => sum + x.nominal, 0);
+
   return {
     upz_id: upzId,
     rkat_unlocked: isUnlocked,
@@ -8342,8 +8367,9 @@ function getUpzRkatSetting(upzId) {
     current_year: currentYear,
     persen_penta: (found && found.persen_penta !== undefined) ? Number(found.persen_penta) : def.persen_penta,
     persen_amil: (found && found.persen_amil !== undefined) ? Number(found.persen_amil) : def.persen_amil,
-    tagihan_salin: (found && found.tagihan_salin !== undefined) ? Number(found.tagihan_salin) : def.tagihan_salin,
-    salin_bulan_transfer: (found && Array.isArray(found.salin_bulan_transfer)) ? found.salin_bulan_transfer.map(Number) : []
+    tagihan_salin: totalSalinTransferred,
+    salin_bulan_transfer: transferredMonths,
+    salin_bulanan: salinBulanan
   };
 }
 
@@ -8500,20 +8526,32 @@ function renderUpzPentaBudgetAndChart() {
 
   const persenPenta = setting.persen_penta !== undefined ? setting.persen_penta : 35;
   const persenAmil = setting.persen_amil !== undefined ? setting.persen_amil : 5;
-  const tagihanSalinBulan = setting.tagihan_salin !== undefined ? Number(setting.tagihan_salin) : 0;
-  const salinTransferredMonths = Array.isArray(setting.salin_bulan_transfer) ? setting.salin_bulan_transfer.map(Number) : [];
+  const salinBulanan = Array.isArray(setting.salin_bulanan) ? setting.salin_bulanan : [];
+  const bulanFullNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
   const alokasiPenta = Math.round(totalSetoran * (persenPenta / 100));
   const hakAmil = Math.round(totalSetoran * (persenAmil / 100));
 
+  let totalTagihanSalin = 0;
   let countBulanSalin = 0;
   if (selectedBulan !== 'semua') {
-    const isTransferred = salinTransferredMonths.includes(Number(selectedBulan));
-    countBulanSalin = isTransferred ? 1 : 0;
+    const mNum = Number(selectedBulan);
+    const mItem = salinBulanan.find(function (x) { return x.bulan === mNum; });
+    if (mItem && mItem.transfer) {
+      totalTagihanSalin = Number(mItem.nominal) || 0;
+      countBulanSalin = 1;
+    } else {
+      totalTagihanSalin = 0;
+      countBulanSalin = 0;
+    }
   } else {
-    countBulanSalin = salinTransferredMonths.length;
+    salinBulanan.forEach(function (x) {
+      if (x.transfer) {
+        totalTagihanSalin += Number(x.nominal) || 0;
+        countBulanSalin += 1;
+      }
+    });
   }
-  const totalTagihanSalin = tagihanSalinBulan * countBulanSalin;
 
   const approvedPenta = filteredPenta.filter(function (p) {
     const st = String(p.status || '').toLowerCase();
@@ -8578,36 +8616,69 @@ function renderUpzPentaBudgetAndChart() {
     elHakAmilSub.textContent = `${persenAmil}% dari Setoran Masuk`;
   }
 
+  // 6. Scorecard Tagihan Salin Aslimas (Akumulasi Saja)
   const elTagihanSalin = document.getElementById('upzPentaTagihanSalin');
   if (elTagihanSalin) {
     elTagihanSalin.textContent = formatRupiah(totalTagihanSalin);
   }
   const elTagihanSalinSub = document.getElementById('upzPentaTagihanSalinSub');
   if (elTagihanSalinSub) {
-    if (countBulanSalin > 0) {
-      elTagihanSalinSub.textContent = `Ditransfer BAZNAS: ${countBulanSalin} bln (${formatRupiah(tagihanSalinBulan)}/bln)`;
+    if (selectedBulan !== 'semua') {
+      const mIdx = Number(selectedBulan) - 1;
+      const mItem = salinBulanan.find(function (x) { return x.bulan === Number(selectedBulan); });
+      const isTrf = mItem && mItem.transfer;
+      elTagihanSalinSub.textContent = isTrf
+        ? `${bulanFullNames[mIdx] || 'Bulan'}: Sudah ditransfer BAZNAS`
+        : `${bulanFullNames[mIdx] || 'Bulan'}: Belum ditransfer BAZNAS`;
     } else {
-      elTagihanSalinSub.textContent = `Belum ada transfer BAZNAS (${formatRupiah(tagihanSalinBulan)}/bln)`;
+      elTagihanSalinSub.textContent = countBulanSalin > 0
+        ? `Akumulasi ${countBulanSalin} bulan ditransfer BAZNAS`
+        : 'Belum ada transfer BAZNAS';
     }
   }
 
-  // Render UPZ Salin Month Tracker (View-Only UPZ)
-  const upzMonthBadgesContainer = document.getElementById('upzSalinMonthBadges');
-  const upzCountBadge = document.getElementById('upzSalinTransferCountBadge');
-  if (upzCountBadge) {
-    upzCountBadge.textContent = `${salinTransferredMonths.length}/12 Bln`;
-  }
-  if (upzMonthBadgesContainer) {
-    const bulanNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-    const bulanFull = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-    upzMonthBadgesContainer.innerHTML = bulanNames.map(function (bName, idx) {
-      const mNum = idx + 1;
-      const isTransferred = salinTransferredMonths.includes(mNum);
-      const title = isTransferred
-        ? `${bulanFull[idx]}: Sudah ditransfer BAZNAS (${formatRupiah(tagihanSalinBulan)})`
-        : `${bulanFull[idx]}: Belum ditransfer BAZNAS`;
-      return `<div class="upz-month-chip ${isTransferred ? 'is-transferred' : ''}" title="${escapeHtml(title)}">${isTransferred ? '✓ ' : '○ '}${bName}</div>`;
-    }).join('');
+  // Render Kontainer Review Pembayaran Salin Aslimas (Role UPZ)
+  const reviewTbody = document.getElementById('upzSalinReviewTableBody');
+  if (reviewTbody) {
+    let totalAllMonths = 0;
+    let totalTransferredAll = 0;
+    let countTransferredAll = 0;
+
+    let rowsHtml = '';
+    salinBulanan.forEach(function (item, idx) {
+      const nom = Number(item.nominal) || 0;
+      const isTransferred = Boolean(item.transfer);
+      totalAllMonths += nom;
+      if (isTransferred) {
+        totalTransferredAll += nom;
+        countTransferredAll += 1;
+      }
+
+      const statusBadge = isTransferred
+        ? `<span class="badge-status-clean badge-clean-green" style="font-size:11px;padding:3px 8px;font-weight:600;"><svg class="icon" style="width:10px;height:10px;margin-right:2px;"><use href="#i-check"></use></svg> Sudah Ditransfer</span>`
+        : `<span class="badge-status-clean" style="font-size:11px;padding:3px 8px;background:#f1f5f9;color:#64748b;border:1px solid #cbd5e1;">Belum Ditransfer</span>`;
+
+      const impactText = isTransferred
+        ? `<span style="color:#15803d;font-weight:600;">Mengurangi alokasi (${formatRupiah(nom)})</span>`
+        : `<span style="color:var(--slate-400);">Belum memotong anggaran</span>`;
+
+      rowsHtml += `
+        <tr style="border-bottom:1px solid var(--slate-100);">
+          <td style="text-align:center;color:var(--slate-400);">${idx + 1}</td>
+          <td style="font-weight:600;color:var(--slate-800);">${bulanFullNames[idx]}</td>
+          <td style="font-weight:600;">${formatRupiah(nom)}</td>
+          <td style="text-align:center;">${statusBadge}</td>
+          <td style="font-size:12px;">${impactText}</td>
+        </tr>
+      `;
+    });
+    reviewTbody.innerHTML = rowsHtml;
+
+    const countBadge = document.getElementById('upzSalinTransferCountBadge');
+    if (countBadge) countBadge.textContent = `${countTransferredAll}/12 Bln Ditransfer`;
+
+    const accumBadge = document.getElementById('upzSalinTotalAccumBadge');
+    if (accumBadge) accumBadge.textContent = `Akumulasi: ${formatRupiah(totalTransferredAll)}`;
   }
 
   renderUpzPentaChart(selectedTahun === 'semua' ? new Date().getFullYear() : Number(selectedTahun), persenPenta);
@@ -8756,55 +8827,89 @@ function updateAdminRkatStatusDisplay(isUnlocked, unlockedYear) {
   }
 }
 
-function renderAdminSalinMonthChecklist(transferredMonths = [], nominalPerBulan = 0) {
-  const container = document.getElementById('adminSalinMonthGrid');
-  if (!container) return;
-  const tMonths = Array.isArray(transferredMonths) ? transferredMonths.map(Number) : [];
-  const bulanShort = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+function renderAdminSalinMonthTable(salinBulanan = []) {
+  const tbody = document.getElementById('adminSalinMonthTableBody');
+  if (!tbody) return;
 
-  container.innerHTML = bulanShort.map(function (bName, idx) {
-    const mNum = idx + 1;
-    const isChecked = tMonths.includes(mNum);
-    return `
-      <label class="salin-month-chip ${isChecked ? 'is-active' : ''}">
-        <input type="checkbox" class="admin-salin-cb" data-month="${mNum}" ${isChecked ? 'checked' : ''}>
-        <span>${bName}</span>
-      </label>
+  const bulanNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+  let html = '';
+  for (let m = 1; m <= 12; m++) {
+    const item = (Array.isArray(salinBulanan) ? salinBulanan.find(function (x) { return Number(x.bulan) === m; }) : null) || { bulan: m, nominal: 0, transfer: false };
+    const nomStr = item.nominal ? Number(item.nominal).toLocaleString('id-ID') : '0';
+    const isChecked = Boolean(item.transfer);
+
+    html += `
+      <tr style="border-bottom:1px solid var(--slate-100);" data-month="${m}">
+        <td style="text-align:center;padding:6px;">
+          <input type="checkbox" class="admin-salin-cb" data-month="${m}" ${isChecked ? 'checked' : ''} style="cursor:pointer;width:15px;height:15px;accent-color:#16a34a;">
+        </td>
+        <td style="padding:6px 8px;font-weight:600;color:var(--slate-800);">${bulanNames[m - 1]}</td>
+        <td style="padding:6px 8px;">
+          <div class="input-addon-group" style="height:28px;">
+            <span class="input-addon-label" style="font-size:11px;padding:0 6px;">Rp</span>
+            <input type="text" class="form-control admin-salin-nom-input" data-month="${m}" value="${nomStr}" placeholder="0" inputmode="numeric" style="height:28px;font-size:11.5px;padding:2px 8px;">
+          </div>
+        </td>
+        <td style="padding:6px 8px;text-align:center;">
+          <span class="badge-status-clean ${isChecked ? 'badge-clean-green' : ''} admin-salin-status-badge" style="font-size:10.5px;padding:2px 6px;">
+            ${isChecked ? 'Sudah Ditransfer' : 'Belum Ditransfer'}
+          </span>
+        </td>
+      </tr>
     `;
-  }).join('');
+  }
 
-  container.querySelectorAll('.admin-salin-cb').forEach(function (cb) {
-    cb.addEventListener('change', function () {
-      const parent = cb.closest('.salin-month-chip');
-      if (parent) {
-        if (cb.checked) {
-          parent.classList.add('is-active');
-        } else {
-          parent.classList.remove('is-active');
-        }
-      }
-      const raw = (document.getElementById('adminRkatTagihanSalin').value || '0').replace(/\D/g, '');
-      updateAdminSalinSummary(parseInt(raw, 10) || 0);
+  tbody.innerHTML = html;
+
+  tbody.querySelectorAll('.admin-salin-nom-input').forEach(function (inp) {
+    inp.addEventListener('input', function () {
+      const raw = this.value.replace(/\D/g, '');
+      this.value = raw ? Number(raw).toLocaleString('id-ID') : '';
+      updateAdminSalinSummary();
     });
   });
 
-  updateAdminSalinSummary(nominalPerBulan);
+  tbody.querySelectorAll('.admin-salin-cb').forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      const row = cb.closest('tr');
+      const badge = row ? row.querySelector('.admin-salin-status-badge') : null;
+      if (badge) {
+        if (cb.checked) {
+          badge.className = 'badge-status-clean badge-clean-green admin-salin-status-badge';
+          badge.textContent = 'Sudah Ditransfer';
+        } else {
+          badge.className = 'badge-status-clean admin-salin-status-badge';
+          badge.textContent = 'Belum Ditransfer';
+        }
+      }
+      updateAdminSalinSummary();
+    });
+  });
+
+  updateAdminSalinSummary();
 }
 
-function updateAdminSalinSummary(nominalPerBulan) {
-  if (nominalPerBulan === undefined || isNaN(nominalPerBulan)) {
-    const raw = (document.getElementById('adminRkatTagihanSalin')?.value || '0').replace(/\D/g, '');
-    nominalPerBulan = parseInt(raw, 10) || 0;
-  }
-  const checkedBoxes = document.querySelectorAll('#adminSalinMonthGrid .admin-salin-cb:checked');
-  const count = checkedBoxes.length;
-  const total = count * Number(nominalPerBulan || 0);
+function updateAdminSalinSummary() {
+  const rows = document.querySelectorAll('#adminSalinMonthTableBody tr');
+  let checkedCount = 0;
+  let totalTransferred = 0;
+
+  rows.forEach(function (tr) {
+    const cb = tr.querySelector('.admin-salin-cb');
+    const inp = tr.querySelector('.admin-salin-nom-input');
+    const nom = inp ? (parseInt(inp.value.replace(/\D/g, ''), 10) || 0) : 0;
+    if (cb && cb.checked) {
+      checkedCount += 1;
+      totalTransferred += nom;
+    }
+  });
 
   const countEl = document.getElementById('adminSalinCountLabel');
-  if (countEl) countEl.textContent = `${count} bulan`;
+  if (countEl) countEl.textContent = `${checkedCount} bulan`;
 
   const totalEl = document.getElementById('adminSalinTotalLabel');
-  if (totalEl) totalEl.textContent = formatRupiah(total);
+  if (totalEl) totalEl.textContent = formatRupiah(totalTransferred);
 }
 
 async function initAdminRkatManagement() {
@@ -8866,10 +8971,7 @@ async function initAdminRkatManagement() {
       const amilInput = document.getElementById('adminRkatPersenAmil');
       if (amilInput) amilInput.value = setting.persen_amil !== undefined ? setting.persen_amil : 5;
 
-      const salinInput = document.getElementById('adminRkatTagihanSalin');
-      if (salinInput) salinInput.value = setting.tagihan_salin ? Number(setting.tagihan_salin).toLocaleString('id-ID') : '0';
-
-      renderAdminSalinMonthChecklist(setting.salin_bulan_transfer || [], setting.tagihan_salin || 0);
+      renderAdminSalinMonthTable(setting.salin_bulanan || []);
     });
   }
 
@@ -8887,20 +8989,9 @@ async function initAdminRkatManagement() {
       const currentYear = new Date().getFullYear();
       updateAdminRkatStatusDisplay(targetState, targetState ? currentYear : null);
 
-      // Otomatis simpan perubahan gembok saat tombol diklik agar langsung tersimpan ke database
       if (saveBtn) {
         saveBtn.click();
       }
-    });
-  }
-
-  const salinInput = document.getElementById('adminRkatTagihanSalin');
-  if (salinInput && !salinInput.dataset.bound) {
-    salinInput.dataset.bound = 'true';
-    salinInput.addEventListener('input', function () {
-      const raw = this.value.replace(/\D/g, '');
-      this.value = raw ? Number(raw).toLocaleString('id-ID') : '';
-      updateAdminSalinSummary(parseInt(raw, 10) || 0);
     });
   }
 
@@ -8908,13 +8999,16 @@ async function initAdminRkatManagement() {
   if (selectAllBtn && !selectAllBtn.dataset.bound) {
     selectAllBtn.dataset.bound = 'true';
     selectAllBtn.addEventListener('click', function () {
-      document.querySelectorAll('#adminSalinMonthGrid .admin-salin-cb').forEach(function (cb) {
+      document.querySelectorAll('#adminSalinMonthTableBody .admin-salin-cb').forEach(function (cb) {
         cb.checked = true;
-        const p = cb.closest('.salin-month-chip');
-        if (p) p.classList.add('is-active');
+        const row = cb.closest('tr');
+        const badge = row ? row.querySelector('.admin-salin-status-badge') : null;
+        if (badge) {
+          badge.className = 'badge-status-clean badge-clean-green admin-salin-status-badge';
+          badge.textContent = 'Sudah Ditransfer';
+        }
       });
-      const raw = (document.getElementById('adminRkatTagihanSalin').value || '0').replace(/\D/g, '');
-      updateAdminSalinSummary(parseInt(raw, 10) || 0);
+      updateAdminSalinSummary();
     });
   }
 
@@ -8922,13 +9016,38 @@ async function initAdminRkatManagement() {
   if (clearAllBtn && !clearAllBtn.dataset.bound) {
     clearAllBtn.dataset.bound = 'true';
     clearAllBtn.addEventListener('click', function () {
-      document.querySelectorAll('#adminSalinMonthGrid .admin-salin-cb').forEach(function (cb) {
+      document.querySelectorAll('#adminSalinMonthTableBody .admin-salin-cb').forEach(function (cb) {
         cb.checked = false;
-        const p = cb.closest('.salin-month-chip');
-        if (p) p.classList.remove('is-active');
+        const row = cb.closest('tr');
+        const badge = row ? row.querySelector('.admin-salin-status-badge') : null;
+        if (badge) {
+          badge.className = 'badge-status-clean admin-salin-status-badge';
+          badge.textContent = 'Belum Ditransfer';
+        }
       });
-      const raw = (document.getElementById('adminRkatTagihanSalin').value || '0').replace(/\D/g, '');
-      updateAdminSalinSummary(parseInt(raw, 10) || 0);
+      updateAdminSalinSummary();
+    });
+  }
+
+  const quickNominalInput = document.getElementById('adminSalinQuickNominal');
+  if (quickNominalInput && !quickNominalInput.dataset.bound) {
+    quickNominalInput.dataset.bound = 'true';
+    quickNominalInput.addEventListener('input', function () {
+      const raw = this.value.replace(/\D/g, '');
+      this.value = raw ? Number(raw).toLocaleString('id-ID') : '';
+    });
+  }
+
+  const quickApplyBtn = document.getElementById('adminSalinQuickApplyBtn');
+  if (quickApplyBtn && !quickApplyBtn.dataset.bound) {
+    quickApplyBtn.dataset.bound = 'true';
+    quickApplyBtn.addEventListener('click', function () {
+      const qInput = document.getElementById('adminSalinQuickNominal');
+      const valStr = qInput ? qInput.value.trim() : '';
+      document.querySelectorAll('#adminSalinMonthTableBody .admin-salin-nom-input').forEach(function (inp) {
+        inp.value = valStr;
+      });
+      updateAdminSalinSummary();
     });
   }
 
@@ -8947,12 +9066,20 @@ async function initAdminRkatManagement() {
       const currentYear = new Date().getFullYear();
       const pPenta = parseFloat(document.getElementById('adminRkatPersenPenta').value) || 35;
       const pAmil = parseFloat(document.getElementById('adminRkatPersenAmil').value) || 5;
-      const tSalinStr = (document.getElementById('adminRkatTagihanSalin').value || '0').replace(/\D/g, '');
-      const tSalin = parseInt(tSalinStr, 10) || 0;
 
-      const checkedMonths = Array.from(document.querySelectorAll('#adminSalinMonthGrid .admin-salin-cb:checked'))
-        .map(function (cb) { return parseInt(cb.dataset.month, 10); })
-        .filter(function (n) { return !isNaN(n) && n >= 1 && n <= 12; });
+      const salinBulanan = [];
+      for (let m = 1; m <= 12; m++) {
+        const cb = document.querySelector(`#adminSalinMonthTableBody .admin-salin-cb[data-month="${m}"]`);
+        const nomInput = document.querySelector(`#adminSalinMonthTableBody .admin-salin-nom-input[data-month="${m}"]`);
+        const nomRaw = (nomInput ? nomInput.value : '0').replace(/\D/g, '');
+        salinBulanan.push({
+          bulan: m,
+          nominal: parseInt(nomRaw, 10) || 0,
+          transfer: cb ? cb.checked : false
+        });
+      }
+      const checkedMonths = salinBulanan.filter(function (x) { return x.transfer; }).map(function (x) { return x.bulan; });
+      const totalSalinTransferred = salinBulanan.filter(function (x) { return x.transfer; }).reduce(function (sum, x) { return sum + x.nominal; }, 0);
 
       saveBtn.disabled = true;
       saveBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Menyimpan...';
@@ -8973,8 +9100,9 @@ async function initAdminRkatManagement() {
             unlocked_year: isUnlocked ? currentYear : null,
             persen_penta: pPenta,
             persen_amil: pAmil,
-            tagihan_salin: tSalin,
-            salin_bulan_transfer: checkedMonths
+            tagihan_salin: totalSalinTransferred,
+            salin_bulan_transfer: checkedMonths,
+            salin_bulanan: salinBulanan
           })
         });
 
@@ -8996,8 +9124,9 @@ async function initAdminRkatManagement() {
             unlocked_year: isUnlocked ? currentYear : null,
             persen_penta: pPenta,
             persen_amil: pAmil,
-            tagihan_salin: tSalin,
+            tagihan_salin: totalSalinTransferred,
             salin_bulan_transfer: checkedMonths,
+            salin_bulanan: salinBulanan,
             updated_at: new Date().toISOString()
           };
           const { error: insErr } = await supabaseClient.from('audit_logs').insert([{
@@ -9072,6 +9201,9 @@ function renderAdminRkatTable(filterText = '') {
       ? `<button type="button" class="btn btn-xs btn-outline-danger rkat-quick-toggle" data-upz-id="${escapeHtml(uid)}" data-target-state="false" style="padding:2px 8px;font-size:11px;">Kunci</button>`
       : `<button type="button" class="btn btn-xs btn-primary rkat-quick-toggle" data-upz-id="${escapeHtml(uid)}" data-target-state="true" style="padding:2px 8px;font-size:11px;">Buka RKAT ${currentYear}</button>`;
 
+    const totalTrf = (setting.salin_bulanan || []).filter(function (x) { return x.transfer; }).reduce(function (sum, x) { return sum + x.nominal; }, 0);
+    const countTrf = (setting.salin_bulan_transfer || []).length;
+
     html += `
       <tr style="border-bottom:1px solid var(--slate-100);">
         <td style="padding:8px 10px;font-weight:500;">${escapeHtml(unama)}</td>
@@ -9079,8 +9211,8 @@ function renderAdminRkatTable(filterText = '') {
         <td style="padding:8px 10px;">${setting.persen_penta}%</td>
         <td style="padding:8px 10px;">${setting.persen_amil}%</td>
         <td style="padding:8px 10px;">
-          ${formatRupiah(setting.tagihan_salin || 0)}/bln
-          <span style="font-size:11px;color:var(--slate-500);display:block;">(${(setting.salin_bulan_transfer || []).length} bln)</span>
+          ${formatRupiah(totalTrf)}
+          <span style="font-size:11px;color:var(--slate-500);display:block;">(${countTrf}/12 bln transfer)</span>
         </td>
         <td style="padding:8px 10px;text-align:center;white-space:nowrap;">
           ${actionBtn}
@@ -9121,7 +9253,8 @@ function renderAdminRkatTable(filterText = '') {
             persen_penta: setting.persen_penta,
             persen_amil: setting.persen_amil,
             tagihan_salin: setting.tagihan_salin,
-            salin_bulan_transfer: setting.salin_bulan_transfer || []
+            salin_bulan_transfer: setting.salin_bulan_transfer || [],
+            salin_bulanan: setting.salin_bulanan || []
           })
         });
         if (res.ok) {
@@ -9143,6 +9276,7 @@ function renderAdminRkatTable(filterText = '') {
             persen_amil: setting.persen_amil,
             tagihan_salin: setting.tagihan_salin,
             salin_bulan_transfer: setting.salin_bulan_transfer || [],
+            salin_bulanan: setting.salin_bulanan || [],
             updated_at: new Date().toISOString()
           };
           const { error: insErr } = await supabaseClient.from('audit_logs').insert([{

@@ -744,31 +744,52 @@
                     </div>
                   </div>
 
-                  <div class="form-group" style="margin-top:2px;">
-                    <label for="adminRkatTagihanSalin" style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Tagihan Salin Aslimas (Rp/bulan)</label>
-                    <div class="input-addon-group">
-                      <span class="input-addon-label">Rp</span>
-                      <input type="text" id="adminRkatTagihanSalin" class="form-control" placeholder="0" inputmode="numeric">
-                    </div>
-                    <span style="font-size:11px;color:var(--slate-400);display:block;margin-top:4px;">Nominal tagihan program Salin Aslimas per bulan</span>
-                  </div>
-
-                  <!-- Checklist Realisasi Transfer Salin Aslimas oleh BAZNAS -->
-                  <div class="form-group" style="margin-top:4px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
-                      <label style="font-size:12px;font-weight:600;margin:0;color:var(--slate-800);">
-                        Bulan Ditransfer BAZNAS:
-                      </label>
-                      <div style="display:flex;gap:4px;">
-                        <button type="button" id="adminSalinSelectAllBtn" class="btn btn-ghost btn-xs" style="padding:2px 8px;font-size:11px;height:24px;">Pilih Semua</button>
-                        <button type="button" id="adminSalinClearAllBtn" class="btn btn-ghost btn-xs" style="padding:2px 8px;font-size:11px;height:24px;">Batal Semua</button>
+                  <!-- Tagihan Salin Aslimas Bulanan (Manual Nominal & Status Transfer) -->
+                  <div class="form-group" style="margin-top:4px;border:1px solid var(--slate-200);border-radius:8px;padding:12px;background:#f8fafc;">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+                      <div>
+                        <label style="font-size:12.5px;font-weight:700;margin:0;color:var(--slate-800);display:flex;align-items:center;gap:6px;">
+                          <svg class="icon" style="width:14px;height:14px;color:var(--slate-600);"><use href="#i-tag"></use></svg>
+                          Tagihan Salin Aslimas & Status Transfer BAZNAS
+                        </label>
+                        <span style="font-size:11px;color:var(--slate-500);display:block;margin-top:2px;">Input nominal per bulan secara manual & beri ceklis jika sudah ditransfer BAZNAS.</span>
+                      </div>
+                      <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                        <button type="button" id="adminSalinSelectAllBtn" class="btn btn-ghost btn-xs" style="padding:2px 8px;font-size:11px;height:24px;">Ceklis Semua</button>
+                        <button type="button" id="adminSalinClearAllBtn" class="btn btn-ghost btn-xs" style="padding:2px 8px;font-size:11px;height:24px;">Batal Ceklis</button>
                       </div>
                     </div>
-                    <div id="adminSalinMonthGrid" class="salin-month-grid">
-                      <!-- 12 Checkbox chips injected dynamically -->
+
+                    <!-- Quick Uniform Nominal Apply -->
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;background:#fff;padding:6px 8px;border-radius:6px;border:1px solid var(--slate-200);">
+                      <span style="font-size:11px;color:var(--slate-600);font-weight:500;white-space:nowrap;">Terapkan nominal sama:</span>
+                      <div class="input-addon-group" style="max-width:150px;height:28px;">
+                        <span class="input-addon-label" style="font-size:11px;padding:0 6px;">Rp</span>
+                        <input type="text" id="adminSalinQuickNominal" class="form-control" placeholder="0" inputmode="numeric" style="height:28px;font-size:11px;padding:2px 6px;">
+                      </div>
+                      <button type="button" id="adminSalinQuickApplyBtn" class="btn btn-xs btn-outline-primary" style="height:28px;font-size:11px;padding:0 8px;white-space:nowrap;">Terapkan ke 12 Bln</button>
                     </div>
-                    <div id="adminSalinSummaryNotice" style="font-size:11.5px;color:var(--slate-600);margin-top:8px;background:#f8fafc;padding:8px 10px;border-radius:6px;border:1px solid var(--slate-200);line-height:1.4;">
-                      Ditransfer: <strong id="adminSalinCountLabel">0 bulan</strong> • Akumulasi: <strong id="adminSalinTotalLabel" style="color:#0f5132;">Rp 0</strong> (mengurangi alokasi pentasharufan)
+
+                    <!-- 12 Bulan Table -->
+                    <div style="max-height:260px;overflow-y:auto;border:1px solid var(--slate-200);border-radius:6px;background:#fff;">
+                      <table class="table" style="width:100%;font-size:11.5px;margin:0;border-collapse:collapse;">
+                        <thead style="position:sticky;top:0;background:var(--slate-100);z-index:2;">
+                          <tr style="border-bottom:1px solid var(--slate-200);">
+                            <th style="padding:6px 8px;text-align:center;width:40px;">Ceklis</th>
+                            <th style="padding:6px 8px;width:90px;">Bulan</th>
+                            <th style="padding:6px 8px;">Nominal Tagihan (Rp)</th>
+                            <th style="padding:6px 8px;text-align:center;width:110px;">Status Transfer</th>
+                          </tr>
+                        </thead>
+                        <tbody id="adminSalinMonthTableBody">
+                          <!-- 12 Bulan rows injected dynamically -->
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div id="adminSalinSummaryNotice" style="font-size:11.5px;color:var(--slate-700);margin-top:8px;background:#fff;padding:8px 10px;border-radius:6px;border:1px solid var(--slate-200);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+                      <div>Ditransfer BAZNAS: <strong id="adminSalinCountLabel">0 bulan</strong></div>
+                      <div>Total Akumulasi: <strong id="adminSalinTotalLabel" style="color:#0f5132;">Rp 0</strong> (pengurang alokasi)</div>
                     </div>
                   </div>
 
@@ -1384,28 +1405,47 @@
             </div>
           </div>
 
-          <!-- 6. Tagihan Salin Aslimas (Tersendiri) -->
-          <div class="summary-card" style="flex-direction:column;align-items:stretch;gap:10px;">
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div class="summary-icon tone-indigo"><svg class="icon"><use href="#i-tag"></use></svg></div>
-              <div>
-                <div class="summary-title">Tagihan Salin Aslimas</div>
-                <div id="upzPentaTagihanSalin" class="summary-value">Rp 0</div>
-                <div id="upzPentaTagihanSalinSub" class="summary-sub">Kewajiban program per bulan</div>
-              </div>
-            </div>
-            <!-- Status Ditransfer BAZNAS (View-Only UPZ) -->
-            <div style="border-top:1px dashed var(--slate-200);padding-top:8px;">
-              <div style="font-size:11px;color:var(--slate-500);font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
-                <span>Status Ditransfer BAZNAS:</span>
-                <span id="upzSalinTransferCountBadge" style="color:#15803d;font-weight:700;">0/12 Bln</span>
-              </div>
-              <div id="upzSalinMonthBadges" class="upz-salin-month-grid">
-                <!-- 12 Read-only month chips injected dynamically -->
-              </div>
+          <!-- 6. Tagihan Salin Aslimas (Akumulasi Saja) -->
+          <div class="summary-card">
+            <div class="summary-icon tone-indigo"><svg class="icon"><use href="#i-tag"></use></svg></div>
+            <div>
+              <div class="summary-title">Tagihan Salin Aslimas</div>
+              <div id="upzPentaTagihanSalin" class="summary-value">Rp 0</div>
+              <div id="upzPentaTagihanSalinSub" class="summary-sub">Akumulasi ditransfer BAZNAS</div>
             </div>
           </div>
         </div>
+
+        <!-- REVIEW PEMBAYARAN SALIN ASLIMAS (ROLE UPZ) -->
+        <section class="content-card salin-review-card" style="margin-bottom:24px;">
+          <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div>
+              <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-tag"></use></svg> Rincian Salin Aslimas</span>
+              <h2>Review Pembayaran Salin Aslimas</h2>
+              <p class="section-desc">Rincian kewajiban program Salin Aslimas per bulan dan status transfer pembayaran oleh BAZNAS.</p>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <span id="upzSalinTransferCountBadge" class="badge-status-clean badge-clean-green" style="font-weight:600;font-size:12px;padding:4px 10px;">0/12 Bln Ditransfer</span>
+              <span id="upzSalinTotalAccumBadge" class="badge-status-clean badge-clean-blue" style="font-weight:700;font-size:12px;padding:4px 10px;">Akumulasi: Rp 0</span>
+            </div>
+          </div>
+          <div class="table-container" style="margin-top:12px;overflow-x:auto;">
+            <table class="table" style="width:100%;font-size:12.5px;">
+              <thead>
+                <tr>
+                  <th style="width:50px;text-align:center;">No</th>
+                  <th style="width:140px;">Bulan</th>
+                  <th>Nominal Tagihan</th>
+                  <th style="width:180px;text-align:center;">Status Transfer BAZNAS</th>
+                  <th>Dampak Pengurangan Alokasi</th>
+                </tr>
+              </thead>
+              <tbody id="upzSalinReviewTableBody">
+                <!-- 12 Bulan rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
 
         <!-- GRAFIK MONITORING PENTASHARUFAN UPZ -->
         <section class="content-card penta-chart-card" style="margin-bottom:24px;">
