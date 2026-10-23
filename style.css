@@ -78,7 +78,8 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 html {
@@ -1751,19 +1752,42 @@ body.role-admin .user-chip:hover {
   grid-template-columns: repeat(3, minmax(140px, 1fr)) auto;
 }
 
-@media (max-width: 800px) {
+.filter-bar-donatur {
+  grid-template-columns: minmax(180px, 1.5fr) minmax(200px, 2fr) minmax(120px, 1fr) minmax(180px, 1.2fr) auto;
+}
 
+.filter-bar-upz-mgmt {
+  grid-template-columns: minmax(220px, 2fr) minmax(160px, 1fr) auto;
+}
+
+@media (max-width: 900px) {
+  .filter-bar,
   .filter-bar-admin,
-  .filter-bar-upz {
+  .filter-bar-upz,
+  .filter-bar-donatur,
+  .filter-bar-upz-mgmt {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 520px) {
-
+@media (max-width: 640px) {
+  .filter-bar,
   .filter-bar-admin,
-  .filter-bar-upz {
-    grid-template-columns: 1fr;
+  .filter-bar-upz,
+  .filter-bar-donatur,
+  .filter-bar-upz-mgmt {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  .filter-item.filter-actions {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .filter-item.filter-actions .btn {
+    width: 100%;
   }
 }
 
@@ -3097,6 +3121,37 @@ body.role-admin .user-chip:hover {
   width: 1px;
   height: 32px;
   background: var(--slate-200);
+}
+
+@media (max-width: 640px) {
+  .donatur-summary-bar {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+  }
+  .donatur-summary-bar .ds-sep {
+    display: none !important;
+  }
+  .donatur-summary-bar .ds-item {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 2px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .donatur-summary-bar {
+    grid-template-columns: 1fr !important;
+    text-align: left !important;
+  }
+  .donatur-summary-bar .ds-item {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
 }
 
 /* ==================================================
@@ -7183,6 +7238,422 @@ body.role-admin #headerWebsiteBadge {
   background: transparent !important;
   min-width: 0 !important;
   box-sizing: border-box !important;
+}
+
+/* ==================================================
+   MOBILE PRECISION & ZERO HORIZONTAL SCROLL ENFORCEMENT
+   BAZNAS UPZ Responsive Architecture (< 768px, < 640px, < 480px)
+   ================================================== */
+
+/* 1. Global Viewport & Container Containment */
+html,
+body {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
+#app,
+#dashboardPage,
+.dashboard-container,
+.page-wrapper,
+.main-content {
+  max-width: 100% !important;
+  overflow-x: clip !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+/* 2. Universal Table Horizontal Scroll Isolation */
+.table-responsive,
+.table-container,
+.upz-mgmt-table-wrap,
+.donatur-table-wrap,
+.penta-table-wrap,
+.excel-preview,
+.rkat-table-scroll,
+.table-scroll-wrap {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+
+/* 3. Topbar on Mobile Devices */
+@media (max-width: 768px) {
+  .topbar {
+    padding: 10px 14px !important;
+    gap: 8px !important;
+  }
+
+  .topbar-brand {
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  .topbar-title {
+    font-size: 14px !important;
+    max-width: 170px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .topbar-sub {
+    display: none !important;
+  }
+
+  .header-website-badge {
+    display: none !important;
+  }
+
+  .topbar-user {
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .header-icon-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    padding: 0 !important;
+  }
+
+  .user-chip {
+    padding: 4px 8px !important;
+    font-size: 11.5px !important;
+    max-width: 110px !important;
+    gap: 5px !important;
+  }
+
+  .user-chip .user-name {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    padding: 8px 10px !important;
+  }
+
+  .baznas-header-logo {
+    width: 54px !important;
+    flex: 0 0 54px !important;
+  }
+
+  .baznas-header-logo .baznas-logo {
+    width: 54px !important;
+    max-height: 28px !important;
+  }
+
+  .topbar-title {
+    font-size: 13px !important;
+    max-width: 115px !important;
+  }
+
+  .header-icon-btn {
+    width: 33px !important;
+    height: 33px !important;
+    min-width: 33px !important;
+  }
+
+  .header-icon-btn .icon {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .user-chip {
+    padding: 4px 6px !important;
+    max-width: 76px !important;
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .topbar-title {
+    max-width: 95px !important;
+    font-size: 12px !important;
+  }
+
+  .user-chip .user-name {
+    display: none !important;
+  }
+
+  .user-chip {
+    padding: 6px !important;
+    max-width: none !important;
+    border-radius: 50% !important;
+  }
+}
+
+/* 4. Banner & Hero Section on Mobile */
+@media (max-width: 768px) {
+  .hero,
+  .page-title-banner {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 16px 14px !important;
+    margin-bottom: 16px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    border-radius: var(--radius-lg, 12px) !important;
+  }
+
+  .hero-badge {
+    display: none !important;
+  }
+
+  .hero-title,
+  .page-title-text h2 {
+    font-size: 18px !important;
+    line-height: 1.3 !important;
+  }
+
+  .hero-desc,
+  .page-title-text p {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    -webkit-line-clamp: 3 !important;
+    line-clamp: 3 !important;
+  }
+
+  .hero-right {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+  }
+}
+
+/* 5. Containers & Content Cards */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 14px 12px 64px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .content-card {
+    padding: 16px 14px !important;
+    border-radius: var(--radius-lg, 12px) !important;
+    margin-bottom: 18px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .section-header {
+    margin-bottom: 16px !important;
+  }
+
+  .section-header h2 {
+    font-size: 17px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 10px 8px 56px !important;
+  }
+
+  .content-card {
+    padding: 14px 10px !important;
+    border-radius: var(--radius-md, 8px) !important;
+    margin-bottom: 14px !important;
+  }
+}
+
+/* 6. Summary Scorecards on Mobile */
+@media (max-width: 640px) {
+  .summary-grid,
+  .summary-grid-3,
+  .summary-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .summary-card {
+    padding: 12px 10px !important;
+    min-height: auto !important;
+    border-radius: var(--radius-md, 8px) !important;
+    gap: 6px !important;
+  }
+
+  .summary-card .summary-value {
+    font-size: 15px !important;
+  }
+
+  .summary-card .summary-title {
+    font-size: 11px !important;
+  }
+
+  .summary-card .summary-sub {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .summary-grid,
+  .summary-grid-3,
+  .summary-grid-4 {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+}
+
+/* 7. Modals on Mobile Viewports */
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 10px 6px !important;
+    align-items: flex-end !important;
+  }
+
+  .modal-card,
+  .modal-lg,
+  .modal-md,
+  .modal-sm,
+  .dialog-card,
+  .verify-confirm-card,
+  .delete-confirm-card,
+  .photo-preview-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    max-height: 92vh !important;
+    border-radius: var(--radius-lg, 14px) var(--radius-lg, 14px) 0 0 !important;
+  }
+
+  .modal-header {
+    padding: 12px 14px !important;
+  }
+
+  .modal-scroll {
+    padding: 12px 14px !important;
+    max-height: calc(92vh - 120px) !important;
+  }
+
+  .modal-footer {
+    padding: 10px 14px !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .modal-footer .btn {
+    flex: 1 1 auto !important;
+  }
+}
+
+/* 8. Dropdowns on Small Mobile Screens */
+@media (max-width: 520px) {
+  .notif-dropdown {
+    position: fixed !important;
+    top: 56px !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: 82vh !important;
+    border-radius: var(--radius-lg, 14px) !important;
+  }
+
+  .hamburger-dropdown {
+    position: fixed !important;
+    top: 56px !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: 82vh !important;
+    overflow-y: auto !important;
+    border-radius: var(--radius-lg, 14px) !important;
+  }
+}
+
+/* 9. Setoran / Transaction Cards */
+@media (max-width: 640px) {
+  .tx-card {
+    padding: 14px 12px !important;
+    gap: 12px !important;
+  }
+
+  .tx-nominal {
+    font-size: 16px !important;
+  }
+
+  .tx-meta {
+    font-size: 11.5px !important;
+    gap: 4px 10px !important;
+  }
+
+  .tx-actions {
+    width: 100% !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .tx-actions .btn {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* 10. Salin Aslimas & RKAT */
+@media (max-width: 640px) {
+  .salin-month-grid,
+  .upz-salin-month-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4px !important;
+  }
+
+  .salin-month-chip {
+    padding: 5px 3px !important;
+    font-size: 10.5px !important;
+  }
+
+  .salin-nom-input {
+    font-size: 11px !important;
+  }
+
+  .rkat-admin-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .rkat-form-box,
+  .rkat-table-box {
+    min-height: auto !important;
+    height: auto !important;
+  }
+}
+
+/* 11. Login Panel Precision on Mobile */
+@media (max-width: 640px) {
+  .login-panel {
+    padding: 24px 16px !important;
+    min-height: 100vh !important;
+  }
+
+  .login-card {
+    max-width: 100% !important;
+  }
+
+  .login-card h1 {
+    font-size: 22px !important;
+  }
+
+  .subtitle {
+    font-size: 13px !important;
+    margin-bottom: 20px !important;
+  }
 }
 
 
