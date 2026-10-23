@@ -2142,44 +2142,24 @@ async function openDetailModal(setoranId, isAdmin) {
 function updateDetailModalDocsSection(setoranId, isAdmin) {
   const docConfigs = [
     {
-      key: 'bsz',
-      name: 'Bukti Setor Zakat (BSZ)',
-      rowId: 'detailDocRow_bsz',
-      uploadBtnId: 'detailUploadBszBtn',
-      downloadBtnId: 'detailDownloadBszBtn',
-      descId: 'detailDocDesc_bsz',
-      emptyDescAdmin: 'Belum diterbitkan. Unggah berkas BSZ resmi untuk UPZ.',
+      key: 'bsz_upz',
+      name: 'BSZ UPZ',
+      rowId: 'detailDocRow_bsz_upz',
+      uploadBtnId: 'detailUploadBtn_bsz_upz',
+      downloadBtnId: 'detailDownloadBtn_bsz_upz',
+      descId: 'detailDocDesc_bsz_upz',
+      emptyDescAdmin: 'Belum diterbitkan. Unggah berkas resmi BSZ UPZ (PDF/RAR).',
       emptyDescUpz: 'Belum diterbitkan oleh Admin BAZNAS.'
     },
     {
-      key: 'tf_penta',
-      name: 'Bukti Transfer Pentasharufan',
-      rowId: 'detailDocRow_tf_penta',
-      uploadBtnId: 'detailUploadBtn_tf_penta',
-      downloadBtnId: 'detailDownloadBtn_tf_penta',
-      descId: 'detailDocDesc_tf_penta',
-      emptyDescAdmin: 'Belum diunggah. Unggah bukti transfer jika perbantuan telah disalurkan.',
-      emptyDescUpz: 'Bukti transfer perbantuan pentasharufan belum diunggah Admin.'
-    },
-    {
-      key: 'tf_amil',
-      name: 'Bukti Transfer Hak Amil UPZ',
-      rowId: 'detailDocRow_tf_amil',
-      uploadBtnId: 'detailUploadBtn_tf_amil',
-      downloadBtnId: 'detailDownloadBtn_tf_amil',
-      descId: 'detailDocDesc_tf_amil',
-      emptyDescAdmin: 'Belum diunggah. Unggah bukti transfer pencairan hak amil (5%) UPZ.',
-      emptyDescUpz: 'Bukti transfer hak amil belum diunggah Admin.'
-    },
-    {
-      key: 'tf_salin',
-      name: 'Bukti Transfer Salin Aslimas',
-      rowId: 'detailDocRow_tf_salin',
-      uploadBtnId: 'detailUploadBtn_tf_salin',
-      downloadBtnId: 'detailDownloadBtn_tf_salin',
-      descId: 'detailDocDesc_tf_salin',
-      emptyDescAdmin: 'Belum diunggah. Unggah bukti transfer program Salin Aslimas.',
-      emptyDescUpz: 'Bukti transfer Salin Aslimas belum diunggah Admin.'
+      key: 'bsz_nama',
+      name: 'BSZ Per Nama',
+      rowId: 'detailDocRow_bsz_nama',
+      uploadBtnId: 'detailUploadBtn_bsz_nama',
+      downloadBtnId: 'detailDownloadBtn_bsz_nama',
+      descId: 'detailDocDesc_bsz_nama',
+      emptyDescAdmin: 'Belum diterbitkan. Unggah berkas BSZ per nama donatur (PDF/RAR).',
+      emptyDescUpz: 'Belum diterbitkan oleh Admin BAZNAS.'
     }
   ];
 
@@ -2190,13 +2170,13 @@ function updateDetailModalDocsSection(setoranId, isAdmin) {
     const uploadBtn = document.getElementById(cfg.uploadBtnId);
     const downloadBtn = document.getElementById(cfg.downloadBtnId);
 
-    if (doc && doc.file_name) {
+    if (doc && (doc.file_name || doc.file_path)) {
       if (rowEl) {
         rowEl.classList.remove('is-empty');
         rowEl.classList.add('is-uploaded');
         if (!isAdmin) {
           rowEl.classList.remove('admin-view');
-          rowEl.setAttribute('title', 'Klik untuk mengunduh ' + cfg.name);
+          rowEl.setAttribute('title', 'Klik untuk mengunduh ' + (doc.nama_bsz || cfg.name));
           rowEl.onclick = function (e) {
             if (e.target.closest('.detail-doc-actions')) return;
             downloadTransferDocFile(setoranId, cfg.key);
@@ -2207,20 +2187,20 @@ function updateDetailModalDocsSection(setoranId, isAdmin) {
           rowEl.onclick = null;
         }
       }
-      const ext = (doc.file_name.split('.').pop() || '').toUpperCase();
+      const ext = ((doc.file_name || '').split('.').pop() || 'PDF').toUpperCase();
+      const displayName = doc.nama_bsz || doc.file_name;
       if (descEl) {
-        descEl.innerHTML = `<span style="background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-right:6px;border:1px solid #bbf7d0;">${escapeHtml(ext)}</span> <strong>${escapeHtml(doc.file_name)}</strong>`;
+        descEl.innerHTML = `<span style="background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-right:6px;border:1px solid #bbf7d0;">${escapeHtml(ext)}</span> <strong>${escapeHtml(displayName)}</strong>${doc.nama_bsz && doc.file_name !== doc.nama_bsz ? ` <span style="font-size:11px;color:var(--slate-500);">(${escapeHtml(doc.file_name)})</span>` : ''}`;
       }
       if (downloadBtn) {
         if (!isAdmin) {
           downloadBtn.style.display = 'inline-flex';
           downloadBtn.disabled = false;
-          downloadBtn.className = 'btn btn-soft btn-sm btn-icon-only detail-doc-download-btn';
+          downloadBtn.className = 'btn btn-soft btn-sm detail-doc-download-btn';
           downloadBtn.style.opacity = '1';
           downloadBtn.style.cursor = 'pointer';
-          downloadBtn.setAttribute('title', 'Unduh ' + cfg.name);
-          downloadBtn.setAttribute('aria-label', 'Unduh ' + cfg.name);
-          downloadBtn.innerHTML = '<svg class="icon"><use href="#i-download"></use></svg>';
+          downloadBtn.setAttribute('title', 'Unduh ' + displayName);
+          downloadBtn.innerHTML = `<svg class="icon"><use href="#i-download"></use></svg><span>Unduh ${escapeHtml(cfg.name)}</span>`;
           downloadBtn.onclick = function (e) {
             e.stopPropagation();
             downloadTransferDocFile(setoranId, cfg.key);
@@ -2234,8 +2214,7 @@ function updateDetailModalDocsSection(setoranId, isAdmin) {
         if (isAdmin) {
           uploadBtn.style.display = 'inline-flex';
           uploadBtn.setAttribute('title', 'Ganti Berkas ' + cfg.name);
-          uploadBtn.setAttribute('aria-label', 'Ganti Berkas ' + cfg.name);
-          uploadBtn.innerHTML = '<svg class="icon"><use href="#i-upload"></use></svg>';
+          uploadBtn.innerHTML = `<svg class="icon"><use href="#i-upload"></use></svg><span>Ganti ${escapeHtml(cfg.name)}</span>`;
           uploadBtn.onclick = function (e) {
             e.stopPropagation();
             openUploadDocModal(setoranId, cfg.key);
@@ -2260,12 +2239,11 @@ function updateDetailModalDocsSection(setoranId, isAdmin) {
         if (!isAdmin) {
           downloadBtn.style.display = 'inline-flex';
           downloadBtn.disabled = true;
-          downloadBtn.className = 'btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled';
-          downloadBtn.style.opacity = '0.35';
+          downloadBtn.className = 'btn btn-soft btn-sm detail-doc-download-btn btn-disabled';
+          downloadBtn.style.opacity = '0.4';
           downloadBtn.style.cursor = 'not-allowed';
           downloadBtn.setAttribute('title', 'Belum diunggah oleh admin');
-          downloadBtn.setAttribute('aria-label', 'Belum diunggah oleh admin');
-          downloadBtn.innerHTML = '<svg class="icon"><use href="#i-download"></use></svg>';
+          downloadBtn.innerHTML = `<svg class="icon"><use href="#i-download"></use></svg><span>Unduh ${escapeHtml(cfg.name)}</span>`;
           downloadBtn.onclick = null;
         } else {
           downloadBtn.style.display = 'none';
@@ -2276,8 +2254,7 @@ function updateDetailModalDocsSection(setoranId, isAdmin) {
         if (isAdmin) {
           uploadBtn.style.display = 'inline-flex';
           uploadBtn.setAttribute('title', 'Upload ' + cfg.name);
-          uploadBtn.setAttribute('aria-label', 'Upload ' + cfg.name);
-          uploadBtn.innerHTML = '<svg class="icon"><use href="#i-upload"></use></svg>';
+          uploadBtn.innerHTML = `<svg class="icon"><use href="#i-upload"></use></svg><span>Upload ${escapeHtml(cfg.name)}</span>`;
           uploadBtn.onclick = function (e) {
             e.stopPropagation();
             openUploadDocModal(setoranId, cfg.key);
@@ -2846,11 +2823,6 @@ function renderAdminSetoran(setoran) {
     const status = String(item.status || 'menunggu').toLowerCase();
     const namaUpz = (item.upz_id && upzMap[item.upz_id]) ? upzMap[item.upz_id] : (item.upz_id || '-');
     const isPending = status === 'menunggu';
-
-    const bsz = (typeof getBszRecord === 'function') ? getBszRecord(id) : null;
-    const bszLabel = bsz ? 'BSZ ✓ (Lihat / Ganti)' : 'Upload BSZ';
-    const bszIcon = bsz ? '#i-check' : '#i-upload';
-    const bszIconStyle = bsz ? 'color:var(--emerald-600);' : '';
 
     return `<article class="riwayat-item admin-riwayat-item" data-admin-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div><strong>${escapeHtml(namaUpz)}</strong></div><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div></div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions admin-row-actions"><button type="button" class="btn btn-soft btn-sm btn-icon-only history-preview-button" data-preview-id="${id}" title="Rincian Setoran" aria-label="Rincian Setoran"><svg class="icon"><use href="#i-file-text"></use></svg></button></div></div>${isPending ? `<div class="admin-verify-inline"><label for="catatan-${id}">Catatan verifikasi</label><textarea id="catatan-${id}" class="admin-catatan" data-catatan-id="${id}" rows="2" placeholder="Catatan wajib diisi jika ditolak."></textarea><div class="verify-actions"><button type="button" class="admin-verify-button btn btn-primary" data-keputusan="diterima" data-setoran-id="${id}">Terima</button><button type="button" class="admin-verify-button btn btn-danger" data-keputusan="ditolak" data-setoran-id="${id}">Tolak</button></div></div>` : ''}</article>`;
   }).join('') + renderPagination('admin', adminCurrentPage, totalPages);
@@ -7609,10 +7581,11 @@ function initDeleteSetoranFeature() {
         const { data: { session } } = await supabaseClient.auth.getSession();
         const token = session ? session.access_token : '';
 
+        const filePath = (pendingDeleteSetoranItem && pendingDeleteSetoranItem.file_path) ? pendingDeleteSetoranItem.file_path : '';
         const res = await fetch('/api/delete-setoran', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: token, setoran_id: setoranId })
+          body: JSON.stringify({ token: token, setoran_id: setoranId, file_path: filePath })
         });
 
         const resJson = await res.json();
@@ -7841,15 +7814,16 @@ function closePreviewFotoModal() {
 
 // 6c. Upload helper for Pentasharufan (via /api/upload-penta ke bucket 'pentasharufan')
 async function uploadPentaFile(file, subfolder, upzId) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = () => {
-      resolve({ filePath: '', publicUrl: '', originalName: file.name });
+      reject(new Error('Gagal membaca file ' + file.name));
     };
     reader.onload = async function (e) {
       const dataUrl = e.target.result;
       const base64 = typeof dataUrl === 'string' && dataUrl.includes(',') ? dataUrl.split(',')[1] : '';
 
+      // 1. Coba upload via endpoint /api/upload-penta (menggunakan server/service role key)
       try {
         const res = await fetch('/api/upload-penta', {
           method: 'POST',
@@ -7865,46 +7839,58 @@ async function uploadPentaFile(file, subfolder, upzId) {
 
         if (res.ok) {
           const json = await res.json();
-          if (json.success && json.publicUrl) {
+          if (json.success && (json.publicUrl || json.signedUrl || json.filePath)) {
             return resolve({
               filePath: json.filePath,
-              publicUrl: json.publicUrl,
+              publicUrl: json.publicUrl || json.signedUrl,
               originalName: file.name
             });
           }
         }
       } catch (netErr) {
-        console.warn('API /api/upload-penta network warning:', netErr);
+        console.warn('API /api/upload-penta network notice:', netErr);
       }
 
-      // Fallback direct upload ke bucket pentasharufan Supabase
+      // 2. Fallback direct upload ke bucket pentasharufan Supabase
       const ext = file.name.split('.').pop() || 'dat';
       const cleanBase = file.name.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 30);
-      const filePath = `pentasharufan/${upzId || 'umum'}/${subfolder}/${Date.now()}_${cleanBase}.${ext}`;
+      const safeUpz = (upzId || 'umum').replace(/[^a-zA-Z0-9_-]/g, '_');
+      const filePath = `${safeUpz}/${subfolder}/${Date.now()}_${cleanBase}.${ext}`;
 
+      let directSuccess = false;
+      let directErr = null;
       try {
-        await supabaseClient.storage
+        const { error: upErr } = await supabaseClient.storage
           .from('pentasharufan')
           .upload(filePath, file, { cacheControl: '3600', upsert: true });
+        if (!upErr) directSuccess = true;
+        else directErr = upErr;
       } catch (storageErr) {
-        console.warn('Storage upload exception:', storageErr);
+        directErr = storageErr;
       }
 
       let signedFallbackUrl = '';
-      try {
-        const { data: signData } = await supabaseClient.storage
-          .from('pentasharufan')
-          .createSignedUrl(filePath, 604800);
-        if (signData && signData.signedUrl) signedFallbackUrl = signData.signedUrl;
-      } catch (_) {}
+      if (directSuccess) {
+        try {
+          const { data: signData } = await supabaseClient.storage
+            .from('pentasharufan')
+            .createSignedUrl(filePath, 604800);
+          if (signData && signData.signedUrl) signedFallbackUrl = signData.signedUrl;
+        } catch (_) {}
+      }
 
-      const pubUrl = signedFallbackUrl || (subfolder === 'foto' ? dataUrl : `/api/penta-file?path=${encodeURIComponent(filePath)}`);
+      if (directSuccess) {
+        const pubUrl = signedFallbackUrl || (subfolder === 'foto' ? dataUrl : `/api/penta-file?path=${encodeURIComponent(filePath)}`);
+        return resolve({
+          filePath: filePath,
+          publicUrl: pubUrl,
+          originalName: file.name
+        });
+      }
 
-      resolve({
-        filePath: filePath,
-        publicUrl: pubUrl,
-        originalName: file.name
-      });
+      // Beri notifikasi jelas jika upload gagal
+      const errMsg = directErr ? (directErr.message || directErr.error_description || String(directErr)) : 'Gagal menghubungi server storage';
+      reject(new Error(`Gagal mengunggah berkas ${file.name}: ${errMsg}. Pastikan izin bucket pentasharufan tersedia.`));
     };
     reader.readAsDataURL(file);
   });
@@ -7995,7 +7981,8 @@ function initPentasharufanFeature() {
   const pentaMessage = document.getElementById('pentaMessage');
   const pentaSubmitBtn = document.getElementById('pentaSubmitBtn');
 
-  if (pentaForm) {
+  if (pentaForm && !pentaForm.dataset.bound) {
+    pentaForm.dataset.bound = 'true';
     pentaForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
@@ -8050,11 +8037,7 @@ function initPentasharufanFeature() {
         // 1. Upload Excel
         const uploadedExcel = await uploadPentaFile(excelFile, 'excel', upzId);
 
-        // 2. Upload Foto & generate data URL as resilient fallback
-        let photoDataUrl = '';
-        if (pentaFotoImg && pentaFotoImg.src && pentaFotoImg.src.startsWith('data:')) {
-          photoDataUrl = pentaFotoImg.src;
-        }
+        // 2. Upload Foto
         const uploadedFoto = await uploadPentaFile(fotoFile, 'foto', upzId);
 
         const pentaRecord = {
@@ -8072,8 +8055,7 @@ function initPentasharufanFeature() {
           file_excel_url: uploadedExcel.publicUrl,
           file_foto_name: fotoFile.name,
           file_foto_path: uploadedFoto.filePath,
-          file_foto_url: uploadedFoto.publicUrl || photoDataUrl,
-          photo_fallback: photoDataUrl,
+          file_foto_url: uploadedFoto.publicUrl || '',
           status: 'menunggu',
           catatan_admin: ''
         };
@@ -8263,19 +8245,56 @@ let upzPentaChartInstance = null;
 let cachedAllUpzListRkat = [];
 
 async function fetchRkatConfig() {
+  let loaded = false;
   try {
     const res = await fetch('/api/rkat-config');
     if (res.ok) {
       const json = await res.json();
       if (json.success && json.data) {
         cachedRkatConfig = json.data;
-        if (typeof refreshActiveGuide === 'function') {
-          refreshActiveGuide();
-        }
+        loaded = true;
       }
     }
   } catch (err) {
-    console.warn('fetchRkatConfig warning:', err);
+    console.warn('fetchRkatConfig network notice:', err);
+  }
+
+  // Fallback direct Supabase audit_logs jika endpoint backend belum mengembalikan data
+  if (!loaded || !cachedRkatConfig || !cachedRkatConfig.upz_settings || !Object.keys(cachedRkatConfig.upz_settings).length) {
+    try {
+      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+        const { data: logs, error } = await supabaseClient
+          .from('audit_logs')
+          .select('description, created_at')
+          .eq('module', 'rkat_config')
+          .order('created_at', { ascending: true });
+
+        if (!error && Array.isArray(logs) && logs.length > 0) {
+          if (!cachedRkatConfig) {
+            cachedRkatConfig = { default: { persen_penta: 35, persen_amil: 5, tagihan_salin: 0 }, upz_settings: {} };
+          }
+          if (!cachedRkatConfig.upz_settings) cachedRkatConfig.upz_settings = {};
+
+          logs.forEach(l => {
+            try {
+              const p = typeof l.description === 'string' ? JSON.parse(l.description) : l.description;
+              if (p && p.upz_id) {
+                cachedRkatConfig.upz_settings[p.upz_id] = Object.assign(
+                  cachedRkatConfig.upz_settings[p.upz_id] || {},
+                  p
+                );
+              }
+            } catch (_) {}
+          });
+        }
+      }
+    } catch (sbErr) {
+      console.warn('Direct Supabase rkat_config fallback notice:', sbErr);
+    }
+  }
+
+  if (typeof refreshActiveGuide === 'function') {
+    refreshActiveGuide();
   }
   return cachedRkatConfig;
 }
@@ -8295,7 +8314,12 @@ function getUpzRkatSetting(upzId) {
     const keys = Object.keys(cachedRkatConfig.upz_settings);
     for (let k of keys) {
       const item = cachedRkatConfig.upz_settings[k];
-      if (item && (item.upz_id === upzId || String(k).toLowerCase() === String(upzId).toLowerCase() || (item.nama_upz && String(item.nama_upz).toLowerCase() === String(upzId).toLowerCase()))) {
+      if (item && (
+        item.upz_id === upzId ||
+        String(k).toLowerCase() === String(upzId).toLowerCase() ||
+        (item.nama_upz && String(item.nama_upz).toLowerCase() === String(upzId).toLowerCase()) ||
+        (item.kode_upz && String(item.kode_upz).toLowerCase() === String(upzId).toLowerCase())
+      )) {
         found = item;
         break;
       }
@@ -8782,11 +8806,21 @@ async function initAdminRkatManagement() {
   const toggleBtn = document.getElementById('adminRkatToggleLockBtn');
   if (toggleBtn && !toggleBtn.dataset.bound) {
     toggleBtn.dataset.bound = 'true';
-    toggleBtn.addEventListener('click', function () {
+    toggleBtn.addEventListener('click', async function () {
       const selectedId = upzSelect.value;
-      if (!selectedId) return;
+      if (!selectedId) {
+        showMessage(msgEl, 'Pilih UPZ terlebih dahulu.', '#d93025');
+        return;
+      }
       const current = toggleBtn.dataset.unlocked === 'true';
-      updateAdminRkatStatusDisplay(!current, new Date().getFullYear());
+      const targetState = !current;
+      const currentYear = new Date().getFullYear();
+      updateAdminRkatStatusDisplay(targetState, targetState ? currentYear : null);
+
+      // Otomatis simpan perubahan gembok saat tombol diklik agar langsung tersimpan ke database
+      if (saveBtn) {
+        saveBtn.click();
+      }
     });
   }
 
@@ -8821,6 +8855,7 @@ async function initAdminRkatManagement() {
       saveBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Menyimpan...';
       showMessage(msgEl, 'Menyimpan pengaturan UPZ...', '#0f6c3e');
 
+      let saved = false;
       try {
         const { data: { session } } = await supabaseClient.auth.getSession();
         const token = session ? session.access_token : '';
@@ -8839,18 +8874,49 @@ async function initAdminRkatManagement() {
           })
         });
 
-        const json = await res.json();
-        if (!res.ok || !json.success) throw new Error(json.message || 'Gagal menyimpan.');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success) saved = true;
+        }
+      } catch (apiErr) {
+        console.warn('API /api/save-rkat-config notice:', apiErr);
+      }
 
+      // Direct Supabase fallback jika backend API belum terhubung
+      if (!saved && typeof supabaseClient !== 'undefined') {
+        try {
+          const sPayload = {
+            upz_id: selectedId,
+            nama_upz: u ? (u.nama_upz || u.nama_lengkap) : '',
+            rkat_unlocked: isUnlocked,
+            unlocked_year: isUnlocked ? currentYear : null,
+            persen_penta: pPenta,
+            persen_amil: pAmil,
+            tagihan_salin: tSalin,
+            updated_at: new Date().toISOString()
+          };
+          const { error: insErr } = await supabaseClient.from('audit_logs').insert([{
+            action: 'UPDATE_RKAT_CONFIG',
+            module: 'rkat_config',
+            reference_id: isUuid(selectedId) ? selectedId : null,
+            description: JSON.stringify(sPayload)
+          }]);
+          if (!insErr) saved = true;
+        } catch (sbErr) {
+          console.warn('Supabase audit_logs direct insert notice:', sbErr);
+        }
+      }
+
+      if (saved) {
         showMessage(msgEl, 'Pengaturan RKAT & alokasi berhasil disimpan!', '#16a34a');
         await fetchRkatConfig();
         renderAdminRkatTable(document.getElementById('adminRkatSearchTable') ? document.getElementById('adminRkatSearchTable').value.toLowerCase().trim() : '');
-      } catch (err) {
-        showMessage(msgEl, 'Error: ' + err.message, '#d93025');
-      } finally {
-        saveBtn.disabled = false;
-        saveBtn.innerHTML = '<svg class="icon"><use href="#i-check"></use></svg> Simpan Pengaturan UPZ';
+      } else {
+        showMessage(msgEl, 'Gagal menyimpan pengaturan RKAT. Silakan coba lagi.', '#d93025');
       }
+
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = '<svg class="icon"><use href="#i-check"></use></svg> Simpan Pengaturan UPZ';
     });
   }
 
@@ -8931,10 +8997,11 @@ function renderAdminRkatTable(filterText = '') {
       btn.disabled = true;
       btn.textContent = '...';
 
+      let saved = false;
       try {
         const { data: { session } } = await supabaseClient.auth.getSession();
         const token = session ? session.access_token : '';
-        await fetch('/api/save-rkat-config', {
+        const res = await fetch('/api/save-rkat-config', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -8948,15 +9015,44 @@ function renderAdminRkatTable(filterText = '') {
             tagihan_salin: setting.tagihan_salin
           })
         });
-        await fetchRkatConfig();
-        renderAdminRkatTable(filterText);
-
-        const upzSelect = document.getElementById('adminRkatSelectUpz');
-        if (upzSelect && upzSelect.value === upzId) {
-          updateAdminRkatStatusDisplay(targetState, targetState ? currentYear : null);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success) saved = true;
         }
       } catch (err) {
-        console.error('Quick toggle error:', err);
+        console.warn('Quick toggle fetch notice:', err);
+      }
+
+      if (!saved && typeof supabaseClient !== 'undefined') {
+        try {
+          const sPayload = {
+            upz_id: upzId,
+            nama_upz: u ? (u.nama_upz || u.nama_lengkap) : '',
+            rkat_unlocked: targetState,
+            unlocked_year: targetState ? currentYear : null,
+            persen_penta: setting.persen_penta,
+            persen_amil: setting.persen_amil,
+            tagihan_salin: setting.tagihan_salin,
+            updated_at: new Date().toISOString()
+          };
+          const { error: insErr } = await supabaseClient.from('audit_logs').insert([{
+            action: 'UPDATE_RKAT_CONFIG',
+            module: 'rkat_config',
+            reference_id: isUuid(upzId) ? upzId : null,
+            description: JSON.stringify(sPayload)
+          }]);
+          if (!insErr) saved = true;
+        } catch (sbErr) {
+          console.warn('Quick toggle direct Supabase notice:', sbErr);
+        }
+      }
+
+      await fetchRkatConfig();
+      renderAdminRkatTable(filterText);
+
+      const upzSelect = document.getElementById('adminRkatSelectUpz');
+      if (upzSelect && upzSelect.value === upzId) {
+        updateAdminRkatStatusDisplay(targetState, targetState ? currentYear : null);
       }
     });
   });
@@ -8984,57 +9080,87 @@ async function loadUpzPentasharufan() {
   const myUpzId = currentProfile ? currentProfile.upz_id : null;
   const myNamaUpz = currentProfile ? (currentProfile.nama_upz || currentProfile.nama_lengkap) : null;
 
-  // Gabungkan dari endpoint backend /api/penta-list, audit_logs, dan localStorage
-  let records = getLocalPentaRecords();
+  const recordsMap = new Map();
 
+  // 1. Ambil dari endpoint backend /api/penta-list (Single Source of Truth)
   try {
     const res = await fetch('/api/penta-list');
     if (res.ok) {
       const json = await res.json();
-      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+      if (json.success && Array.isArray(json.data)) {
+        // Sinkronisasi: jika admin menghapus permohonan, hapus dari cache lokal UPZ
+        const serverIds = new Set(json.data.map(function (r) { return String(r.id); }));
+        const localList = getLocalPentaRecords();
+        localList.forEach(function (l) {
+          if (l && l.id && !serverIds.has(String(l.id))) {
+            deleteLocalPentaRecord(l.id);
+          }
+        });
+        if (json.data.length === 0) {
+          localStorage.removeItem(LOCAL_PENTA_KEY);
+        }
+
         json.data.forEach(function (rec) {
-          const idx = records.findIndex(function (r) { return r.id === rec.id; });
-          if (idx >= 0) {
-            records[idx] = Object.assign({}, records[idx], rec);
-          } else {
-            records.push(rec);
+          if (rec && rec.id && (rec.nama_upz || rec.nominal || rec.jenis_program)) {
+            recordsMap.set(rec.id, rec);
+            saveLocalPentaRecord(rec);
           }
         });
       }
     }
   } catch (apiErr) {
     console.warn('Fetch /api/penta-list warning:', apiErr);
+    // Hanya jika network offline sama sekali, fallback ke localStorage
+    const localList = getLocalPentaRecords();
+    localList.forEach(function (rec) {
+      if (rec && rec.id && !recordsMap.has(rec.id) && (rec.nama_upz || rec.nominal || rec.jenis_program)) {
+        recordsMap.set(rec.id, rec);
+      }
+    });
   }
 
+  // 3. Sinkronkan dengan Supabase audit_logs (urutan asc)
   try {
-    const { data, error } = await supabaseClient
+    const { data: logs, error } = await supabaseClient
       .from('audit_logs')
       .select('*')
       .eq('module', 'pentasharufan')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: true });
 
-    if (!error && data && data.length > 0) {
-      data.forEach(function (log) {
+    if (!error && Array.isArray(logs) && logs.length > 0) {
+      logs.forEach(function (log) {
         try {
-          const parsed = JSON.parse(log.description);
-          if (parsed && parsed.id) {
-            const idx = records.findIndex(function (r) { return r.id === parsed.id; });
-            if (idx >= 0) {
-              if (parsed.status) records[idx].status = parsed.status;
-              if (parsed.catatan_admin !== undefined) records[idx].catatan_admin = parsed.catatan_admin;
-            } else {
-              records.push(parsed);
-            }
+          const parsed = typeof log.description === 'string' ? JSON.parse(log.description) : log.description;
+          if (!parsed || !parsed.id) return;
+
+          if (log.action === 'PENTASHARUFAN_DELETE') {
+            recordsMap.delete(parsed.id);
+            deleteLocalPentaRecord(parsed.id);
+            return;
           }
-        } catch (e) {}
+
+          if (log.action === 'PENTASHARUFAN_SUBMIT') {
+            if (parsed.nama_upz || parsed.nominal || parsed.jenis_program) {
+              recordsMap.set(parsed.id, parsed);
+            }
+            return;
+          }
+
+          if (recordsMap.has(parsed.id)) {
+            const current = recordsMap.get(parsed.id);
+            if (parsed.status) current.status = parsed.status;
+            if (parsed.catatan_admin !== undefined) current.catatan_admin = parsed.catatan_admin;
+          }
+        } catch (_) {}
       });
     }
   } catch (err) {
     console.warn('Fetch pentasharufan logs error:', err);
   }
 
-  // Filter khusus UPZ yang login
-  const myRecords = records.filter(function (r) {
+  // Filter khusus UPZ yang login dan pastikan record valid
+  const myRecords = Array.from(recordsMap.values()).filter(function (r) {
+    if (!r || !r.id || (!r.nama_upz && !r.nominal && !r.jenis_program)) return false;
     if (myUpzId && String(r.upz_id) === String(myUpzId)) return true;
     if (myNamaUpz && String(r.nama_upz || '').toLowerCase().trim() === String(myNamaUpz).toLowerCase().trim()) return true;
     return false;
@@ -9137,20 +9263,17 @@ async function loadAdminPentasharufan() {
   const container = document.getElementById('adminPentaTableContainer');
   if (!container) return;
 
-  // Gabungkan dari endpoint backend /api/penta-list, audit_logs, dan localStorage
-  let records = getLocalPentaRecords();
+  const recordsMap = new Map();
 
+  // 1. Ambil dari endpoint backend /api/penta-list
   try {
     const res = await fetch('/api/penta-list');
     if (res.ok) {
       const json = await res.json();
-      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+      if (json.success && Array.isArray(json.data)) {
         json.data.forEach(function (rec) {
-          const idx = records.findIndex(function (r) { return r.id === rec.id; });
-          if (idx >= 0) {
-            records[idx] = Object.assign({}, records[idx], rec);
-          } else {
-            records.push(rec);
+          if (rec && rec.id && (rec.nama_upz || rec.nominal || rec.jenis_program)) {
+            recordsMap.set(rec.id, rec);
           }
         });
       }
@@ -9159,36 +9282,52 @@ async function loadAdminPentasharufan() {
     console.warn('Fetch /api/penta-list warning:', apiErr);
   }
 
+  // 2. Sinkronkan dengan Supabase audit_logs (urutan asc)
   try {
-    const { data, error } = await supabaseClient
+    const { data: logs, error } = await supabaseClient
       .from('audit_logs')
       .select('*')
       .eq('module', 'pentasharufan')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: true });
 
-    if (!error && data && data.length > 0) {
-      data.forEach(function (log) {
+    if (!error && Array.isArray(logs) && logs.length > 0) {
+      logs.forEach(function (log) {
         try {
-          const parsed = JSON.parse(log.description);
-          if (parsed && parsed.id) {
-            const idx = records.findIndex(function (r) { return r.id === parsed.id; });
-            if (idx >= 0) {
-              if (parsed.status) records[idx].status = parsed.status;
-              if (parsed.catatan_admin !== undefined) records[idx].catatan_admin = parsed.catatan_admin;
-            } else {
-              records.push(parsed);
-            }
+          const parsed = typeof log.description === 'string' ? JSON.parse(log.description) : log.description;
+          if (!parsed || !parsed.id) return;
+
+          // Hapus jika di-delete admin
+          if (log.action === 'PENTASHARUFAN_DELETE') {
+            recordsMap.delete(parsed.id);
+            return;
           }
-        } catch (e) {}
+
+          // Tambah submit baru hanya jika valid
+          if (log.action === 'PENTASHARUFAN_SUBMIT') {
+            if (parsed.nama_upz || parsed.nominal || parsed.jenis_program) {
+              recordsMap.set(parsed.id, parsed);
+            }
+            return;
+          }
+
+          // Update status permohonan
+          if (recordsMap.has(parsed.id)) {
+            const current = recordsMap.get(parsed.id);
+            if (parsed.status) current.status = parsed.status;
+            if (parsed.catatan_admin !== undefined) current.catatan_admin = parsed.catatan_admin;
+          }
+        } catch (_) {}
       });
     }
   } catch (err) {
     console.warn('Fetch admin pentasharufan logs error:', err);
   }
 
-  cachedAdminPentaRecords = records.sort(function (a, b) {
-    return new Date(b.created_at || 0) - new Date(a.created_at || 0);
-  });
+  cachedAdminPentaRecords = Array.from(recordsMap.values())
+    .filter(function (r) { return r && r.id && (r.nama_upz || r.nominal || r.jenis_program); })
+    .sort(function (a, b) {
+      return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    });
 
   // Populate Filter UPZ
   const upzSelect = document.getElementById('adminPentaFilterUpz');
@@ -9466,16 +9605,30 @@ function initDeletePentaFeature() {
   if (closeX) closeX.addEventListener('click', closeDeletePentaModal);
   if (cancelBtn) cancelBtn.addEventListener('click', closeDeletePentaModal);
   if (execBtn) {
-    execBtn.addEventListener('click', function () {
+    execBtn.addEventListener('click', async function () {
       if (!pendingDeletePentaId) return;
       const id = pendingDeletePentaId;
       deleteLocalPentaRecord(id);
       cachedAdminPentaRecords = cachedAdminPentaRecords.filter(function (r) { return String(r.id) !== String(id); });
-      fetch('/api/delete-penta', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: id, admin_id: currentProfile ? currentProfile.id : null })
-      }).catch(function (e) { console.warn('Delete penta notice:', e); });
+      try {
+        await fetch('/api/delete-penta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: id, admin_id: currentProfile ? currentProfile.id : null })
+        });
+      } catch (e) {
+        console.warn('Delete penta notice:', e);
+        try {
+          if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+            await supabaseClient.from('audit_logs').insert([{
+              action: 'PENTASHARUFAN_DELETE',
+              module: 'pentasharufan',
+              user_id: currentProfile ? currentProfile.id : null,
+              description: JSON.stringify({ id: id })
+            }]);
+          }
+        } catch (_) {}
+      }
       updateAdminPentaScorecards(cachedAdminPentaRecords);
       filterAndRenderAdminPentaTable();
       closeDeletePentaModal();
@@ -9484,6 +9637,16 @@ function initDeletePentaFeature() {
       }
     });
   }
+
+  // Multi-tab sync: update UPZ view jika admin menghapus di tab lain
+  window.addEventListener('storage', function (e) {
+    if (e.key === LOCAL_PENTA_KEY) {
+      const upzView = document.getElementById('upzViewPentasharufan');
+      if (upzView && !upzView.classList.contains('hidden')) {
+        if (typeof loadUpzPentasharufan === 'function') loadUpzPentasharufan();
+      }
+    }
+  });
 }
 
 // ======================================================================
@@ -9599,42 +9762,54 @@ function getBszRecord(setoranId) {
 
 function getTransferDocRecord(setoranId, docType) {
   if (!setoranId || !docType) return null;
-  if (docType === 'bsz') {
-    return getBszRecord(setoranId);
+  const sDocs = transferDocsRecords[String(setoranId)] || {};
+  if (sDocs[docType]) return sDocs[docType];
+
+  const bszObj = bszRecords[String(setoranId)];
+  if (bszObj) {
+    if (bszObj[docType]) return bszObj[docType];
+    if (docType === 'bsz_upz' || docType === 'bsz') {
+      if (bszObj.bsz_upz) return bszObj.bsz_upz;
+      if (bszObj.file_name) return bszObj;
+    }
+    if (docType === 'bsz_nama' && bszObj.bsz_nama) return bszObj.bsz_nama;
   }
-  const sDocs = transferDocsRecords[String(setoranId)];
-  return (sDocs && sDocs[docType]) ? sDocs[docType] : null;
+  return null;
 }
 
 function openUploadDocModal(setoranId, docType) {
-  docType = docType || 'bsz';
+  docType = docType || 'bsz_upz';
   const modal = document.getElementById('uploadBszModal');
   if (!modal) return;
   const item = (currentAdminSetoran || []).concat(currentSetoran || []).find(function (s) { return String(s.id) === String(setoranId); });
   const upzName = (item && ((upzMap && upzMap[item.upz_id]) || item.nama_upz || item.upz_id)) || 'UPZ';
 
-  const titles = {
-    bsz: { title: 'Unggah Bukti Setor Zakat (BSZ)', sub: 'Unggah berkas resmi BSZ untuk UPZ', label: 'Pilih Berkas BSZ (PDF / JPG / PNG):' },
-    tf_penta: { title: 'Unggah Bukti Transfer Pentasharufan', sub: 'Unggah bukti transfer perbantuan pentasharufan untuk UPZ', label: 'Pilih Bukti Transfer Pentasharufan (PDF / JPG / PNG):' },
-    tf_amil: { title: 'Unggah Bukti Transfer Hak Amil', sub: 'Unggah bukti transfer hak amil (5%) ke rekening UPZ', label: 'Pilih Bukti Transfer Hak Amil (PDF / JPG / PNG):' },
-    tf_salin: { title: 'Unggah Bukti Transfer Salin Aslimas', sub: 'Unggah bukti transfer program Salin Aslimas', label: 'Pilih Bukti Transfer Salin Aslimas (PDF / JPG / PNG):' }
-  };
-  const tInfo = titles[docType] || titles.bsz;
+  const isPerNama = (docType === 'bsz_nama');
+  const typeTitle = isPerNama ? 'BSZ Per Nama' : 'BSZ UPZ';
 
   const titleEl = document.getElementById('uploadBszModalTitle');
-  if (titleEl) titleEl.textContent = tInfo.title;
+  if (titleEl) titleEl.textContent = 'Unggah ' + typeTitle;
 
   const subEl = document.getElementById('uploadBszModalSubtitle');
-  if (subEl) subEl.textContent = `${tInfo.sub} • ${upzName} (${item ? formatRupiah(item.nominal) : ''})`;
+  if (subEl) subEl.textContent = isPerNama
+    ? `Unggah berkas resmi BSZ per nama donatur/muzakki • ${upzName}`
+    : `Unggah berkas resmi BSZ lembaga UPZ • ${upzName}`;
 
   const labelEl = document.getElementById('uploadDocFileLabel');
-  if (labelEl) labelEl.textContent = tInfo.label;
+  if (labelEl) labelEl.textContent = `Pilih Berkas ${typeTitle} (PDF / RAR):`;
 
   const idInput = document.getElementById('uploadBszSetoranId');
   if (idInput) idInput.value = setoranId;
 
   const typeInput = document.getElementById('uploadDocType');
   if (typeInput) typeInput.value = docType;
+
+  const customNameInput = document.getElementById('inputBszCustomName');
+  const existing = getTransferDocRecord(setoranId, docType);
+  if (customNameInput) {
+    customNameInput.value = (existing && (existing.nama_bsz || existing.file_name)) ? (existing.nama_bsz || existing.file_name) : '';
+    customNameInput.placeholder = isPerNama ? 'Contoh: BSZ Donatur Perorangan - UPZ ...' : 'Contoh: BSZ Lembaga UPZ Periode ...';
+  }
 
   const fileInput = document.getElementById('inputBszFile');
   if (fileInput) fileInput.value = '';
@@ -9643,11 +9818,12 @@ function openUploadDocModal(setoranId, docType) {
   if (msgEl) { msgEl.textContent = ''; msgEl.className = 'form-message'; }
 
   const currentNotice = document.getElementById('uploadBszCurrentFileNotice');
-  const existing = getTransferDocRecord(setoranId, docType);
   if (currentNotice) {
     if (existing && existing.file_name) {
+      const ext = (existing.file_name.split('.').pop() || 'PDF').toUpperCase();
+      const displayName = existing.nama_bsz || existing.file_name;
       currentNotice.classList.remove('hidden');
-      currentNotice.innerHTML = `<strong>Berkas Saat Ini:</strong> ${escapeHtml(existing.file_name)} <span style="color:var(--slate-500);font-size:11px;">(${new Date(existing.uploaded_at).toLocaleDateString('id-ID')})</span> <a href="javascript:void(0)" id="previewCurrentDocLink" style="margin-left:8px;color:var(--primary);font-weight:600;">Lihat / Unduh</a>`;
+      currentNotice.innerHTML = `<strong>Berkas Saat Ini:</strong> [${escapeHtml(ext)}] ${escapeHtml(displayName)} <span style="color:var(--slate-500);font-size:11px;">(${new Date(existing.uploaded_at).toLocaleDateString('id-ID')})</span> <a href="javascript:void(0)" id="previewCurrentDocLink" style="margin-left:8px;color:var(--primary);font-weight:600;">Lihat / Unduh</a>`;
       const prevLink = document.getElementById('previewCurrentDocLink');
       if (prevLink) {
         prevLink.addEventListener('click', function () {
@@ -9662,14 +9838,14 @@ function openUploadDocModal(setoranId, docType) {
 
   const btnText = document.getElementById('saveUploadBszBtnText');
   if (btnText) {
-    btnText.textContent = existing ? 'Perbarui Berkas' : 'Simpan & Unggah Berkas';
+    btnText.textContent = existing ? `Perbarui ${typeTitle}` : `Simpan & Terbitkan ${typeTitle}`;
   }
 
   modal.classList.remove('hidden');
 }
 
 function openUploadBszModal(setoranId) {
-  return openUploadDocModal(setoranId, 'bsz');
+  return openUploadDocModal(setoranId, 'bsz_upz');
 }
 
 function closeUploadBszModal() {
@@ -9678,19 +9854,25 @@ function closeUploadBszModal() {
 }
 
 async function downloadTransferDocFile(setoranId, docType) {
-  docType = docType || 'bsz';
+  docType = docType || 'bsz_upz';
   const doc = getTransferDocRecord(setoranId, docType);
   if (!doc) {
-    if (typeof showToast === 'function') showToast('Berkas belum tersedia untuk transaksi ini.', 'warning');
-    else alert('Berkas belum tersedia.');
+    if (typeof showToast === 'function') showToast('Berkas BSZ belum tersedia untuk transaksi ini.', 'warning');
+    else alert('Berkas BSZ belum tersedia.');
     return;
+  }
+
+  const rawExt = (doc.file_name ? doc.file_name.split('.').pop() : 'pdf').toLowerCase();
+  let downloadName = doc.nama_bsz || doc.file_name || `BSZ_${setoranId.slice(0, 8)}.${rawExt}`;
+  if (!downloadName.toLowerCase().endsWith('.' + rawExt)) {
+    downloadName += '.' + rawExt;
   }
 
   // 1. Jika ada file_data (base64 data url), unduh langsung
   if (doc.file_data && doc.file_data.startsWith('data:')) {
     const link = document.createElement('a');
     link.href = doc.file_data;
-    link.download = doc.file_name || `${docType}_${setoranId.slice(0, 8)}.pdf`;
+    link.download = downloadName;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -9705,7 +9887,7 @@ async function downloadTransferDocFile(setoranId, docType) {
         const blobUrl = URL.createObjectURL(fileBlob);
         const link = document.createElement('a');
         link.href = blobUrl;
-        link.download = doc.file_name || `${docType}_${setoranId.slice(0, 8)}.pdf`;
+        link.download = downloadName;
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -9721,7 +9903,7 @@ async function downloadTransferDocFile(setoranId, docType) {
 }
 
 function downloadBszFile(setoranId) {
-  return downloadTransferDocFile(setoranId, 'bsz');
+  return downloadTransferDocFile(setoranId, 'bsz_upz');
 }
 
 function initBszUploadFeature() {
@@ -9730,6 +9912,7 @@ function initBszUploadFeature() {
   const closeBtn = document.getElementById('closeUploadBszBtn');
   const saveBtn = document.getElementById('saveUploadBszBtn');
   const fileInput = document.getElementById('inputBszFile');
+  const customNameInput = document.getElementById('inputBszCustomName');
   const idInput = document.getElementById('uploadBszSetoranId');
   const typeInput = document.getElementById('uploadDocType');
   const msgEl = document.getElementById('uploadBszMsg');
@@ -9742,10 +9925,20 @@ function initBszUploadFeature() {
     });
   }
 
+  // Auto-fill nama BSZ jika nama masih kosong saat memilih file
+  if (fileInput && customNameInput) {
+    fileInput.addEventListener('change', function () {
+      if (fileInput.files && fileInput.files[0] && !customNameInput.value.trim()) {
+        const rawName = fileInput.files[0].name.replace(/\.[^/.]+$/, '');
+        customNameInput.value = rawName;
+      }
+    });
+  }
+
   if (saveBtn) {
     saveBtn.addEventListener('click', async function () {
       const setoranId = idInput ? idInput.value : '';
-      const docType = (typeInput && typeInput.value) || 'bsz';
+      const docType = (typeInput && typeInput.value) || 'bsz_upz';
 
       if (!setoranId) {
         if (msgEl) showMessage(msgEl, 'ID setoran tidak valid.', '#d93025');
@@ -9758,10 +9951,10 @@ function initBszUploadFeature() {
         return;
       }
 
-      const validExts = ['pdf', 'jpg', 'jpeg', 'png'];
+      const validExts = ['pdf', 'rar'];
       const ext = (file.name.split('.').pop() || '').toLowerCase();
       if (!validExts.includes(ext)) {
-        if (msgEl) showMessage(msgEl, 'Format berkas harus PDF, JPG, atau PNG.', '#d93025');
+        if (msgEl) showMessage(msgEl, 'Format berkas harus PDF atau RAR.', '#d93025');
         return;
       }
 
@@ -9770,8 +9963,10 @@ function initBszUploadFeature() {
         return;
       }
 
+      const customName = (customNameInput && customNameInput.value.trim()) || file.name;
+
       saveBtn.disabled = true;
-      if (msgEl) showMessage(msgEl, 'Mengunggah berkas...', '#0f6c3e');
+      if (msgEl) showMessage(msgEl, 'Mengunggah berkas BSZ...', '#0f6c3e');
 
       try {
         const reader = new FileReader();
@@ -9796,10 +9991,11 @@ function initBszUploadFeature() {
         const item = (currentAdminSetoran || []).concat(currentSetoran || []).find(function (s) { return String(s.id) === String(setoranId); });
         const upzId = item ? (item.upz_id || '') : '';
 
-        const endpoint = (docType === 'bsz') ? '/api/save-bsz' : '/api/save-transfer-doc';
+        const endpoint = '/api/save-bsz';
         const payload = {
           setoran_id: setoranId,
           doc_type: docType,
+          nama_bsz: customName,
           file_name: file.name,
           file_path: storageFilePath,
           file_data: fileDataUrl,
@@ -9818,10 +10014,14 @@ function initBszUploadFeature() {
           throw new Error(saveJson.message || 'Gagal menyimpan data berkas ke server.');
         }
 
-        if (docType === 'bsz') {
-          bszRecords[setoranId] = saveJson.data;
-          try { localStorage.setItem('bsz_records_cache', JSON.stringify(bszRecords)); } catch (_) {}
+        if (!bszRecords[setoranId] || typeof bszRecords[setoranId] !== 'object' || bszRecords[setoranId].file_name) {
+          const old = bszRecords[setoranId];
+          bszRecords[setoranId] = {};
+          if (old && old.file_name) bszRecords[setoranId].bsz_upz = old;
         }
+        bszRecords[setoranId][docType] = saveJson.data;
+        try { localStorage.setItem('bsz_records_cache', JSON.stringify(bszRecords)); } catch (_) {}
+
         if (!transferDocsRecords[setoranId]) transferDocsRecords[setoranId] = {};
         transferDocsRecords[setoranId][docType] = saveJson.data;
         try { localStorage.setItem('transfer_docs_cache', JSON.stringify(transferDocsRecords)); } catch (_) {}

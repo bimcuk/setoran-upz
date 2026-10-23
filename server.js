@@ -222,22 +222,30 @@ const server = http.createServer(async (req, res) => {
         'Content-Type': 'application/json'
       };
 
-      if (!isAdmin) {
-        // Cek kepemilikan dan status setoran
+      let targetFilePath = file_path;
+      try {
         const checkRes = await fetch(
-          `${SUPABASE_URL}/rest/v1/setoran?select=id,upz_id,status&id=eq.${encodeURIComponent(setoran_id)}`,
+          `${SUPABASE_URL}/rest/v1/setoran?select=id,upz_id,status,file_path&id=eq.${encodeURIComponent(setoran_id)}`,
           { headers }
         );
         const checkData = await checkRes.json();
-        if (!Array.isArray(checkData) || !checkData.length) {
+        if (Array.isArray(checkData) && checkData.length) {
+          if (!targetFilePath && checkData[0].file_path) {
+            targetFilePath = checkData[0].file_path;
+          }
+          if (!isAdmin) {
+            if (checkData[0].upz_id !== callerUser.id) {
+              return sendJson(403, { success: false, message: 'Anda tidak memiliki hak untuk menghapus setoran ini.' });
+            }
+            if (checkData[0].status !== 'menunggu') {
+              return sendJson(400, { success: false, message: 'Hanya setoran dengan status menunggu yang dapat dihapus oleh UPZ.' });
+            }
+          }
+        } else if (!isAdmin) {
           return sendJson(404, { success: false, message: 'Data setoran tidak ditemukan.' });
         }
-        if (checkData[0].upz_id !== callerUser.id) {
-          return sendJson(403, { success: false, message: 'Anda tidak memiliki hak untuk menghapus setoran ini.' });
-        }
-        if (checkData[0].status !== 'menunggu') {
-          return sendJson(400, { success: false, message: 'Hanya setoran dengan status menunggu yang dapat dihapus oleh UPZ.' });
-        }
+      } catch (checkErr) {
+        console.warn('[DELETE-SETORAN] check data notice:', checkErr.message);
       }
 
       // 1. Hapus detail_setoran terkait terlebih dahulu (foreign key)
@@ -254,22 +262,43 @@ const server = http.createServer(async (req, res) => {
       );
       console.log(`[DELETE-SETORAN] setoran HTTP ${delSetoranRes.status}`);
 
-      // 3. Hapus berkas fisik di Supabase Storage jika ada file_path
-      if (file_path) {
+      // 3. Hapus berkas fisik di Supabase Storage jika ada targetFilePath
+      if (targetFilePath) {
         try {
+          const cleanPath = targetFilePath.replace(/^setoran-upz\//, '');
           const delStorageRes = await fetch(
             `${SUPABASE_URL}/storage/v1/object/setoran-upz`,
             {
               method: 'DELETE',
               headers,
-              body: JSON.stringify({ prefixes: [file_path] })
+              body: JSON.stringify({ prefixes: [cleanPath] })
             }
           );
-          console.log(`[DELETE-SETORAN] storage file HTTP ${delStorageRes.status}`);
+          console.log(`[DELETE-SETORAN] storage file HTTP ${delStorageRes.status} (${cleanPath})`);
         } catch (storageErr) {
           console.warn('[DELETE-SETORAN] Gagal hapus storage file (non-blocking):', storageErr.message);
         }
       }
+
+      // 4. Bersihkan dokumen BSZ terkait jika ada
+      try {
+        const bszFilePath = path.join(__dirname, 'bsz_data.json');
+        if (fs.existsSync(bszFilePath)) {
+          const bszData = JSON.parse(fs.readFileSync(bszFilePath, 'utf8'));
+          if (bszData[setoran_id]) {
+            delete bszData[setoran_id];
+            fs.writeFileSync(bszFilePath, JSON.stringify(bszData, null, 2), 'utf8');
+          }
+        }
+        const tfFilePath = path.join(__dirname, 'transfer_docs.json');
+        if (fs.existsSync(tfFilePath)) {
+          const tfData = JSON.parse(fs.readFileSync(tfFilePath, 'utf8'));
+          if (tfData[setoran_id]) {
+            delete tfData[setoran_id];
+            fs.writeFileSync(tfFilePath, JSON.stringify(tfData, null, 2), 'utf8');
+          }
+        }
+      } catch (_) {}
 
       return sendJson(200, {
         success: true,
@@ -819,12 +848,12 @@ const server = http.createServer(async (req, res) => {
       const cleanBase = name.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 30);
       const safeFolder = subfolder || 'berkas';
       const safeUpz = (upzId || 'umum').replace(/[^a-zA-Z0-9_-]/g, '_');
-      const filePath = `pentasharufan/${safeUpz}/${safeFolder}/${Date.now()}_${cleanBase}.${ext}`;
+      const filePath = `${safeUpz}/${safeFolder}/${Date.now()}_${cleanBase}.${ext}`;
 
       const buffer = Buffer.from(base64, 'base64');
       const mimeType = type || (ext === 'xlsx' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : (ext === 'xls' ? 'application/vnd.ms-excel' : 'application/octet-stream'));
 
-      const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/pentasharufan/${filePath}`, {
+      const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/pentasharufan/${encodeURI(filePath)}`, {
         method: 'POST',
         headers: {
           'apikey': sKey,
@@ -936,7 +965,7 @@ const server = http.createServer(async (req, res) => {
 
     try {
       const sKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
-      const resLogs = await fetch(`${SUPABASE_URL}/rest/v1/audit_logs?module=eq.pentasharufan&order=created_at.desc&limit=500`, {
+      const resLogs = await fetch(`${SUPABASE_URL}/rest/v1/audit_logs?module=eq.pentasharufan&order=created_at.asc`, {
         headers: {
           'apikey': sKey,
           'Authorization': `Bearer ${sKey}`
@@ -950,32 +979,43 @@ const server = http.createServer(async (req, res) => {
       const logs = await resLogs.json();
       const recordsMap = new Map();
 
-      // Process in chronological order so status updates overwrite older states
-      const chronological = (logs || []).slice().reverse();
-      chronological.forEach(log => {
+      (logs || []).forEach(log => {
         try {
           const rec = JSON.parse(log.description);
-          if (rec && rec.id) {
-            if (log.action === 'PENTASHARUFAN_DELETE') {
-              recordsMap.delete(rec.id);
-            } else if (!recordsMap.has(rec.id)) {
+          if (!rec || !rec.id) return;
+
+          if (log.action === 'PENTASHARUFAN_DELETE') {
+            recordsMap.delete(rec.id);
+            return;
+          }
+
+          if (log.action === 'PENTASHARUFAN_SUBMIT') {
+            if (rec.nama_upz || rec.nominal || rec.jenis_program) {
               recordsMap.set(rec.id, rec);
-            } else {
-              const current = recordsMap.get(rec.id);
-              if (rec.status) current.status = rec.status;
-              if (rec.catatan_admin !== undefined) current.catatan_admin = rec.catatan_admin;
             }
+            return;
+          }
+
+          if (recordsMap.has(rec.id)) {
+            const current = recordsMap.get(rec.id);
+            if (rec.status) current.status = rec.status;
+            if (rec.catatan_admin !== undefined) current.catatan_admin = rec.catatan_admin;
+          } else if (rec.nama_upz && (rec.nominal || rec.jenis_program)) {
+            recordsMap.set(rec.id, rec);
           }
         } catch (_) {}
       });
 
-      const list = Array.from(recordsMap.values()).sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      const list = Array.from(recordsMap.values())
+        .filter(r => r && r.id && (r.nama_upz || r.nominal || r.jenis_program))
+        .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
 
       // Buat signed URLs otomatis untuk berkas private
       async function signFilePath(pathStr) {
         if (!pathStr) return '';
         try {
-          const signRes = await fetch(`${SUPABASE_URL}/storage/v1/object/sign/pentasharufan/${encodeURI(pathStr)}`, {
+          const cleanPath = pathStr.startsWith('pentasharufan/') ? pathStr.replace(/^pentasharufan\//, '') : pathStr;
+          const signRes = await fetch(`${SUPABASE_URL}/storage/v1/object/sign/pentasharufan/${encodeURI(cleanPath)}`, {
             method: 'POST',
             headers: {
               'apikey': sKey,
@@ -1025,7 +1065,8 @@ const server = http.createServer(async (req, res) => {
       }
 
       const sKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
-      const fileRes = await fetch(`${SUPABASE_URL}/storage/v1/object/authenticated/pentasharufan/${encodeURI(filePath)}`, {
+      const cleanPath = filePath.startsWith('pentasharufan/') ? filePath.replace(/^pentasharufan\//, '') : filePath;
+      const fileRes = await fetch(`${SUPABASE_URL}/storage/v1/object/authenticated/pentasharufan/${encodeURI(cleanPath)}`, {
         headers: {
           'apikey': sKey,
           'Authorization': `Bearer ${sKey}`
@@ -1128,6 +1169,49 @@ const server = http.createServer(async (req, res) => {
         'Content-Type': 'application/json'
       };
 
+      // 1. Cari berkas terkait permohonan di audit_logs untuk dihapus dari storage
+      try {
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/audit_logs?module=eq.pentasharufan&description=like.*"${id}"*`, { headers });
+        if (checkRes.ok) {
+          const rows = await checkRes.json();
+          const filesToDelete = [];
+          (rows || []).forEach(r => {
+            try {
+              const d = typeof r.description === 'string' ? JSON.parse(r.description) : r.description;
+              if (d && d.id === id) {
+                if (d.file_excel_path) {
+                  filesToDelete.push(d.file_excel_path.replace(/^pentasharufan\//, ''));
+                }
+                if (d.foto_penyerahan_path) {
+                  filesToDelete.push(d.foto_penyerahan_path.replace(/^pentasharufan\//, ''));
+                }
+              }
+            } catch (_) {}
+          });
+
+          if (filesToDelete.length > 0) {
+            await fetch(`${SUPABASE_URL}/storage/v1/object/pentasharufan`, {
+              method: 'DELETE',
+              headers,
+              body: JSON.stringify({ prefixes: filesToDelete })
+            });
+          }
+        }
+      } catch (storageErr) {
+        console.warn('Hapus file pentasharufan storage warning:', storageErr);
+      }
+
+      // 2. Hapus log pengajuan lama dari audit_logs
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/audit_logs?module=eq.pentasharufan&description=like.*"${id}"*`, {
+          method: 'DELETE',
+          headers
+        });
+      } catch (delErr) {
+        console.warn('Hapus audit_logs lama warning:', delErr);
+      }
+
+      // 3. Catat log PENTASHARUFAN_DELETE
       await fetch(`${SUPABASE_URL}/rest/v1/audit_logs`, {
         method: 'POST',
         headers,
@@ -1163,6 +1247,38 @@ const server = http.createServer(async (req, res) => {
           records = JSON.parse(fs.readFileSync(bszFilePath, 'utf8'));
         } catch (_) { records = {}; }
       }
+
+      // Ambil juga dari Supabase audit_logs untuk sinkronisasi
+      if (SUPABASE_SERVICE_ROLE_KEY && SUPABASE_SERVICE_ROLE_KEY !== 'ISI_SERVICE_ROLE_KEY_DISINI') {
+        try {
+          const resLogs = await fetch(`${SUPABASE_URL}/rest/v1/audit_logs?module=eq.BSZ&order=created_at.asc`, {
+            headers: {
+              'apikey': SUPABASE_SERVICE_ROLE_KEY,
+              'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+            }
+          });
+          if (resLogs.ok) {
+            const logs = await resLogs.json();
+            (logs || []).forEach(log => {
+              try {
+                const d = typeof log.description === 'string' ? JSON.parse(log.description) : log.description;
+                if (d && d.setoran_id) {
+                  const typeKey = (d.doc_type === 'bsz_nama') ? 'bsz_nama' : 'bsz_upz';
+                  if (!records[d.setoran_id] || typeof records[d.setoran_id] !== 'object' || records[d.setoran_id].file_name) {
+                    const old = records[d.setoran_id];
+                    records[d.setoran_id] = {};
+                    if (old && old.file_name) records[d.setoran_id].bsz_upz = old;
+                  }
+                  records[d.setoran_id][typeKey] = d;
+                }
+              } catch (_) {}
+            });
+          }
+        } catch (e) {
+          console.warn('[BSZ-LIST] Supabase sync notice:', e.message);
+        }
+      }
+
       return sendJson(200, { success: true, data: records });
     } catch (err) {
       console.error('[BSZ-LIST ERROR]', err.message);
@@ -1173,7 +1289,7 @@ const server = http.createServer(async (req, res) => {
   // ============================================================
   // ENDPOINT: Save Bukti Setor Zakat (BSZ)
   // POST /api/save-bsz
-  // Body: { token, setoran_id, file_name, file_path, file_data, uploaded_at, upz_id }
+  // Body: { setoran_id, doc_type, nama_bsz, file_name, file_path, file_data, uploaded_at, upz_id }
   // ============================================================
   if (req.url === '/api/save-bsz' && req.method === 'POST') {
     const sendJson = (statusCode, data) => {
@@ -1183,11 +1299,12 @@ const server = http.createServer(async (req, res) => {
 
     try {
       const body = await readBody(req);
-      const { setoran_id, file_name, file_path, file_data, uploaded_at, upz_id } = body;
+      const { setoran_id, doc_type, nama_bsz, file_name, file_path, file_data, uploaded_at, upz_id } = body;
 
       if (!setoran_id) return sendJson(400, { success: false, message: 'setoran_id wajib diisi.' });
       if (!file_name) return sendJson(400, { success: false, message: 'file_name wajib diisi.' });
 
+      const typeKey = (doc_type === 'bsz_nama') ? 'bsz_nama' : 'bsz_upz';
       const bszFilePath = path.join(__dirname, 'bsz_data.json');
       let records = {};
       if (fs.existsSync(bszFilePath)) {
@@ -1198,6 +1315,8 @@ const server = http.createServer(async (req, res) => {
 
       const newRecord = {
         setoran_id,
+        doc_type: typeKey,
+        nama_bsz: (nama_bsz || file_name).trim(),
         file_name,
         file_path: file_path || '',
         file_data: file_data || '',
@@ -1205,12 +1324,22 @@ const server = http.createServer(async (req, res) => {
         upz_id: upz_id || ''
       };
 
-      records[setoran_id] = newRecord;
+      if (!records[setoran_id] || typeof records[setoran_id] !== 'object' || records[setoran_id].file_name) {
+        const old = records[setoran_id];
+        records[setoran_id] = {};
+        if (old && old.file_name) records[setoran_id].bsz_upz = old;
+      }
+      records[setoran_id][typeKey] = newRecord;
       fs.writeFileSync(bszFilePath, JSON.stringify(records, null, 2), 'utf8');
 
       // Simpan log ke Supabase audit_logs jika service role key tersedia
       if (SUPABASE_SERVICE_ROLE_KEY && SUPABASE_SERVICE_ROLE_KEY !== 'ISI_SERVICE_ROLE_KEY_DISINI') {
         try {
+          const logRecord = Object.assign({}, newRecord);
+          if (logRecord.file_path && logRecord.file_data && logRecord.file_data.length > 500000) {
+            logRecord.file_data = '';
+          }
+
           await fetch(`${SUPABASE_URL}/rest/v1/audit_logs`, {
             method: 'POST',
             headers: {
@@ -1219,10 +1348,10 @@ const server = http.createServer(async (req, res) => {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              action: 'UPLOAD_BSZ',
+              action: typeKey === 'bsz_nama' ? 'UPLOAD_BSZ_NAMA' : 'UPLOAD_BSZ_UPZ',
               module: 'BSZ',
               reference_id: setoran_id,
-              description: JSON.stringify({ file_name, file_path, uploaded_at: newRecord.uploaded_at })
+              description: JSON.stringify(logRecord)
             })
           });
         } catch (auditErr) {

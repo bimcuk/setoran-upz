@@ -17,7 +17,9 @@
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <symbol id="i-hand-heart" viewBox="0 0 24 24"><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 15 6 6"/><path d="M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.73 2.73 0 0 0 16 4a2.78 2.78 0 0 0-5 1.8c0 1.2.8 2 1.5 2.8L16 12Z"/></symbol>
     <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
-    <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="12" y="14.5" font-size="7" font-weight="600" text-anchor="middle" fill="currentColor" stroke="none" font-family="'Poppins', sans-serif">Rp</text></symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8"/><path d="M8 11h8"/><path d="M8 15h5"/></symbol>
+    <symbol id="i-arrow-left-right" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol>
+    <symbol id="i-building-check" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v7"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h8"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="m16 19 2 2 4-4"/></symbol>
     <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
     <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></symbol>
@@ -324,7 +326,7 @@
           <div class="summary-grid summary-grid-3" id="adminSummaryGrid">
             <!-- BARIS 1 -->
             <div class="summary-card">
-              <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-receipt"></use></svg></div>
+              <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-arrow-left-right"></use></svg></div>
               <div><div class="summary-title">Total Transaksi</div><div id="adminJumlahTransaksi" class="summary-value">0</div></div>
             </div>
             <div class="summary-card">
@@ -348,7 +350,7 @@
               </div>
             </div>
             <div class="summary-card">
-              <div class="summary-icon tone-teal"><svg class="icon"><use href="#i-users"></use></svg></div>
+              <div class="summary-icon tone-teal"><svg class="icon"><use href="#i-building-check"></use></svg></div>
               <div>
                 <div class="summary-title">UPZ Berpartisipasi</div>
                 <div id="adminJumlahUpzPartisipasi" class="summary-value">0</div>
@@ -883,7 +885,7 @@
             <div><div class="summary-title">Total Setoran Diterima</div><div id="totalSetoran" class="summary-value">Rp 0</div></div>
           </div>
           <div class="summary-card">
-            <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-receipt"></use></svg></div>
+            <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-arrow-left-right"></use></svg></div>
             <div><div class="summary-title">Jumlah Transaksi</div><div id="jumlahTransaksi" class="summary-value">0</div></div>
           </div>
           <div class="summary-card">
@@ -1574,80 +1576,42 @@
       <div class="modal-scroll">
         <div id="detailModalMeta" class="detail-meta"></div>
 
-        <!-- SECTION DOKUMEN & BUKTI TRANSFER (BSZ, TF PENTASHARUFAN, TF HAK AMIL, TF SALIN ASLIMAS) -->
+        <!-- SECTION BUKTI SETOR ZAKAT (BSZ UPZ & BSZ PER NAMA) -->
         <div id="detailDocsSection" class="detail-docs-list">
-          <!-- 1. Bukti Setor Zakat (BSZ) -->
-          <div id="detailDocRow_bsz" class="detail-doc-card is-empty">
+          <!-- 1. Bukti Setor Zakat (BSZ) UPZ -->
+          <div id="detailDocRow_bsz_upz" class="detail-doc-card is-empty">
             <div class="detail-doc-left">
-              <div id="detailDocIcon_bsz" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
+              <div id="detailDocIcon_bsz_upz" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
               <div>
-                <div class="detail-doc-title">Bukti Setor Zakat (BSZ) Resmi</div>
-                <div id="detailDocDesc_bsz" class="detail-doc-desc">Belum diterbitkan</div>
+                <div class="detail-doc-title">Bukti Setor Zakat (BSZ) UPZ</div>
+                <div id="detailDocDesc_bsz_upz" class="detail-doc-desc">Belum diterbitkan</div>
               </div>
             </div>
-            <div id="detailDocActions_bsz" class="detail-doc-actions">
-              <button type="button" id="detailUploadBszBtn" class="btn btn-ghost btn-sm btn-icon-only detail-doc-upload-btn" title="Upload BSZ" style="display: none;">
-                <svg class="icon"><use href="#i-upload"></use></svg>
+            <div id="detailDocActions_bsz_upz" class="detail-doc-actions">
+              <button type="button" id="detailUploadBtn_bsz_upz" class="btn btn-soft btn-sm detail-doc-upload-btn" title="Upload BSZ UPZ" style="display: none;">
+                <svg class="icon"><use href="#i-upload"></use></svg><span>Upload BSZ UPZ</span>
               </button>
-              <button type="button" id="detailDownloadBszBtn" class="btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
-                <svg class="icon"><use href="#i-download"></use></svg>
+              <button type="button" id="detailDownloadBtn_bsz_upz" class="btn btn-soft btn-sm detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
+                <svg class="icon"><use href="#i-download"></use></svg><span>Unduh BSZ UPZ</span>
               </button>
             </div>
           </div>
 
-          <!-- 2. Transfer Perbantuan Pentasharufan -->
-          <div id="detailDocRow_tf_penta" class="detail-doc-card is-empty">
+          <!-- 2. Bukti Setor Zakat (BSZ) Per Nama -->
+          <div id="detailDocRow_bsz_nama" class="detail-doc-card is-empty">
             <div class="detail-doc-left">
-              <div id="detailDocIcon_tf_penta" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
+              <div id="detailDocIcon_bsz_nama" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
               <div>
-                <div class="detail-doc-title">Bukti Transfer Pentasharufan</div>
-                <div id="detailDocDesc_tf_penta" class="detail-doc-desc">Belum diunggah</div>
+                <div class="detail-doc-title">Bukti Setor Zakat (BSZ) Per Nama</div>
+                <div id="detailDocDesc_bsz_nama" class="detail-doc-desc">Belum diterbitkan</div>
               </div>
             </div>
-            <div id="detailDocActions_tf_penta" class="detail-doc-actions">
-              <button type="button" id="detailUploadBtn_tf_penta" class="btn btn-ghost btn-sm btn-icon-only detail-doc-upload-btn" title="Upload Bukti Transfer Pentasharufan" style="display: none;">
-                <svg class="icon"><use href="#i-upload"></use></svg>
+            <div id="detailDocActions_bsz_nama" class="detail-doc-actions">
+              <button type="button" id="detailUploadBtn_bsz_nama" class="btn btn-soft btn-sm detail-doc-upload-btn" title="Upload BSZ Per Nama" style="display: none;">
+                <svg class="icon"><use href="#i-upload"></use></svg><span>Upload BSZ Per Nama</span>
               </button>
-              <button type="button" id="detailDownloadBtn_tf_penta" class="btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
-                <svg class="icon"><use href="#i-download"></use></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- 3. Transfer Hak Amil UPZ -->
-          <div id="detailDocRow_tf_amil" class="detail-doc-card is-empty">
-            <div class="detail-doc-left">
-              <div id="detailDocIcon_tf_amil" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
-              <div>
-                <div class="detail-doc-title">Bukti Transfer Hak Amil UPZ</div>
-                <div id="detailDocDesc_tf_amil" class="detail-doc-desc">Belum diunggah</div>
-              </div>
-            </div>
-            <div id="detailDocActions_tf_amil" class="detail-doc-actions">
-              <button type="button" id="detailUploadBtn_tf_amil" class="btn btn-ghost btn-sm btn-icon-only detail-doc-upload-btn" title="Upload Bukti Transfer Hak Amil" style="display: none;">
-                <svg class="icon"><use href="#i-upload"></use></svg>
-              </button>
-              <button type="button" id="detailDownloadBtn_tf_amil" class="btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
-                <svg class="icon"><use href="#i-download"></use></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- 4. Transfer Salin Aslimas -->
-          <div id="detailDocRow_tf_salin" class="detail-doc-card is-empty">
-            <div class="detail-doc-left">
-              <div id="detailDocIcon_tf_salin" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
-              <div>
-                <div class="detail-doc-title">Bukti Transfer Salin Aslimas</div>
-                <div id="detailDocDesc_tf_salin" class="detail-doc-desc">Belum diunggah</div>
-              </div>
-            </div>
-            <div id="detailDocActions_tf_salin" class="detail-doc-actions">
-              <button type="button" id="detailUploadBtn_tf_salin" class="btn btn-ghost btn-sm btn-icon-only detail-doc-upload-btn" title="Upload Bukti Transfer Salin Aslimas" style="display: none;">
-                <svg class="icon"><use href="#i-upload"></use></svg>
-              </button>
-              <button type="button" id="detailDownloadBtn_tf_salin" class="btn btn-ghost btn-sm btn-icon-only detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
-                <svg class="icon"><use href="#i-download"></use></svg>
+              <button type="button" id="detailDownloadBtn_bsz_nama" class="btn btn-soft btn-sm detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
+                <svg class="icon"><use href="#i-download"></use></svg><span>Unduh BSZ Per Nama</span>
               </button>
             </div>
           </div>
@@ -2211,10 +2175,15 @@
       <div class="modal-scroll" style="padding:16px;">
         <input type="hidden" id="uploadBszSetoranId" value="">
         <input type="hidden" id="uploadDocType" value="bsz">
+        <div class="form-group" style="margin-bottom:12px;">
+          <label for="inputBszCustomName" style="font-weight:600;font-size:12px;margin-bottom:4px;display:block;">Nama / Judul BSZ:</label>
+          <input type="text" id="inputBszCustomName" class="form-control" placeholder="Contoh: BSZ Zakat Fitrah 1447H UPZ ..." style="padding:8px 12px;font-size:13px;">
+          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:2px;">Opsional. Jika kosong, akan otomatis menggunakan nama file asli.</div>
+        </div>
         <div class="form-group">
-          <label id="uploadDocFileLabel" for="inputBszFile">Pilih Berkas (PDF / JPG / PNG):</label>
-          <input type="file" id="inputBszFile" class="form-control" accept=".pdf,.jpg,.jpeg,.png,image/jpeg,image/png,application/pdf" style="padding:8px;">
-          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:4px;">Format didukung: PDF, JPG, PNG (Maks 20MB)</div>
+          <label id="uploadDocFileLabel" for="inputBszFile" style="font-weight:600;font-size:12px;margin-bottom:4px;display:block;">Pilih Berkas BSZ (PDF / RAR):</label>
+          <input type="file" id="inputBszFile" class="form-control" accept=".pdf,.rar,application/pdf,application/x-rar-compressed,application/octet-stream,application/vnd.rar" style="padding:8px;">
+          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:4px;">Format didukung: <strong>PDF</strong> dan <strong>RAR</strong> (Maks 20MB)</div>
         </div>
         <div id="uploadBszCurrentFileNotice" class="hidden" style="margin-top:12px;padding:8px 12px;background:var(--slate-100);border-radius:6px;font-size:12px;"></div>
         <div id="uploadBszMsg" class="form-message" style="margin-top:8px;"></div>

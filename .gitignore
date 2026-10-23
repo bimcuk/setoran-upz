@@ -5,6 +5,8 @@ __pycache__/
 *.xlsx
 WEB UPZ.xlsx
 rkat_config.json
+bsz_data.json
+transfer_docs.json
 *.bat
 *.py
 *.gs
