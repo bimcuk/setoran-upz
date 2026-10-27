@@ -6226,39 +6226,55 @@ async function ensureAdminDonaturLoaded(forceRefresh = false) {
 async function updateScorecardDonatur(selectedUpzId) {
   const sel = document.getElementById('scorecardUpzFilter');
   const upzId = selectedUpzId !== undefined ? selectedUpzId : (sel ? sel.value : 'semua');
-  const countEl = document.getElementById('adminTotalDonaturScorecard');
-  const subEl = document.getElementById('scorecardDonaturSub');
-  const hintEl = document.getElementById('scorecardFilterHintText');
-  if (!countEl) return;
+  const topCountEl = document.getElementById('adminTotalDonaturScorecard');
+  const topSubEl = document.getElementById('scorecardDonaturSub');
+  const chartDonaturEl = document.getElementById('adminChartDonaturUpz');
+  const chartLabelEl = document.getElementById('adminChartDonaturLabel');
 
   await ensureAdminDonaturLoaded();
 
   const donors = adminDonaturCache.donors || [];
-  let count = 0;
-  if (!upzId || upzId === 'semua') {
-    count = donors.length;
-    if (subEl) subEl.textContent = 'Muzaki & Munfik (Seluruh UPZ)';
-    if (hintEl) hintEl.textContent = '';
-  } else {
-    const upzName = (upzMap && upzMap[upzId]) || 'UPZ Terpilih';
-    const upzDonors = donors.filter(function (d) { return d.upz_id === upzId; });
-    count = upzDonors.length;
-    if (subEl) subEl.textContent = `Muzaki & Munfik (${upzName})`;
-    if (hintEl) hintEl.textContent = '';
+
+  // 1. Scorecard atas admin: SELALU akumulasi seluruh donatur dari SEMUA UPZ
+  if (topCountEl) {
+    topCountEl.textContent = donors.length.toLocaleString('id-ID');
   }
-  countEl.textContent = count.toLocaleString('id-ID');
+  if (topSubEl) {
+    topSubEl.textContent = 'Muzaki & Munfik (Seluruh UPZ)';
+  }
+
+  // 2. Metrik grafik bulanan: Jumlah donatur tiap-tiap UPZ sesuai filter UPZ
+  let chartCount = 0;
+  if (!upzId || upzId === 'semua') {
+    chartCount = donors.length;
+    if (chartLabelEl) chartLabelEl.textContent = 'Jumlah Donatur';
+  } else {
+    const upzName = (upzMap && upzMap[upzId]) || 'UPZ';
+    const upzDonors = donors.filter(function (d) { return String(d.upz_id) === String(upzId); });
+    chartCount = upzDonors.length;
+    if (chartLabelEl) chartLabelEl.textContent = 'Jumlah Donatur';
+  }
+
+  if (chartDonaturEl) {
+    chartDonaturEl.textContent = chartCount.toLocaleString('id-ID');
+  }
 }
 
 // MODAL RINCIAN DONATUR: MUZAKI (ZAKAT) VS MUNFIK (NON-ZAKAT)
-function renderDonaturBreakdownModalContent() {
-  const sel = document.getElementById('scorecardUpzFilter');
-  const upzId = (sel && sel.value) ? sel.value : 'semua';
+function renderDonaturBreakdownModalContent(forcedUpzId) {
+  let upzId = 'semua';
+  if (forcedUpzId !== undefined) {
+    upzId = forcedUpzId;
+  } else {
+    const sel = document.getElementById('scorecardUpzFilter');
+    upzId = (sel && sel.value) ? sel.value : 'semua';
+  }
   const donors = (adminDonaturCache && adminDonaturCache.donors) ? adminDonaturCache.donors : [];
 
   let filtered = donors;
   let scopeLabel = 'Seluruh UPZ (Semua Wilayah)';
   if (upzId && upzId !== 'semua') {
-    filtered = donors.filter(function (d) { return d.upz_id === upzId; });
+    filtered = donors.filter(function (d) { return String(d.upz_id) === String(upzId); });
     scopeLabel = (upzMap && upzMap[upzId]) || 'UPZ Terpilih';
   }
 
@@ -6290,16 +6306,16 @@ function renderDonaturBreakdownModalContent() {
   if (nonZakatRatioEl) nonZakatRatioEl.textContent = `${munfikPct}% dari total donatur`;
 }
 
-async function openDonaturBreakdownModal() {
+async function openDonaturBreakdownModal(forcedUpzId) {
   const modal = document.getElementById('donaturBreakdownModal');
   if (!modal) return;
   modal.classList.remove('hidden');
 
-  renderDonaturBreakdownModalContent();
+  renderDonaturBreakdownModalContent(forcedUpzId);
 
   try {
     await ensureAdminDonaturLoaded();
-    renderDonaturBreakdownModalContent();
+    renderDonaturBreakdownModalContent(forcedUpzId);
   } catch (err) {
     console.warn('Gagal memuat detail donatur:', err);
   }
@@ -6779,9 +6795,9 @@ function renderAdminMonthlyChart(forcedYear) {
       : '-';
   }
 
-  document.querySelectorAll('.adminChartYearLabelText').forEach(function (el) {
-    el.textContent = selectedYear;
-  });
+  if (typeof updateScorecardDonatur === 'function') {
+    updateScorecardDonatur(selectedUpz);
+  }
 
   if (adminChartInstance) {
     adminChartInstance.destroy();
@@ -7160,10 +7176,6 @@ function renderUpzMonthlyChart(forcedYear) {
       ? BULAN_NAMES[maxMonthIdx + 1] + ' (' + formatRupiahSimple(maxMonthVal) + ')'
       : '-';
   }
-
-  document.querySelectorAll('.upzChartYearLabelText').forEach(function (el) {
-    el.textContent = selectedYear;
-  });
 
   if (upzChartInstance) {
     upzChartInstance.destroy();
@@ -10241,8 +10253,15 @@ function initNewModalsFeature() {
   const closeDonaturBtn = document.getElementById('closeDonaturBreakdownBtn');
   const donaturModal = document.getElementById('donaturBreakdownModal');
 
-  if (triggerDonatur) triggerDonatur.addEventListener('click', openDonaturBreakdownModal);
-  if (btnDetailDonatur) btnDetailDonatur.addEventListener('click', openDonaturBreakdownModal);
+  const btnChartDonatur = document.getElementById('btnChartDetailDonaturAdmin');
+  if (triggerDonatur) triggerDonatur.addEventListener('click', function () { openDonaturBreakdownModal('semua'); });
+  if (btnDetailDonatur) btnDetailDonatur.addEventListener('click', function () { openDonaturBreakdownModal('semua'); });
+  if (btnChartDonatur) {
+    btnChartDonatur.addEventListener('click', function () {
+      const sel = document.getElementById('scorecardUpzFilter');
+      openDonaturBreakdownModal(sel ? sel.value : 'semua');
+    });
+  }
   if (closeDonaturX) closeDonaturX.addEventListener('click', closeDonaturBreakdownModal);
   if (closeDonaturBtn) closeDonaturBtn.addEventListener('click', closeDonaturBreakdownModal);
   if (donaturModal) {
@@ -10261,11 +10280,20 @@ function initNewModalsFeature() {
       return;
     }
 
+    const chartDonaturBtn = e.target.closest('#btnChartDetailDonaturAdmin');
+    if (chartDonaturBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const sel = document.getElementById('scorecardUpzFilter');
+      openDonaturBreakdownModal(sel ? sel.value : 'semua');
+      return;
+    }
+
     const donaturBtn = e.target.closest('#btnDetailDonatur, .btnDetailDonatur, #triggerDonaturBreakdown');
     if (donaturBtn) {
       e.preventDefault();
       e.stopPropagation();
-      openDonaturBreakdownModal();
+      openDonaturBreakdownModal('semua');
       return;
     }
   });
