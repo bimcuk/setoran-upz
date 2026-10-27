@@ -141,6 +141,48 @@ function hitungTotalTerverifikasi(daftarSetoran) {
     }, 0);
 }
 
+function isSetoranProgram(item) {
+  if (!item) return false;
+  if (item.tipe_setoran === 'program') return true;
+  if (item.nama_program) return true;
+  if (item.file_name && String(item.file_name).includes('[PROGRAM]')) return true;
+  if (item.catatan && String(item.catatan).includes('PROGRAM:')) return true;
+  return false;
+}
+
+function getNamaProgram(item) {
+  if (!item) return '';
+  if (item.nama_program) return String(item.nama_program).trim();
+  if (item.file_name && String(item.file_name).includes('[PROGRAM]')) {
+    return String(item.file_name).replace(/\[PROGRAM\]/i, '').trim();
+  }
+  if (item.catatan && String(item.catatan).includes('PROGRAM:')) {
+    const raw = String(item.catatan).replace(/.*PROGRAM:/i, '').trim();
+    return raw.split('|')[0].trim();
+  }
+  return 'Setoran Program';
+}
+
+function hitungTotalReguler(daftarSetoran) {
+  return (daftarSetoran || [])
+    .filter(function (item) {
+      return String(item.status || '').toLowerCase() === 'diterima' && !isSetoranProgram(item);
+    })
+    .reduce(function (total, item) {
+      return total + Number(item.nominal || 0);
+    }, 0);
+}
+
+function hitungTotalProgram(daftarSetoran) {
+  return (daftarSetoran || [])
+    .filter(function (item) {
+      return String(item.status || '').toLowerCase() === 'diterima' && isSetoranProgram(item);
+    })
+    .reduce(function (total, item) {
+      return total + Number(item.nominal || 0);
+    }, 0);
+}
+
 function showMessage(element, text, color) {
   if (!element) return;
   element.textContent = text;
@@ -1371,6 +1413,10 @@ function clearAllUserVisualData() {
   // 2. Bersihkan Scorecard & Ringkasan UPZ
   const totalSetoran = document.getElementById('totalSetoran');
   if (totalSetoran) totalSetoran.textContent = 'Rp 0';
+  const totalSetoranProgram = document.getElementById('totalSetoranProgram');
+  if (totalSetoranProgram) totalSetoranProgram.textContent = 'Rp 0';
+  const adminTotalSetoranProg = document.getElementById('adminTotalSetoranProgram');
+  if (adminTotalSetoranProg) adminTotalSetoranProg.textContent = 'Rp 0';
   const jumlahTransaksi = document.getElementById('jumlahTransaksi');
   if (jumlahTransaksi) jumlahTransaksi.textContent = '0';
   const jumlahDonatur = document.getElementById('jumlahDonatur');
@@ -1388,6 +1434,12 @@ function clearAllUserVisualData() {
   if (setoranForm) {
     try { setoranForm.reset(); } catch (_) {}
   }
+  const setoranProgForm = document.getElementById('setoranProgramForm');
+  if (setoranProgForm) {
+    try { setoranProgForm.reset(); } catch (_) {}
+  }
+  const setoranProgMsg = document.getElementById('setoranProgramMessage');
+  if (setoranProgMsg) { setoranProgMsg.textContent = ''; setoranProgMsg.style.display = 'none'; }
   if (fileExcel) fileExcel.value = '';
   if (fileExcelInfo) { fileExcelInfo.textContent = ''; fileExcelInfo.classList.add('hidden'); }
   if (excelPreview) excelPreview.innerHTML = '';
@@ -1555,6 +1607,67 @@ async function getDetailSetoran(setoranId) {
   }
 
   return data || [];
+}
+
+async function updateUpzDonaturScorecard(setoranList) {
+  const jumlahDonatur = document.getElementById('jumlahDonatur');
+  if (!jumlahDonatur) return;
+
+  const list = setoranList || currentSetoran || [];
+  // Hanya hitung donatur dari setoran reguler yang berstatus diterima
+  const acceptedReguler = list.filter(function (s) {
+    const st = String(s.status || '').toLowerCase().trim();
+    const isAccepted = (st === 'diterima' || st === 'disetujui' || st === 'verified' || st === 'sukses' || st === 'cocok');
+    return isAccepted && !isSetoranProgram(s);
+  });
+
+  if (!acceptedReguler.length) {
+    jumlahDonatur.textContent = '0';
+    return;
+  }
+
+  // Jika cache donatur UPZ sudah dimuat sebelumnya
+  if (upzDonaturCache && upzDonaturCache.loaded && Array.isArray(upzDonaturCache.donors) && upzDonaturCache.donors.length > 0) {
+    jumlahDonatur.textContent = upzDonaturCache.donors.length.toLocaleString('id-ID');
+    return;
+  }
+
+  const setoranIds = acceptedReguler.map(function (s) { return s.id; }).filter(Boolean);
+  try {
+    const { data: details, error } = await supabaseClient
+      .from('detail_setoran')
+      .select('nama_muzaki, setoran_id')
+      .in('setoran_id', setoranIds);
+
+    if (!error && Array.isArray(details) && details.length > 0) {
+      const uniqueDonors = new Set();
+      details.forEach(function (d) {
+        if (d.nama_muzaki && String(d.nama_muzaki).trim()) {
+          uniqueDonors.add(String(d.nama_muzaki).trim().toLowerCase());
+        }
+      });
+      jumlahDonatur.textContent = uniqueDonors.size.toLocaleString('id-ID');
+    } else {
+      // Fallback per-transaksi jika chunk in() kosong
+      const uniqueDonors = new Set();
+      for (const s of acceptedReguler) {
+        try {
+          const rows = await getDetailSetoran(s.id);
+          if (Array.isArray(rows)) {
+            rows.forEach(function (r) {
+              if (r.nama_muzaki && String(r.nama_muzaki).trim()) {
+                uniqueDonors.add(String(r.nama_muzaki).trim().toLowerCase());
+              }
+            });
+          }
+        } catch (_) {}
+      }
+      jumlahDonatur.textContent = (uniqueDonors.size || acceptedReguler.length).toLocaleString('id-ID');
+    }
+  } catch (err) {
+    console.warn('Gagal menghitung donatur UPZ:', err);
+    jumlahDonatur.textContent = '0';
+  }
 }
 
 // ==================================================
@@ -1736,32 +1849,22 @@ async function loadDashboard(keepCurrentView = false) {
       jumlahTransaksi.textContent = setoran.length.toLocaleString('id-ID');
     }
 
-    // TOTAL SETORAN UPZ HANYA MENGHITUNG STATUS DITERIMA.
-    const total = hitungTotalTerverifikasi(setoran);
+    // TOTAL SETORAN UPZ: Reguler & Program terpisah, hanya menghitung status DITERIMA.
+    const totalReguler = hitungTotalReguler(setoran);
+    const totalProgram = hitungTotalProgram(setoran);
 
     const totalSetoran = document.getElementById('totalSetoran');
     if (totalSetoran) {
-      totalSetoran.textContent = formatRupiah(total);
+      totalSetoran.textContent = formatRupiah(totalReguler);
     }
 
-    const jumlahDonatur = document.getElementById('jumlahDonatur');
-
-    if (jumlahDonatur) {
-      jumlahDonatur.textContent = '...';
-
-      if (setoran.length && setoran[0].id) {
-        try {
-          const detailTerakhir = await getDetailSetoran(setoran[0].id);
-          jumlahDonatur.textContent =
-            detailTerakhir.length.toLocaleString('id-ID');
-        } catch (detailError) {
-          console.error('HITUNG DONATUR ERROR:', detailError);
-          jumlahDonatur.textContent = '-';
-        }
-      } else {
-        jumlahDonatur.textContent = '0';
-      }
+    const totalSetoranProgEl = document.getElementById('totalSetoranProgram');
+    if (totalSetoranProgEl) {
+      totalSetoranProgEl.textContent = formatRupiah(totalProgram);
     }
+
+    // JUMLAH DONATUR UPZ: Dihitung dari seluruh donatur unik setoran reguler diterima
+    await updateUpzDonaturScorecard(setoran);
 
     populateUpzTahunFilter(setoran);
     filterAndRenderRiwayat();
@@ -1886,7 +1989,12 @@ function renderRiwayat(setoran) {
     const id = escapeHtml(item.id || '');
     const status = String(item.status || 'menunggu').toLowerCase();
 
-    return `<article class="riwayat-item" data-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div></div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions"><button type="button" class="btn btn-soft btn-sm btn-icon-only history-preview-button" data-preview-id="${id}" title="Rincian Setoran" aria-label="Rincian Setoran"><svg class="icon"><use href="#i-file-text"></use></svg></button></div></div></article>`;
+    const isProgram = isSetoranProgram(item);
+    const tagHtml = isProgram
+      ? `<div style="margin-top:4px;"><span class="badge-program-tag"><svg class="icon" style="width:11px;height:11px;"><use href="#i-tag"></use></svg> Program: ${escapeHtml(getNamaProgram(item))}</span></div>`
+      : `<div style="margin-top:4px;"><span class="badge-reguler-tag"><svg class="icon" style="width:11px;height:11px;"><use href="#i-sheet"></use></svg> Setoran Reguler</span></div>`;
+
+    return `<article class="riwayat-item" data-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div>${tagHtml}</div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions"><button type="button" class="btn btn-soft btn-sm btn-icon-only history-preview-button" data-preview-id="${id}" title="Rincian Setoran" aria-label="Rincian Setoran"><svg class="icon"><use href="#i-file-text"></use></svg></button></div></div></article>`;
   }).join('') + renderPagination('upz', upzCurrentPage, totalPages);
   bindHistoryPreviewEvents(container, false);
 }
@@ -2128,16 +2236,52 @@ async function openDetailModal(setoranId, isAdmin) {
   }
 
   detailModal.classList.remove('hidden');
-  try {
-    detailModalBody.innerHTML = renderDetailSetoran(await getDetailSetoran(item.id));
-  } catch (error) {
-    detailModalBody.innerHTML = '<p class="form-message" style="color:#dc2626">' + escapeHtml(error.message) + '</p>';
-  }
+  if (isSetoranProgram(item)) {
+    const progName = getNamaProgram(item);
+    const nom = Number(String(item.nominal || 0).replace(/[^\d.-]/g, '')) || 0;
+    const upzName = (item.upz_id && upzMap && upzMap[item.upz_id]) ? upzMap[item.upz_id] : (item.nama_upz || (currentProfile && currentProfile.nama_upz) || '-');
+    detailModalBody.innerHTML = `
+      <div style="background:var(--blue-50,#eff6ff);border:1px solid var(--blue-200,#bfdbfe);border-radius:10px;padding:18px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;border-bottom:1px solid var(--blue-200,#bfdbfe);padding-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg class="icon" style="width:20px;height:20px;color:var(--blue-600);"><use href="#i-tag"></use></svg>
+            <strong style="font-size:15px;color:var(--blue-900);">Program: ${escapeHtml(progName)}</strong>
+          </div>
+          <span class="status-badge ${getStatusClass(status)}">${escapeHtml(getStatusLabel(status))}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;margin-bottom:14px;">
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">Nominal Setoran</div>
+            <div style="font-size:18px;font-weight:700;color:var(--primary-700);margin-top:2px;">${formatRupiah(nom)}</div>
+          </div>
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">Tanggal Setor</div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-800);margin-top:2px;">${escapeHtml(formatTanggal(item.tanggal_setor))}</div>
+          </div>
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">UPZ Penyetor</div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-800);margin-top:2px;">${escapeHtml(upzName)}</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--slate-600);margin:0;line-height:1.5;">
+          Transaksi ini disetor melalui <strong>Formulir Setoran Program</strong> tanpa berkas rincian muzaki perorangan.
+        </p>
+        ${item.catatan ? `<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--blue-200);font-size:13px;color:var(--slate-700);"><strong>Catatan:</strong> ${escapeHtml(item.catatan)}</div>` : ''}
+      </div>
+    `;
+    if (detailDownloadButton) detailDownloadButton.classList.add('hidden');
+  } else {
+    try {
+      detailModalBody.innerHTML = renderDetailSetoran(await getDetailSetoran(item.id));
+    } catch (error) {
+      detailModalBody.innerHTML = '<p class="form-message" style="color:#dc2626">' + escapeHtml(error.message) + '</p>';
+    }
 
-  if (detailDownloadButton) {
-    detailDownloadButton.onclick = function () {
-      downloadSetoranExcelFile(item);
-    };
+    if (detailDownloadButton) {
+      detailDownloadButton.onclick = function () {
+        downloadSetoranExcelFile(item);
+      };
+    }
   }
 }
 
@@ -2701,8 +2845,9 @@ function updateAdminSummary(setoran) {
     return String(item.status || '').toLowerCase() === 'menunggu';
   });
 
-  // TOTAL ADMIN HANYA MENGHITUNG STATUS DITERIMA.
-  const total = hitungTotalTerverifikasi(setoran);
+  // TOTAL ADMIN HANYA MENGHITUNG STATUS DITERIMA (Reguler & Program terpisah).
+  const totalReguler = hitungTotalReguler(setoran);
+  const totalProgram = hitungTotalProgram(setoran);
 
   if (jumlahTransaksi) {
     jumlahTransaksi.textContent = setoran.length.toLocaleString('id-ID');
@@ -2713,7 +2858,12 @@ function updateAdminSummary(setoran) {
   }
 
   if (totalNominal) {
-    totalNominal.textContent = formatRupiah(total);
+    totalNominal.textContent = formatRupiah(totalReguler);
+  }
+
+  const adminProgEl = document.getElementById('adminTotalSetoranProgram');
+  if (adminProgEl) {
+    adminProgEl.textContent = formatRupiah(totalProgram);
   }
 
   if (partisipasiEl) {
@@ -2825,8 +2975,12 @@ function renderAdminSetoran(setoran) {
     const status = String(item.status || 'menunggu').toLowerCase();
     const namaUpz = (item.upz_id && upzMap[item.upz_id]) ? upzMap[item.upz_id] : (item.upz_id || '-');
     const isPending = status === 'menunggu';
+    const isProgram = isSetoranProgram(item);
+    const tagHtml = isProgram
+      ? `<div style="margin-top:4px;"><span class="badge-program-tag"><svg class="icon" style="width:11px;height:11px;"><use href="#i-tag"></use></svg> Program: ${escapeHtml(getNamaProgram(item))}</span></div>`
+      : `<div style="margin-top:4px;"><span class="badge-reguler-tag"><svg class="icon" style="width:11px;height:11px;"><use href="#i-sheet"></use></svg> Setoran Reguler</span></div>`;
 
-    return `<article class="riwayat-item admin-riwayat-item" data-admin-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div><strong>${escapeHtml(namaUpz)}</strong></div><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div></div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions admin-row-actions"><button type="button" class="btn btn-soft btn-sm btn-icon-only history-preview-button" data-preview-id="${id}" title="Rincian Setoran" aria-label="Rincian Setoran"><svg class="icon"><use href="#i-file-text"></use></svg></button></div></div>${isPending ? `<div class="admin-verify-inline"><label for="catatan-${id}">Catatan verifikasi</label><textarea id="catatan-${id}" class="admin-catatan" data-catatan-id="${id}" rows="2" placeholder="Catatan wajib diisi jika ditolak."></textarea><div class="verify-actions"><button type="button" class="admin-verify-button btn btn-primary" data-keputusan="diterima" data-setoran-id="${id}">Terima</button><button type="button" class="admin-verify-button btn btn-danger" data-keputusan="ditolak" data-setoran-id="${id}">Tolak</button></div></div>` : ''}</article>`;
+    return `<article class="riwayat-item admin-riwayat-item" data-admin-setoran-id="${id}"><div class="riwayat-main"><div class="riwayat-nominal">${formatRupiah(item.nominal)}</div><div class="riwayat-info"><div><strong>${escapeHtml(namaUpz)}</strong></div><div>Tanggal setor: <strong>${escapeHtml(formatTanggal(item.tanggal_setor))}</strong></div><div>Periode: <strong>${escapeHtml(getNamaBulan(item.periode_bulan) + ' ' + (item.periode_tahun || '-'))}</strong></div>${tagHtml}</div><div class="status-badge ${getStatusClass(status)}" data-badge-setoran-id="${id}" title="Klik untuk melihat catatan status">${escapeHtml(getStatusLabel(status))}</div><div class="riwayat-actions admin-row-actions"><button type="button" class="btn btn-soft btn-sm btn-icon-only history-preview-button" data-preview-id="${id}" title="Rincian Setoran" aria-label="Rincian Setoran"><svg class="icon"><use href="#i-file-text"></use></svg></button></div></div>${isPending ? `<div class="admin-verify-inline"><label for="catatan-${id}">Catatan verifikasi</label><textarea id="catatan-${id}" class="admin-catatan" data-catatan-id="${id}" rows="2" placeholder="Catatan wajib diisi jika ditolak."></textarea><div class="verify-actions"><button type="button" class="admin-verify-button btn btn-primary" data-keputusan="diterima" data-setoran-id="${id}">Terima</button><button type="button" class="admin-verify-button btn btn-danger" data-keputusan="ditolak" data-setoran-id="${id}">Tolak</button></div></div>` : ''}</article>`;
   }).join('') + renderPagination('admin', adminCurrentPage, totalPages);
   bindHistoryPreviewEvents(adminSetoranContainer, true);
   bindAdminVerifyEvents();
@@ -5644,13 +5798,16 @@ async function loadUpzDonaturMatrix(forceRefresh = false) {
 
   const accepted = (currentSetoran || []).filter(function (s) {
     const st = String(s.status || '').toLowerCase().trim();
-    return st === 'diterima' || st === 'disetujui' || st === 'verified' || st === 'sukses';
+    const isAccepted = (st === 'diterima' || st === 'disetujui' || st === 'verified' || st === 'sukses' || st === 'cocok');
+    return isAccepted && !isSetoranProgram(s);
   });
 
   populateUpzDonaturTahunFilter(accepted);
 
   if (!accepted.length) {
     upzDonaturCache = { upzId: currentProfile.upz_id, loaded: true, donors: [] };
+    const jdEl = document.getElementById('jumlahDonatur');
+    if (jdEl) jdEl.textContent = '0';
     renderUpzDonaturTable();
     return;
   }
@@ -5732,6 +5889,11 @@ async function loadUpzDonaturMatrix(forceRefresh = false) {
         return a.nama.localeCompare(b.nama);
       })
     };
+
+    const jdEl = document.getElementById('jumlahDonatur');
+    if (jdEl && Array.isArray(upzDonaturCache.donors)) {
+      jdEl.textContent = upzDonaturCache.donors.length.toLocaleString('id-ID');
+    }
 
     renderUpzDonaturTable();
   } catch (err) {
@@ -6558,7 +6720,8 @@ function renderAdminMonthlyChart(forcedYear) {
     }
   }
 
-  const dataDiterima = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const dataDiterimaReguler = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const dataDiterimaProgram = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   const dataMenunggu = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   filteredSetorans.forEach(function (item) {
@@ -6568,7 +6731,11 @@ function renderAdminMonthlyChart(forcedYear) {
         const nominal = Number(item.nominal || 0);
         const status = String(item.status || '').toLowerCase();
         if (status === 'diterima') {
-          dataDiterima[m] += nominal;
+          if (isSetoranProgram(item)) {
+            dataDiterimaProgram[m] += nominal;
+          } else {
+            dataDiterimaReguler[m] += nominal;
+          }
         } else if (status === 'menunggu') {
           dataMenunggu[m] += nominal;
         }
@@ -6576,19 +6743,21 @@ function renderAdminMonthlyChart(forcedYear) {
     }
   });
 
-  const totalYear = dataDiterima.reduce(function (a, b) { return a + b; }, 0);
+  const totalYear = dataDiterimaReguler.reduce(function (a, b) { return a + b; }, 0) +
+                    dataDiterimaProgram.reduce(function (a, b) { return a + b; }, 0);
   const currentRunningMonth = new Date().getMonth() + 1;
   const runningMonths = (selectedYear === currentYear) ? Math.max(1, currentRunningMonth) : 12;
   const avgMonth = Math.round(totalYear / runningMonths);
 
   let maxMonthIdx = 0;
   let maxMonthVal = 0;
-  dataDiterima.forEach(function (val, idx) {
-    if (val > maxMonthVal) {
-      maxMonthVal = val;
-      maxMonthIdx = idx;
+  for (let i = 0; i < 12; i++) {
+    const combinedVal = dataDiterimaReguler[i] + dataDiterimaProgram[i];
+    if (combinedVal > maxMonthVal) {
+      maxMonthVal = combinedVal;
+      maxMonthIdx = i;
     }
-  });
+  }
 
   const totalEl = document.getElementById('adminChartTotalYear');
   if (totalEl) totalEl.textContent = formatRupiah(totalYear);
@@ -6614,10 +6783,18 @@ function renderAdminMonthlyChart(forcedYear) {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
       datasets: [
         {
-          label: 'Terverifikasi (Diterima)',
-          data: dataDiterima,
+          label: 'Reguler (Diterima)',
+          data: dataDiterimaReguler,
           backgroundColor: 'rgba(25, 135, 84, 0.85)',
           hoverBackgroundColor: 'rgba(15, 108, 62, 1)',
+          borderRadius: 6,
+          borderSkipped: false
+        },
+        {
+          label: 'Program (Diterima)',
+          data: dataDiterimaProgram,
+          backgroundColor: 'rgba(37, 99, 235, 0.85)',
+          hoverBackgroundColor: 'rgba(29, 78, 216, 1)',
           borderRadius: 6,
           borderSkipped: false
         },
@@ -6914,7 +7091,8 @@ function renderUpzMonthlyChart(forcedYear) {
   const yearLabel = document.getElementById('upzChartYearLabel');
   if (yearLabel) yearLabel.textContent = selectedYear;
 
-  const dataDiterima = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const dataDiterimaReguler = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const dataDiterimaProgram = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   const dataMenunggu = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   currentSetoran.forEach(function (item) {
@@ -6924,7 +7102,11 @@ function renderUpzMonthlyChart(forcedYear) {
         const nominal = Number(item.nominal || 0);
         const status = String(item.status || '').toLowerCase();
         if (status === 'diterima') {
-          dataDiterima[m] += nominal;
+          if (isSetoranProgram(item)) {
+            dataDiterimaProgram[m] += nominal;
+          } else {
+            dataDiterimaReguler[m] += nominal;
+          }
         } else if (status === 'menunggu') {
           dataMenunggu[m] += nominal;
         }
@@ -6932,19 +7114,21 @@ function renderUpzMonthlyChart(forcedYear) {
     }
   });
 
-  const totalYear = dataDiterima.reduce(function (a, b) { return a + b; }, 0);
+  const totalYear = dataDiterimaReguler.reduce(function (a, b) { return a + b; }, 0) +
+                    dataDiterimaProgram.reduce(function (a, b) { return a + b; }, 0);
   const currentRunningMonth = new Date().getMonth() + 1;
   const runningMonths = (selectedYear === currentYear) ? Math.max(1, currentRunningMonth) : 12;
   const avgMonth = Math.round(totalYear / runningMonths);
 
   let maxMonthIdx = 0;
   let maxMonthVal = 0;
-  dataDiterima.forEach(function (val, idx) {
-    if (val > maxMonthVal) {
-      maxMonthVal = val;
-      maxMonthIdx = idx;
+  for (let i = 0; i < 12; i++) {
+    const combinedVal = dataDiterimaReguler[i] + dataDiterimaProgram[i];
+    if (combinedVal > maxMonthVal) {
+      maxMonthVal = combinedVal;
+      maxMonthIdx = i;
     }
-  });
+  }
 
   const totalEl = document.getElementById('upzChartTotalYear');
   if (totalEl) totalEl.textContent = formatRupiah(totalYear);
@@ -6970,10 +7154,18 @@ function renderUpzMonthlyChart(forcedYear) {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
       datasets: [
         {
-          label: 'Diterima BAZNAS',
-          data: dataDiterima,
+          label: 'Reguler (Diterima)',
+          data: dataDiterimaReguler,
           backgroundColor: 'rgba(25, 135, 84, 0.85)',
           hoverBackgroundColor: 'rgba(15, 108, 62, 1)',
+          borderRadius: 6,
+          borderSkipped: false
+        },
+        {
+          label: 'Program (Diterima)',
+          data: dataDiterimaProgram,
+          backgroundColor: 'rgba(37, 99, 235, 0.85)',
+          hoverBackgroundColor: 'rgba(29, 78, 216, 1)',
           borderRadius: 6,
           borderSkipped: false
         },
@@ -10487,6 +10679,496 @@ function initVisualRefreshFeature() {
 }
 
 // ======================================================================
+// 6i. FITUR FORMULIR SETORAN PROGRAM, MASTER PROGRAM & PREVIEW DETAIL
+// ======================================================================
+
+let currentProgramMasterList = [];
+
+async function fetchProgramMasterList() {
+  try {
+    const res = await fetch('/api/program-types');
+    const data = await res.json();
+    if (data && data.success && Array.isArray(data.programs)) {
+      currentProgramMasterList = data.programs;
+      populateProgramDropdown();
+      return data.programs;
+    }
+  } catch (err) {
+    console.warn('[PROGRAM-MASTER] Gagal memuat daftar program:', err.message);
+  }
+  return [];
+}
+
+function populateProgramDropdown() {
+  const selectEl = document.getElementById('programJenisSelect');
+  if (!selectEl) return;
+  const currentVal = selectEl.value;
+  let html = '<option value="">-- Pilih Jenis Program --</option>';
+  (currentProgramMasterList || []).forEach(function (p) {
+    html += `<option value="${escapeHtml(p.name)}" ${p.name === currentVal ? 'selected' : ''}>${escapeHtml(p.name)}</option>`;
+  });
+  selectEl.innerHTML = html;
+}
+
+async function openProgramPreviewModal(isAdmin) {
+  const modal = document.getElementById('programPreviewModal');
+  if (!modal) return;
+
+  const isAdminMode = (isAdmin !== undefined) ? !!isAdmin : (currentProfile && currentProfile.role === 'admin');
+  const titleEl = document.getElementById('programPreviewModalTitle');
+  const subEl = document.getElementById('programPreviewModalSubtitle');
+  const cardsContainer = document.getElementById('programBreakdownCards');
+  const tableBody = document.getElementById('programTransactionsTableBody');
+  const thUpz = document.getElementById('thProgramUpzCol');
+
+  modal.classList.remove('hidden');
+
+  if (thUpz) thUpz.style.display = isAdminMode ? '' : 'none';
+  if (titleEl) titleEl.textContent = isAdminMode ? 'Rincian Akumulasi Setoran Program (Admin)' : 'Rincian Akumulasi Setoran Program (UPZ)';
+  if (subEl) subEl.textContent = isAdminMode ? 'Rincian akumulasi setoran berdasarkan jenis program dari seluruh UPZ.' : 'Detail akumulasi setoran program yang telah diajukan oleh UPZ Anda.';
+
+  if (cardsContainer) {
+    cardsContainer.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--slate-500);font-size:13px;">Memuat data transaksi setoran program...</div>';
+  }
+  if (tableBody) {
+    tableBody.innerHTML = `<tr><td colspan="${isAdminMode ? 6 : 5}" style="text-align:center;padding:24px;color:var(--slate-400);font-size:13px;">Memuat rincian transaksi...</td></tr>`;
+  }
+
+  let list = [];
+  try {
+    if (isAdminMode) {
+      if (Array.isArray(currentAdminSetoran) && currentAdminSetoran.length > 0) {
+        list = currentAdminSetoran.filter(isSetoranProgram);
+      }
+      if (!list.length) {
+        const { data: dbRows, error: dbErr } = await supabaseClient
+          .from('setoran')
+          .select('*')
+          .order('tanggal_setor', { ascending: false });
+        if (!dbErr && Array.isArray(dbRows)) {
+          if (!currentAdminSetoran || !currentAdminSetoran.length) {
+            currentAdminSetoran = dbRows;
+          }
+          list = dbRows.filter(isSetoranProgram);
+        }
+      }
+    } else {
+      if (Array.isArray(currentSetoran) && currentSetoran.length > 0) {
+        list = currentSetoran.filter(isSetoranProgram);
+      }
+      if (!list.length) {
+        const targetUpz = (currentProfile && currentProfile.upz_id) || '';
+        let query = supabaseClient.from('setoran').select('*').order('tanggal_setor', { ascending: false });
+        if (targetUpz) query = query.eq('upz_id', targetUpz);
+        const { data: dbRows, error: dbErr } = await query;
+        if (!dbErr && Array.isArray(dbRows)) {
+          if (!currentSetoran || !currentSetoran.length) {
+            currentSetoran = dbRows;
+          }
+          list = dbRows.filter(isSetoranProgram);
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Gagal mengambil setoran program:', err);
+  }
+
+  // Hitung akumulasi per jenis program
+  const breakdown = {};
+  list.forEach(function (s) {
+    const pName = getNamaProgram(s) || 'Lainnya';
+    if (!breakdown[pName]) {
+      breakdown[pName] = { totalDiterima: 0, totalSemua: 0, countDiterima: 0, countTotal: 0 };
+    }
+    const nom = Number(String(s.nominal || 0).replace(/[^\d.-]/g, '')) || 0;
+    const st = String(s.status || '').toLowerCase().trim();
+    breakdown[pName].totalSemua += nom;
+    breakdown[pName].countTotal += 1;
+    if (st === 'diterima' || st === 'disetujui' || st === 'verified' || st === 'sukses' || st === 'cocok') {
+      breakdown[pName].totalDiterima += nom;
+      breakdown[pName].countDiterima += 1;
+    }
+  });
+
+  if (cardsContainer) {
+    const progKeys = Object.keys(breakdown);
+    if (!progKeys.length) {
+      cardsContainer.innerHTML = `
+        <div class="empty-state" style="grid-column:1/-1;padding:24px;text-align:center;">
+          Belum ada transaksi setoran program tercatat.
+        </div>
+      `;
+    } else {
+      cardsContainer.innerHTML = progKeys.map(function (pName) {
+        const item = breakdown[pName];
+        return `
+          <div class="program-breakdown-card" style="background:#fff;border:1px solid var(--slate-200);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow-sm);">
+            <div class="program-breakdown-title" style="font-weight:700;font-size:13px;color:var(--slate-800);margin-bottom:6px;">${escapeHtml(pName)}</div>
+            <div class="program-breakdown-val" style="font-size:18px;font-weight:700;color:var(--primary-700);">${formatRupiah(item.totalDiterima)}</div>
+            <div class="program-breakdown-count" style="font-size:12px;color:var(--slate-500);margin-top:4px;">
+              <strong>${item.countDiterima}</strong> disetujui · ${item.countTotal} total transaksi
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  if (tableBody) {
+    if (!list.length) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="${isAdminMode ? 6 : 5}" style="text-align:center;padding:28px;color:var(--slate-400);">
+            Belum ada transaksi setoran program.
+          </td>
+        </tr>
+      `;
+    } else {
+      tableBody.innerHTML = list.map(function (s, idx) {
+        const upzName = (s.upz_id && upzMap && upzMap[s.upz_id]) ? upzMap[s.upz_id] : (s.nama_upz || s.upz_id || '-');
+        const pName = getNamaProgram(s);
+        const st = String(s.status || 'menunggu').toLowerCase().trim();
+        const nom = Number(String(s.nominal || 0).replace(/[^\d.-]/g, '')) || 0;
+        return `
+          <tr style="border-bottom:1px solid var(--slate-100);">
+            <td style="padding:10px 12px;text-align:center;">${idx + 1}</td>
+            ${isAdminMode ? `<td style="padding:10px 12px;font-weight:600;color:var(--slate-800);">${escapeHtml(upzName)}</td>` : ''}
+            <td style="padding:10px 12px;font-weight:600;color:var(--blue-700);">
+              <div>${escapeHtml(pName)}</div>
+              ${s.catatan ? `<div style="font-size:11px;color:var(--slate-500);font-weight:normal;margin-top:2px;">${escapeHtml(s.catatan)}</div>` : ''}
+            </td>
+            <td style="padding:10px 12px;color:var(--slate-600);">${escapeHtml(formatTanggal(s.tanggal_setor))}</td>
+            <td style="padding:10px 12px;text-align:right;font-weight:700;color:var(--slate-800);">${formatRupiah(nom)}</td>
+            <td style="padding:10px 12px;text-align:center;">
+              <span class="status-badge ${getStatusClass(st)}" style="font-size:11px;">${escapeHtml(getStatusLabel(st))}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
+
+  const closeX = document.getElementById('closeProgramPreviewX');
+  const closeBtn = document.getElementById('closeProgramPreviewBtn');
+  function closeModal() { modal.classList.add('hidden'); }
+  if (closeX && !closeX.dataset.bound) { closeX.dataset.bound = 'true'; closeX.onclick = closeModal; }
+  if (closeBtn && !closeBtn.dataset.bound) { closeBtn.dataset.bound = 'true'; closeBtn.onclick = closeModal; }
+  modal.onclick = function (e) { if (e.target === modal) closeModal(); };
+}
+
+function openAdminProgramModal() {
+  const modal = document.getElementById('adminProgramModal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  renderAdminProgramList();
+
+  const closeX = document.getElementById('closeAdminProgramX');
+  const closeBtn = document.getElementById('closeAdminProgramBtn');
+  function closeModal() { modal.classList.add('hidden'); }
+  if (closeX && !closeX.dataset.bound) { closeX.dataset.bound = 'true'; closeX.onclick = closeModal; }
+  if (closeBtn && !closeBtn.dataset.bound) { closeBtn.dataset.bound = 'true'; closeBtn.onclick = closeModal; }
+  modal.onclick = function (e) { if (e.target === modal) closeModal(); };
+}
+
+async function renderAdminProgramList() {
+  const container = document.getElementById('adminProgramListContainer');
+  if (!container) return;
+
+  container.innerHTML = '<div style="padding:16px;text-align:center;color:var(--slate-500);font-size:13px;">Memuat program...</div>';
+  await fetchProgramMasterList();
+
+  if (!currentProgramMasterList.length) {
+    container.innerHTML = '<div style="padding:16px;text-align:center;color:var(--slate-400);font-size:13px;">Belum ada jenis program terdaftar.</div>';
+    return;
+  }
+
+  container.innerHTML = currentProgramMasterList.map(function (p) {
+    return `
+      <div class="admin-program-row">
+        <div>
+          <div style="font-weight:600;font-size:13px;color:var(--slate-800);">${escapeHtml(p.name)}</div>
+          <div style="font-size:11px;color:var(--slate-400);">ID: ${escapeHtml(p.id)}</div>
+        </div>
+        <button type="button" class="btn btn-ghost btn-xs btn-del-prog" data-id="${escapeHtml(p.id)}" style="color:#dc2626;display:inline-flex;align-items:center;gap:4px;" title="Hapus jenis program">
+          <svg class="icon" style="width:12px;height:12px;"><use href="#i-trash-2"></use></svg>
+          <span>Hapus</span>
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  container.querySelectorAll('.btn-del-prog').forEach(function (btn) {
+    btn.addEventListener('click', async function () {
+      const pId = this.dataset.id;
+      const targetProg = currentProgramMasterList.find(function (p) { return p.id === pId; });
+      const pName = targetProg ? targetProg.name : pId;
+
+      // Konfirmasi custom modal (tanpa pop-up browser)
+      let confirmed = false;
+      if (typeof askDialog === 'function') {
+        confirmed = await askDialog(
+          'Hapus Jenis Program',
+          `Apakah Anda yakin ingin menghapus program "${pName}" (${pId})? Slot ID ini akan dialokasikan kembali jika ada penambahan program baru.`,
+          'Ya, Hapus Program',
+          'i-trash-2',
+          true
+        );
+      } else {
+        confirmed = true;
+      }
+      if (!confirmed) return;
+
+      const token = await getValidAuthToken();
+      btn.disabled = true;
+      btn.textContent = 'Menghapus...';
+      try {
+        const res = await fetch('/api/save-program-type', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, action: 'delete', id: pId })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Gagal menghapus program.');
+
+        if (typeof showToast === 'function') {
+          showToast(`Program "${pName}" (${pId}) berhasil dihapus.`, 'success');
+        }
+        await renderAdminProgramList();
+      } catch (err) {
+        if (typeof showToast === 'function') {
+          showToast('Gagal menghapus: ' + err.message, 'error');
+        } else {
+          const msgEl = document.getElementById('adminProgramMsg');
+          if (msgEl) {
+            msgEl.textContent = 'Gagal: ' + err.message;
+            msgEl.style.color = '#dc2626';
+            msgEl.style.display = 'block';
+          }
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<svg class="icon" style="width:12px;height:12px;"><use href="#i-trash-2"></use></svg><span>Hapus</span>';
+      }
+    });
+  });
+}
+
+function initSetoranProgramFeature() {
+  // 1. Tab Switcher (Formulir Setoran Reguler vs Formulir Setoran Program)
+  const tabReguler = document.getElementById('tabSetoranReguler');
+  const tabProgram = document.getElementById('tabSetoranProgram');
+  const cardReguler = document.getElementById('cardSetoranReguler');
+  const cardProgram = document.getElementById('cardSetoranProgram');
+
+  if (tabReguler && tabProgram && cardReguler && cardProgram) {
+    tabReguler.addEventListener('click', function () {
+      tabReguler.className = 'btn btn-primary';
+      tabProgram.className = 'btn btn-soft';
+      cardReguler.classList.remove('hidden');
+      cardProgram.classList.add('hidden');
+    });
+
+    tabProgram.addEventListener('click', function () {
+      tabProgram.className = 'btn btn-primary';
+      tabReguler.className = 'btn btn-soft';
+      cardProgram.classList.remove('hidden');
+      cardReguler.classList.add('hidden');
+      fetchProgramMasterList();
+    });
+  }
+
+  // 2. Format Rupiah & Default Tanggal Form Program
+  const nomInput = document.getElementById('programNominalSetoran');
+  if (nomInput && !nomInput.dataset.boundFormat) {
+    nomInput.dataset.boundFormat = 'true';
+    nomInput.addEventListener('input', function () {
+      const raw = this.value.replace(/\D/g, '');
+      this.value = raw ? Number(raw).toLocaleString('id-ID') : '';
+    });
+  }
+
+  const tglInput = document.getElementById('programTanggalSetor');
+  if (tglInput && !tglInput.value) {
+    tglInput.value = new Date().toISOString().split('T')[0];
+  }
+
+  // Muat daftar program awal
+  fetchProgramMasterList();
+
+  // 3. Submit Form Setoran Program
+  const programForm = document.getElementById('setoranProgramForm');
+  const progMsg = document.getElementById('setoranProgramMessage');
+  const progSubmitBtn = document.getElementById('submitProgramButton');
+
+  if (programForm && !programForm.dataset.boundSubmit) {
+    programForm.dataset.boundSubmit = 'true';
+    programForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const namaProg = (document.getElementById('programJenisSelect')?.value || '').trim();
+      const tglSetor = document.getElementById('programTanggalSetor')?.value;
+      const nomStr = document.getElementById('programNominalSetoran')?.value || '';
+      const catatan = document.getElementById('programCatatan')?.value || '';
+
+      if (!namaProg || !tglSetor || !nomStr) {
+        showMessage(progMsg, 'Semua data setoran program wajib diisi.', '#d93025');
+        return;
+      }
+
+      const nominalAngka = Number(nomStr.replace(/\D/g, ''));
+      if (!nominalAngka || nominalAngka <= 0) {
+        showMessage(progMsg, 'Nominal setoran program harus lebih dari 0.', '#d93025');
+        return;
+      }
+
+      const upzTitle = (currentProfile && (currentProfile.nama_upz || currentProfile.kode_upz)) || 'UPZ';
+      const setuju = await askConfirmSetoran({
+        upz: upzTitle,
+        tanggal: formatTanggal(tglSetor),
+        periode: 'Program: ' + namaProg,
+        nominal: formatRupiah(nominalAngka),
+        jumlah: 'Setoran Program',
+        file: 'Tanpa file (Formulir Program)'
+      });
+
+      if (!setuju) {
+        showMessage(progMsg, 'Pengiriman dibatalkan.', '#666');
+        return;
+      }
+
+      progSubmitBtn.disabled = true;
+      progSubmitBtn.textContent = 'Menyimpan...';
+      showMessage(progMsg, 'Mengirim setoran program ke database...', '#666');
+
+      try {
+        const token = await getValidAuthToken();
+        if (!token) throw new Error('Sesi login telah berakhir. Silakan login kembali.');
+
+        const res = await fetch('/api/save-setoran-program', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token,
+            upz_id: currentProfile.upz_id,
+            nama_program: namaProg,
+            tanggal_setor: tglSetor,
+            nominal: nominalAngka,
+            catatan
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || 'Gagal menyimpan setoran program.');
+        }
+
+        showMessage(progMsg, 'Setoran program berhasil dikirim. Status: Menunggu Verifikasi.', '#259148');
+        programForm.reset();
+        if (tglInput) tglInput.value = new Date().toISOString().split('T')[0];
+
+        if (typeof recordUpzActivity === 'function') {
+          recordUpzActivity({
+            type: 'upload',
+            title: 'Setoran Program Baru',
+            nama_upz: upzTitle,
+            upz_id: currentProfile && currentProfile.upz_id,
+            nominal: nominalAngka,
+            desc: `Mengajukan setoran program <strong>${escapeHtml(namaProg)}</strong> senilai <strong>${formatRupiah(nominalAngka)}</strong>`
+          });
+        }
+
+        await loadDashboard(true);
+        if (typeof renderUpzMonthlyChart === 'function') renderUpzMonthlyChart();
+
+      } catch (err) {
+        showMessage(progMsg, err.message, '#d93025');
+      } finally {
+        progSubmitBtn.disabled = false;
+        progSubmitBtn.textContent = 'Simpan Setoran Program';
+      }
+    });
+  }
+
+  // 4. Delegasi Klik Tombol Preview Detail & Kelola Program
+  document.addEventListener('click', function (e) {
+    // Tombol Preview Detail Setoran Program (UPZ)
+    const btnUpzPreview = e.target.closest('#btnPreviewProgramUpz');
+    if (btnUpzPreview) {
+      e.preventDefault();
+      openProgramPreviewModal(false);
+      return;
+    }
+
+    // Tombol Preview Detail Setoran Program (Admin)
+    const btnAdminPreview = e.target.closest('#btnPreviewProgramAdmin');
+    if (btnAdminPreview) {
+      e.preventDefault();
+      openProgramPreviewModal(true);
+      return;
+    }
+
+    // Menu Kelola Jenis Program (Admin Dropdown)
+    const btnKelola = e.target.closest('#menuAdminProgram');
+    if (btnKelola) {
+      e.preventDefault();
+      openAdminProgramModal();
+      return;
+    }
+  });
+
+  // 5. Tambah Program Baru (Admin Modal)
+  const addBtn = document.getElementById('adminAddProgramBtn');
+  const addInput = document.getElementById('adminNewProgramInput');
+  const addMsg = document.getElementById('adminProgramMsg');
+
+  if (addBtn && !addBtn.dataset.boundAdd) {
+    addBtn.dataset.boundAdd = 'true';
+    addBtn.addEventListener('click', async function () {
+      const name = (addInput ? addInput.value : '').trim();
+      if (!name) {
+        if (addMsg) {
+          addMsg.textContent = 'Nama program tidak boleh kosong.';
+          addMsg.style.color = '#dc2626';
+          addMsg.style.display = 'block';
+        }
+        return;
+      }
+
+      addBtn.disabled = true;
+      addBtn.textContent = 'Menambahkan...';
+      if (addMsg) addMsg.style.display = 'none';
+
+      try {
+        const token = await getValidAuthToken();
+        const res = await fetch('/api/save-program-type', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, action: 'add', name })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Gagal menambahkan program.');
+
+        if (addInput) addInput.value = '';
+        if (addMsg) {
+          addMsg.textContent = 'Program berhasil ditambahkan!';
+          addMsg.style.color = '#15803d';
+          addMsg.style.display = 'block';
+          setTimeout(() => { addMsg.style.display = 'none'; }, 2500);
+        }
+        await renderAdminProgramList();
+      } catch (err) {
+        if (addMsg) {
+          addMsg.textContent = err.message;
+          addMsg.style.color = '#dc2626';
+          addMsg.style.display = 'block';
+        }
+      } finally {
+        addBtn.disabled = false;
+        addBtn.innerHTML = '<svg class="icon" style="width:14px;height:14px;"><use href="#i-plus"></use></svg><span>Tambah</span>';
+      }
+    });
+  }
+}
+
+// ======================================================================
 // 7. INITIALIZE ALL NEW MODULES ON DOM READY
 // ======================================================================
 function runAllNewFeaturesInit() {
@@ -10499,6 +11181,7 @@ function runAllNewFeaturesInit() {
     ['initNewModalsFeature', initNewModalsFeature],
     ['initBszUploadFeature', initBszUploadFeature],
     ['initVisualRefreshFeature', initVisualRefreshFeature],
+    ['initSetoranProgramFeature', initSetoranProgramFeature],
     ['syncBszList', syncBszList]
   ];
   tasks.forEach(function (pair) {

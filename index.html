@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,56 +12,242 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=27">
 </head>
+
 <body>
 
   <!-- SPRITE IKON (Lucide, MIT) -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-    <symbol id="i-hand-heart" viewBox="0 0 24 24"><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 15 6 6"/><path d="M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.73 2.73 0 0 0 16 4a2.78 2.78 0 0 0-5 1.8c0 1.2.8 2 1.5 2.8L16 12Z"/></symbol>
-    <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
-    <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8"/><path d="M8 11h8"/><path d="M8 15h5"/></symbol>
-    <symbol id="i-arrow-left-right" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol>
-    <symbol id="i-building-check" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v7"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h8"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="m16 19 2 2 4-4"/></symbol>
-    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
-    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
-    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></symbol>
-    <symbol id="i-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></symbol>
-    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
-    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
-    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></symbol>
-    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
-    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></symbol>
-    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
-    <symbol id="i-sheet" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
-    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
-    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
-    <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
-    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
-    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
-    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
-    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l6.58-6.58a1 1 0 0 0 0-1.42Z"/><path d="M7 7h.01"/></symbol>
-    <symbol id="i-table" viewBox="0 0 24 24"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></symbol>
-    <symbol id="i-user-check" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></symbol>
-    <symbol id="i-user-x" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="23" y2="14"/><line x1="23" y1="8" x2="17" y2="14"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></symbol>
-    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
-    <symbol id="i-bar-chart" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></symbol>
-    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
-    <symbol id="i-trash-2" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></symbol>
-    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
-    <symbol id="i-external-link" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
-    <symbol id="i-message-circle" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
-    <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
-    <symbol id="i-more-vertical" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></symbol>
-    <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></symbol>
-    <symbol id="i-book-open" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
-    <symbol id="i-help-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
-    <symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
-    <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
-    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+    <symbol id="i-hand-heart" viewBox="0 0 24 24">
+      <path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16" />
+      <path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9" />
+      <path d="m2 15 6 6" />
+      <path d="M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.73 2.73 0 0 0 16 4a2.78 2.78 0 0 0-5 1.8c0 1.2.8 2 1.5 2.8L16 12Z" />
+    </symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24">
+      <path
+        d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+      <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+    </symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24">
+      <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+      <path d="M8 7h8" />
+      <path d="M8 11h8" />
+      <path d="M8 15h5" />
+    </symbol>
+    <symbol id="i-arrow-left-right" viewBox="0 0 24 24">
+      <path d="M8 3 4 7l4 4" />
+      <path d="M4 7h16" />
+      <path d="m16 21 4-4-4-4" />
+      <path d="M20 17H4" />
+    </symbol>
+    <symbol id="i-building-check" viewBox="0 0 24 24">
+      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v7" />
+      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h8" />
+      <path d="M10 6h4" />
+      <path d="M10 10h4" />
+      <path d="m16 19 2 2 4-4" />
+    </symbol>
+    <symbol id="i-users" viewBox="0 0 24 24">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 6v6l4 2" />
+    </symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24">
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4" />
+      <path d="M8 2v4" />
+      <path d="M3 10h18" />
+    </symbol>
+    <symbol id="i-building" viewBox="0 0 24 24">
+      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+      <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+      <path d="M10 6h4" />
+      <path d="M10 10h4" />
+      <path d="M10 14h4" />
+      <path d="M10 18h4" />
+    </symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <path d="m16 17 5-5-5-5" />
+      <path d="M21 12H9" />
+    </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="m7 10 5 5 5-5" />
+      <path d="M12 15V3" />
+    </symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="m17 8-5-5-5 5" />
+      <path d="M12 3v12" />
+    </symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24">
+      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24">
+      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+      <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+      <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+      <line x1="2" x2="22" y1="2" y2="22" />
+    </symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24">
+      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+      <path d="M21 3v5h-5" />
+      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+      <path d="M8 16H3v5" />
+    </symbol>
+    <symbol id="i-sheet" viewBox="0 0 24 24">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+      <path d="M8 13h2" />
+      <path d="M14 13h2" />
+      <path d="M8 17h2" />
+      <path d="M14 17h2" />
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="M20 6 9 17l-5-5" />
+    </symbol>
+    <symbol id="i-x" viewBox="0 0 24 24">
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 8v4" />
+      <path d="M12 16h.01" />
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24">
+      <path
+        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+      <path d="m9 12 2 2 4-4" />
+    </symbol>
+    <symbol id="i-send" viewBox="0 0 24 24">
+      <path d="m22 2-7 20-4-9-9-4Z" />
+      <path d="M22 2 11 13" />
+    </symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24">
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24">
+      <rect x="3" y="11" width="18" height="11" rx="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24">
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
+    </symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24">
+      <path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l6.58-6.58a1 1 0 0 0 0-1.42Z" />
+      <path d="M7 7h.01" />
+    </symbol>
+    <symbol id="i-table" viewBox="0 0 24 24">
+      <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+      <path d="M3 9h18" />
+      <path d="M3 15h18" />
+      <path d="M9 3v18" />
+    </symbol>
+    <symbol id="i-user-check" viewBox="0 0 24 24">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <polyline points="16 11 18 13 22 9" />
+    </symbol>
+    <symbol id="i-user-x" viewBox="0 0 24 24">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <line x1="17" y1="8" x2="23" y2="14" />
+      <line x1="23" y1="8" x2="17" y2="14" />
+    </symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24">
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="4" y1="18" x2="20" y2="18" />
+    </symbol>
+    <symbol id="i-home" viewBox="0 0 24 24">
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
+    </symbol>
+    <symbol id="i-bar-chart" viewBox="0 0 24 24">
+      <line x1="12" y1="20" x2="12" y2="10" />
+      <line x1="18" y1="20" x2="18" y2="4" />
+      <line x1="6" y1="20" x2="6" y2="16" />
+    </symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24">
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </symbol>
+    <symbol id="i-trash-2" viewBox="0 0 24 24">
+      <path d="M3 6h18" />
+      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+      <line x1="10" x2="10" y1="11" y2="17" />
+      <line x1="14" x2="14" y1="11" y2="17" />
+    </symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+      <path d="M2 12h20" />
+    </symbol>
+    <symbol id="i-external-link" viewBox="0 0 24 24">
+      <path d="M15 3h6v6" />
+      <path d="M10 14 21 3" />
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    </symbol>
+    <symbol id="i-message-circle" viewBox="0 0 24 24">
+      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+    </symbol>
+    <symbol id="i-image" viewBox="0 0 24 24">
+      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+      <circle cx="9" cy="9" r="2" />
+      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+    </symbol>
+    <symbol id="i-more-vertical" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="2" />
+      <circle cx="12" cy="5" r="2" />
+      <circle cx="12" cy="19" r="2" />
+    </symbol>
+    <symbol id="i-file-text" viewBox="0 0 24 24">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+      <line x1="10" y1="9" x2="8" y2="9" />
+    </symbol>
+    <symbol id="i-book-open" viewBox="0 0 24 24">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    </symbol>
+    <symbol id="i-help-circle" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24">
+      <polyline points="9 18 15 12 9 6" />
+    </symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="16" x2="12" y2="12" />
+      <line x1="12" y1="8" x2="12.01" y2="8" />
+    </symbol>
   </svg>
 
   <!-- ====================================== -->
@@ -94,18 +281,25 @@
       <div class="brand-orb orb-1"></div>
       <div class="brand-orb orb-2"></div>
       <div class="brand-content">
-        <p class="brand-headline" id="typewriterHeadline"><span class="tw-text">Amanah tersalurkan,<br>tercatat dengan rapi.</span><span class="tw-cursor"></span></p>
+        <p class="brand-headline" id="typewriterHeadline"><span class="tw-text">Amanah tersalurkan,<br>tercatat dengan
+            rapi.</span><span class="tw-cursor"></span></p>
         <ul class="brand-points">
           <li class="brand-point-item">
-            <span class="point-icon-box"><svg class="icon"><use href="#i-shield"></use></svg></span>
+            <span class="point-icon-box"><svg class="icon">
+                <use href="#i-shield"></use>
+              </svg></span>
             <span class="point-text">Verifikasi setoran transparan</span>
           </li>
           <li class="brand-point-item">
-            <span class="point-icon-box"><svg class="icon"><use href="#i-sheet"></use></svg></span>
+            <span class="point-icon-box"><svg class="icon">
+                <use href="#i-sheet"></use>
+              </svg></span>
             <span class="point-text">Rincian muzaki berbasis Excel</span>
           </li>
           <li class="brand-point-item">
-            <span class="point-icon-box"><svg class="icon"><use href="#i-clock"></use></svg></span>
+            <span class="point-icon-box"><svg class="icon">
+                <use href="#i-clock"></use>
+              </svg></span>
             <span class="point-text">Riwayat tersimpan real-time</span>
           </li>
         </ul>
@@ -114,8 +308,10 @@
 
     <main class="login-panel">
       <div class="login-card">
-        <div class="login-card-logo-wrap" style="display:flex;justify-content:center;align-items:center;text-align:center;margin:0 auto 24px auto;width:100%;">
-          <img class="baznas-logo login-card-logo" src="assets/logo_baznas_banyumas.png" alt="BAZNAS Kabupaten Banyumas" style="display:block;margin:0 auto;height:56px;max-width:100%;width:auto;object-fit:contain;">
+        <div class="login-card-logo-wrap"
+          style="display:flex;justify-content:center;align-items:center;text-align:center;margin:0 auto 24px auto;width:100%;">
+          <img class="baznas-logo login-card-logo" src="assets/logo_baznas_banyumas.png" alt="BAZNAS Kabupaten Banyumas"
+            style="display:block;margin:0 auto;height:56px;max-width:100%;width:auto;object-fit:contain;">
         </div>
         <h1 style="text-align:center;">Selamat datang</h1>
         <p class="subtitle" style="text-align:center;">Masuk ke portal Sistem Pelaporan UPZ BAZNAS Banyumas.</p>
@@ -124,7 +320,9 @@
           <div class="login-field">
             <label for="email">Email</label>
             <div class="input-icon">
-              <svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-mail"></use>
+              </svg>
               <input type="email" id="email" placeholder="nama@email.com" autocomplete="email" required>
             </div>
           </div>
@@ -132,10 +330,16 @@
           <div class="login-field">
             <label for="password">Password</label>
             <div class="input-icon">
-              <svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg>
-              <input type="password" id="password" placeholder="Masukkan password" autocomplete="current-password" required>
-              <button type="button" id="togglePasswordBtn" class="toggle-password-btn" aria-label="Lihat password" title="Lihat password">
-                <svg class="icon"><use href="#i-eye"></use></svg>
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-lock"></use>
+              </svg>
+              <input type="password" id="password" placeholder="Masukkan password" autocomplete="current-password"
+                required>
+              <button type="button" id="togglePasswordBtn" class="toggle-password-btn" aria-label="Lihat password"
+                title="Lihat password">
+                <svg class="icon">
+                  <use href="#i-eye"></use>
+                </svg>
               </button>
             </div>
           </div>
@@ -156,7 +360,9 @@
 
     <header class="topbar">
       <div class="topbar-brand">
-        <div class="baznas-header-logo"><img class="baznas-logo baznas-logo-light" src="assets/logo_baznas_banyumas.png" alt="BAZNAS Banyumas"><img class="baznas-logo baznas-logo-dark" src="assets/logo_baznas_banyumas_white.png" alt="BAZNAS Banyumas"></div>
+        <div class="baznas-header-logo"><img class="baznas-logo baznas-logo-light" src="assets/logo_baznas_banyumas.png"
+            alt="BAZNAS Banyumas"><img class="baznas-logo baznas-logo-dark" src="assets/logo_baznas_banyumas_white.png"
+            alt="BAZNAS Banyumas"></div>
         <div class="topbar-titles-wrap">
           <div class="topbar-title">Sistem Pelaporan UPZ</div>
           <div class="topbar-sub">BAZNAS Kabupaten Banyumas</div>
@@ -165,47 +371,73 @@
 
       <div class="topbar-user">
         <!-- Link Website Resmi BAZNAS Banyumas di Header (Hanya tampil untuk role UPZ) -->
-        <a href="https://baznasbanyumas.com" target="_blank" rel="noopener noreferrer" class="header-website-badge" id="headerWebsiteBadge" title="Buka Website Resmi BAZNAS Kabupaten Banyumas">
-          <svg class="icon"><use href="#i-globe"></use></svg>
+        <a href="https://baznasbanyumas.com" target="_blank" rel="noopener noreferrer" class="header-website-badge"
+          id="headerWebsiteBadge" title="Buka Website Resmi BAZNAS Kabupaten Banyumas">
+          <svg class="icon">
+            <use href="#i-globe"></use>
+          </svg>
           <span class="web-badge-text">baznasbanyumas.com</span>
-          <svg class="icon ext-icon"><use href="#i-external-link"></use></svg>
+          <svg class="icon ext-icon">
+            <use href="#i-external-link"></use>
+          </svg>
         </a>
 
         <div class="user-chip" id="headerUserChip" title="Klik untuk melihat profil UPZ">
-          <svg class="icon"><use href="#i-users"></use></svg>
+          <svg class="icon">
+            <use href="#i-users"></use>
+          </svg>
           <span id="userName" class="user-name">-</span>
         </div>
 
         <!-- Tombol Beranda di Header (Hanya Ikon) -->
-        <button type="button" id="headerHomeButton" class="btn btn-ghost btn-icon-only header-icon-btn" aria-label="Beranda" title="Beranda">
-          <svg class="icon"><use href="#i-home"></use></svg>
+        <button type="button" id="headerHomeButton" class="btn btn-ghost btn-icon-only header-icon-btn"
+          aria-label="Beranda" title="Beranda">
+          <svg class="icon">
+            <use href="#i-home"></use>
+          </svg>
         </button>
 
         <!-- Tombol Refresh di Header -->
-        <button type="button" id="headerRefreshButton" class="btn btn-ghost btn-icon-only header-icon-btn" aria-label="Refresh Data" title="Muat Ulang Data">
-          <svg class="icon"><use href="#i-refresh"></use></svg>
+        <button type="button" id="headerRefreshButton" class="btn btn-ghost btn-icon-only header-icon-btn"
+          aria-label="Refresh Data" title="Muat Ulang Data">
+          <svg class="icon">
+            <use href="#i-refresh"></use>
+          </svg>
         </button>
 
         <!-- Tombol & Dropdown Notifikasi Admin -->
         <div id="adminNotificationWrap" class="notif-dropdown-wrap hidden">
-          <button type="button" id="adminNotifButton" class="btn btn-ghost btn-icon-only header-icon-btn notif-bell-btn" aria-label="Notifikasi Aktivitas UPZ" title="Notifikasi Aktivitas UPZ" aria-expanded="false" aria-haspopup="true">
-            <svg class="icon"><use href="#i-bell"></use></svg>
+          <button type="button" id="adminNotifButton" class="btn btn-ghost btn-icon-only header-icon-btn notif-bell-btn"
+            aria-label="Notifikasi Aktivitas UPZ" title="Notifikasi Aktivitas UPZ" aria-expanded="false"
+            aria-haspopup="true">
+            <svg class="icon">
+              <use href="#i-bell"></use>
+            </svg>
             <span id="adminNotifBadge" class="notif-badge hidden">0</span>
           </button>
 
-          <div id="adminNotifDropdown" class="notif-dropdown hidden" role="region" aria-label="Notifikasi Aktivitas UPZ">
+          <div id="adminNotifDropdown" class="notif-dropdown hidden" role="region"
+            aria-label="Notifikasi Aktivitas UPZ">
             <div class="notif-header">
               <div class="notif-header-title">
-                <svg class="icon"><use href="#i-bell"></use></svg>
+                <svg class="icon">
+                  <use href="#i-bell"></use>
+                </svg>
                 <span>Notifikasi Aktivitas UPZ</span>
                 <span id="notifUnreadPill" class="notif-unread-pill hidden">0 baru</span>
               </div>
               <div class="notif-header-actions">
-                <button type="button" id="markAllNotifsReadBtn" class="notif-header-icon-btn" title="Tandai semua pemberitahuan sudah dibaca" aria-label="Tandai semua sudah dibaca">
-                  <svg class="icon"><use href="#i-check"></use></svg>
+                <button type="button" id="markAllNotifsReadBtn" class="notif-header-icon-btn"
+                  title="Tandai semua pemberitahuan sudah dibaca" aria-label="Tandai semua sudah dibaca">
+                  <svg class="icon">
+                    <use href="#i-check"></use>
+                  </svg>
                 </button>
-                <button type="button" id="deleteAllNotifsBtn" class="notif-header-icon-btn notif-btn-trash" title="Hapus semua pemberitahuan" aria-label="Hapus semua pemberitahuan">
-                  <svg class="icon"><use href="#i-trash-2"></use></svg>
+                <button type="button" id="deleteAllNotifsBtn" class="notif-header-icon-btn notif-btn-trash"
+                  title="Hapus semua pemberitahuan" aria-label="Hapus semua pemberitahuan">
+                  <svg class="icon">
+                    <use href="#i-trash-2"></use>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -223,7 +455,9 @@
             <div class="notif-footer">
               <span class="notif-footer-hint"><span class="live-dot"></span> Pembaruan real-time</span>
               <button type="button" id="refreshNotifsBtn" class="notif-footer-btn" title="Muat ulang notifikasi">
-                <svg class="icon"><use href="#i-refresh"></use></svg> Segarkan
+                <svg class="icon">
+                  <use href="#i-refresh"></use>
+                </svg> Segarkan
               </button>
             </div>
           </div>
@@ -231,8 +465,11 @@
 
         <!-- Menu Hamburger Dropdown -->
         <div class="menu-dropdown-wrap">
-          <button type="button" id="hamburgerButton" class="btn btn-ghost btn-icon-only header-icon-btn" aria-label="Menu Navigasi" title="Menu Navigasi" aria-expanded="false" aria-haspopup="true">
-            <svg class="icon"><use href="#i-menu"></use></svg>
+          <button type="button" id="hamburgerButton" class="btn btn-ghost btn-icon-only header-icon-btn"
+            aria-label="Menu Navigasi" title="Menu Navigasi" aria-expanded="false" aria-haspopup="true">
+            <svg class="icon">
+              <use href="#i-menu"></use>
+            </svg>
           </button>
 
           <div id="hamburgerDropdown" class="hamburger-dropdown hidden" role="menu">
@@ -240,25 +477,44 @@
             <div id="adminMenuGroup" class="menu-group">
               <div class="menu-header">Administrator</div>
               <button type="button" class="menu-item" id="menuAdminBeranda" role="menuitem">
-                <svg class="icon"><use href="#i-home"></use></svg><span>Beranda</span>
+                <svg class="icon">
+                  <use href="#i-home"></use>
+                </svg><span>Beranda</span>
               </button>
               <button type="button" class="menu-item" id="menuAdminSetoran" role="menuitem">
-                <svg class="icon"><use href="#i-receipt"></use></svg><span>Daftar Setoran</span>
+                <svg class="icon">
+                  <use href="#i-receipt"></use>
+                </svg><span>Daftar Setoran</span>
+              </button>
+              <button type="button" class="menu-item" id="menuAdminProgram" role="menuitem">
+                <svg class="icon">
+                  <use href="#i-tag"></use>
+                </svg><span>Kelola Jenis Program</span>
               </button>
               <button type="button" class="menu-item" id="menuAdminDonatur" role="menuitem">
-                <svg class="icon"><use href="#i-users"></use></svg><span>Daftar Donatur</span>
+                <svg class="icon">
+                  <use href="#i-users"></use>
+                </svg><span>Daftar Donatur</span>
               </button>
               <button type="button" class="menu-item" id="menuAdminPentasharufan" role="menuitem">
-                <svg class="icon"><use href="#i-hand-heart"></use></svg><span>Perbantuan Pentasharufan</span>
+                <svg class="icon">
+                  <use href="#i-hand-heart"></use>
+                </svg><span>Perbantuan Pentasharufan</span>
               </button>
               <button type="button" class="menu-item" id="menuAdminUpz" role="menuitem">
-                <svg class="icon"><use href="#i-building"></use></svg><span>Manajemen Akun UPZ</span>
+                <svg class="icon">
+                  <use href="#i-building"></use>
+                </svg><span>Manajemen Akun UPZ</span>
               </button>
               <button type="button" class="menu-item" id="menuAdminExport" role="menuitem">
-                <svg class="icon"><use href="#i-sheet"></use></svg><span>Export Rekap Excel</span>
+                <svg class="icon">
+                  <use href="#i-sheet"></use>
+                </svg><span>Export Rekap Excel</span>
               </button>
               <button type="button" class="menu-item" id="menuAdminPanduan" role="menuitem">
-                <svg class="icon"><use href="#i-book-open"></use></svg><span>Buku Panduan Sistem</span>
+                <svg class="icon">
+                  <use href="#i-book-open"></use>
+                </svg><span>Buku Panduan Sistem</span>
               </button>
             </div>
 
@@ -266,31 +522,47 @@
             <div id="upzMenuGroup" class="menu-group hidden">
               <div class="menu-header">Unit Pengumpul Zakat</div>
               <button type="button" class="menu-item" id="menuUpzBeranda" role="menuitem">
-                <svg class="icon"><use href="#i-home"></use></svg><span>Beranda</span>
+                <svg class="icon">
+                  <use href="#i-home"></use>
+                </svg><span>Beranda</span>
               </button>
               <button type="button" class="menu-item" id="menuUpzInput" role="menuitem">
-                <svg class="icon"><use href="#i-upload"></use></svg><span>Input Setoran</span>
+                <svg class="icon">
+                  <use href="#i-upload"></use>
+                </svg><span>Input Setoran</span>
               </button>
               <button type="button" class="menu-item" id="menuUpzDonatur" role="menuitem">
-                <svg class="icon"><use href="#i-users"></use></svg><span>Daftar Donatur</span>
+                <svg class="icon">
+                  <use href="#i-users"></use>
+                </svg><span>Daftar Donatur</span>
               </button>
               <button type="button" class="menu-item" id="menuUpzRiwayat" role="menuitem">
-                <svg class="icon"><use href="#i-receipt"></use></svg><span>Riwayat Setoran</span>
+                <svg class="icon">
+                  <use href="#i-receipt"></use>
+                </svg><span>Riwayat Setoran</span>
               </button>
               <button type="button" class="menu-item" id="menuUpzPentasharufan" role="menuitem">
-                <svg class="icon"><use href="#i-hand-heart"></use></svg><span>Perbantuan Pentasharufan</span>
+                <svg class="icon">
+                  <use href="#i-hand-heart"></use>
+                </svg><span>Perbantuan Pentasharufan</span>
               </button>
               <button type="button" class="menu-item" id="menuUpzMgmt" role="menuitem">
-                <svg class="icon"><use href="#i-building"></use></svg><span>Manajemen UPZ</span>
+                <svg class="icon">
+                  <use href="#i-building"></use>
+                </svg><span>Manajemen UPZ</span>
               </button>
               <button type="button" class="menu-item" id="menuUpzPanduan" role="menuitem">
-                <svg class="icon"><use href="#i-book-open"></use></svg><span>Buku Panduan UPZ</span>
+                <svg class="icon">
+                  <use href="#i-book-open"></use>
+                </svg><span>Buku Panduan UPZ</span>
               </button>
             </div>
 
             <div class="menu-divider"></div>
             <button type="button" class="menu-item menu-item-danger" id="menuLogout" role="menuitem">
-              <svg class="icon"><use href="#i-logout"></use></svg><span>Logout</span>
+              <svg class="icon">
+                <use href="#i-logout"></use>
+              </svg><span>Logout</span>
             </button>
           </div>
         </div>
@@ -315,55 +587,103 @@
         <div id="adminViewBeranda" class="admin-view">
           <div class="hero hero-admin page-title-banner">
             <div class="hero-text page-title-text">
-              <span class="hero-eyebrow"><svg class="icon"><use href="#i-shield"></use></svg>Panel Administrator</span>
+              <span class="hero-eyebrow"><svg class="icon">
+                  <use href="#i-shield"></use>
+                </svg>Panel Administrator</span>
               <h2 class="hero-title">Beranda Administrator</h2>
-              <p class="hero-desc">Monitoring ringkasan verifikasi dan tren statistik setoran dana UPZ BAZNAS Banyumas.</p>
+              <p class="hero-desc">Monitoring ringkasan verifikasi dan tren statistik setoran dana UPZ BAZNAS Banyumas.
+              </p>
             </div>
-            <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-bar-chart"></use></svg></div>
+            <div class="hero-badge" aria-hidden="true"><svg class="icon">
+                <use href="#i-bar-chart"></use>
+              </svg></div>
           </div>
 
           <!-- SCORECARD ADMIN 2 BARIS (3 BOX PER BARIS) -->
           <div class="summary-grid summary-grid-3" id="adminSummaryGrid">
             <!-- BARIS 1 -->
             <div class="summary-card">
-              <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-arrow-left-right"></use></svg></div>
-              <div><div class="summary-title">Total Transaksi</div><div id="adminJumlahTransaksi" class="summary-value">0</div></div>
+              <div class="summary-icon tone-blue"><svg class="icon">
+                  <use href="#i-arrow-left-right"></use>
+                </svg></div>
+              <div>
+                <div class="summary-title">Total Transaksi</div>
+                <div id="adminJumlahTransaksi" class="summary-value">0</div>
+              </div>
             </div>
             <div class="summary-card">
-              <div class="summary-icon tone-amber"><svg class="icon"><use href="#i-clock"></use></svg></div>
-              <div><div class="summary-title">Menunggu Verifikasi</div><div id="adminJumlahMenunggu" class="summary-value">0</div></div>
+              <div class="summary-icon tone-amber"><svg class="icon">
+                  <use href="#i-clock"></use>
+                </svg></div>
+              <div>
+                <div class="summary-title">Menunggu Verifikasi</div>
+                <div id="adminJumlahMenunggu" class="summary-value">0</div>
+              </div>
             </div>
             <div class="summary-card">
-              <div class="summary-icon tone-green"><svg class="icon"><use href="#i-wallet"></use></svg></div>
-              <div><div class="summary-title">Total Terverifikasi</div><div id="adminTotalNominal" class="summary-value">Rp 0</div></div>
+              <div class="summary-icon tone-green"><svg class="icon">
+                  <use href="#i-wallet"></use>
+                </svg></div>
+              <div>
+                <div class="summary-title">Setoran Reguler</div>
+                <div id="adminTotalNominal" class="summary-value">Rp 0</div>
+              </div>
+            </div>
+            <div class="summary-card card-with-corner-action">
+              <button type="button" id="btnPreviewProgramAdmin" class="summary-corner-btn"
+                title="Preview Detail Setoran Program" aria-label="Preview Detail Setoran Program">
+                <svg class="icon">
+                  <use href="#i-file-text"></use>
+                </svg>
+              </button>
+              <div class="summary-icon tone-blue"><svg class="icon">
+                  <use href="#i-tag"></use>
+                </svg></div>
+              <div>
+                <div class="summary-title">Setoran Program</div>
+                <div id="adminTotalSetoranProgram" class="summary-value">Rp 0</div>
+              </div>
             </div>
 
             <!-- BARIS 2 -->
             <div class="summary-card card-with-corner-action">
-              <button type="button" id="btnDetailKategoriUpz" class="summary-corner-btn" title="Lihat rincian per kategori UPZ" aria-label="Lihat rincian per kategori UPZ">
-                <svg class="icon"><use href="#i-file-text"></use></svg>
+              <button type="button" id="btnDetailKategoriUpz" class="summary-corner-btn"
+                title="Lihat rincian per kategori UPZ" aria-label="Lihat rincian per kategori UPZ">
+                <svg class="icon">
+                  <use href="#i-file-text"></use>
+                </svg>
               </button>
-              <div class="summary-icon tone-violet"><svg class="icon"><use href="#i-building"></use></svg></div>
+              <div class="summary-icon tone-violet"><svg class="icon">
+                  <use href="#i-building"></use>
+                </svg></div>
               <div>
                 <div class="summary-title">Jumlah UPZ Terdata</div>
                 <div id="adminJumlahUpzTerdata" class="summary-value">602</div>
               </div>
             </div>
             <div class="summary-card">
-              <div class="summary-icon tone-teal"><svg class="icon"><use href="#i-building-check"></use></svg></div>
+              <div class="summary-icon tone-teal"><svg class="icon">
+                  <use href="#i-building-check"></use>
+                </svg></div>
               <div>
                 <div class="summary-title">UPZ Berpartisipasi</div>
                 <div id="adminJumlahUpzPartisipasi" class="summary-value">0</div>
               </div>
             </div>
             <div class="summary-card card-with-corner-action">
-              <button type="button" id="btnDetailDonatur" class="summary-corner-btn" title="Lihat Rincian Muzaki &amp; Munfik" aria-label="Lihat Rincian Muzaki &amp; Munfik">
-                <svg class="icon"><use href="#i-file-text"></use></svg>
+              <button type="button" id="btnDetailDonatur" class="summary-corner-btn"
+                title="Lihat Rincian Muzaki &amp; Munfik" aria-label="Lihat Rincian Muzaki &amp; Munfik">
+                <svg class="icon">
+                  <use href="#i-file-text"></use>
+                </svg>
               </button>
-              <div class="summary-icon tone-teal"><svg class="icon"><use href="#i-users"></use></svg></div>
+              <div class="summary-icon tone-teal"><svg class="icon">
+                  <use href="#i-users"></use>
+                </svg></div>
               <div>
                 <div class="summary-title">Jumlah Donatur</div>
-                <div id="triggerDonaturBreakdown" style="display:flex;align-items:baseline;gap:6px;cursor:pointer;" title="Klik untuk melihat rincian Muzaki dan Munfik">
+                <div id="triggerDonaturBreakdown" style="display:flex;align-items:baseline;gap:6px;cursor:pointer;"
+                  title="Klik untuk melihat rincian Muzaki dan Munfik">
                   <span id="adminTotalDonaturScorecard" class="summary-value">0</span>
                   <span class="dfb-value-unit" style="font-size:12px;color:var(--slate-500);">Donatur</span>
                 </div>
@@ -375,7 +695,9 @@
           <div class="content-card chart-card" id="adminChartCard">
             <div class="section-header chart-header">
               <div>
-                <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-bar-chart"></use></svg> Tren Setoran</span>
+                <span class="section-badge-eyebrow"><svg class="icon">
+                    <use href="#i-bar-chart"></use>
+                  </svg> Tren Setoran</span>
                 <h2>Grafik Setoran per Bulan</h2>
                 <p class="section-desc">Akumulasi nominal setoran yang masuk setiap bulan pada tahun yang dipilih.</p>
               </div>
@@ -419,9 +741,12 @@
           <div class="content-card ranking-card" id="adminRankingCard">
             <div class="section-header ranking-header">
               <div>
-                <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-tag"></use></svg> Klasemen Kontribusi</span>
+                <span class="section-badge-eyebrow"><svg class="icon">
+                    <use href="#i-tag"></use>
+                  </svg> Klasemen Kontribusi</span>
                 <h2>Peringkat Setoran UPZ</h2>
-                <p class="section-desc">Peringkat 5 UPZ dengan akumulasi setoran tertinggi dan 5 UPZ terendah (berdasarkan setoran terverifikasi).</p>
+                <p class="section-desc">Peringkat 5 UPZ dengan akumulasi setoran tertinggi dan 5 UPZ terendah
+                  (berdasarkan setoran terverifikasi).</p>
               </div>
               <div class="chart-controls ranking-controls-group">
                 <div class="ranking-filter-item">
@@ -473,33 +798,66 @@
         <div id="adminViewSetoran" class="admin-view hidden">
           <div class="hero hero-admin page-title-banner">
             <div class="hero-text page-title-text">
-              <span class="hero-eyebrow"><svg class="icon"><use href="#i-receipt"></use></svg>Verifikasi Setoran</span>
+              <span class="hero-eyebrow"><svg class="icon">
+                  <use href="#i-receipt"></use>
+                </svg>Verifikasi Setoran</span>
               <h2 class="hero-title">Daftar Setoran Masuk</h2>
               <p class="hero-desc">Periksa dan putuskan verifikasi data transaksi setoran yang diajukan oleh UPZ.</p>
             </div>
-            <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-receipt"></use></svg></div>
+            <div class="hero-badge" aria-hidden="true"><svg class="icon">
+                <use href="#i-receipt"></use>
+              </svg></div>
           </div>
 
           <div class="content-card">
             <div class="section-header">
-              <div>
-                <h2>Tabel Setoran</h2>
-                <p class="section-desc">Klik <strong>Periksa</strong> untuk melihat rincian muzaki dan memverifikasi.</p>
-              </div>
+              <h2>Tabel Setoran</h2>
+              <p class="section-desc">Klik <strong>Periksa</strong> untuk melihat rincian muzaki dan memverifikasi.
+              </p>
             </div>
 
             <div class="filter-bar filter-bar-admin">
               <div class="filter-item filter-search">
                 <label for="adminSearchInput">Pencarian</label>
-                <div class="input-icon"><svg class="icon"><use href="#i-search"></use></svg><input type="text" id="adminSearchInput" placeholder="Cari nama UPZ, kode, atau file..." autocomplete="off"></div>
+                <div class="input-icon"><svg class="icon">
+                    <use href="#i-search"></use>
+                  </svg><input type="text" id="adminSearchInput" placeholder="Cari nama UPZ, kode, atau file..."
+                    autocomplete="off"></div>
               </div>
-              <div class="filter-item"><label for="adminFilterStatus">Status</label><select id="adminFilterStatus"><option value="semua">Semua Status</option><option value="menunggu">Menunggu Verifikasi</option><option value="diterima">Diterima</option><option value="ditolak">Ditolak</option></select></div>
-              <div class="filter-item"><label for="adminFilterUpz">Pilih UPZ</label><select id="adminFilterUpz"><option value="semua">Semua UPZ</option></select></div>
-              <div class="filter-item"><label for="adminFilterTanggal">Tanggal Setor</label><input type="date" id="adminFilterTanggal"></div>
-              <div class="filter-item"><label for="adminFilterBulan">Bulan</label><select id="adminFilterBulan"><option value="semua">Semua Bulan</option><option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option><option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option></select></div>
-              <div class="filter-item"><label for="adminFilterTahun">Tahun</label><input type="number" id="adminFilterTahun" min="2000" max="2100" placeholder="2026"></div>
-              <div class="filter-item"><label for="adminFilterNominal">Nominal</label><div class="input-prefix"><span>Rp</span><input type="text" inputmode="numeric" id="adminFilterNominal" autocomplete="off" placeholder="500.000"></div></div>
-              <div class="filter-item filter-actions"><button type="button" id="adminResetFilterButton" class="btn btn-ghost">Reset Filter</button></div>
+              <div class="filter-item"><label for="adminFilterStatus">Status</label><select id="adminFilterStatus">
+                  <option value="semua">Semua Status</option>
+                  <option value="menunggu">Menunggu Verifikasi</option>
+                  <option value="diterima">Diterima</option>
+                  <option value="ditolak">Ditolak</option>
+                </select></div>
+              <div class="filter-item"><label for="adminFilterUpz">Pilih UPZ</label><select id="adminFilterUpz">
+                  <option value="semua">Semua UPZ</option>
+                </select></div>
+              <div class="filter-item"><label for="adminFilterTanggal">Tanggal Setor</label><input type="date"
+                  id="adminFilterTanggal"></div>
+              <div class="filter-item"><label for="adminFilterBulan">Bulan</label><select id="adminFilterBulan">
+                  <option value="semua">Semua Bulan</option>
+                  <option value="1">Januari</option>
+                  <option value="2">Februari</option>
+                  <option value="3">Maret</option>
+                  <option value="4">April</option>
+                  <option value="5">Mei</option>
+                  <option value="6">Juni</option>
+                  <option value="7">Juli</option>
+                  <option value="8">Agustus</option>
+                  <option value="9">September</option>
+                  <option value="10">Oktober</option>
+                  <option value="11">November</option>
+                  <option value="12">Desember</option>
+                </select></div>
+              <div class="filter-item"><label for="adminFilterTahun">Tahun</label><input type="number"
+                  id="adminFilterTahun" min="2000" max="2100" placeholder="2026"></div>
+              <div class="filter-item"><label for="adminFilterNominal">Nominal</label>
+                <div class="input-prefix"><span>Rp</span><input type="text" inputmode="numeric" id="adminFilterNominal"
+                    autocomplete="off" placeholder="500.000"></div>
+              </div>
+              <div class="filter-item filter-actions"><button type="button" id="adminResetFilterButton"
+                  class="btn btn-ghost">Reset Filter</button></div>
             </div>
 
             <div class="list-toolbar">
@@ -517,25 +875,35 @@
         <div id="adminViewDonatur" class="admin-view hidden">
           <div class="hero hero-admin page-title-banner">
             <div class="hero-text page-title-text">
-              <span class="hero-eyebrow"><svg class="icon"><use href="#i-users"></use></svg>Database Donatur</span>
+              <span class="hero-eyebrow"><svg class="icon">
+                  <use href="#i-users"></use>
+                </svg>Database Donatur</span>
               <h2 class="hero-title">Rekapitulasi Donatur Seluruh UPZ</h2>
-              <p class="hero-desc">Histori donatur dan model ceklis per bulan dari seluruh UPZ yang setoran file Excel-nya telah <strong>diterima</strong>.</p>
+              <p class="hero-desc">Histori donatur dan model ceklis per bulan dari seluruh UPZ yang setoran file
+                Excel-nya telah <strong>diterima</strong>.</p>
             </div>
-            <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-users"></use></svg></div>
+            <div class="hero-badge" aria-hidden="true"><svg class="icon">
+                <use href="#i-users"></use>
+              </svg></div>
           </div>
 
           <section id="adminDonaturManagement" class="content-card" style="margin-top:0;">
-            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div class="section-header"
+              style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
                 <h2>Matriks Donatur Bulanan</h2>
                 <p class="section-desc">Cek histori donatur dan model ceklis per bulan dari seluruh UPZ.</p>
               </div>
               <div class="header-actions" style="display:flex;gap:8px;">
                 <button type="button" id="adminDonaturExportBtn" class="btn btn-gold">
-                  <svg class="icon"><use href="#i-sheet"></use></svg><span>Export Excel</span>
+                  <svg class="icon">
+                    <use href="#i-sheet"></use>
+                  </svg><span>Export Excel</span>
                 </button>
                 <button type="button" id="adminDonaturRefreshBtn" class="btn btn-ghost">
-                  <svg class="icon"><use href="#i-refresh"></use></svg><span>Muat Ulang</span>
+                  <svg class="icon">
+                    <use href="#i-refresh"></use>
+                  </svg><span>Muat Ulang</span>
                 </button>
               </div>
             </div>
@@ -569,7 +937,9 @@
               <div class="filter-item filter-search">
                 <label for="adminDonaturSearch">Cari Donatur</label>
                 <div class="input-icon">
-                  <svg class="icon"><use href="#i-search"></use></svg>
+                  <svg class="icon">
+                    <use href="#i-search"></use>
+                  </svg>
                   <input type="text" id="adminDonaturSearch" placeholder="Cari nama donatur..." autocomplete="off">
                 </div>
               </div>
@@ -602,21 +972,28 @@
         <div id="adminViewUpz" class="admin-view hidden">
           <div class="hero hero-admin page-title-banner">
             <div class="hero-text page-title-text">
-              <span class="hero-eyebrow"><svg class="icon"><use href="#i-building"></use></svg>Data UPZ</span>
+              <span class="hero-eyebrow"><svg class="icon">
+                  <use href="#i-building"></use>
+                </svg>Data UPZ</span>
               <h2 class="hero-title">Manajemen Akun UPZ</h2>
               <p class="hero-desc">Kelola data pendaftaran akun UPZ, kategori, dan perbarui kata sandi.</p>
             </div>
-            <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-building"></use></svg></div>
+            <div class="hero-badge" aria-hidden="true"><svg class="icon">
+                <use href="#i-building"></use>
+              </svg></div>
           </div>
 
           <section id="adminUpzManagement" class="content-card" style="margin-top:0;">
-            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div class="section-header"
+              style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
                 <h2>Daftar Akun UPZ</h2>
                 <p class="section-desc">Tambah, cari, dan edit data akun UPZ.</p>
               </div>
               <button type="button" id="addUpzButton" class="btn btn-primary">
-                <svg class="icon"><use href="#i-plus"></use></svg><span>Tambah UPZ Baru</span>
+                <svg class="icon">
+                  <use href="#i-plus"></use>
+                </svg><span>Tambah UPZ Baru</span>
               </button>
             </div>
 
@@ -624,7 +1001,9 @@
               <div class="filter-item filter-search">
                 <label for="upzMgmtSearch">Cari UPZ</label>
                 <div class="input-icon">
-                  <svg class="icon"><use href="#i-search"></use></svg>
+                  <svg class="icon">
+                    <use href="#i-search"></use>
+                  </svg>
                   <input type="text" id="upzMgmtSearch" placeholder="Cari nama atau email UPZ..." autocomplete="off">
                 </div>
               </div>
@@ -646,12 +1025,15 @@
               </div>
               <div class="filter-item filter-actions">
                 <button type="button" id="upzMgmtRefresh" class="btn btn-ghost">
-                  <svg class="icon"><use href="#i-refresh"></use></svg><span>Muat Ulang</span>
+                  <svg class="icon">
+                    <use href="#i-refresh"></use>
+                  </svg><span>Muat Ulang</span>
                 </button>
               </div>
             </div>
 
-            <div id="upzMgmtCount" class="list-count" style="margin-bottom:12px;font-size:13px;color:var(--slate-500);"></div>
+            <div id="upzMgmtCount" class="list-count" style="margin-bottom:12px;font-size:13px;color:var(--slate-500);">
+            </div>
             <div id="upzMgmtContainer">
               <div class="empty-state" style="padding:24px;">Memuat data UPZ...</div>
             </div>
@@ -662,40 +1044,69 @@
         <div id="adminViewPentasharufan" class="admin-view hidden">
           <div class="hero hero-admin page-title-banner">
             <div class="hero-text page-title-text">
-              <span class="hero-eyebrow"><svg class="icon"><use href="#i-hand-heart"></use></svg>Panel Administrator</span>
+              <span class="hero-eyebrow"><svg class="icon">
+                  <use href="#i-hand-heart"></use>
+                </svg>Panel Administrator</span>
               <h2 class="hero-title">Perbantuan Pentasharufan UPZ</h2>
-              <p class="hero-desc">Monitoring, verifikasi, dan unduh berkas pengajuan bantuan penyaluran dari UPZ se-Kabupaten Banyumas.</p>
+              <p class="hero-desc">Monitoring, verifikasi, dan unduh berkas pengajuan bantuan penyaluran dari UPZ
+                se-Kabupaten Banyumas.</p>
             </div>
-            <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-hand-heart"></use></svg></div>
+            <div class="hero-badge" aria-hidden="true"><svg class="icon">
+                <use href="#i-hand-heart"></use>
+              </svg></div>
           </div>
 
           <!-- Scorecard Ringkasan Pentasharufan Admin -->
           <div class="summary-grid" id="adminPentaSummaryGrid">
             <div class="summary-card">
-              <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-receipt"></use></svg></div>
-              <div><div class="summary-title">Total Permohonan</div><div id="adminPentaTotalCount" class="summary-value">0</div></div>
+              <div class="summary-icon tone-blue"><svg class="icon">
+                  <use href="#i-receipt"></use>
+                </svg></div>
+              <div>
+                <div class="summary-title">Total Permohonan</div>
+                <div id="adminPentaTotalCount" class="summary-value">0</div>
+              </div>
             </div>
             <div class="summary-card">
-              <div class="summary-icon tone-amber"><svg class="icon"><use href="#i-clock"></use></svg></div>
-              <div><div class="summary-title">Menunggu Review</div><div id="adminPentaMenungguCount" class="summary-value">0</div></div>
+              <div class="summary-icon tone-amber"><svg class="icon">
+                  <use href="#i-clock"></use>
+                </svg></div>
+              <div>
+                <div class="summary-title">Menunggu Review</div>
+                <div id="adminPentaMenungguCount" class="summary-value">0</div>
+              </div>
             </div>
             <div class="summary-card">
-              <div class="summary-icon tone-green"><svg class="icon"><use href="#i-check"></use></svg></div>
-              <div><div class="summary-title">Disetujui / Selesai</div><div id="adminPentaDisetujuiCount" class="summary-value">0</div></div>
+              <div class="summary-icon tone-green"><svg class="icon">
+                  <use href="#i-check"></use>
+                </svg></div>
+              <div>
+                <div class="summary-title">Disetujui / Selesai</div>
+                <div id="adminPentaDisetujuiCount" class="summary-value">0</div>
+              </div>
             </div>
             <div class="summary-card">
-              <div class="summary-icon tone-teal"><svg class="icon"><use href="#i-wallet"></use></svg></div>
-              <div><div class="summary-title">Total Dana Diajukan</div><div id="adminPentaTotalNominal" class="summary-value">Rp 0</div></div>
+              <div class="summary-icon tone-teal"><svg class="icon">
+                  <use href="#i-wallet"></use>
+                </svg></div>
+              <div>
+                <div class="summary-title">Total Dana Diajukan</div>
+                <div id="adminPentaTotalNominal" class="summary-value">Rp 0</div>
+              </div>
             </div>
           </div>
 
           <!-- KELOLA AKSES RKAT & KETENTUAN ANGGARAN UPZ (ADMIN) -->
           <section class="content-card rkat-admin-card" style="margin-bottom:24px;">
-            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div class="section-header"
+              style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
-                <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-shield"></use></svg> Akses & Alokasi RKAT</span>
+                <span class="section-badge-eyebrow"><svg class="icon">
+                    <use href="#i-shield"></use>
+                  </svg> Akses & Alokasi RKAT</span>
                 <h2>Kelola Akses RKAT & Persentase Anggaran UPZ</h2>
-                <p class="section-desc">Buka kunci akses perbantuan pentasharufan bagi UPZ yang telah konfirmasi RKAT, serta sesuaikan persentase pentasharufan, hak amil, dan tagihan Salin Aslimas.</p>
+                <p class="section-desc">Buka kunci akses perbantuan pentasharufan bagi UPZ yang telah konfirmasi RKAT,
+                  serta sesuaikan persentase pentasharufan, hak amil, dan tagihan Salin Aslimas.</p>
               </div>
             </div>
 
@@ -703,12 +1114,16 @@
               <!-- Form Pengaturan UPZ Terpilih -->
               <div class="rkat-form-box">
                 <h3 class="rkat-box-title">
-                  <svg class="icon tone-teal"><use href="#i-edit"></use></svg> Atur Akses & Persentase UPZ
+                  <svg class="icon tone-teal">
+                    <use href="#i-edit"></use>
+                  </svg> Atur Akses & Persentase UPZ
                 </h3>
 
                 <div class="form-group" style="margin-bottom:12px;">
-                  <label for="adminRkatSelectUpz" style="font-weight:600;font-size:13px;">Pilih UPZ <span class="required-star">*</span></label>
-                  <select id="adminRkatSelectUpz" class="form-control" style="width:100%;height:38px;padding:0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
+                  <label for="adminRkatSelectUpz" style="font-weight:600;font-size:13px;">Pilih UPZ <span
+                      class="required-star">*</span></label>
+                  <select id="adminRkatSelectUpz" class="form-control"
+                    style="width:100%;height:38px;padding:0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
                     <option value="">-- Pilih UPZ --</option>
                   </select>
                 </div>
@@ -718,9 +1133,11 @@
                   <div class="rkat-status-banner">
                     <div>
                       <div style="font-size:12px;color:var(--slate-500);font-weight:500;">Status Akses RKAT</div>
-                      <div id="adminRkatCurrentStatus" style="font-weight:600;font-size:14px;margin-top:2px;">Terkunci</div>
+                      <div id="adminRkatCurrentStatus" style="font-weight:600;font-size:14px;margin-top:2px;">Terkunci
+                      </div>
                     </div>
-                    <button type="button" id="adminRkatToggleLockBtn" class="btn btn-sm btn-outline-primary" style="white-space:nowrap;">
+                    <button type="button" id="adminRkatToggleLockBtn" class="btn btn-sm btn-outline-primary"
+                      style="white-space:nowrap;">
                       Buka Akses RKAT
                     </button>
                   </div>
@@ -730,16 +1147,22 @@
                     <div class="form-group">
                       <label for="adminRkatPersenPenta" style="font-size:12px;font-weight:600;">% Pentasharufan</label>
                       <div class="input-icon">
-                        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--slate-400);font-weight:600;">%</span>
-                        <input type="number" id="adminRkatPersenPenta" min="0" max="100" step="0.5" value="35" class="form-control" placeholder="35" style="height:38px;padding:0 28px 0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
+                        <span
+                          style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--slate-400);font-weight:600;">%</span>
+                        <input type="number" id="adminRkatPersenPenta" min="0" max="100" step="0.5" value="35"
+                          class="form-control" placeholder="35"
+                          style="height:38px;padding:0 28px 0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
                       </div>
                     </div>
 
                     <div class="form-group">
                       <label for="adminRkatPersenAmil" style="font-size:12px;font-weight:600;">% Hak Amil</label>
                       <div class="input-icon">
-                        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--slate-400);font-weight:600;">%</span>
-                        <input type="number" id="adminRkatPersenAmil" min="0" max="100" step="0.5" value="5" class="form-control" placeholder="5" style="height:38px;padding:0 28px 0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
+                        <span
+                          style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--slate-400);font-weight:600;">%</span>
+                        <input type="number" id="adminRkatPersenAmil" min="0" max="100" step="0.5" value="5"
+                          class="form-control" placeholder="5"
+                          style="height:38px;padding:0 28px 0 12px;border:1px solid var(--slate-200);border-radius:8px;box-sizing:border-box;">
                       </div>
                     </div>
                   </div>
@@ -749,16 +1172,21 @@
                     <div class="salin-section-header">
                       <div class="salin-title-wrap">
                         <label class="salin-header-label">
-                          <svg class="icon" style="width:14px;height:14px;color:var(--slate-600);"><use href="#i-tag"></use></svg>
+                          <svg class="icon" style="width:14px;height:14px;color:var(--slate-600);">
+                            <use href="#i-tag"></use>
+                          </svg>
                           Tagihan Salin Aslimas & Status Transfer BAZNAS
                         </label>
-                        <span class="salin-header-sub">Input nominal per bulan secara manual & beri ceklis jika sudah ditransfer BAZNAS.</span>
+                        <span class="salin-header-sub">Input nominal per bulan secara manual & beri ceklis jika sudah
+                          ditransfer BAZNAS.</span>
                       </div>
                       <div class="salin-toolbar-actions">
                         <span class="salin-year-label">Tahun:</span>
                         <select id="adminSalinTahunSelect" class="form-control salin-year-select"></select>
-                        <button type="button" id="adminSalinSelectAllBtn" class="btn btn-ghost btn-xs">Ceklis Semua</button>
-                        <button type="button" id="adminSalinClearAllBtn" class="btn btn-ghost btn-xs">Batal Ceklis</button>
+                        <button type="button" id="adminSalinSelectAllBtn" class="btn btn-ghost btn-xs">Ceklis
+                          Semua</button>
+                        <button type="button" id="adminSalinClearAllBtn" class="btn btn-ghost btn-xs">Batal
+                          Ceklis</button>
                       </div>
                     </div>
 
@@ -767,9 +1195,11 @@
                       <span class="salin-quick-label">Terapkan nominal sama:</span>
                       <div class="salin-input-addon salin-quick-addon">
                         <span class="salin-addon-text">Rp</span>
-                        <input type="text" id="adminSalinQuickNominal" class="salin-nom-input" placeholder="0" inputmode="numeric">
+                        <input type="text" id="adminSalinQuickNominal" class="salin-nom-input" placeholder="0"
+                          inputmode="numeric">
                       </div>
-                      <button type="button" id="adminSalinQuickApplyBtn" class="btn btn-xs btn-outline-primary salin-quick-btn">Terapkan ke 12 Bln</button>
+                      <button type="button" id="adminSalinQuickApplyBtn"
+                        class="btn btn-xs btn-outline-primary salin-quick-btn">Terapkan ke 12 Bln</button>
                     </div>
 
                     <!-- 12 Bulan Table -->
@@ -791,14 +1221,18 @@
 
                     <div id="adminSalinSummaryNotice">
                       <div>Ditransfer BAZNAS: <strong id="adminSalinCountLabel">0 bulan</strong></div>
-                      <div>Total Akumulasi: <strong id="adminSalinTotalLabel" style="color:#0f5132;">Rp 0</strong> (pengurang alokasi)</div>
+                      <div>Total Akumulasi: <strong id="adminSalinTotalLabel" style="color:#0f5132;">Rp 0</strong>
+                        (pengurang alokasi)</div>
                     </div>
                   </div>
 
                   <div id="adminRkatMsg" class="form-message" role="status" aria-live="polite"></div>
 
-                  <button type="button" id="adminRkatSaveBtn" class="btn btn-primary btn-block" style="margin-top:auto;height:40px;">
-                    <svg class="icon"><use href="#i-check"></use></svg> Simpan Pengaturan UPZ
+                  <button type="button" id="adminRkatSaveBtn" class="btn btn-primary btn-block"
+                    style="margin-top:auto;height:40px;">
+                    <svg class="icon">
+                      <use href="#i-check"></use>
+                    </svg> Simpan Pengaturan UPZ
                   </button>
                 </div>
               </div>
@@ -807,9 +1241,12 @@
               <div class="rkat-table-box">
                 <div class="rkat-table-header">
                   <h3 class="rkat-box-title">
-                    <svg class="icon tone-green"><use href="#i-table"></use></svg> Daftar Akses RKAT & Persentase UPZ
+                    <svg class="icon tone-green">
+                      <use href="#i-table"></use>
+                    </svg> Daftar Akses RKAT & Persentase UPZ
                   </h3>
-                  <input type="text" id="adminRkatSearchTable" placeholder="Cari UPZ..." class="form-control rkat-search-input">
+                  <input type="text" id="adminRkatSearchTable" placeholder="Cari UPZ..."
+                    class="form-control rkat-search-input">
                 </div>
                 <div class="rkat-table-scroll">
                   <table class="table-compact rkat-overview-table" id="adminRkatOverviewTable">
@@ -824,7 +1261,10 @@
                       </tr>
                     </thead>
                     <tbody id="adminRkatTableBody">
-                      <tr><td colspan="6" style="text-align:center;padding:16px;color:var(--slate-400);">Memuat data RKAT UPZ...</td></tr>
+                      <tr>
+                        <td colspan="6" style="text-align:center;padding:16px;color:var(--slate-400);">Memuat data RKAT
+                          UPZ...</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -834,14 +1274,20 @@
 
           <!-- Tabel Pengajuan Pentasharufan -->
           <section class="content-card">
-            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div class="section-header"
+              style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
-                <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-hand-heart"></use></svg> Arsip Pengajuan</span>
+                <span class="section-badge-eyebrow"><svg class="icon">
+                    <use href="#i-hand-heart"></use>
+                  </svg> Arsip Pengajuan</span>
                 <h2>Daftar Permohonan Pentasharufan</h2>
-                <p class="section-desc">Unduh berkas Excel penerima manfaat dan dokumentasi foto yang diajukan oleh UPZ.</p>
+                <p class="section-desc">Unduh berkas Excel penerima manfaat dan dokumentasi foto yang diajukan oleh UPZ.
+                </p>
               </div>
               <button type="button" id="adminPentaRefreshBtn" class="btn btn-ghost btn-sm">
-                <svg class="icon"><use href="#i-refresh"></use></svg><span>Segarkan Data</span>
+                <svg class="icon">
+                  <use href="#i-refresh"></use>
+                </svg><span>Segarkan Data</span>
               </button>
             </div>
 
@@ -879,7 +1325,8 @@
               </div>
             </div>
 
-            <div id="adminPentaCount" class="list-count" style="margin-bottom:12px;font-size:13px;color:var(--slate-500);"></div>
+            <div id="adminPentaCount" class="list-count"
+              style="margin-bottom:12px;font-size:13px;color:var(--slate-500);"></div>
             <div id="adminPentaTableContainer" class="penta-table-wrap">
               <div class="empty-state" style="padding:24px;">Memuat data pentasharufan...</div>
             </div>
@@ -890,11 +1337,16 @@
         <div id="adminViewPanduan" class="admin-view hidden">
           <div class="hero hero-admin page-title-banner">
             <div class="hero-text page-title-text">
-              <span class="hero-eyebrow"><svg class="icon"><use href="#i-book-open"></use></svg>Dokumentasi &amp; SOP</span>
+              <span class="hero-eyebrow"><svg class="icon">
+                  <use href="#i-book-open"></use>
+                </svg>Dokumentasi &amp; SOP</span>
               <h2 class="hero-title">Buku Panduan Sistem Administrator</h2>
-              <p class="hero-desc">Panduan operasional verifikasi setoran, konfigurasi RKAT pentasharufan, manajemen akun UPZ, dan alur kerja sistem terintegrasi.</p>
+              <p class="hero-desc">Panduan operasional verifikasi setoran, konfigurasi RKAT pentasharufan, manajemen
+                akun UPZ, dan alur kerja sistem terintegrasi.</p>
             </div>
-            <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-book-open"></use></svg></div>
+            <div class="hero-badge" aria-hidden="true"><svg class="icon">
+                <use href="#i-book-open"></use>
+              </svg></div>
           </div>
 
           <div id="adminGuideContainer" class="system-guide-container"></div>
@@ -908,29 +1360,63 @@
       <div id="upzViewBeranda" class="upz-view upz-only">
         <section class="hero hero-upz page-title-banner">
           <div class="hero-text page-title-text">
-            <span class="hero-eyebrow"><svg class="icon"><use href="#i-building"></use></svg>Unit Pengumpul Zakat</span>
+            <span class="hero-eyebrow"><svg class="icon">
+                <use href="#i-building"></use>
+              </svg>Unit Pengumpul Zakat</span>
             <h2 id="upzName" class="hero-title">-</h2>
             <p class="hero-desc">Ajukan setoran dan pantau status verifikasinya di sini.</p>
           </div>
           <div class="hero-right">
             <div id="upzKategoriBadge" class="upz-kategori-badge" style="display:none;"></div>
           </div>
-          <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-hand-heart"></use></svg></div>
+          <div class="hero-badge" aria-hidden="true"><svg class="icon">
+              <use href="#i-hand-heart"></use>
+            </svg></div>
         </section>
 
         <!-- RINGKASAN UPZ -->
-        <section class="summary-grid summary-grid-3">
+        <section class="summary-grid summary-grid-4">
           <div class="summary-card">
-            <div class="summary-icon tone-green"><svg class="icon"><use href="#i-wallet"></use></svg></div>
-            <div><div class="summary-title">Total Setoran Diterima</div><div id="totalSetoran" class="summary-value">Rp 0</div></div>
+            <div class="summary-icon tone-green"><svg class="icon">
+                <use href="#i-wallet"></use>
+              </svg></div>
+            <div>
+              <div class="summary-title">Setoran Reguler</div>
+              <div id="totalSetoran" class="summary-value">Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-card card-with-corner-action">
+            <button type="button" id="btnPreviewProgramUpz" class="summary-corner-btn"
+              title="Preview Detail Setoran Program" aria-label="Preview Detail Setoran Program">
+              <svg class="icon">
+                <use href="#i-file-text"></use>
+              </svg>
+            </button>
+            <div class="summary-icon tone-blue"><svg class="icon">
+                <use href="#i-tag"></use>
+              </svg></div>
+            <div>
+              <div class="summary-title">Setoran Program</div>
+              <div id="totalSetoranProgram" class="summary-value">Rp 0</div>
+            </div>
           </div>
           <div class="summary-card">
-            <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-arrow-left-right"></use></svg></div>
-            <div><div class="summary-title">Jumlah Transaksi</div><div id="jumlahTransaksi" class="summary-value">0</div></div>
+            <div class="summary-icon tone-amber"><svg class="icon">
+                <use href="#i-arrow-left-right"></use>
+              </svg></div>
+            <div>
+              <div class="summary-title">Jumlah Transaksi</div>
+              <div id="jumlahTransaksi" class="summary-value">0</div>
+            </div>
           </div>
           <div class="summary-card">
-            <div class="summary-icon tone-violet"><svg class="icon"><use href="#i-users"></use></svg></div>
-            <div><div class="summary-title">Jumlah Donatur</div><div id="jumlahDonatur" class="summary-value">0</div></div>
+            <div class="summary-icon tone-violet"><svg class="icon">
+                <use href="#i-users"></use>
+              </svg></div>
+            <div>
+              <div class="summary-title">Jumlah Donatur</div>
+              <div id="jumlahDonatur" class="summary-value">0</div>
+            </div>
           </div>
         </section>
 
@@ -938,7 +1424,9 @@
         <div class="content-card chart-card" id="upzChartCard">
           <div class="section-header chart-header">
             <div>
-              <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-bar-chart"></use></svg> Tren Setoran</span>
+              <span class="section-badge-eyebrow"><svg class="icon">
+                  <use href="#i-bar-chart"></use>
+                </svg> Tren Setoran</span>
               <h2>Grafik Setoran per Bulan</h2>
               <p class="section-desc">Akumulasi nominal setoran UPZ Anda per bulan pada tahun yang dipilih.</p>
             </div>
@@ -977,17 +1465,39 @@
       <div id="upzViewInput" class="upz-view upz-only hidden">
         <div class="hero hero-upz page-title-banner">
           <div class="hero-text page-title-text">
-            <span class="hero-eyebrow"><svg class="icon"><use href="#i-upload"></use></svg>Formulir Transaksi</span>
+            <span class="hero-eyebrow"><svg class="icon">
+                <use href="#i-upload"></use>
+              </svg>Formulir Transaksi</span>
             <h2 class="hero-title">Input Setoran Baru</h2>
-            <p class="hero-desc">Upload rincian data muzaki dalam file Excel dan ajukan setoran ke BAZNAS.</p>
+            <p class="hero-desc">Pilih Formulir Setoran Reguler atau Setoran Program dan ajukan setoran ke BAZNAS.</p>
           </div>
-          <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-upload"></use></svg></div>
+          <div class="hero-badge" aria-hidden="true"><svg class="icon">
+              <use href="#i-upload"></use>
+            </svg></div>
         </div>
 
-        <section class="content-card">
+        <!-- TAB PILIHAN JENIS FORMULIR SETORAN -->
+        <div class="setoran-form-toggle-wrap" style="display:flex;gap:10px;margin-bottom:16px;">
+          <button type="button" id="tabSetoranReguler" class="btn btn-primary"
+            style="display:inline-flex;align-items:center;gap:8px;font-weight:600;padding:10px 18px;border-radius:8px;">
+            <svg class="icon" style="width:16px;height:16px;">
+              <use href="#i-sheet"></use>
+            </svg>
+            <span>Formulir Setoran Reguler</span>
+          </button>
+          <button type="button" id="tabSetoranProgram" class="btn btn-soft"
+            style="display:inline-flex;align-items:center;gap:8px;font-weight:600;padding:10px 18px;border-radius:8px;">
+            <svg class="icon" style="width:16px;height:16px;">
+              <use href="#i-tag"></use>
+            </svg>
+            <span>Formulir Setoran Program</span>
+          </button>
+        </div>
+
+        <section class="content-card" id="cardSetoranReguler">
           <div class="section-header">
             <div>
-              <h2>Formulir Setoran</h2>
+              <h2>Formulir Setoran Reguler</h2>
               <p class="section-desc">Total nominal di Excel harus sama dengan nominal setoran.</p>
             </div>
           </div>
@@ -1002,7 +1512,8 @@
               <label for="nominalSetoran">Nominal Setoran</label>
               <div class="input-prefix">
                 <span>Rp</span>
-                <input type="text" id="nominalSetoran" inputmode="numeric" placeholder="500.000" autocomplete="off" required>
+                <input type="text" id="nominalSetoran" inputmode="numeric" placeholder="500.000" autocomplete="off"
+                  required>
               </div>
             </div>
 
@@ -1033,13 +1544,18 @@
             <div class="form-group form-group-full">
               <div class="field-header-row">
                 <label for="fileExcel" style="margin-bottom:0;">Rincian Muzaki (Excel)</label>
-                <a href="#" id="downloadTemplateButton" class="btn btn-soft btn-sm download-template-link" download="template_rincian_muzaki.xlsx">
-                  <svg class="icon"><use href="#i-download"></use></svg><span>Download Template Excel</span>
+                <a href="#" id="downloadTemplateButton" class="btn btn-soft btn-sm download-template-link"
+                  download="template_rincian_muzaki.xlsx">
+                  <svg class="icon">
+                    <use href="#i-download"></use>
+                  </svg><span>Download Template Excel</span>
                 </a>
               </div>
               <div class="dropzone">
                 <input type="file" id="fileExcel" accept=".xlsx,.xls" required>
-                <div class="dropzone-icon"><svg class="icon"><use href="#i-upload"></use></svg></div>
+                <div class="dropzone-icon"><svg class="icon">
+                    <use href="#i-upload"></use>
+                  </svg></div>
                 <div class="dropzone-text">
                   <strong>Klik atau tarik file ke sini</strong>
                   <span>Format .xlsx / .xls · maks. 5 MB · kolom Nama Muzaki &amp; Nominal</span>
@@ -1050,9 +1566,53 @@
 
             <div id="excelPreview" class="excel-preview form-group-full" style="display:none;"></div>
 
-            <button type="submit" id="submitSetoranButton" class="btn btn-primary btn-lg btn-block form-group-full">Simpan Setoran</button>
+            <button type="submit" id="submitSetoranButton"
+              class="btn btn-primary btn-lg btn-block form-group-full">Simpan Setoran</button>
 
             <div id="setoranMessage" class="form-message form-group-full" role="status" aria-live="polite"></div>
+          </form>
+        </section>
+
+        <!-- FORMULIR SETORAN PROGRAM -->
+        <section class="content-card hidden" id="cardSetoranProgram">
+          <div class="section-header">
+            <div>
+              <h2>Formulir Setoran Program</h2>
+              <p class="section-desc">Pilih program, tanggal setoran, dan nominal setoran tanpa upload file Excel.</p>
+            </div>
+          </div>
+
+          <form id="setoranProgramForm" class="setoran-form">
+            <div class="form-group form-group-full">
+              <label for="programJenisSelect">Pilih Program <span class="required-star">*</span></label>
+              <select id="programJenisSelect" required style="width:100%;height:42px;border:1px solid var(--slate-200);border-radius:8px;padding:0 12px;font-size:14px;box-sizing:border-box;">
+                <option value="">-- Memuat Jenis Program... --</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="programTanggalSetor">Tanggal Setor <span class="required-star">*</span></label>
+              <input type="date" id="programTanggalSetor" required>
+            </div>
+
+            <div class="form-group">
+              <label for="programNominalSetoran">Nominal Setoran <span class="required-star">*</span></label>
+              <div class="input-prefix">
+                <span>Rp</span>
+                <input type="text" id="programNominalSetoran" inputmode="numeric" placeholder="500.000" autocomplete="off" required>
+              </div>
+            </div>
+
+            <div class="form-group form-group-full">
+              <label for="programCatatan">Catatan / Keterangan (Opsional)</label>
+              <textarea id="programCatatan" class="form-control" rows="2" placeholder="Catatan tambahan untuk admin (opsional)..." style="width:100%;border:1px solid var(--slate-200);border-radius:8px;padding:8px 12px;box-sizing:border-box;resize:vertical;"></textarea>
+            </div>
+
+            <button type="submit" id="submitProgramButton" class="btn btn-primary btn-lg btn-block form-group-full">
+              Simpan Setoran Program
+            </button>
+
+            <div id="setoranProgramMessage" class="form-message form-group-full" role="status" aria-live="polite"></div>
           </form>
         </section>
       </div>
@@ -1063,22 +1623,30 @@
       <div id="upzViewDonatur" class="upz-view upz-only hidden">
         <div class="hero hero-upz page-title-banner">
           <div class="hero-text page-title-text">
-            <span class="hero-eyebrow"><svg class="icon"><use href="#i-users"></use></svg>Database Donatur</span>
+            <span class="hero-eyebrow"><svg class="icon">
+                <use href="#i-users"></use>
+              </svg>Database Donatur</span>
             <h2 class="hero-title">Daftar Donatur & Histori Donasi</h2>
-            <p class="hero-desc">Otomatis terintegrasi dari nama donatur dalam file Excel setoran yang telah berstatus <strong>diterima</strong> oleh admin.</p>
+            <p class="hero-desc">Otomatis terintegrasi dari nama donatur dalam file Excel setoran yang telah berstatus
+              <strong>diterima</strong> oleh admin.</p>
           </div>
-          <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-users"></use></svg></div>
+          <div class="hero-badge" aria-hidden="true"><svg class="icon">
+              <use href="#i-users"></use>
+            </svg></div>
         </div>
 
         <section class="content-card" id="upzDonaturSection">
-          <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div class="section-header"
+            style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
             <div>
               <h2>Matriks Donatur Bulanan</h2>
               <p class="section-desc">Pantau donatur yang sudah atau belum berdonasi pada bulan aktif.</p>
             </div>
             <div class="header-actions">
               <button type="button" id="upzDonaturRefresh" class="btn btn-ghost">
-                <svg class="icon"><use href="#i-refresh"></use></svg><span>Segarkan Data</span>
+                <svg class="icon">
+                  <use href="#i-refresh"></use>
+                </svg><span>Segarkan Data</span>
               </button>
             </div>
           </div>
@@ -1106,7 +1674,9 @@
             <div class="filter-item filter-search">
               <label for="donaturSearch">Cari Donatur</label>
               <div class="input-icon">
-                <svg class="icon"><use href="#i-search"></use></svg>
+                <svg class="icon">
+                  <use href="#i-search"></use>
+                </svg>
                 <input type="text" id="donaturSearch" placeholder="Cari nama donatur..." autocomplete="off">
               </div>
             </div>
@@ -1141,25 +1711,32 @@
       <div id="upzViewRiwayat" class="upz-view upz-only hidden">
         <div class="hero hero-upz page-title-banner">
           <div class="hero-text page-title-text">
-            <span class="hero-eyebrow"><svg class="icon"><use href="#i-receipt"></use></svg>Riwayat Transaksi</span>
+            <span class="hero-eyebrow"><svg class="icon">
+                <use href="#i-receipt"></use>
+              </svg>Riwayat Transaksi</span>
             <h2 class="hero-title">Riwayat Setoran UPZ</h2>
             <p class="hero-desc">Daftar seluruh setoran yang pernah Anda ajukan dan status verifikasinya.</p>
           </div>
-          <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-receipt"></use></svg></div>
+          <div class="hero-badge" aria-hidden="true"><svg class="icon">
+              <use href="#i-receipt"></use>
+            </svg></div>
         </div>
 
         <section id="upzRiwayatSection" class="content-card">
           <div class="section-header">
             <div>
               <h2>Tabel Riwayat Setoran</h2>
-              <p class="section-desc">Gunakan tombol <strong>Preview</strong> untuk melihat rincian donatur, <strong>Unduh</strong> untuk file Excel.</p>
+              <p class="section-desc">Gunakan tombol <strong>Preview</strong> untuk melihat rincian donatur,
+                <strong>Unduh</strong> untuk file Excel.</p>
             </div>
           </div>
 
           <div class="filter-bar filter-bar-upz">
             <div class="filter-item">
               <label for="upzFilterTahun">Tahun</label>
-              <select id="upzFilterTahun"><option value="semua">Semua Tahun</option></select>
+              <select id="upzFilterTahun">
+                <option value="semua">Semua Tahun</option>
+              </select>
             </div>
             <div class="filter-item">
               <label for="upzFilterBulan">Bulan</label>
@@ -1209,24 +1786,31 @@
       <div id="upzViewMgmt" class="upz-view upz-only hidden">
         <div class="hero hero-upz page-title-banner">
           <div class="hero-text page-title-text">
-            <span class="hero-eyebrow"><svg class="icon"><use href="#i-building"></use></svg>Profil &amp; Akun</span>
+            <span class="hero-eyebrow"><svg class="icon">
+                <use href="#i-building"></use>
+              </svg>Profil &amp; Akun</span>
             <h2 class="hero-title">Manajemen UPZ</h2>
             <p class="hero-desc">Informasi data unit pengumpul zakat dan pengaturan kata sandi akun Anda.</p>
           </div>
-          <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-building"></use></svg></div>
+          <div class="hero-badge" aria-hidden="true"><svg class="icon">
+              <use href="#i-building"></use>
+            </svg></div>
         </div>
 
         <div class="content-grid-2">
           <!-- KARTU INFORMASI PROFIL UPZ -->
           <section class="content-card">
-            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div class="section-header"
+              style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
                 <h2>Informasi UPZ</h2>
                 <p class="section-desc">Data identitas unit pengumpul zakat yang terdaftar di BAZNAS.</p>
               </div>
               <div class="header-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
                 <button type="button" id="openEditPengelolaModalBtn" class="btn btn-soft btn-sm">
-                  <svg class="icon"><use href="#i-edit"></use></svg><span>Edit Profil UPZ</span>
+                  <svg class="icon">
+                    <use href="#i-edit"></use>
+                  </svg><span>Edit Profil UPZ</span>
                 </button>
               </div>
             </div>
@@ -1278,24 +1862,36 @@
               <div class="form-group">
                 <label for="upzNewPassword">Password Baru</label>
                 <div class="input-icon">
-                  <svg class="icon"><use href="#i-lock"></use></svg>
+                  <svg class="icon">
+                    <use href="#i-lock"></use>
+                  </svg>
                   <input type="password" id="upzNewPassword" placeholder="Minimal 6 karakter" required minlength="6">
-                  <button type="button" id="toggleUpzNewPasswordBtn" class="toggle-password-btn" aria-label="Lihat password" title="Lihat password">
-                    <svg class="icon"><use href="#i-eye"></use></svg>
+                  <button type="button" id="toggleUpzNewPasswordBtn" class="toggle-password-btn"
+                    aria-label="Lihat password" title="Lihat password">
+                    <svg class="icon">
+                      <use href="#i-eye"></use>
+                    </svg>
                   </button>
                 </div>
               </div>
               <div class="form-group">
                 <label for="upzConfirmPassword">Konfirmasi Password Baru</label>
                 <div class="input-icon">
-                  <svg class="icon"><use href="#i-lock"></use></svg>
-                  <input type="password" id="upzConfirmPassword" placeholder="Ulangi password baru" required minlength="6">
-                  <button type="button" id="toggleUpzConfirmPasswordBtn" class="toggle-password-btn" aria-label="Lihat password" title="Lihat password">
-                    <svg class="icon"><use href="#i-eye"></use></svg>
+                  <svg class="icon">
+                    <use href="#i-lock"></use>
+                  </svg>
+                  <input type="password" id="upzConfirmPassword" placeholder="Ulangi password baru" required
+                    minlength="6">
+                  <button type="button" id="toggleUpzConfirmPasswordBtn" class="toggle-password-btn"
+                    aria-label="Lihat password" title="Lihat password">
+                    <svg class="icon">
+                      <use href="#i-eye"></use>
+                    </svg>
                   </button>
                 </div>
               </div>
-              <button type="submit" id="upzChangePasswordBtn" class="btn btn-primary btn-block">Simpan Password Baru</button>
+              <button type="submit" id="upzChangePasswordBtn" class="btn btn-primary btn-block">Simpan Password
+                Baru</button>
               <div id="upzChangePasswordMsg" class="form-message" role="status" aria-live="polite"></div>
             </form>
           </section>
@@ -1308,18 +1904,25 @@
       <div id="upzViewPentasharufan" class="upz-view upz-only hidden">
         <div class="hero hero-upz page-title-banner">
           <div class="hero-text page-title-text">
-            <span class="hero-eyebrow"><svg class="icon"><use href="#i-hand-heart"></use></svg>Penyaluran ZIS</span>
+            <span class="hero-eyebrow"><svg class="icon">
+                <use href="#i-hand-heart"></use>
+              </svg>Penyaluran ZIS</span>
             <h2 class="hero-title">Perbantuan Pentasharufan UPZ</h2>
-            <p class="hero-desc">Ajukan permohonan perbantuan penyaluran dana zakat dan infak untuk mustahik di lingkungan UPZ Anda.</p>
+            <p class="hero-desc">Ajukan permohonan perbantuan penyaluran dana zakat dan infak untuk mustahik di
+              lingkungan UPZ Anda.</p>
           </div>
-          <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-hand-heart"></use></svg></div>
+          <div class="hero-badge" aria-hidden="true"><svg class="icon">
+              <use href="#i-hand-heart"></use>
+            </svg></div>
         </div>
 
         <!-- FILTER BULAN & TAHUN PERBANTUAN PENTASHARUFAN UPZ -->
         <div class="penta-budget-filter-bar">
           <div class="penta-filter-intro">
             <div class="penta-filter-icon tone-teal">
-              <svg class="icon"><use href="#i-calendar"></use></svg>
+              <svg class="icon">
+                <use href="#i-calendar"></use>
+              </svg>
             </div>
             <div>
               <div class="penta-filter-label">Filter Periode Anggaran</div>
@@ -1349,8 +1952,11 @@
                 <option value="12">Desember</option>
               </select>
             </div>
-            <button type="button" id="upzPentaResetFilterBtn" class="btn btn-ghost penta-filter-btn" title="Kembalikan ke semua bulan">
-              <svg class="icon"><use href="#i-refresh"></use></svg><span>Reset</span>
+            <button type="button" id="upzPentaResetFilterBtn" class="btn btn-ghost penta-filter-btn"
+              title="Kembalikan ke semua bulan">
+              <svg class="icon">
+                <use href="#i-refresh"></use>
+              </svg><span>Reset</span>
             </button>
           </div>
         </div>
@@ -1359,7 +1965,9 @@
         <div class="summary-grid penta-budget-grid" id="upzPentaBudgetGrid">
           <!-- 1. Total Setoran Masuk -->
           <div class="summary-card">
-            <div class="summary-icon tone-blue"><svg class="icon"><use href="#i-receipt"></use></svg></div>
+            <div class="summary-icon tone-blue"><svg class="icon">
+                <use href="#i-receipt"></use>
+              </svg></div>
             <div>
               <div class="summary-title">Setoran Masuk (Terverifikasi)</div>
               <div id="upzPentaTotalSetoran" class="summary-value">Rp 0</div>
@@ -1369,7 +1977,9 @@
 
           <!-- 2. Alokasi Perbantuan Pentasharufan -->
           <div class="summary-card">
-            <div class="summary-icon tone-teal"><svg class="icon"><use href="#i-hand-heart"></use></svg></div>
+            <div class="summary-icon tone-teal"><svg class="icon">
+                <use href="#i-hand-heart"></use>
+              </svg></div>
             <div>
               <div class="summary-title">Alokasi Perbantuan Pentasharufan</div>
               <div id="upzPentaAlokasi" class="summary-value" style="color:#0f5132;">Rp 0</div>
@@ -1379,7 +1989,9 @@
 
           <!-- 3. Yang Sudah Ditasharufkan -->
           <div class="summary-card">
-            <div class="summary-icon tone-green"><svg class="icon"><use href="#i-check"></use></svg></div>
+            <div class="summary-icon tone-green"><svg class="icon">
+                <use href="#i-check"></use>
+              </svg></div>
             <div>
               <div class="summary-title">Sudah Ditasharufkan</div>
               <div id="upzPentaRealisasi" class="summary-value">Rp 0</div>
@@ -1389,7 +2001,9 @@
 
           <!-- 4. Sisa Anggaran Pentasharufan -->
           <div class="summary-card">
-            <div class="summary-icon tone-amber" id="upzPentaSisaIcon"><svg class="icon"><use href="#i-wallet"></use></svg></div>
+            <div class="summary-icon tone-amber" id="upzPentaSisaIcon"><svg class="icon">
+                <use href="#i-wallet"></use>
+              </svg></div>
             <div>
               <div class="summary-title">Sisa Anggaran Pentasharufan</div>
               <div id="upzPentaSisa" class="summary-value">Rp 0</div>
@@ -1399,7 +2013,9 @@
 
           <!-- 5. Hak Amil UPZ (Tersendiri) -->
           <div class="summary-card">
-            <div class="summary-icon tone-purple"><svg class="icon"><use href="#i-users"></use></svg></div>
+            <div class="summary-icon tone-purple"><svg class="icon">
+                <use href="#i-users"></use>
+              </svg></div>
             <div>
               <div class="summary-title">Hak Amil UPZ</div>
               <div id="upzPentaHakAmil" class="summary-value">Rp 0</div>
@@ -1409,7 +2025,9 @@
 
           <!-- 6. Tagihan Salin Aslimas (Akumulasi Saja) -->
           <div class="summary-card">
-            <div class="summary-icon tone-indigo"><svg class="icon"><use href="#i-tag"></use></svg></div>
+            <div class="summary-icon tone-indigo"><svg class="icon">
+                <use href="#i-tag"></use>
+              </svg></div>
             <div>
               <div class="summary-title">Tagihan Salin Aslimas</div>
               <div id="upzPentaTagihanSalin" class="summary-value">Rp 0</div>
@@ -1420,19 +2038,26 @@
 
         <!-- REVIEW PEMBAYARAN SALIN ASLIMAS (ROLE UPZ) -->
         <section class="content-card salin-review-card" style="margin-bottom:24px;">
-          <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div class="section-header"
+            style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
             <div>
-              <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-tag"></use></svg> Rincian Salin Aslimas</span>
+              <span class="section-badge-eyebrow"><svg class="icon">
+                  <use href="#i-tag"></use>
+                </svg> Rincian Salin Aslimas</span>
               <h2>Review Pembayaran Salin Aslimas</h2>
-              <p class="section-desc">Rincian kewajiban program Salin Aslimas per bulan dan status transfer pembayaran oleh BAZNAS.</p>
+              <p class="section-desc">Rincian kewajiban program Salin Aslimas per bulan dan status transfer pembayaran
+                oleh BAZNAS.</p>
             </div>
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
               <div style="display:flex;align-items:center;gap:6px;">
                 <span style="font-size:11.5px;font-weight:600;color:var(--slate-600);">Tahun:</span>
-                <select id="upzSalinFilterTahun" class="form-control" style="width:105px;height:30px;font-size:12px;font-weight:700;border:1px solid var(--slate-300);border-radius:6px;padding:2px 8px;background:#fff;"></select>
+                <select id="upzSalinFilterTahun" class="form-control"
+                  style="width:105px;height:30px;font-size:12px;font-weight:700;border:1px solid var(--slate-300);border-radius:6px;padding:2px 8px;background:#fff;"></select>
               </div>
-              <span id="upzSalinTransferCountBadge" class="badge-status-clean badge-clean-green" style="font-weight:600;font-size:12px;padding:4px 10px;">0/12 Bln Ditransfer</span>
-              <span id="upzSalinTotalAccumBadge" class="badge-status-clean badge-clean-blue" style="font-weight:700;font-size:12px;padding:4px 10px;">Akumulasi: Rp 0</span>
+              <span id="upzSalinTransferCountBadge" class="badge-status-clean badge-clean-green"
+                style="font-weight:600;font-size:12px;padding:4px 10px;">0/12 Bln Ditransfer</span>
+              <span id="upzSalinTotalAccumBadge" class="badge-status-clean badge-clean-blue"
+                style="font-weight:700;font-size:12px;padding:4px 10px;">Akumulasi: Rp 0</span>
             </div>
           </div>
           <div class="table-container" style="margin-top:12px;overflow-x:auto;">
@@ -1455,11 +2080,15 @@
 
         <!-- GRAFIK MONITORING PENTASHARUFAN UPZ -->
         <section class="content-card penta-chart-card" style="margin-bottom:24px;">
-          <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div class="section-header"
+            style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
             <div>
-              <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-bar-chart"></use></svg> Analitik Anggaran</span>
+              <span class="section-badge-eyebrow"><svg class="icon">
+                  <use href="#i-bar-chart"></use>
+                </svg> Analitik Anggaran</span>
               <h2>Grafik Tren Alokasi vs Realisasi Pentasharufan</h2>
-              <p class="section-desc" id="upzPentaChartDesc">Komparasi setoran masuk, alokasi perbantuan pentasharufan, dan realisasi penyaluran per bulan.</p>
+              <p class="section-desc" id="upzPentaChartDesc">Komparasi setoran masuk, alokasi perbantuan pentasharufan,
+                dan realisasi penyaluran per bulan.</p>
             </div>
           </div>
           <div class="penta-chart-wrap" style="position:relative;height:280px;width:100%;">
@@ -1470,31 +2099,47 @@
         <div class="content-grid-2 content-grid-penta">
           <!-- FORM PENGAJUAN PENTASHARUFAN -->
           <section class="content-card">
-            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div class="section-header"
+              style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
-                <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-edit"></use></svg> Formulir Baru</span>
+                <span class="section-badge-eyebrow"><svg class="icon">
+                    <use href="#i-edit"></use>
+                  </svg> Formulir Baru</span>
                 <h2>Form Permohonan Pentasharufan</h2>
-                <p class="section-desc">Lengkapi data permohonan, unggah daftar nama penerima (Excel), dan foto dokumentasi.</p>
+                <p class="section-desc">Lengkapi data permohonan, unggah daftar nama penerima (Excel), dan foto
+                  dokumentasi.</p>
               </div>
               <div id="upzRkatStatusBadgeWrap"></div>
             </div>
 
             <!-- LOCK NOTICE BANNER (JIKA RKAT BELUM AKTIF) -->
-            <div id="upzRkatLockBanner" class="rkat-lock-banner hidden" style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;padding:24px;text-align:center;margin-bottom:20px;">
-              <div style="width:52px;height:52px;background:#fef3c7;color:#d97706;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px auto;">
-                <svg class="icon" style="width:28px;height:28px;"><use href="#i-lock"></use></svg>
+            <div id="upzRkatLockBanner" class="rkat-lock-banner hidden"
+              style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;padding:24px;text-align:center;margin-bottom:20px;">
+              <div
+                style="width:52px;height:52px;background:#fef3c7;color:#d97706;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px auto;">
+                <svg class="icon" style="width:28px;height:28px;">
+                  <use href="#i-lock"></use>
+                </svg>
               </div>
-              <h3 style="font-size:17px;font-weight:700;color:#92400e;margin-bottom:6px;">Akses Perbantuan Pentasharufan Terkunci</h3>
+              <h3 style="font-size:17px;font-weight:700;color:#92400e;margin-bottom:6px;">Akses Perbantuan Pentasharufan
+                Terkunci</h3>
               <p style="font-size:13.5px;color:#78350f;max-width:520px;margin:0 auto 16px auto;line-height:1.5;">
-                Fitur permohonan perbantuan pentasharufan hanya dapat diakses oleh UPZ yang telah mendaftarkan dan mengesahkan dokumen <strong>RKAT (Rencana Kerja & Anggaran Tahunan)</strong> di BAZNAS Kabupaten Banyumas.
+                Fitur permohonan perbantuan pentasharufan hanya dapat diakses oleh UPZ yang telah mendaftarkan dan
+                mengesahkan dokumen <strong>RKAT (Rencana Kerja & Anggaran Tahunan)</strong> di BAZNAS Kabupaten
+                Banyumas.
               </p>
               <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
-                <a id="upzRkatWaBtn" href="https://wa.me/6281368691114" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="background:#25d366;color:#ffffff;font-weight:600;padding:10px 20px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
-                  <svg class="icon" style="width:18px;height:18px;"><use href="#i-message-circle"></use></svg>
+                <a id="upzRkatWaBtn" href="https://wa.me/6281368691114" target="_blank" rel="noopener noreferrer"
+                  class="btn btn-whatsapp"
+                  style="background:#25d366;color:#ffffff;font-weight:600;padding:10px 20px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
+                  <svg class="icon" style="width:18px;height:18px;">
+                    <use href="#i-message-circle"></use>
+                  </svg>
                   <span>Daftarkan RKAT via WhatsApp</span>
                 </a>
               </div>
-              <p style="font-size:11.5px;color:#b45309;margin-top:12px;">Admin akan membuka akses formulir ini setelah konfirmasi RKAT UPZ Anda diterima.</p>
+              <p style="font-size:11.5px;color:#b45309;margin-top:12px;">Admin akan membuka akses formulir ini setelah
+                konfirmasi RKAT UPZ Anda diterima.</p>
             </div>
 
             <form id="pentaForm" novalidate>
@@ -1503,12 +2148,18 @@
                 <label for="pentaJenis">Program / Jenis Pentasharufan <span class="required-star">*</span></label>
                 <select id="pentaJenis" required>
                   <option value="">Pilih Program Pentasharufan</option>
-                  <option value="Banyumas Peduli (Kemanusiaan / Bencana / Fakir Miskin)">Banyumas Peduli (Kemanusiaan / Bencana / Fakir Miskin)</option>
-                  <option value="Banyumas Cerdas (Pendidikan / Beasiswa Siswa & Santri)">Banyumas Cerdas (Pendidikan / Beasiswa Siswa & Santri)</option>
-                  <option value="Banyumas Sehat (Kesehatan / Bantuan Pengobatan Dhuafa)">Banyumas Sehat (Kesehatan / Bantuan Pengobatan Dhuafa)</option>
-                  <option value="Banyumas Sejahtera (Ekonomi / Pemberdayaan Modal Usaha)">Banyumas Sejahtera (Ekonomi / Pemberdayaan Modal Usaha)</option>
-                  <option value="Banyumas Takwa (Dakwah & Advokasi Keagamaan)">Banyumas Takwa (Dakwah & Advokasi Keagamaan)</option>
-                  <option value="Salin Aslimas (Penyaluran Asnaf Sesuai Ketentuan BAZNAS)">Salin Aslimas (Penyaluran Asnaf Sesuai Ketentuan BAZNAS)</option>
+                  <option value="Banyumas Peduli (Kemanusiaan / Bencana / Fakir Miskin)">Banyumas Peduli (Kemanusiaan /
+                    Bencana / Fakir Miskin)</option>
+                  <option value="Banyumas Cerdas (Pendidikan / Beasiswa Siswa & Santri)">Banyumas Cerdas (Pendidikan /
+                    Beasiswa Siswa & Santri)</option>
+                  <option value="Banyumas Sehat (Kesehatan / Bantuan Pengobatan Dhuafa)">Banyumas Sehat (Kesehatan /
+                    Bantuan Pengobatan Dhuafa)</option>
+                  <option value="Banyumas Sejahtera (Ekonomi / Pemberdayaan Modal Usaha)">Banyumas Sejahtera (Ekonomi /
+                    Pemberdayaan Modal Usaha)</option>
+                  <option value="Banyumas Takwa (Dakwah & Advokasi Keagamaan)">Banyumas Takwa (Dakwah & Advokasi
+                    Keagamaan)</option>
+                  <option value="Salin Aslimas (Penyaluran Asnaf Sesuai Ketentuan BAZNAS)">Salin Aslimas (Penyaluran
+                    Asnaf Sesuai Ketentuan BAZNAS)</option>
                 </select>
               </div>
 
@@ -1525,7 +2176,9 @@
                 <div class="form-group penta-form-group">
                   <label for="pentaJumlahPenerima">Jumlah Penerima Manfaat <span class="required-star">*</span></label>
                   <div class="input-icon penta-input-icon">
-                    <svg class="icon"><use href="#i-users"></use></svg>
+                    <svg class="icon">
+                      <use href="#i-users"></use>
+                    </svg>
                     <input type="number" id="pentaJumlahPenerima" min="1" placeholder="Contoh: 25" required>
                   </div>
                 </div>
@@ -1534,16 +2187,23 @@
               <!-- Upload File Excel Penerima Manfaat + Download Template -->
               <div class="form-group">
                 <div class="upload-label-row">
-                  <label for="pentaFileExcel">Daftar Penerima Manfaat (Excel) <span class="required-star">*</span></label>
-                  <button type="button" id="downloadPentaTemplateBtn" class="btn btn-soft btn-xs download-template-link" title="Unduh template Excel resmi BAZNAS Banyumas">
-                    <svg class="icon"><use href="#i-download"></use></svg><span>Download Template Excel</span>
+                  <label for="pentaFileExcel">Daftar Penerima Manfaat (Excel) <span
+                      class="required-star">*</span></label>
+                  <button type="button" id="downloadPentaTemplateBtn" class="btn btn-soft btn-xs download-template-link"
+                    title="Unduh template Excel resmi BAZNAS Banyumas">
+                    <svg class="icon">
+                      <use href="#i-download"></use>
+                    </svg><span>Download Template Excel</span>
                   </button>
                 </div>
                 <div class="file-upload-box">
                   <input type="file" id="pentaFileExcel" accept=".xlsx,.xls" required>
                   <label for="pentaFileExcel" class="file-dropzone">
-                    <svg class="icon tone-green"><use href="#i-sheet"></use></svg>
-                    <span id="pentaFileExcelInfo" class="file-dropzone-text">Pilih atau seret file Excel (.xlsx / .xls)</span>
+                    <svg class="icon tone-green">
+                      <use href="#i-sheet"></use>
+                    </svg>
+                    <span id="pentaFileExcelInfo" class="file-dropzone-text">Pilih atau seret file Excel (.xlsx /
+                      .xls)</span>
                     <span class="file-hint">Maksimal 5 MB · Wajib mencakup nama, NIK, alamat, dan nominal</span>
                   </label>
                 </div>
@@ -1551,12 +2211,16 @@
 
               <!-- Upload Foto Dokumentasi (Cukup 1 file) -->
               <div class="form-group">
-                <label for="pentaFileFoto">Foto Dokumentasi Pentasharufan (1 File) <span class="required-star">*</span></label>
+                <label for="pentaFileFoto">Foto Dokumentasi Pentasharufan (1 File) <span
+                    class="required-star">*</span></label>
                 <div class="file-upload-box">
                   <input type="file" id="pentaFileFoto" accept="image/jpeg,image/png,image/webp,image/jpg" required>
                   <label for="pentaFileFoto" class="file-dropzone">
-                    <svg class="icon tone-teal"><use href="#i-image"></use></svg>
-                    <span id="pentaFileFotoInfo" class="file-dropzone-text">Pilih atau foto langsung dokumentasi (.jpg / .png)</span>
+                    <svg class="icon tone-teal">
+                      <use href="#i-image"></use>
+                    </svg>
+                    <span id="pentaFileFotoInfo" class="file-dropzone-text">Pilih atau foto langsung dokumentasi (.jpg /
+                      .png)</span>
                     <span class="file-hint">Maksimal 5 MB · Foto kegiatan, penyerahan, atau survei mustahik</span>
                   </label>
                 </div>
@@ -1566,7 +2230,9 @@
                   <div class="foto-preview-meta">
                     <span id="pentaFotoName" class="foto-file-name">-</span>
                     <button type="button" id="pentaRemoveFotoBtn" class="btn btn-danger-soft btn-xs">
-                      <svg class="icon"><use href="#i-x"></use></svg><span>Hapus Foto</span>
+                      <svg class="icon">
+                        <use href="#i-x"></use>
+                      </svg><span>Hapus Foto</span>
                     </button>
                   </div>
                 </div>
@@ -1575,7 +2241,8 @@
               <!-- Keterangan / Deskripsi -->
               <div class="form-group">
                 <label for="pentaKeterangan">Keterangan / Uraian Bantuan</label>
-                <textarea id="pentaKeterangan" rows="3" placeholder="Tuliskan keterangan peruntukan bantuan, nama desa/wilayah mustahik, atau catatan khusus..."></textarea>
+                <textarea id="pentaKeterangan" rows="3"
+                  placeholder="Tuliskan keterangan peruntukan bantuan, nama desa/wilayah mustahik, atau catatan khusus..."></textarea>
               </div>
 
               <!-- Pesan & Tombol Submit -->
@@ -1583,7 +2250,9 @@
 
               <div class="form-submit-row">
                 <button type="submit" id="pentaSubmitBtn" class="btn btn-primary btn-block">
-                  <svg class="icon"><use href="#i-send"></use></svg><span>Kirim Permohonan Pentasharufan</span>
+                  <svg class="icon">
+                    <use href="#i-send"></use>
+                  </svg><span>Kirim Permohonan Pentasharufan</span>
                 </button>
               </div>
             </form>
@@ -1591,14 +2260,19 @@
 
           <!-- RIWAYAT PENGAJUAN PENTASHARUFAN UPZ -->
           <section class="content-card">
-            <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div class="section-header"
+              style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
-                <span class="section-badge-eyebrow"><svg class="icon"><use href="#i-receipt"></use></svg> Status Pengajuan</span>
+                <span class="section-badge-eyebrow"><svg class="icon">
+                    <use href="#i-receipt"></use>
+                  </svg> Status Pengajuan</span>
                 <h2>Riwayat Permohonan UPZ</h2>
                 <p class="section-desc">Pantau status verifikasi dan unduh kembali berkas yang telah dikirim.</p>
               </div>
               <button type="button" id="upzPentaRefreshBtn" class="btn btn-ghost btn-sm">
-                <svg class="icon"><use href="#i-refresh"></use></svg><span>Segarkan</span>
+                <svg class="icon">
+                  <use href="#i-refresh"></use>
+                </svg><span>Segarkan</span>
               </button>
             </div>
 
@@ -1615,11 +2289,16 @@
       <div id="upzViewPanduan" class="upz-view upz-only hidden">
         <div class="hero hero-upz page-title-banner">
           <div class="hero-text page-title-text">
-            <span class="hero-eyebrow"><svg class="icon"><use href="#i-book-open"></use></svg>Panduan Penggunaan</span>
+            <span class="hero-eyebrow"><svg class="icon">
+                <use href="#i-book-open"></use>
+              </svg>Panduan Penggunaan</span>
             <h2 class="hero-title">Buku Panduan Pengoperasian UPZ</h2>
-            <p class="hero-desc">Petunjuk lengkap pengajuan setoran ZIS, perbantuan pentasharufan RKAT, unduh BSZ, dan pengelolaan akun UPZ.</p>
+            <p class="hero-desc">Petunjuk lengkap pengajuan setoran ZIS, perbantuan pentasharufan RKAT, unduh BSZ, dan
+              pengelolaan akun UPZ.</p>
           </div>
-          <div class="hero-badge" aria-hidden="true"><svg class="icon"><use href="#i-book-open"></use></svg></div>
+          <div class="hero-badge" aria-hidden="true"><svg class="icon">
+              <use href="#i-book-open"></use>
+            </svg></div>
         </div>
 
         <div id="upzGuideContainer" class="system-guide-container"></div>
@@ -1639,13 +2318,17 @@
     <div class="modal-card modal-lg">
       <div class="modal-header">
         <div class="modal-heading">
-          <div class="modal-icon"><svg class="icon"><use href="#i-sheet"></use></svg></div>
+          <div class="modal-icon"><svg class="icon">
+              <use href="#i-sheet"></use>
+            </svg></div>
           <div>
             <h3 id="detailModalTitle">Rincian Setoran</h3>
             <p id="detailModalSubtitle" class="modal-subtitle"></p>
           </div>
         </div>
-        <button type="button" id="detailModalCloseX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="detailModalCloseX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
 
       <div class="modal-scroll">
@@ -1656,18 +2339,27 @@
           <!-- 1. Bukti Setor Zakat (BSZ) UPZ -->
           <div id="detailDocRow_bsz_upz" class="detail-doc-card is-empty">
             <div class="detail-doc-left">
-              <div id="detailDocIcon_bsz_upz" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
+              <div id="detailDocIcon_bsz_upz" class="detail-doc-icon"><svg class="icon">
+                  <use href="#i-file-text"></use>
+                </svg></div>
               <div>
                 <div class="detail-doc-title">Bukti Setor Zakat (BSZ) UPZ</div>
                 <div id="detailDocDesc_bsz_upz" class="detail-doc-desc">Belum diterbitkan</div>
               </div>
             </div>
             <div id="detailDocActions_bsz_upz" class="detail-doc-actions">
-              <button type="button" id="detailUploadBtn_bsz_upz" class="btn btn-soft btn-sm detail-doc-upload-btn" title="Upload BSZ UPZ" style="display: none;">
-                <svg class="icon"><use href="#i-upload"></use></svg><span>Upload BSZ UPZ</span>
+              <button type="button" id="detailUploadBtn_bsz_upz" class="btn btn-soft btn-sm detail-doc-upload-btn"
+                title="Upload BSZ UPZ" style="display: none;">
+                <svg class="icon">
+                  <use href="#i-upload"></use>
+                </svg><span>Upload BSZ UPZ</span>
               </button>
-              <button type="button" id="detailDownloadBtn_bsz_upz" class="btn btn-soft btn-sm detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
-                <svg class="icon"><use href="#i-download"></use></svg><span>Unduh BSZ UPZ</span>
+              <button type="button" id="detailDownloadBtn_bsz_upz"
+                class="btn btn-soft btn-sm detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin"
+                disabled style="opacity:0.35;cursor:not-allowed;">
+                <svg class="icon">
+                  <use href="#i-download"></use>
+                </svg><span>Unduh BSZ UPZ</span>
               </button>
             </div>
           </div>
@@ -1675,18 +2367,27 @@
           <!-- 2. Bukti Setor Zakat (BSZ) Per Nama -->
           <div id="detailDocRow_bsz_nama" class="detail-doc-card is-empty">
             <div class="detail-doc-left">
-              <div id="detailDocIcon_bsz_nama" class="detail-doc-icon"><svg class="icon"><use href="#i-file-text"></use></svg></div>
+              <div id="detailDocIcon_bsz_nama" class="detail-doc-icon"><svg class="icon">
+                  <use href="#i-file-text"></use>
+                </svg></div>
               <div>
                 <div class="detail-doc-title">Bukti Setor Zakat (BSZ) Per Nama</div>
                 <div id="detailDocDesc_bsz_nama" class="detail-doc-desc">Belum diterbitkan</div>
               </div>
             </div>
             <div id="detailDocActions_bsz_nama" class="detail-doc-actions">
-              <button type="button" id="detailUploadBtn_bsz_nama" class="btn btn-soft btn-sm detail-doc-upload-btn" title="Upload BSZ Per Nama" style="display: none;">
-                <svg class="icon"><use href="#i-upload"></use></svg><span>Upload BSZ Per Nama</span>
+              <button type="button" id="detailUploadBtn_bsz_nama" class="btn btn-soft btn-sm detail-doc-upload-btn"
+                title="Upload BSZ Per Nama" style="display: none;">
+                <svg class="icon">
+                  <use href="#i-upload"></use>
+                </svg><span>Upload BSZ Per Nama</span>
               </button>
-              <button type="button" id="detailDownloadBtn_bsz_nama" class="btn btn-soft btn-sm detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin" disabled style="opacity:0.35;cursor:not-allowed;">
-                <svg class="icon"><use href="#i-download"></use></svg><span>Unduh BSZ Per Nama</span>
+              <button type="button" id="detailDownloadBtn_bsz_nama"
+                class="btn btn-soft btn-sm detail-doc-download-btn btn-disabled" title="Belum diunggah oleh admin"
+                disabled style="opacity:0.35;cursor:not-allowed;">
+                <svg class="icon">
+                  <use href="#i-download"></use>
+                </svg><span>Unduh BSZ Per Nama</span>
               </button>
             </div>
           </div>
@@ -1698,24 +2399,37 @@
           <label for="detailCatatan">Catatan verifikasi</label>
           <textarea id="detailCatatan" rows="3" placeholder="Catatan wajib diisi jika setoran ditolak."></textarea>
           <div class="verify-actions">
-            <button type="button" id="detailRejectButton" class="btn btn-danger"><svg class="icon"><use href="#i-x"></use></svg><span>Tolak Setoran</span></button>
-            <button type="button" id="detailAcceptButton" class="btn btn-primary"><svg class="icon"><use href="#i-check"></use></svg><span>Terima Setoran</span></button>
+            <button type="button" id="detailRejectButton" class="btn btn-danger"><svg class="icon">
+                <use href="#i-x"></use>
+              </svg><span>Tolak Setoran</span></button>
+            <button type="button" id="detailAcceptButton" class="btn btn-primary"><svg class="icon">
+                <use href="#i-check"></use>
+              </svg><span>Terima Setoran</span></button>
           </div>
         </div>
       </div>
 
-      <div class="modal-footer" id="detailModalFooter" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+      <div class="modal-footer" id="detailModalFooter"
+        style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <button type="button" id="detailDeleteButton" class="btn btn-danger-soft btn-sm" style="display: none;" title="Hapus setoran ini">
-            <svg class="icon"><use href="#i-trash-2"></use></svg><span>Hapus Setoran</span>
+          <button type="button" id="detailDeleteButton" class="btn btn-danger-soft btn-sm" style="display: none;"
+            title="Hapus setoran ini">
+            <svg class="icon">
+              <use href="#i-trash-2"></use>
+            </svg><span>Hapus Setoran</span>
           </button>
         </div>
         <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
-          <a id="detailWaConfirmButton" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-wa-confirm hidden" title="Konfirmasi via WhatsApp">
-            <svg class="icon"><use href="#i-message-circle"></use></svg>
+          <a id="detailWaConfirmButton" href="#" target="_blank" rel="noopener noreferrer"
+            class="btn btn-wa-confirm hidden" title="Konfirmasi via WhatsApp">
+            <svg class="icon">
+              <use href="#i-message-circle"></use>
+            </svg>
             <span>Konfirmasi Setoran</span>
           </a>
-          <button type="button" id="detailDownloadButton" class="btn btn-soft"><svg class="icon"><use href="#i-download"></use></svg><span>Unduh Excel</span></button>
+          <button type="button" id="detailDownloadButton" class="btn btn-soft"><svg class="icon">
+              <use href="#i-download"></use>
+            </svg><span>Unduh Excel</span></button>
           <button type="button" id="detailCloseButton" class="btn btn-ghost">Tutup</button>
         </div>
       </div>
@@ -1725,17 +2439,22 @@
   <!-- ====================================== -->
   <!-- MODAL KONFIRMASI SETORAN               -->
   <!-- ====================================== -->
-  <div id="confirmSetoranModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+  <div id="confirmSetoranModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="confirmModalTitle">
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-heading">
-          <div class="modal-icon"><svg class="icon"><use href="#i-send"></use></svg></div>
+          <div class="modal-icon"><svg class="icon">
+              <use href="#i-send"></use>
+            </svg></div>
           <div>
             <h3 id="confirmModalTitle">Konfirmasi Pengajuan</h3>
             <p class="modal-subtitle">Periksa kembali data sebelum dikirim ke BAZNAS.</p>
           </div>
         </div>
-        <button type="button" id="closeConfirmModalButton" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeConfirmModalButton" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
 
       <div class="confirm-summary-box">
@@ -1743,53 +2462,101 @@
         <div class="confirm-row"><span>Tanggal Setor</span><strong id="confirmTanggal">-</strong></div>
         <div class="confirm-row"><span>Periode</span><strong id="confirmPeriode">-</strong></div>
         <div class="confirm-row"><span>Jumlah Muzaki</span><strong id="confirmJumlahMuzaki">0 orang</strong></div>
-        <div class="confirm-row"><span>File Rincian</span><strong id="confirmNamaFile" class="text-break">-</strong></div>
-        <div class="confirm-row highlight"><span>Nominal Setoran</span><strong id="confirmNominal" class="confirm-nominal-val">Rp 0</strong></div>
+        <div class="confirm-row"><span>File Rincian</span><strong id="confirmNamaFile" class="text-break">-</strong>
+        </div>
+        <div class="confirm-row highlight"><span>Nominal Setoran</span><strong id="confirmNominal"
+            class="confirm-nominal-val">Rp 0</strong></div>
       </div>
 
       <div class="modal-notice">
-        <svg class="icon"><use href="#i-alert"></use></svg>
-        <span>Setelah dikirim, setoran berstatus <strong>Menunggu Verifikasi</strong> dan tidak dapat diubah sampai diverifikasi admin.</span>
+        <svg class="icon">
+          <use href="#i-alert"></use>
+        </svg>
+        <span>Setelah dikirim, setoran berstatus <strong>Menunggu Verifikasi</strong> dan tidak dapat diubah sampai
+          diverifikasi admin.</span>
       </div>
 
       <div class="modal-footer">
         <button type="button" id="cancelConfirmButton" class="btn btn-ghost">Periksa Kembali</button>
-        <button type="button" id="proceedConfirmButton" class="btn btn-primary"><svg class="icon"><use href="#i-send"></use></svg><span>Ya, Kirim Setoran</span></button>
+        <button type="button" id="proceedConfirmButton" class="btn btn-primary"><svg class="icon">
+            <use href="#i-send"></use>
+          </svg><span>Ya, Kirim Setoran</span></button>
       </div>
     </div>
   </div>
 
   <!-- MODAL PILIHAN EXPORT -->
-  <div id="exportModal" class="modal-overlay modal-top hidden" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+  <div id="exportModal" class="modal-overlay modal-top hidden" role="dialog" aria-modal="true"
+    aria-labelledby="exportModalTitle">
     <div class="modal-card modal-sm">
       <div class="modal-header">
-        <div class="modal-heading"><div class="modal-icon"><svg class="icon"><use href="#i-sheet"></use></svg></div><div><h3 id="exportModalTitle">Export Rekap Excel</h3><p class="modal-subtitle">Pilih pengelompokan data.</p></div></div>
-        <button type="button" id="exportModalCloseX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <div class="modal-heading">
+          <div class="modal-icon"><svg class="icon">
+              <use href="#i-sheet"></use>
+            </svg></div>
+          <div>
+            <h3 id="exportModalTitle">Export Rekap Excel</h3>
+            <p class="modal-subtitle">Pilih pengelompokan data.</p>
+          </div>
+        </div>
+        <button type="button" id="exportModalCloseX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div id="exportOptions" class="export-options">
-        <button type="button" class="export-option" data-export-mode="bulan"><strong>Rekap per Bulan</strong><span>Pilih bulan dan tahun.</span></button>
-        <button type="button" class="export-option" data-export-mode="tahun"><strong>Rekap per Tahun</strong><span>Pilih tahun.</span></button>
-        <button type="button" class="export-option" data-export-mode="upz"><strong>Rekap per Nama UPZ</strong><span>Pilih nama UPZ.</span></button>
+        <button type="button" class="export-option" data-export-mode="bulan"><strong>Rekap per Bulan</strong><span>Pilih
+            bulan dan tahun.</span></button>
+        <button type="button" class="export-option" data-export-mode="tahun"><strong>Rekap per Tahun</strong><span>Pilih
+            tahun.</span></button>
+        <button type="button" class="export-option" data-export-mode="upz"><strong>Rekap per Nama
+            UPZ</strong><span>Pilih nama UPZ.</span></button>
       </div>
       <div id="exportConfig" class="export-config hidden">
-        <div id="exportMonthField"><label for="exportMonth">Bulan</label><select id="exportMonth"><option value="">Pilih bulan</option><option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option><option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option></select></div>
-        <div id="exportYearField"><label for="exportYear">Tahun</label><input id="exportYear" type="number" min="2000" max="2100" placeholder="2026"></div>
-        <div id="exportUpzField"><label for="exportUpz">Nama UPZ</label><select id="exportUpz"><option value="">Pilih UPZ</option></select></div>
-        <div class="modal-footer"><button type="button" id="exportBackButton" class="btn btn-ghost">Kembali</button><button type="button" id="exportConfirmButton" class="btn btn-primary">Export Excel</button></div>
+        <div id="exportMonthField"><label for="exportMonth">Bulan</label><select id="exportMonth">
+            <option value="">Pilih bulan</option>
+            <option value="1">Januari</option>
+            <option value="2">Februari</option>
+            <option value="3">Maret</option>
+            <option value="4">April</option>
+            <option value="5">Mei</option>
+            <option value="6">Juni</option>
+            <option value="7">Juli</option>
+            <option value="8">Agustus</option>
+            <option value="9">September</option>
+            <option value="10">Oktober</option>
+            <option value="11">November</option>
+            <option value="12">Desember</option>
+          </select></div>
+        <div id="exportYearField"><label for="exportYear">Tahun</label><input id="exportYear" type="number" min="2000"
+            max="2100" placeholder="2026"></div>
+        <div id="exportUpzField"><label for="exportUpz">Nama UPZ</label><select id="exportUpz">
+            <option value="">Pilih UPZ</option>
+          </select></div>
+        <div class="modal-footer"><button type="button" id="exportBackButton"
+            class="btn btn-ghost">Kembali</button><button type="button" id="exportConfirmButton"
+            class="btn btn-primary">Export Excel</button></div>
       </div>
       <div class="modal-footer"><button type="button" id="exportModalCancel" class="btn btn-ghost">Batal</button></div>
     </div>
   </div>
 
   <!-- MODAL TAMBAH / EDIT AKUN UPZ (ADMIN) -->
-  <div id="upzFormModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="upzFormModalTitle">
+  <div id="upzFormModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="upzFormModalTitle">
     <div class="modal-card modal-md">
       <div class="modal-header">
         <div class="modal-heading">
-          <div class="modal-icon"><svg class="icon"><use href="#i-building"></use></svg></div>
-          <div><h3 id="upzFormModalTitle">Tambah UPZ Baru</h3><p class="modal-subtitle">Isi data akun UPZ.</p></div>
+          <div class="modal-icon"><svg class="icon">
+              <use href="#i-building"></use>
+            </svg></div>
+          <div>
+            <h3 id="upzFormModalTitle">Tambah UPZ Baru</h3>
+            <p class="modal-subtitle">Isi data akun UPZ.</p>
+          </div>
         </div>
-        <button type="button" id="upzFormModalCloseX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="upzFormModalCloseX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <form id="upzFormModal_form" novalidate>
@@ -1804,7 +2571,8 @@
               <input type="email" id="upzFormEmail" placeholder="email@domain.com" required>
             </div>
             <div class="form-group">
-              <label for="upzFormPassword">Password <small id="upzFormPasswordHint">(kosongkan jika tidak diubah)</small></label>
+              <label for="upzFormPassword">Password <small id="upzFormPasswordHint">(kosongkan jika tidak
+                  diubah)</small></label>
               <input type="password" id="upzFormPassword" placeholder="Password baru">
             </div>
             <div class="form-group">
@@ -1852,23 +2620,30 @@
       </div>
       <div class="modal-footer">
         <button type="button" id="upzFormModalCancel" class="btn btn-ghost">Batal</button>
-        <button type="button" id="upzFormModalSave" class="btn btn-primary"><svg class="icon"><use href="#i-check"></use></svg><span>Simpan</span></button>
+        <button type="button" id="upzFormModalSave" class="btn btn-primary"><svg class="icon">
+            <use href="#i-check"></use>
+          </svg><span>Simpan</span></button>
       </div>
     </div>
   </div>
 
   <!-- MODAL EDIT PROFIL UPZ (ROLE UPZ) -->
-  <div id="editPengelolaModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="editPengelolaModalTitle">
+  <div id="editPengelolaModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="editPengelolaModalTitle">
     <div class="modal-card modal-sm">
       <div class="modal-header">
         <div class="modal-heading">
-          <div class="modal-icon tone-green-bg"><svg class="icon"><use href="#i-edit"></use></svg></div>
+          <div class="modal-icon tone-green-bg"><svg class="icon">
+              <use href="#i-edit"></use>
+            </svg></div>
           <div>
             <h3 id="editPengelolaModalTitle">Edit Profil UPZ</h3>
             <p class="modal-subtitle">Perbarui Nomor SK, Nama Ketua, dan Pengelola UPZ.</p>
           </div>
         </div>
-        <button type="button" id="editPengelolaModalCloseX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="editPengelolaModalCloseX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <form id="editPengelolaForm" novalidate>
@@ -1882,13 +2657,16 @@
           </div>
           <div class="form-group">
             <label for="inputNamaPengelola">Nama Lengkap Pengelola / PIC <span class="required-star">*</span></label>
-            <input type="text" id="inputNamaPengelola" placeholder="Contoh: H. Ahmad Subandi, S.Pd" required autocomplete="name">
+            <input type="text" id="inputNamaPengelola" placeholder="Contoh: H. Ahmad Subandi, S.Pd" required
+              autocomplete="name">
           </div>
           <div id="editPengelolaMsg" class="form-message" role="status" aria-live="polite"></div>
           <div class="modal-actions" style="margin-top:20px;display:flex;justify-content:flex-end;gap:8px;">
             <button type="button" id="editPengelolaModalCancel" class="btn btn-ghost">Batal</button>
             <button type="submit" id="editPengelolaModalSave" class="btn btn-primary">
-              <svg class="icon"><use href="#i-check"></use></svg><span>Simpan Perubahan</span>
+              <svg class="icon">
+                <use href="#i-check"></use>
+              </svg><span>Simpan Perubahan</span>
             </button>
           </div>
         </form>
@@ -1897,17 +2675,22 @@
   </div>
 
   <!-- MODAL INFORMASI PROFIL UPZ (ROLE UPZ) -->
-  <div id="upzProfileInfoModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="upzProfileInfoTitle">
+  <div id="upzProfileInfoModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="upzProfileInfoTitle">
     <div class="modal-card modal-md">
       <div class="modal-header">
         <div class="modal-heading">
-          <div class="modal-icon tone-teal-bg"><svg class="icon"><use href="#i-user"></use></svg></div>
+          <div class="modal-icon tone-teal-bg"><svg class="icon">
+              <use href="#i-user"></use>
+            </svg></div>
           <div>
             <h3 id="upzProfileInfoTitle">Informasi Profil UPZ</h3>
             <p class="modal-subtitle">Identitas resmi UPZ yang terdaftar di sistem BAZNAS Banyumas.</p>
           </div>
         </div>
-        <button type="button" id="closeUpzProfileInfoX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeUpzProfileInfoX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <div class="verify-confirm-summary">
@@ -1945,17 +2728,23 @@
   </div>
 
   <!-- MODAL DETAIL BREAKDOWN KATEGORI UPZ TERDATA (ADMIN) -->
-  <div id="upzCategoryModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="upzCategoryModalTitle">
+  <div id="upzCategoryModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="upzCategoryModalTitle">
     <div class="modal-card modal-md">
       <div class="modal-header">
         <div class="modal-heading">
-          <div class="modal-icon tone-violet"><svg class="icon"><use href="#i-building"></use></svg></div>
+          <div class="modal-icon tone-violet"><svg class="icon">
+              <use href="#i-building"></use>
+            </svg></div>
           <div>
             <h3 id="upzCategoryModalTitle">Rincian Kategori UPZ Terdata</h3>
-            <p class="modal-subtitle">Total <strong id="modalTotalUpzCount">602</strong> UPZ resmi terdata di Kabupaten Banyumas.</p>
+            <p class="modal-subtitle">Total <strong id="modalTotalUpzCount">602</strong> UPZ resmi terdata di Kabupaten
+              Banyumas.</p>
           </div>
         </div>
-        <button type="button" id="closeUpzCategoryX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeUpzCategoryX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <div id="modalUpzCategoryGrid" class="upz-category-modal-grid">
@@ -1966,17 +2755,22 @@
   </div>
 
   <!-- MODAL RINCIAN DONATUR (MUZAKI & MUNFIK) (ADMIN) -->
-  <div id="donaturBreakdownModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="donaturBreakdownTitle">
+  <div id="donaturBreakdownModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="donaturBreakdownTitle">
     <div class="modal-card modal-sm">
       <div class="modal-header">
         <div class="modal-heading">
-          <div class="modal-icon tone-teal"><svg class="icon"><use href="#i-users"></use></svg></div>
+          <div class="modal-icon tone-teal"><svg class="icon">
+              <use href="#i-users"></use>
+            </svg></div>
           <div>
             <h3 id="donaturBreakdownTitle">Rincian Donatur</h3>
             <p id="donaturBreakdownSub" class="modal-subtitle">Komposisi Muzaki dan Munfik</p>
           </div>
         </div>
-        <button type="button" id="closeDonaturBreakdownX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeDonaturBreakdownX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <div class="donatur-breakdown-cards">
@@ -2001,19 +2795,24 @@
   </div>
 
   <!-- MODAL KONFIRMASI VERIFIKASI SETORAN (ADMIN) -->
-  <div id="adminVerifyConfirmModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="verifyConfirmModalTitle">
+  <div id="adminVerifyConfirmModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="verifyConfirmModalTitle">
     <div class="modal-card modal-sm verify-confirm-card">
       <div class="modal-header">
         <div class="modal-heading">
           <div id="verifyConfirmIconBox" class="modal-icon verify-icon-diterima">
-            <svg class="icon"><use href="#i-check"></use></svg>
+            <svg class="icon">
+              <use href="#i-check"></use>
+            </svg>
           </div>
           <div>
             <h3 id="verifyConfirmModalTitle">Konfirmasi Setoran</h3>
             <p id="verifyConfirmModalSubtitle" class="modal-subtitle">Periksa rincian sebelum mengambil keputusan.</p>
           </div>
         </div>
-        <button type="button" id="closeVerifyConfirmX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeVerifyConfirmX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <div class="verify-confirm-summary">
@@ -2037,14 +2836,19 @@
 
         <div class="form-group" style="margin-top:14px;margin-bottom:0;">
           <label for="confirmVerifyCatatan" id="confirmCatatanLabel">Catatan Verifikasi</label>
-          <textarea id="confirmVerifyCatatan" class="form-control" rows="3" placeholder="Tuliskan catatan verifikasi (wajib diisi jika ditolak)..." style="width:100%;resize:vertical;"></textarea>
-          <div id="confirmVerifyErrorMsg" class="form-message" style="margin-top:6px;display:none;color:#dc2626;font-size:12px;font-weight:600;"></div>
+          <textarea id="confirmVerifyCatatan" class="form-control" rows="3"
+            placeholder="Tuliskan catatan verifikasi (wajib diisi jika ditolak)..."
+            style="width:100%;resize:vertical;"></textarea>
+          <div id="confirmVerifyErrorMsg" class="form-message"
+            style="margin-top:6px;display:none;color:#dc2626;font-size:12px;font-weight:600;"></div>
         </div>
       </div>
       <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;">
         <button type="button" id="cancelVerifyConfirmBtn" class="btn btn-ghost">Batal</button>
         <button type="button" id="executeVerifyConfirmBtn" class="btn btn-primary">
-          <svg class="icon"><use href="#i-check"></use></svg>
+          <svg class="icon">
+            <use href="#i-check"></use>
+          </svg>
           <span id="executeVerifyConfirmText">Ya, Konfirmasi</span>
         </button>
       </div>
@@ -2054,7 +2858,8 @@
   <!-- DIALOG KONFIRMASI GENERIK              -->
   <!-- (logout, verifikasi)                   -->
   <!-- ====================================== -->
-  <div id="dialogModal" class="modal-overlay modal-top hidden" role="alertdialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogMessage">
+  <div id="dialogModal" class="modal-overlay modal-top hidden" role="alertdialog" aria-modal="true"
+    aria-labelledby="dialogTitle" aria-describedby="dialogMessage">
     <div class="modal-card modal-sm dialog-card">
       <div id="dialogIcon" class="dialog-icon"></div>
       <h3 id="dialogTitle">Konfirmasi</h3>
@@ -2067,19 +2872,24 @@
   </div>
 
   <!-- MODAL KONFIRMASI HAPUS SETORAN -->
-  <div id="deleteSetoranModal" class="modal-overlay hidden" style="z-index: 10050;" role="dialog" aria-modal="true" aria-labelledby="deleteSetoranTitle">
+  <div id="deleteSetoranModal" class="modal-overlay hidden" style="z-index: 10050;" role="dialog" aria-modal="true"
+    aria-labelledby="deleteSetoranTitle">
     <div class="modal-card modal-sm delete-confirm-card">
       <div class="modal-header">
         <div class="modal-heading">
           <div class="modal-icon tone-danger-bg">
-            <svg class="icon"><use href="#i-trash-2"></use></svg>
+            <svg class="icon">
+              <use href="#i-trash-2"></use>
+            </svg>
           </div>
           <div>
             <h3 id="deleteSetoranTitle">Hapus Data Setoran</h3>
             <p class="modal-subtitle">Tindakan ini permanen dan tidak dapat dibatalkan.</p>
           </div>
         </div>
-        <button type="button" id="closeDeleteSetoranX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeDeleteSetoranX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <div class="verify-confirm-summary">
@@ -2102,14 +2912,19 @@
         </div>
 
         <div class="modal-notice modal-notice-danger" style="margin-top:12px;">
-          <svg class="icon"><use href="#i-alert"></use></svg>
-          <span>Data setoran, rincian donatur muzaki di database, dan berkas di storage akan dihapus secara permanen.</span>
+          <svg class="icon">
+            <use href="#i-alert"></use>
+          </svg>
+          <span>Data setoran, rincian donatur muzaki di database, dan berkas di storage akan dihapus secara
+            permanen.</span>
         </div>
       </div>
       <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;">
         <button type="button" id="cancelDeleteSetoranBtn" class="btn btn-ghost">Batal</button>
         <button type="button" id="executeDeleteSetoranBtn" class="btn btn-danger">
-          <svg class="icon"><use href="#i-trash-2"></use></svg>
+          <svg class="icon">
+            <use href="#i-trash-2"></use>
+          </svg>
           <span id="executeDeleteSetoranText">Ya, Hapus Setoran</span>
         </button>
       </div>
@@ -2117,19 +2932,24 @@
   </div>
 
   <!-- MODAL KONFIRMASI HAPUS AKUN UPZ (ADMIN) -->
-  <div id="deleteUpzModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="deleteUpzTitle">
+  <div id="deleteUpzModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="deleteUpzTitle">
     <div class="modal-card modal-sm delete-confirm-card">
       <div class="modal-header">
         <div class="modal-heading">
           <div class="modal-icon tone-danger-bg">
-            <svg class="icon"><use href="#i-user-x"></use></svg>
+            <svg class="icon">
+              <use href="#i-user-x"></use>
+            </svg>
           </div>
           <div>
             <h3 id="deleteUpzTitle">Hapus Akun UPZ</h3>
             <p class="modal-subtitle">Tindakan ini menghapus profil dan hak akses login UPZ.</p>
           </div>
         </div>
-        <button type="button" id="closeDeleteUpzX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeDeleteUpzX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <div class="verify-confirm-summary">
@@ -2152,14 +2972,18 @@
         </div>
 
         <div class="modal-notice modal-notice-danger" style="margin-top:12px;">
-          <svg class="icon"><use href="#i-alert"></use></svg>
+          <svg class="icon">
+            <use href="#i-alert"></use>
+          </svg>
           <span>Akun UPZ akan dihapus secara permanen dari sistem. Pengguna tidak akan dapat masuk kembali.</span>
         </div>
       </div>
       <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;">
         <button type="button" id="cancelDeleteUpzBtn" class="btn btn-ghost">Batal</button>
         <button type="button" id="executeDeleteUpzBtn" class="btn btn-danger">
-          <svg class="icon"><use href="#i-trash-2"></use></svg>
+          <svg class="icon">
+            <use href="#i-trash-2"></use>
+          </svg>
           <span id="executeDeleteUpzText">Ya, Hapus Akun</span>
         </button>
       </div>
@@ -2167,19 +2991,24 @@
   </div>
 
   <!-- MODAL KONFIRMASI HAPUS PENTASHARUFAN -->
-  <div id="deletePentaModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="deletePentaTitle">
+  <div id="deletePentaModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="deletePentaTitle">
     <div class="modal-card modal-sm delete-confirm-card">
       <div class="modal-header">
         <div class="modal-heading">
           <div class="modal-icon tone-danger-bg">
-            <svg class="icon"><use href="#i-trash-2"></use></svg>
+            <svg class="icon">
+              <use href="#i-trash-2"></use>
+            </svg>
           </div>
           <div>
             <h3 id="deletePentaTitle">Hapus Permohonan Pentasharufan</h3>
             <p class="modal-subtitle">Konfirmasi penghapusan permohonan pentasharufan.</p>
           </div>
         </div>
-        <button type="button" id="closeDeletePentaX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeDeletePentaX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll">
         <div class="verify-confirm-summary">
@@ -2197,14 +3026,18 @@
           </div>
         </div>
         <div class="modal-notice modal-notice-danger" style="margin-top:12px;">
-          <svg class="icon"><use href="#i-alert"></use></svg>
+          <svg class="icon">
+            <use href="#i-alert"></use>
+          </svg>
           <span>Data permohonan pentasharufan akan dihapus secara permanen.</span>
         </div>
       </div>
       <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;">
         <button type="button" id="cancelDeletePentaBtn" class="btn btn-ghost">Batal</button>
         <button type="button" id="executeDeletePentaBtn" class="btn btn-danger">
-          <svg class="icon"><use href="#i-trash-2"></use></svg>
+          <svg class="icon">
+            <use href="#i-trash-2"></use>
+          </svg>
           <span id="executeDeletePentaText">Ya, Hapus Data</span>
         </button>
       </div>
@@ -2212,26 +3045,35 @@
   </div>
 
   <!-- MODAL PRATINJAU FOTO PENTASHARUFAN -->
-  <div id="previewFotoModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="previewFotoTitle">
+  <div id="previewFotoModal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="previewFotoTitle">
     <div class="modal-card modal-md photo-preview-card">
       <div class="modal-header">
         <div class="modal-heading">
           <div class="modal-icon tone-teal-bg">
-            <svg class="icon"><use href="#i-image"></use></svg>
+            <svg class="icon">
+              <use href="#i-image"></use>
+            </svg>
           </div>
           <div>
             <h3 id="previewFotoTitle">Dokumentasi Pentasharufan</h3>
             <p id="previewFotoSubtitle" class="modal-subtitle">-</p>
           </div>
         </div>
-        <button type="button" id="closePreviewFotoX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closePreviewFotoX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll photo-modal-body" style="text-align:center;padding:16px;">
-        <img id="previewFotoFullImg" src="" alt="Foto Dokumentasi" class="preview-full-img" style="max-width:100%;max-height:65vh;border-radius:8px;object-fit:contain;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
+        <img id="previewFotoFullImg" src="" alt="Foto Dokumentasi" class="preview-full-img"
+          style="max-width:100%;max-height:65vh;border-radius:8px;object-fit:contain;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
       </div>
       <div class="modal-footer" style="display:flex;justify-content:space-between;align-items:center;">
-        <a id="previewFotoDownloadLink" href="#" download="" class="btn btn-soft btn-sm" target="_blank" rel="noopener noreferrer">
-          <svg class="icon"><use href="#i-download"></use></svg><span>Unduh Foto Asli</span>
+        <a id="previewFotoDownloadLink" href="#" download="" class="btn btn-soft btn-sm" target="_blank"
+          rel="noopener noreferrer">
+          <svg class="icon">
+            <use href="#i-download"></use>
+          </svg><span>Unduh Foto Asli</span>
         </a>
         <button type="button" id="closePreviewFotoBtn" class="btn btn-ghost">Tutup</button>
       </div>
@@ -2239,38 +3081,54 @@
   </div>
 
   <!-- MODAL UPLOAD BSZ -->
-  <div id="uploadBszModal" class="modal-overlay hidden" style="z-index: 10050;" role="dialog" aria-modal="true" aria-labelledby="uploadBszModalTitle">
+  <div id="uploadBszModal" class="modal-overlay hidden" style="z-index: 10050;" role="dialog" aria-modal="true"
+    aria-labelledby="uploadBszModalTitle">
     <div class="modal-card modal-sm">
       <div class="modal-header">
         <div class="modal-heading">
-          <div class="modal-icon tone-emerald"><svg class="icon"><use href="#i-upload"></use></svg></div>
+          <div class="modal-icon tone-emerald"><svg class="icon">
+              <use href="#i-upload"></use>
+            </svg></div>
           <div>
             <h3 id="uploadBszModalTitle">Unggah Bukti Setor Zakat (BSZ)</h3>
             <p id="uploadBszModalSubtitle" class="modal-subtitle">Unggah berkas resmi BSZ untuk UPZ</p>
           </div>
         </div>
-        <button type="button" id="closeUploadBszX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeUploadBszX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll" style="padding:16px;">
         <input type="hidden" id="uploadBszSetoranId" value="">
         <input type="hidden" id="uploadDocType" value="bsz">
         <div class="form-group" style="margin-bottom:12px;">
-          <label for="inputBszCustomName" style="font-weight:600;font-size:12px;margin-bottom:4px;display:block;">Nama / Judul BSZ:</label>
-          <input type="text" id="inputBszCustomName" class="form-control" placeholder="Contoh: BSZ Zakat Fitrah 1447H UPZ ..." style="padding:8px 12px;font-size:13px;">
-          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:2px;">Opsional. Jika kosong, akan otomatis menggunakan nama file asli.</div>
+          <label for="inputBszCustomName" style="font-weight:600;font-size:12px;margin-bottom:4px;display:block;">Nama /
+            Judul BSZ:</label>
+          <input type="text" id="inputBszCustomName" class="form-control"
+            placeholder="Contoh: BSZ Zakat Fitrah 1447H UPZ ..." style="padding:8px 12px;font-size:13px;">
+          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:2px;">Opsional. Jika kosong,
+            akan otomatis menggunakan nama file asli.</div>
         </div>
         <div class="form-group">
-          <label id="uploadDocFileLabel" for="inputBszFile" style="font-weight:600;font-size:12px;margin-bottom:4px;display:block;">Pilih Berkas BSZ (PDF / RAR):</label>
-          <input type="file" id="inputBszFile" class="form-control" accept=".pdf,.rar,application/pdf,application/x-rar-compressed,application/octet-stream,application/vnd.rar" style="padding:8px;">
-          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:4px;">Format didukung: <strong>PDF</strong> dan <strong>RAR</strong> (Maks 20MB)</div>
+          <label id="uploadDocFileLabel" for="inputBszFile"
+            style="font-weight:600;font-size:12px;margin-bottom:4px;display:block;">Pilih Berkas BSZ (PDF /
+            RAR):</label>
+          <input type="file" id="inputBszFile" class="form-control"
+            accept=".pdf,.rar,application/pdf,application/x-rar-compressed,application/octet-stream,application/vnd.rar"
+            style="padding:8px;">
+          <div class="form-hint" style="font-size:11px;color:var(--slate-500);margin-top:4px;">Format didukung:
+            <strong>PDF</strong> dan <strong>RAR</strong> (Maks 20MB)</div>
         </div>
-        <div id="uploadBszCurrentFileNotice" class="hidden" style="margin-top:12px;padding:8px 12px;background:var(--slate-100);border-radius:6px;font-size:12px;"></div>
+        <div id="uploadBszCurrentFileNotice" class="hidden"
+          style="margin-top:12px;padding:8px 12px;background:var(--slate-100);border-radius:6px;font-size:12px;"></div>
         <div id="uploadBszMsg" class="form-message" style="margin-top:8px;"></div>
       </div>
       <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:8px;">
         <button type="button" id="closeUploadBszBtn" class="btn btn-ghost">Batal</button>
         <button type="button" id="saveUploadBszBtn" class="btn btn-primary">
-          <svg class="icon"><use href="#i-upload"></use></svg>
+          <svg class="icon">
+            <use href="#i-upload"></use>
+          </svg>
           <span id="saveUploadBszBtnText">Simpan &amp; Terbitkan BSZ</span>
         </button>
       </div>
@@ -2278,30 +3136,39 @@
   </div>
 
   <!-- MODAL PENJELASAN STATUS / CATATAN ADMIN -->
-  <div id="statusExplanationModal" class="modal-overlay hidden" style="z-index:99999;" role="dialog" aria-modal="true" aria-labelledby="statusModalTitle">
+  <div id="statusExplanationModal" class="modal-overlay hidden" style="z-index:99999;" role="dialog" aria-modal="true"
+    aria-labelledby="statusModalTitle">
     <div class="modal-card modal-sm">
       <div class="modal-header">
         <div class="modal-heading">
-          <div id="statusModalIconBox" class="modal-icon tone-green"><svg class="icon"><use href="#i-shield"></use></svg></div>
+          <div id="statusModalIconBox" class="modal-icon tone-green"><svg class="icon">
+              <use href="#i-shield"></use>
+            </svg></div>
           <div>
             <h3 id="statusModalTitle">Status Setoran</h3>
             <p id="statusModalSubtitle" class="modal-subtitle">Informasi verifikasi setoran BAZNAS</p>
           </div>
         </div>
-        <button type="button" id="closeStatusModalX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+        <button type="button" id="closeStatusModalX" class="modal-close" aria-label="Tutup"><svg class="icon">
+            <use href="#i-x"></use>
+          </svg></button>
       </div>
       <div class="modal-scroll" style="padding:18px 22px;">
         <div class="meta-item" style="margin-bottom:12px;">
-          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">UPZ &amp; Periode</label>
+          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">UPZ &amp;
+            Periode</label>
           <div id="statusModalMeta" style="font-weight:600;color:var(--slate-800);margin-top:2px;">-</div>
         </div>
         <div class="meta-item" style="margin-bottom:14px;">
-          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">Status Terverifikasi</label>
+          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">Status
+            Terverifikasi</label>
           <div style="margin-top:4px;"><span id="statusModalBadge" class="status-badge">-</span></div>
         </div>
         <div class="meta-item">
-          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">Keterangan / Catatan Admin</label>
-          <div id="statusModalCatatanBox" style="margin-top:6px;padding:12px 14px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:8px;font-size:13px;line-height:1.5;color:var(--slate-700);white-space:pre-wrap;">
+          <label style="font-size:11px;text-transform:uppercase;color:var(--slate-500);font-weight:600;">Keterangan /
+            Catatan Admin</label>
+          <div id="statusModalCatatanBox"
+            style="margin-top:6px;padding:12px 14px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:8px;font-size:13px;line-height:1.5;color:var(--slate-700);white-space:pre-wrap;">
             Tidak ada catatan tambahan dari admin.
           </div>
         </div>
@@ -2320,7 +3187,9 @@
       </div>
       <div id="refreshModalCheck" class="refresh-check-wrap hidden">
         <div class="refresh-check-circle">
-          <svg class="icon"><use href="#i-check"></use></svg>
+          <svg class="icon">
+            <use href="#i-check"></use>
+          </svg>
         </div>
       </div>
       <h3 id="refreshModalTitle">Refresh Data...</h3>
@@ -2328,6 +3197,112 @@
     </div>
   </div>
 
+
+  <!-- ====================================== -->
+  <!-- MODAL PREVIEW DETAIL SETORAN PROGRAM   -->
+  <!-- ====================================== -->
+  <div id="programPreviewModal" class="modal-overlay hidden" style="z-index:99990;" role="dialog" aria-modal="true" aria-labelledby="programPreviewModalTitle">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-heading">
+          <div class="modal-icon tone-blue">
+            <svg class="icon"><use href="#i-tag"></use></svg>
+          </div>
+          <div>
+            <h3 id="programPreviewModalTitle">Rincian Akumulasi Setoran Program</h3>
+            <p id="programPreviewModalSubtitle" class="modal-subtitle">Detail akumulasi setoran berdasarkan jenis program terverifikasi.</p>
+          </div>
+        </div>
+        <button type="button" id="closeProgramPreviewX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+      </div>
+
+      <div class="modal-scroll" style="padding:18px 24px;">
+        <!-- Akumulasi per Jenis Program -->
+        <div style="margin-bottom:24px;">
+          <h4 style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--slate-800);display:flex;align-items:center;gap:6px;">
+            <svg class="icon" style="width:16px;height:16px;color:var(--primary-600);"><use href="#i-bar-chart"></use></svg>
+            <span>Akumulasi per Jenis Program</span>
+          </h4>
+          <div id="programBreakdownCards" class="summary-grid" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:12px;">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Daftar Transaksi Setoran Program -->
+        <div>
+          <h4 style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--slate-800);display:flex;align-items:center;gap:6px;">
+            <svg class="icon" style="width:16px;height:16px;color:var(--primary-600);"><use href="#i-receipt"></use></svg>
+            <span>Daftar Transaksi Setoran Program</span>
+          </h4>
+          <div class="table-scroll" style="max-height:350px;overflow-y:auto;border:1px solid var(--slate-200);border-radius:8px;">
+            <table class="table" style="width:100%;font-size:13px;border-collapse:collapse;">
+              <thead style="position:sticky;top:0;background:var(--slate-100);z-index:2;">
+                <tr>
+                  <th style="padding:8px 12px;text-align:left;width:40px;">No</th>
+                  <th style="padding:8px 12px;text-align:left;" id="thProgramUpzCol">Nama UPZ</th>
+                  <th style="padding:8px 12px;text-align:left;">Jenis Program</th>
+                  <th style="padding:8px 12px;text-align:left;">Tanggal Setor</th>
+                  <th style="padding:8px 12px;text-align:right;">Nominal (Rp)</th>
+                  <th style="padding:8px 12px;text-align:center;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="programTransactionsTableBody">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;">
+        <button type="button" id="closeProgramPreviewBtn" class="btn btn-ghost">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================== -->
+  <!-- MODAL KELOLA JENIS PROGRAM (ADMIN)     -->
+  <!-- ====================================== -->
+  <div id="adminProgramModal" class="modal-overlay hidden" style="z-index:99995;" role="dialog" aria-modal="true" aria-labelledby="adminProgramModalTitle">
+    <div class="modal-card modal-md">
+      <div class="modal-header">
+        <div class="modal-heading">
+          <div class="modal-icon tone-blue">
+            <svg class="icon"><use href="#i-tag"></use></svg>
+          </div>
+          <div>
+            <h3 id="adminProgramModalTitle">Kelola Master Jenis Program</h3>
+            <p class="modal-subtitle">Tambah atau hapus jenis program yang muncul pada formulir role UPZ.</p>
+          </div>
+        </div>
+        <button type="button" id="closeAdminProgramX" class="modal-close" aria-label="Tutup"><svg class="icon"><use href="#i-x"></use></svg></button>
+      </div>
+
+      <div class="modal-scroll" style="padding:18px 22px;">
+        <!-- Input Tambah Program -->
+        <div style="background:var(--slate-50);padding:14px;border-radius:8px;border:1px solid var(--slate-200);margin-bottom:16px;">
+          <label for="adminNewProgramInput" style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;color:var(--slate-700);">Tambah Program Baru</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="adminNewProgramInput" class="form-control" placeholder="Contoh: Banyumas Makmur UMKM" style="flex:1;height:38px;padding:0 12px;border:1px solid var(--slate-300);border-radius:6px;box-sizing:border-box;">
+            <button type="button" id="adminAddProgramBtn" class="btn btn-primary" style="white-space:nowrap;height:38px;display:inline-flex;align-items:center;gap:6px;font-weight:600;">
+              <svg class="icon" style="width:14px;height:14px;"><use href="#i-plus"></use></svg>
+              <span>Tambah</span>
+            </button>
+          </div>
+          <div id="adminProgramMsg" style="font-size:12px;margin-top:6px;display:none;font-weight:600;"></div>
+        </div>
+
+        <h4 style="font-size:13px;font-weight:700;color:var(--slate-700);margin-bottom:8px;">Daftar Program Aktif</h4>
+        <div id="adminProgramListContainer" style="max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;">
+        <button type="button" id="closeAdminProgramBtn" class="btn btn-ghost">Selesai</button>
+      </div>
+    </div>
+  </div>
 
   <!-- TOAST -->
   <div id="toastStack" class="toast-stack" role="status" aria-live="polite"></div>
@@ -2341,6 +3316,7 @@
   <!-- CHART.JS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-  <script src="app.js?v=26"></script>
+  <script src="app.js?v=29"></script>
 </body>
+
 </html>

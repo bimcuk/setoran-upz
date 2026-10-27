@@ -8045,7 +8045,81 @@ body {
   }
 }
 
+/* ==================================================
+   FITUR SETORAN PROGRAM & MASTER PROGRAM
+   ================================================== */
+.badge-program-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--blue-50, #eff6ff);
+  color: var(--blue-700, #1d4ed8);
+  border: 1px solid var(--blue-200, #bfdbfe);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
 
+.badge-reguler-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--emerald-50, #ecfdf5);
+  color: var(--emerald-700, #047857);
+  border: 1px solid var(--emerald-200, #a7f3d0);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
 
+.setoran-form-toggle-wrap .btn {
+  transition: all 0.2s ease;
+}
 
+.admin-program-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.admin-program-row:hover {
+  background: var(--slate-50);
+}
+
+.program-breakdown-card {
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow-xs);
+}
+
+.program-breakdown-title {
+  font-size: 12px;
+  color: var(--slate-600);
+  font-weight: 600;
+}
+
+.program-breakdown-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-700);
+}
+
+.program-breakdown-count {
+  font-size: 11px;
+  color: var(--slate-400);
+}
 

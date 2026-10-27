@@ -1698,6 +1698,29 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ============================================================
+  // PROGRAM SETORAN & MASTER JENIS PROGRAM
+  // ============================================================
+  if (req.url === '/api/program-types' || req.url === '/api/save-program-type') {
+    const handler = require('./lib/api/program-types');
+    res.status = function(code) { res.writeHead(code, { 'Content-Type': 'application/json' }); return res; };
+    res.json = function(data) { res.end(JSON.stringify(data)); return res; };
+    if (!req.body && req.method !== 'GET') {
+      req.body = await readBody(req);
+    }
+    return await handler(req, res);
+  }
+
+  if (req.url === '/api/save-setoran-program' && req.method === 'POST') {
+    const handler = require('./lib/api/save-setoran-program');
+    res.status = function(code) { res.writeHead(code, { 'Content-Type': 'application/json' }); return res; };
+    res.json = function(data) { res.end(JSON.stringify(data)); return res; };
+    if (!req.body) {
+      req.body = await readBody(req);
+    }
+    return await handler(req, res);
+  }
+
+  // ============================================================
   // PROXY: /api/backend → Google Apps Script
   // ============================================================
   if (req.url === '/api/backend' && req.method === 'POST') {
