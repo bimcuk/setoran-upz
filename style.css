@@ -1430,6 +1430,10 @@ body.role-admin .user-chip:hover {
   margin-bottom: 24px;
 }
 
+.chart-metrics-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
 .chart-metrics-5 {
   grid-template-columns: repeat(5, 1fr);
 }
@@ -1439,6 +1443,7 @@ body.role-admin .user-chip:hover {
 }
 
 @media (max-width: 1200px) {
+  .chart-metrics-6,
   .chart-metrics-5 {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
@@ -1446,10 +1451,8 @@ body.role-admin .user-chip:hover {
 }
 
 @media (max-width: 992px) {
-  .chart-metrics-5 {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
+  .chart-metrics-6,
+  .chart-metrics-5,
   .chart-metrics-4 {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
@@ -1464,6 +1467,7 @@ body.role-admin .user-chip:hover {
 }
 
 @media (max-width: 576px) {
+  .chart-metrics-6,
   .chart-metrics-5,
   .chart-metrics-4 {
     grid-template-columns: 1fr;

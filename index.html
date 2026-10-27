@@ -701,7 +701,7 @@
             </div>
 
             <!-- Ringkasan Cepat Chart (Mengikuti Filter UPZ & Tahun) -->
-            <div class="chart-metrics-row chart-metrics-5">
+            <div class="chart-metrics-row chart-metrics-6">
               <div class="chart-metric-item">
                 <div class="cm-label">Setoran Reguler</div>
                 <div class="cm-value" id="adminChartRegulerYear" style="color:var(--emerald-700,#059669);">Rp 0</div>
@@ -724,8 +724,14 @@
                 <div class="cm-value" id="adminChartTotalYear">Rp 0</div>
               </div>
               <div class="chart-metric-item">
-                <div class="cm-label">Rata-rata / Bulan</div>
-                <div class="cm-value" id="adminChartAvgMonth">Rp 0</div>
+                <div class="cm-label" style="display:flex;align-items:center;gap:6px;">
+                  <svg class="icon" style="width:13px;height:13px;color:var(--amber-600,#d97706);"><use href="#i-arrow-left-right"></use></svg>
+                  <span>Total Transaksi</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:4px;">
+                  <span class="cm-value" id="adminChartTransaksiYear" style="color:var(--amber-700,#b45309);">0</span>
+                  <span style="font-size:12px;color:var(--slate-500);font-weight:600;">Transaksi</span>
+                </div>
               </div>
               <div class="chart-metric-item card-with-corner-action" style="position:relative;">
                 <button type="button" id="btnChartDetailDonaturAdmin" class="summary-corner-btn"
@@ -742,6 +748,10 @@
                   <span class="cm-value" id="adminChartDonaturUpz" style="color:var(--teal-700,#0f766e);">0</span>
                   <span style="font-size:12px;color:var(--slate-500);font-weight:600;">Donatur</span>
                 </div>
+              </div>
+              <div class="chart-metric-item">
+                <div class="cm-label">Rata-rata / Bulan</div>
+                <div class="cm-value" id="adminChartAvgMonth">Rp 0</div>
               </div>
             </div>
 
@@ -1436,7 +1446,7 @@
           </div>
 
           <!-- Ringkasan Cepat Chart (Mengikuti Filter Tahun) -->
-          <div class="chart-metrics-row chart-metrics-4">
+          <div class="chart-metrics-row chart-metrics-5">
             <div class="chart-metric-item">
               <div class="cm-label">Setoran Reguler</div>
               <div class="cm-value" id="upzChartRegulerYear" style="color:var(--emerald-700,#059669);">Rp 0</div>
@@ -1457,6 +1467,16 @@
             <div class="chart-metric-item">
               <div class="cm-label">Total Seluruh Setoran</div>
               <div class="cm-value" id="upzChartTotalYear">Rp 0</div>
+            </div>
+            <div class="chart-metric-item">
+              <div class="cm-label" style="display:flex;align-items:center;gap:6px;">
+                <svg class="icon" style="width:13px;height:13px;color:var(--amber-600,#d97706);"><use href="#i-arrow-left-right"></use></svg>
+                <span>Total Transaksi</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:4px;">
+                <span class="cm-value" id="upzChartTransaksiYear" style="color:var(--amber-700,#b45309);">0</span>
+                <span style="font-size:12px;color:var(--slate-500);font-weight:600;">Transaksi</span>
+              </div>
             </div>
             <div class="chart-metric-item">
               <div class="cm-label">Rata-rata / Bulan</div>
@@ -3328,7 +3348,7 @@
   <!-- CHART.JS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-  <script src="app.js?v=31"></script>
+  <script src="app.js?v=32"></script>
 </body>
 
 </html>

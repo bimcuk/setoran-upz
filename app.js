@@ -6785,6 +6785,13 @@ function renderAdminMonthlyChart(forcedYear) {
   const totalEl = document.getElementById('adminChartTotalYear');
   if (totalEl) totalEl.textContent = formatRupiah(totalYear);
 
+  const totalTransaksiYear = filteredSetorans.filter(function (item) {
+    const yr = Number(item.periode_tahun) || (item.tanggal_setor ? parseInt(String(item.tanggal_setor).substring(0, 4), 10) : 0);
+    return yr === selectedYear;
+  }).length;
+  const trxEl = document.getElementById('adminChartTransaksiYear');
+  if (trxEl) trxEl.textContent = totalTransaksiYear.toLocaleString('id-ID');
+
   const avgEl = document.getElementById('adminChartAvgMonth');
   if (avgEl) avgEl.textContent = formatRupiah(avgMonth);
 
@@ -7166,6 +7173,13 @@ function renderUpzMonthlyChart(forcedYear) {
 
   const totalEl = document.getElementById('upzChartTotalYear');
   if (totalEl) totalEl.textContent = formatRupiah(totalYear);
+
+  const totalTransaksiYear = currentSetoran.filter(function (item) {
+    const yr = Number(item.periode_tahun) || (item.tanggal_setor ? parseInt(String(item.tanggal_setor).substring(0, 4), 10) : 0);
+    return yr === selectedYear;
+  }).length;
+  const trxEl = document.getElementById('upzChartTransaksiYear');
+  if (trxEl) trxEl.textContent = totalTransaksiYear.toLocaleString('id-ID');
 
   const avgEl = document.getElementById('upzChartAvgMonth');
   if (avgEl) avgEl.textContent = formatRupiah(avgMonth);
