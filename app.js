@@ -1855,7 +1855,7 @@ async function loadDashboard(keepCurrentView = false) {
 
     const totalSetoran = document.getElementById('totalSetoran');
     if (totalSetoran) {
-      totalSetoran.textContent = formatRupiah(totalReguler);
+      totalSetoran.textContent = formatRupiah(totalReguler + totalProgram);
     }
 
     const totalSetoranProgEl = document.getElementById('totalSetoranProgram');
@@ -2858,7 +2858,7 @@ function updateAdminSummary(setoran) {
   }
 
   if (totalNominal) {
-    totalNominal.textContent = formatRupiah(totalReguler);
+    totalNominal.textContent = formatRupiah(totalReguler + totalProgram);
   }
 
   const adminProgEl = document.getElementById('adminTotalSetoranProgram');
@@ -6743,8 +6743,9 @@ function renderAdminMonthlyChart(forcedYear) {
     }
   });
 
-  const totalYear = dataDiterimaReguler.reduce(function (a, b) { return a + b; }, 0) +
-                    dataDiterimaProgram.reduce(function (a, b) { return a + b; }, 0);
+  const totalRegulerYear = dataDiterimaReguler.reduce(function (a, b) { return a + b; }, 0);
+  const totalProgramYear = dataDiterimaProgram.reduce(function (a, b) { return a + b; }, 0);
+  const totalYear = totalRegulerYear + totalProgramYear;
   const currentRunningMonth = new Date().getMonth() + 1;
   const runningMonths = (selectedYear === currentYear) ? Math.max(1, currentRunningMonth) : 12;
   const avgMonth = Math.round(totalYear / runningMonths);
@@ -6759,6 +6760,12 @@ function renderAdminMonthlyChart(forcedYear) {
     }
   }
 
+  const regulerEl = document.getElementById('adminChartRegulerYear');
+  if (regulerEl) regulerEl.textContent = formatRupiah(totalRegulerYear);
+
+  const progEl = document.getElementById('adminChartProgramYear');
+  if (progEl) progEl.textContent = formatRupiah(totalProgramYear);
+
   const totalEl = document.getElementById('adminChartTotalYear');
   if (totalEl) totalEl.textContent = formatRupiah(totalYear);
 
@@ -6771,6 +6778,10 @@ function renderAdminMonthlyChart(forcedYear) {
       ? BULAN_NAMES[maxMonthIdx + 1] + ' (' + formatRupiahSimple(maxMonthVal) + ')'
       : '-';
   }
+
+  document.querySelectorAll('.adminChartYearLabelText').forEach(function (el) {
+    el.textContent = selectedYear;
+  });
 
   if (adminChartInstance) {
     adminChartInstance.destroy();
@@ -7114,8 +7125,9 @@ function renderUpzMonthlyChart(forcedYear) {
     }
   });
 
-  const totalYear = dataDiterimaReguler.reduce(function (a, b) { return a + b; }, 0) +
-                    dataDiterimaProgram.reduce(function (a, b) { return a + b; }, 0);
+  const totalRegulerYear = dataDiterimaReguler.reduce(function (a, b) { return a + b; }, 0);
+  const totalProgramYear = dataDiterimaProgram.reduce(function (a, b) { return a + b; }, 0);
+  const totalYear = totalRegulerYear + totalProgramYear;
   const currentRunningMonth = new Date().getMonth() + 1;
   const runningMonths = (selectedYear === currentYear) ? Math.max(1, currentRunningMonth) : 12;
   const avgMonth = Math.round(totalYear / runningMonths);
@@ -7130,6 +7142,12 @@ function renderUpzMonthlyChart(forcedYear) {
     }
   }
 
+  const regulerEl = document.getElementById('upzChartRegulerYear');
+  if (regulerEl) regulerEl.textContent = formatRupiah(totalRegulerYear);
+
+  const progEl = document.getElementById('upzChartProgramYear');
+  if (progEl) progEl.textContent = formatRupiah(totalProgramYear);
+
   const totalEl = document.getElementById('upzChartTotalYear');
   if (totalEl) totalEl.textContent = formatRupiah(totalYear);
 
@@ -7142,6 +7160,10 @@ function renderUpzMonthlyChart(forcedYear) {
       ? BULAN_NAMES[maxMonthIdx + 1] + ' (' + formatRupiahSimple(maxMonthVal) + ')'
       : '-';
   }
+
+  document.querySelectorAll('.upzChartYearLabelText').forEach(function (el) {
+    el.textContent = selectedYear;
+  });
 
   if (upzChartInstance) {
     upzChartInstance.destroy();
@@ -10772,6 +10794,37 @@ async function openProgramPreviewModal(isAdmin) {
   } catch (err) {
     console.warn('Gagal mengambil setoran program:', err);
   }
+
+  // Filter berdasarkan tahun dan UPZ dari kontrol grafik beranda
+  const chartYear = isAdminMode
+    ? (Number(document.getElementById('adminChartYearFilter')?.value) || new Date().getFullYear())
+    : (Number(document.getElementById('upzChartYearFilter')?.value) || new Date().getFullYear());
+
+  const chartUpz = isAdminMode
+    ? (document.getElementById('scorecardUpzFilter')?.value || 'semua')
+    : ((currentProfile && currentProfile.upz_id) || '');
+
+  const upzNameLabel = (chartUpz && chartUpz !== 'semua') ? ((upzMap && upzMap[chartUpz]) || 'UPZ Terpilih') : 'Seluruh UPZ';
+  if (titleEl) {
+    titleEl.textContent = isAdminMode
+      ? `Rincian Setoran Program (${chartYear} · ${upzNameLabel})`
+      : `Rincian Setoran Program (${chartYear})`;
+  }
+  if (subEl) {
+    subEl.textContent = isAdminMode
+      ? `Rincian akumulasi setoran program tahun ${chartYear} untuk ${upzNameLabel} (mengikuti filter grafik beranda).`
+      : `Rincian akumulasi setoran program Anda pada tahun ${chartYear} (mengikuti filter grafik beranda).`;
+  }
+
+  // Terapkan filter tahun dan UPZ dari kontrol grafik
+  list = list.filter(function (s) {
+    const sYear = Number(s.periode_tahun) || (s.tanggal_setor ? parseInt(String(s.tanggal_setor).substring(0, 4), 10) : 0);
+    if (chartYear && sYear && sYear !== chartYear) return false;
+    if (isAdminMode && chartUpz && chartUpz !== 'semua') {
+      if (String(s.upz_id) !== String(chartUpz)) return false;
+    }
+    return true;
+  });
 
   // Hitung akumulasi per jenis program
   const breakdown = {};
