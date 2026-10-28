@@ -319,6 +319,8 @@ window.showFloatingToast = showToast;
 let adminNotifications = [];
 let adminReadNotifIds = new Set();
 let adminDeletedNotifIds = new Set();
+let adminNotifClearedAt = 0;
+let notifSyncSeq = 0;
 let activeNotifTab = 'semua';
 let realtimeNotifChannel = null;
 let isNotifSystemInitialized = false;
@@ -341,16 +343,37 @@ function saveReadNotifIds() {
 function loadDeletedNotifIds() {
   try {
     const saved = JSON.parse(localStorage.getItem('admin_deleted_notif_ids_v1') || '[]');
-    adminDeletedNotifIds = new Set(Array.isArray(saved) ? saved : []);
+    adminDeletedNotifIds = new Set(Array.isArray(saved) ? saved.map(String) : []);
   } catch (_) {
     adminDeletedNotifIds = new Set();
   }
+  try {
+    const clearedTs = Number(localStorage.getItem('admin_notif_cleared_at_v1') || '0');
+    if (Number.isFinite(clearedTs) && clearedTs > adminNotifClearedAt) {
+      adminNotifClearedAt = clearedTs;
+    }
+  } catch (_) {}
 }
 
 function saveDeletedNotifIds() {
   try {
     localStorage.setItem('admin_deleted_notif_ids_v1', JSON.stringify(Array.from(adminDeletedNotifIds)));
+    if (adminNotifClearedAt > 0) {
+      localStorage.setItem('admin_notif_cleared_at_v1', String(adminNotifClearedAt));
+    }
   } catch (_) {}
+}
+
+function isNotifHiddenOrDeleted(n) {
+  if (!n || !n.id) return true;
+  if (adminDeletedNotifIds.has(String(n.id))) return true;
+  if (adminNotifClearedAt > 0 && n.timestamp) {
+    const ts = new Date(n.timestamp).getTime();
+    if (Number.isFinite(ts) && ts > 0 && ts <= adminNotifClearedAt) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function formatRelativeTime(dateString) {
@@ -417,6 +440,7 @@ function recordUpzActivity(payload) {
 }
 
 function syncAdminNotifications() {
+  const currentSeq = ++notifSyncSeq;
   const notifs = [];
   loadReadNotifIds();
   loadDeletedNotifIds();
@@ -431,6 +455,7 @@ function syncAdminNotifications() {
       const nominalStr = formatRupiah(s.nominal);
       const periodeStr = getNamaBulan(s.periode_bulan) + ' ' + (s.periode_tahun || '');
       const id = s.id;
+      const itemTime = s.updated_at || s.created_at || s.tanggal_setor || '2026-01-01T00:00:00.000Z';
 
       if (status === 'diterima' || status === 'disetujui' || status === 'verified' || status === 'sukses') {
         const notifId = 'upz_accept_' + id;
@@ -442,7 +467,7 @@ function syncAdminNotifications() {
           title: 'Setoran Diterima & Diverifikasi',
           nama_upz: 'BAZNAS Banyumas',
           desc: `Setoran periode <strong>${escapeHtml(periodeStr)}</strong> senilai <strong>${nominalStr}</strong> telah disetujui BAZNAS.`,
-          timestamp: s.updated_at || s.tanggal_setor || new Date().toISOString(),
+          timestamp: itemTime,
           status: 'success',
           read: adminReadNotifIds.has(notifId)
         });
@@ -456,7 +481,7 @@ function syncAdminNotifications() {
           title: 'Setoran Ditolak oleh Admin',
           nama_upz: 'BAZNAS Banyumas',
           desc: `Setoran periode <strong>${escapeHtml(periodeStr)}</strong> ditolak. Catatan: <em>${escapeHtml(s.catatan || 'Periksa rincian data.')}</em>`,
-          timestamp: s.updated_at || s.tanggal_setor || new Date().toISOString(),
+          timestamp: itemTime,
           status: 'danger',
           read: adminReadNotifIds.has(notifId)
         });
@@ -474,7 +499,7 @@ function syncAdminNotifications() {
           title: 'Bukti Setor Zakat (BSZ) Tersedia',
           nama_upz: 'BAZNAS Banyumas',
           desc: `Admin telah mengunggah BSZ resmi (<strong>${escapeHtml(bsz.file_name || 'BSZ.pdf')}</strong>) untuk periode ${periodeStr}. Silakan unduh.`,
-          timestamp: bsz.uploaded_at || new Date().toISOString(),
+          timestamp: bsz.uploaded_at || itemTime,
           status: 'info',
           read: adminReadNotifIds.has(notifId)
         });
@@ -517,7 +542,7 @@ function syncAdminNotifications() {
             title: pStatus === 'disetujui' ? 'Permohonan Pentasharufan Disetujui' : (pStatus === 'ditolak' ? 'Permohonan Pentasharufan Ditolak' : 'Pengajuan Pentasharufan Terkirim'),
             nama_upz: 'BAZNAS Banyumas',
             desc: `Pengajuan program <strong>${escapeHtml(pProg)}</strong> senilai <strong>${pNominal}</strong> ${pStatus === 'disetujui' ? 'telah disetujui' : (pStatus === 'ditolak' ? 'ditolak admin' : 'sedang ditinjau')}.`,
-            timestamp: p.created_at || new Date().toISOString(),
+            timestamp: p.created_at || '2026-01-01T00:00:00.000Z',
             status: pStatus === 'disetujui' ? 'success' : (pStatus === 'ditolak' ? 'danger' : 'menunggu'),
             read: adminReadNotifIds.has(notifId)
           });
@@ -546,7 +571,7 @@ function syncAdminNotifications() {
           setoran_id: s.id,
           file_name: fileName,
           desc: `Mengunggah berkas <strong>${escapeHtml(fileName)}</strong> senilai <strong>${nominalStr}</strong> (Periode ${periodeStr})`,
-          timestamp: s.created_at || s.tanggal_setor || new Date().toISOString(),
+          timestamp: s.created_at || s.tanggal_setor || '2026-01-01T00:00:00.000Z',
           status: s.status || 'menunggu',
           read: adminReadNotifIds.has(notifId)
         });
@@ -567,7 +592,7 @@ function syncAdminNotifications() {
               nama_upz: log.nama_upz || 'UPZ',
               upz_id: log.upz_id,
               desc: log.desc || 'Terdapat pembaruan data dari UPZ',
-              timestamp: log.timestamp || new Date().toISOString(),
+              timestamp: log.timestamp || '2026-01-01T00:00:00.000Z',
               status: 'info',
               read: adminReadNotifIds.has(log.id)
             });
@@ -580,7 +605,7 @@ function syncAdminNotifications() {
   // 3. Ambil notifikasi aktivitas realtime dari server database (/api/notifications)
   if (typeof getValidAuthToken === 'function') {
     getValidAuthToken().then(function (token) {
-      if (!token) return;
+      if (!token || currentSeq !== notifSyncSeq) return;
       fetch('/api/notifications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -589,27 +614,51 @@ function syncAdminNotifications() {
         if (!res.ok) return null;
         return res.json();
       }).then(function (json) {
-        if (!json || !json.success || !Array.isArray(json.data)) return;
-        let hasNew = false;
-        json.data.forEach(function (an) {
-          if (!notifs.some(function (n) { return n.id === an.id; })) {
-            notifs.push({
-              id: an.id,
-              type: an.type || 'perubahan',
-              category: an.category || 'Perubahan Akun',
-              title: an.title || 'Pembaruan Data Akun',
-              nama_upz: an.nama_upz || 'UPZ',
-              upz_id: an.upz_id,
-              desc: an.desc,
-              timestamp: an.timestamp || new Date().toISOString(),
-              status: an.status || 'info',
-              read: adminReadNotifIds.has(an.id)
-            });
-            hasNew = true;
+        if (currentSeq !== notifSyncSeq) return;
+        if (!json || !json.success) return;
+
+        let stateChanged = false;
+        if (json.cleared_at) {
+          const srvClearedMs = new Date(json.cleared_at).getTime();
+          if (Number.isFinite(srvClearedMs) && srvClearedMs > adminNotifClearedAt) {
+            adminNotifClearedAt = srvClearedMs;
+            stateChanged = true;
           }
-        });
+        }
+        if (Array.isArray(json.deleted_ids)) {
+          json.deleted_ids.forEach(function (did) {
+            if (!adminDeletedNotifIds.has(String(did))) {
+              adminDeletedNotifIds.add(String(did));
+              stateChanged = true;
+            }
+          });
+        }
+        if (stateChanged) {
+          saveDeletedNotifIds();
+        }
+
+        let hasNew = stateChanged;
+        if (Array.isArray(json.data)) {
+          json.data.forEach(function (an) {
+            if (!notifs.some(function (n) { return n.id === an.id; })) {
+              notifs.push({
+                id: an.id,
+                type: an.type || 'perubahan',
+                category: an.category || 'Perubahan Akun',
+                title: an.title || 'Pembaruan Data Akun',
+                nama_upz: an.nama_upz || 'UPZ',
+                upz_id: an.upz_id,
+                desc: an.desc,
+                timestamp: an.timestamp || '2026-01-01T00:00:00.000Z',
+                status: an.status || 'info',
+                read: adminReadNotifIds.has(an.id)
+              });
+              hasNew = true;
+            }
+          });
+        }
         if (hasNew) {
-          const activeNotifs = notifs.filter(function (n) { return !adminDeletedNotifIds.has(String(n.id)); });
+          const activeNotifs = notifs.filter(function (n) { return !isNotifHiddenOrDeleted(n); });
           activeNotifs.sort(function (a, b) {
             const timeA = new Date(a.timestamp).getTime() || 0;
             const timeB = new Date(b.timestamp).getTime() || 0;
@@ -625,7 +674,7 @@ function syncAdminNotifications() {
   }
 
   // Filter notifikasi yang telah dihapus & urutkan dari yang terbaru
-  const activeNotifs = notifs.filter(function (n) { return !adminDeletedNotifIds.has(String(n.id)); });
+  const activeNotifs = notifs.filter(function (n) { return !isNotifHiddenOrDeleted(n); });
   activeNotifs.sort(function (a, b) {
     const timeA = new Date(a.timestamp).getTime() || 0;
     const timeB = new Date(b.timestamp).getTime() || 0;
@@ -1029,6 +1078,7 @@ function renderAdminNotificationUI() {
       );
       if (!ok) return;
 
+      notifSyncSeq += 1;
       adminDeletedNotifIds.add(String(notifId));
       saveDeletedNotifIds();
 
@@ -1048,6 +1098,22 @@ function renderAdminNotificationUI() {
       if (typeof showToast === 'function') {
         showToast('Notifikasi berhasil dihapus', 'info');
       }
+
+      // Sinkronkan penghapusan ke Supabase agar tidak muncul lagi saat refresh
+      try {
+        const token = await getValidAuthToken();
+        if (token) {
+          fetch('/api/notifications', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              token,
+              action: 'delete_one',
+              notif_id: String(notifId)
+            })
+          }).catch(function () {});
+        }
+      } catch (_) {}
     });
   });
 }
@@ -1161,9 +1227,33 @@ function initAdminNotificationSystem() {
       );
       if (!ok) return;
 
+      notifSyncSeq += 1;
+      adminNotifClearedAt = Date.now();
+
       adminNotifications.forEach(function (n) {
-        adminDeletedNotifIds.add(String(n.id));
+        if (n && n.id) adminDeletedNotifIds.add(String(n.id));
       });
+      if (Array.isArray(currentAdminSetoran)) {
+        currentAdminSetoran.forEach(function (s) {
+          if (s && s.id) adminDeletedNotifIds.add('setoran_' + s.id);
+        });
+      }
+      if (Array.isArray(currentSetoran)) {
+        currentSetoran.forEach(function (s) {
+          if (s && s.id) {
+            adminDeletedNotifIds.add('upz_accept_' + s.id);
+            adminDeletedNotifIds.add('upz_reject_' + s.id);
+            adminDeletedNotifIds.add('upz_bsz_' + s.id);
+          }
+        });
+      }
+      if (typeof getLocalPentaRecords === 'function') {
+        const pentaRecs = getLocalPentaRecords() || [];
+        pentaRecs.forEach(function (p) {
+          if (p && p.id) adminDeletedNotifIds.add('upz_penta_' + p.id);
+        });
+      }
+
       saveDeletedNotifIds();
       adminNotifications = [];
       try {
@@ -1171,6 +1261,23 @@ function initAdminNotificationSystem() {
       } catch (_) {}
       renderAdminNotificationUI();
       showToast('Semua pemberitahuan berhasil dihapus', 'info');
+
+      // Simpan status delete_all ke Supabase agar tidak muncul kembali setelah reload / lintas sesi
+      try {
+        const token = await getValidAuthToken();
+        if (token) {
+          fetch('/api/notifications', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              token,
+              action: 'delete_all',
+              cleared_at: new Date(adminNotifClearedAt).toISOString(),
+              deleted_ids: Array.from(adminDeletedNotifIds).slice(-300)
+            })
+          }).catch(function () {});
+        }
+      } catch (_) {}
     });
   }
 
@@ -10978,19 +11085,136 @@ async function renderAdminProgramList() {
   }
 
   container.innerHTML = currentProgramMasterList.map(function (p) {
+    const safeId = escapeHtml(p.id);
+    const safeName = escapeHtml(p.name);
     return `
-      <div class="admin-program-row">
-        <div>
-          <div style="font-weight:600;font-size:13px;color:var(--slate-800);">${escapeHtml(p.name)}</div>
-          <div style="font-size:11px;color:var(--slate-400);">ID: ${escapeHtml(p.id)}</div>
+      <div class="admin-program-item-wrap" data-prog-id="${safeId}">
+        <div class="admin-program-row">
+          <div>
+            <div style="font-weight:600;font-size:13px;color:var(--slate-800);">${safeName}</div>
+            <div style="font-size:11px;color:var(--slate-400);">ID: <strong style="color:var(--slate-600);">${safeId}</strong></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button type="button" class="btn btn-ghost btn-xs btn-edit-prog" data-id="${safeId}" style="color:var(--brand-700, #15803d);display:inline-flex;align-items:center;gap:4px;" title="Edit ID & Nama Program">
+              <svg class="icon" style="width:12px;height:12px;"><use href="#i-edit"></use></svg>
+              <span>Edit</span>
+            </button>
+            <button type="button" class="btn btn-ghost btn-xs btn-del-prog" data-id="${safeId}" style="color:#dc2626;display:inline-flex;align-items:center;gap:4px;" title="Hapus jenis program">
+              <svg class="icon" style="width:12px;height:12px;"><use href="#i-trash-2"></use></svg>
+              <span>Hapus</span>
+            </button>
+          </div>
         </div>
-        <button type="button" class="btn btn-ghost btn-xs btn-del-prog" data-id="${escapeHtml(p.id)}" style="color:#dc2626;display:inline-flex;align-items:center;gap:4px;" title="Hapus jenis program">
-          <svg class="icon" style="width:12px;height:12px;"><use href="#i-trash-2"></use></svg>
-          <span>Hapus</span>
-        </button>
+        <div class="admin-program-edit-box hidden" data-edit-box="${safeId}">
+          <div style="font-size:11.5px;font-weight:600;color:var(--slate-700);">Edit Program (Terintegrasi Supabase)</div>
+          <div class="edit-row">
+            <div style="width:135px;flex-shrink:0;">
+              <label style="display:block;font-size:10.5px;color:var(--slate-500);margin-bottom:3px;">ID Program</label>
+              <input type="text" class="edit-prog-id-input" value="${safeId}" placeholder="Contoh: prog-1" style="width:100%;padding:6px 8px;font-size:12.5px;" />
+            </div>
+            <div style="flex:1;min-width:160px;">
+              <label style="display:block;font-size:10.5px;color:var(--slate-500);margin-bottom:3px;">Nama Program</label>
+              <input type="text" class="edit-prog-name-input" value="${safeName}" placeholder="Nama program..." style="width:100%;padding:6px 8px;font-size:12.5px;" />
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--slate-500);">
+            💡 Contoh ID: <strong>prog-1</strong>, <strong>prog-2</strong>, <strong>prog-3</strong>
+          </div>
+          <div class="edit-actions">
+            <button type="button" class="btn btn-soft btn-xs btn-cancel-edit-prog" data-id="${safeId}">Batal</button>
+            <button type="button" class="btn btn-primary btn-xs btn-save-edit-prog" data-id="${safeId}">
+              <svg class="icon" style="width:12px;height:12px;"><use href="#i-check"></use></svg>
+              <span>Simpan ke Supabase</span>
+            </button>
+          </div>
+        </div>
       </div>
     `;
   }).join('');
+
+  // Toggle form edit program
+  container.querySelectorAll('.btn-edit-prog').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const pId = this.dataset.id;
+      const wrap = container.querySelector(`.admin-program-item-wrap[data-prog-id="${CSS.escape(pId)}"]`);
+      if (!wrap) return;
+      const box = wrap.querySelector('.admin-program-edit-box');
+      if (!box) return;
+      const isHidden = box.classList.contains('hidden');
+      container.querySelectorAll('.admin-program-edit-box').forEach(function (b) { b.classList.add('hidden'); });
+      if (isHidden) {
+        box.classList.remove('hidden');
+        const nameInput = box.querySelector('.edit-prog-name-input');
+        if (nameInput) nameInput.focus();
+      }
+    });
+  });
+
+  // Batal edit program
+  container.querySelectorAll('.btn-cancel-edit-prog').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const pId = this.dataset.id;
+      const wrap = container.querySelector(`.admin-program-item-wrap[data-prog-id="${CSS.escape(pId)}"]`);
+      if (!wrap) return;
+      const box = wrap.querySelector('.admin-program-edit-box');
+      if (box) box.classList.add('hidden');
+    });
+  });
+
+  // Simpan edit program (ID & Nama) ke Supabase
+  container.querySelectorAll('.btn-save-edit-prog').forEach(function (btn) {
+    btn.addEventListener('click', async function () {
+      const oldId = this.dataset.id;
+      const wrap = container.querySelector(`.admin-program-item-wrap[data-prog-id="${CSS.escape(oldId)}"]`);
+      if (!wrap) return;
+
+      const idInput = wrap.querySelector('.edit-prog-id-input');
+      const nameInput = wrap.querySelector('.edit-prog-name-input');
+      const newId = (idInput ? idInput.value : '').trim();
+      const newName = (nameInput ? nameInput.value : '').trim();
+
+      if (!newId || !newName) {
+        if (typeof showToast === 'function') {
+          showToast('ID Program dan Nama Program tidak boleh kosong.', 'error');
+        }
+        return;
+      }
+
+      const token = await getValidAuthToken();
+      btn.disabled = true;
+      btn.textContent = 'Menyimpan...';
+
+      try {
+        const res = await fetch('/api/save-program-type', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token,
+            action: 'edit',
+            old_id: oldId,
+            new_id: newId,
+            name: newName
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Gagal memperbarui program.');
+
+        if (typeof showToast === 'function') {
+          showToast(data.message || `Program "${newName}" (${newId}) berhasil diperbarui.`, 'success');
+        }
+        await renderAdminProgramList();
+        if (currentProfile && currentProfile.role === 'admin' && typeof loadAdminSetoran === 'function') {
+          loadAdminSetoran().catch(function () {});
+        }
+      } catch (err) {
+        if (typeof showToast === 'function') {
+          showToast('Gagal menyimpan: ' + err.message, 'error');
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<svg class="icon" style="width:12px;height:12px;"><use href="#i-check"></use></svg><span>Simpan ke Supabase</span>';
+      }
+    });
+  });
 
   container.querySelectorAll('.btn-del-prog').forEach(function (btn) {
     btn.addEventListener('click', async function () {
@@ -11211,12 +11435,14 @@ function initSetoranProgramFeature() {
 
   // 5. Tambah Program Baru (Admin Modal)
   const addBtn = document.getElementById('adminAddProgramBtn');
+  const addIdInput = document.getElementById('adminNewProgramIdInput');
   const addInput = document.getElementById('adminNewProgramInput');
   const addMsg = document.getElementById('adminProgramMsg');
 
   if (addBtn && !addBtn.dataset.boundAdd) {
     addBtn.dataset.boundAdd = 'true';
     addBtn.addEventListener('click', async function () {
+      const customId = (addIdInput ? addIdInput.value : '').trim();
       const name = (addInput ? addInput.value : '').trim();
       if (!name) {
         if (addMsg) {
@@ -11236,14 +11462,15 @@ function initSetoranProgramFeature() {
         const res = await fetch('/api/save-program-type', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token, action: 'add', name })
+          body: JSON.stringify({ token, action: 'add', id: customId || undefined, name })
         });
         const data = await res.json();
         if (!res.ok || !data.success) throw new Error(data.message || 'Gagal menambahkan program.');
 
+        if (addIdInput) addIdInput.value = '';
         if (addInput) addInput.value = '';
         if (addMsg) {
-          addMsg.textContent = 'Program berhasil ditambahkan!';
+          addMsg.textContent = data.message || 'Program berhasil ditambahkan!';
           addMsg.style.color = '#15803d';
           addMsg.style.display = 'block';
           setTimeout(() => { addMsg.style.display = 'none'; }, 2500);
